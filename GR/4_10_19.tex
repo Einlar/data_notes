@@ -1,0 +1,274 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Relativity of simultaneity}
+\lesson{2}{4/10/2019}
+Consider two events $A$ and $B$ that happen at the same time as measured by the inertial frame of reference of observer $O'$: $t_A' = t_B' \equiv t_{AB}'$.\\
+Suppose that $O'$ is moving at a constant velocity $v$ relative to another observer $O$.\\
+How to represent these events in a spacetime diagram?\\
+The idea is to simply use the usual:
+\begin{align*}
+\begin{cases}
+ct' =\gamma c t-\gamma \frac{v}{c}x\\
+x' = \gamma x - \gamma \frac{v}{c}ct
+\end{cases} \text{or} \quad  \begin{cases}
+ct' = \frac{ct - \frac{v}{c}x}{\sqrt{1-\frac{v^2}{c^2}}}\\
+x' = \frac{x-\frac{v}{c}ct}{\sqrt{1-\frac{v^2}{c^2}}}
+\end{cases}
+\end{align*}
+So starting from:
+\begin{align*}
+ct'_{AB} = \frac{ct - \frac{v}{c}x}{\sqrt{1-\frac{v^2}{c^2}}} \Rightarrow ct = \frac{v}{c}x + \sqrt{1-\frac{v^2}{c^2}}ct_{AB}'
+\end{align*}
+which is a line parallel to the $x'$ axis, which is different from the $x$ axis. So, the observer $O$ will measure a non-zero time difference between the two events $A$ and $B$.
+
+\section{Length contraction}
+The \textbf{length} of an object is defined as the spatial distance between two simultaneous events situated at both ends:
+\begin{itemize}
+\item $A$ occurs at $t_A=0$, $x_A=0$
+\item $B$ occurs at $t_B=0$, $x_B=L$
+\end{itemize}
+So, by looking at the ends of an object \textit{at the same time} (relative to the $O$ observer) one can compute the object's length ($L=x_B-x_A$).\\
+What is the length as measured by a different observer $O'$, in relative motion at velocity $v$ wrt $O$?\\
+By using:
+\begin{align*}
+x'_A = \frac{x_A - \frac{v}{c}ct_A}{\sqrt{1-\frac{v^2}{c^2}}}; \quad x_B' = \frac{x_B - \frac{v}{c}ct_B}{\sqrt{1-\frac{v^2}{c^2}}}
+\end{align*}
+and taking the difference, recalling that $t_A = t_B$:
+\begin{align*}
+L'=x_B' - x_A' = \frac{x_B - x_A}{\sqrt{1-\frac{v^2}{c^2}}} = \frac{L}{\sqrt{1-\frac{v^2}{c^2}}} \Rightarrow L = \sqrt{1-\frac{v^2}{c^2}}L
+\end{align*}
+This is the phenomenon of length contraction.
+
+\section{Velocity addition}
+Consider two observers $O$ and $O'$ in relative motion at velocity $v$, and a point $P$ with velocity $V$ as measured by $O$, or $V'$ as seen by $O'$. What is the relation between $V$ and $V'$?\\
+
+From the point of view of $O'$, the measured velocity is defined as:
+\begin{align*}
+\displaystyle V' = \frac{dx'}{dt'} \underset{(a)}{=} \frac{\cancel{\gamma} [dx - v dt]}{\displaystyle \cancel{\gamma} \left[dt - \frac{v\,dx}{c^2}\right]} = \frac{\displaystyle \frac{dx}{dt}-v\frac{dt}{dt}}{\displaystyle \frac{dt}{dt}-\frac{v}{c^2}\frac{dx}{dt}} = \frac{V-v}{\displaystyle 1-\frac{v}{c^2}V}
+\end{align*}
+when in (a) we used a differential of the Lorentz transformations.\\
+Some considerations:
+\begin{itemize}
+\item \textbf{Non relativistic limit} ($v\ll c$, or informally $c\to \infty$): $V'=V-v$
+\item $V=c \Rightarrow V' = \displaystyle \frac{c-v}{1-\frac{vc}{c^2}} = \frac{c-v}{\frac{c-v}{c}} = c$, so \textit{light has the same speed for all observers}. This proves that Lorentz transformations are the correct ones in a universe where light always move at speed $c$ in every frame.
+\end{itemize}
+
+\section{Four-vectors}
+Let's review all the previous effects and concepts by building a general and useful mathematical framework.\\
+
+$4$-vectors are \q{objects that transform as $(ct,x,y,z)$ under a Lorentz Boost}. We will denote this object with:
+\begin{align*}
+x^\mu = (\underbrace{ct}_{\mu=0}, x, y, \underbrace{z}_{\mu=3})\qquad \mu = \{0,1,2,3\}
+\end{align*}
+
+\subsection{Distance and Metric}
+In physics, space is endowed with the notion of \textit{scalar product}, a mathematical structure that gives meaning to the concept of \textbf{distance}. For example, for a vector $\vec{d}$ in two dimensions, it is defined its length as $\sqrt{\vec{d}\cdot \vec{d}} = \sqrt{dx^2 + dy^2}$.\\
+
+More generally, one can define a scalar product by defining its action on two vectors:
+\begin{align*}
+\vec{A} \cdot \vec{B} = A_x B_x + A_y B_y = \begin{pmatrix}A_x, A_y\end{pmatrix}\begin{pmatrix}B_x\\B_y\end{pmatrix} =\ \begin{pmatrix}A_x, A_y\end{pmatrix}\begin{pmatrix}1 & 0\\ 0&1\end{pmatrix}\begin{pmatrix}B_x\\B_y\end{pmatrix}
+\end{align*}
+The identity matrix in this relation \textit{defines} the scalar product. If we used a different matrix, we would have obtained a different scalar product, and thus a different distance.\\
+That \q{matrix} is called the \textbf{metric} of space. In general relativity, we will see that gravitational sources can \textit{influence} the way in which distance as measured - that is they alter the geometry of spacetime.\\
+
+\subsection{The Minkowski metric}
+Let's introduce the \textbf{Minkowski} metric as:
+\begin{align*}
+\eta_{\mu\nu}=\begin{pmatrix}\hlc{Yellow}{-}1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1
+\end{pmatrix}
+\end{align*}
+Let's find the \textit{distance} associated to that metric. We start by taking two events very close to each other, that is separated by an infinitesimal distance, given by their \textit{separation vector}:
+\begin{align*}
+dx^\mu = (cdt, dx, dy, dz)
+\end{align*}
+The distance squared between the two events is then:
+\begin{align*}
+\mathrm{Distance}^2 &= \sum_{\mu=0}^3 \sum_{\nu=0}^3 dx^\mu \eta_{\mu\nu} dx^\nu =\\
+&= \hlc{Yellow}{-}(dx^0)^2 + (dx^1)^2 + (dx^2)^2 + (dx^3)^2 =\\
+&= -c^2dt^2 + dx^2 + dy^2 + dz^2 = ds^2
+\end{align*}
+We obtain the invariant four-distance previously defined: this proves that the Minkowski metric is the one best suited for special relativity.
+
+\subsection{Einstein's notation}
+Repeated indices are implicitly summed over. So, instead of writing:
+\begin{align*}
+ds^2 =\sum_{\mu=0}^3 \sum_{\nu=0}^3 dx^\mu \eta_{\mu\nu}dx^\nu
+\end{align*}
+we will just write:
+\begin{align*}
+ds^2 = dx^\mu \eta_{\mu\nu}dx^\nu
+\end{align*}
+Indices that appear once are \textit{free indices}, and they will appear also in the result.\\
+Indices that appear twice are summed over, and are not free indices, and they disappear in the result.\\
+\textit{Be careful not to use the same index more than twice!}
+
+\subsection{Inverse Minkowski metric}
+Every matrix $A$ with $\op{det}(A) \neq 0$ can be inverted. That means there is a (unique) matrix $A^{-1}$ such that $AA^{-1}=A^{-1}A = \bb{I}$. In the case of the Minkowski metrix we get:
+\begin{align*}
+\op{det}(\eta) = -1
+\end{align*}
+We denote its inverse with $\eta^{\mu\nu}$ (indices up), so that:
+\begin{align*}
+\eta^{-1}\eta = \bb{I} \Leftrightarrow \eta^{\overbrace{\mu}^{ column}\overbrace{\nu}^{row}}\eta_{\underbrace{\nu}_{col}\underbrace{\alpha}_{row}} = \delta^{\mu}_{\diamond\alpha}
+\end{align*}
+($\diamond$ is a spacer for indices).\\
+\begin{align*}
+\delta^{\mu}_{\diamond \alpha} = \begin{cases}
+1 & \text{if $\mu=\alpha$}\\
+0 & \text{if $\mu \neq \alpha$}
+\end{cases}
+\end{align*}
+
+In the particular case of the Minkowski metric $\eta^{\mu\nu} = \eta_{\mu\nu}$, in fact:
+\begin{align*}
+\begin{pmatrix}
+-1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1\end{pmatrix}
+\begin{pmatrix} -1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1\end{pmatrix} =
+\begin{pmatrix}
+1 & 0 & 0 & 0\\
+0 & 1 & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1 \end{pmatrix}
+\end{align*}
+This is usually not true for a general metric $g^{\mu\nu} \neq g_{\mu\nu}$.
+
+
+\subsection{Lorentz Boosts}
+How are Lorentz boosts expressed in this formalism?\\
+Recall the transformation relations:
+\begin{align*}
+t' = \frac{t-\frac{v}{c^2}x}{\sqrt{1-\frac{v^2}{c^2}}}; \qquad x'=\frac{x-vt}{1-\frac{v^2}{c^2}}
+\end{align*}
+We define:
+\begin{align*}
+\beta \equiv \frac{v}{c}\qquad \gamma \equiv \frac{1}{\sqrt{1-\frac{v^2}{c^2}}}
+\end{align*}
+So we can write the transformations in a more compact way:
+\begin{align*}
+\begin{cases}
+ct' = \gamma ct - \beta\gamma x\\
+x' = \gamma x -\beta\gamma ct
+\end{cases}
+\end{align*}
+In matrix notation this becomes much simpler:
+\begin{align*}
+\begin{pmatrix}ct'\\ x'\\y'\\z'\end{pmatrix} = 
+\underbrace{\begin{pmatrix}\gamma & -\beta\gamma & 0 & 0\\
+-\beta\gamma & \gamma & 0 & 0\\
+0 & 0 & 1 & 0\\
+0 & 0 & 0 & 1\end{pmatrix}}_{\Lambda^\mu_{\diamond \nu}}
+\begin{pmatrix}ct\\x\\y\\z\end{pmatrix}
+\Leftrightarrow {x^{\mu}}' = \Lambda^\mu_{\diamond \nu} x^\nu
+\end{align*}
+(and this is the best way to remember them).\\
+
+The infinitesimal invariant four-distance is:
+\begin{align*}
+ds^2 = \eta_{\alpha\beta} dx^\alpha dx^\beta
+\end{align*}
+In a different frame of referente:
+\begin{align*}
+ds' = \eta_{\mu\nu} dx'^\mu dx'^\nu = \eta_{\mu\nu}\Lambda^\mu_{\diamond \alpha}dx^\alpha \Lambda^\nu_{\diamond \beta}dx^\beta
+\end{align*}
+Of course they are the same, meaning that the $\Lambda$ matrix has a peculiar property:
+\begin{align*}
+\text{Invariance of $4$-distance} \Leftrightarrow \eta_{\mu\nu} \Lambda^\mu_{\diamond\alpha}\Lambda^\nu_{\diamond \beta} = \eta_{\alpha\beta}
+\end{align*}
+Let's multiply both parts by the inverse matrix $\eta^{\beta\sigma}$:
+\begin{align}
+\eta_{\mu\nu} \hlc{Yellow}{\Lambda^\mu_{\diamond\alpha} \Lambda^\nu_{\diamond\beta} \eta^{\beta\sigma}} = \Lambda^\mu_{\diamond \alpha}\hlc{SkyBlue}{\eta_{\mu\nu} \Lambda^\nu_{\diamond\beta}\eta^{\beta\sigma}} =  \eta_{\alpha\beta}\eta^{\beta\sigma} = \delta_\alpha^{\diamond\sigma}
+\label{eqn:eta}
+\end{align}
+so the yellow part is equal to the inverse metric, and the light blue part is the inverse of $\Lambda^\mu_{\diamond\alpha}$.
+
+\subsection{Rising and lowering of the indices}
+Some notation rules:
+\begin{itemize}
+\item When contract (= sum over) with $\eta$, lower the index
+\item When contract with $\eta^{-1}$, rise the index
+\end{itemize}
+In this notation, than, by observing (\ref{eqn:eta}) we can define:
+\begin{align*}
+\Lambda^\mu_{\diamond\alpha} \Lambda^{\diamond\sigma}_\mu = \delta^{\diamond\sigma}_\alpha
+\end{align*}
+
+We can also define a $4$-vector with \textit{lower} index:
+\begin{align*}
+x_\mu \equiv \eta_{\mu\nu}x^\nu
+\end{align*}
+How does this vector transform under a Lorentz Boost?\\
+Recall that:
+\begin{align*}
+x'^\mu = \Lambda^\mu_{\diamond\nu}x^\nu
+\end{align*}
+Multiplying both sides by $\eta_{\alpha\mu}$:
+\begin{align*}
+\eta_{\alpha\mu}x'^\mu &= \eta_{\alpha\mu}\Lambda^\mu_{\diamond \nu}x^\nu
+\intertext{we can lower the index of $\Lambda^\mu_{\diamond\nu}$:}
+&=\Lambda_{\alpha\nu}x^\nu 
+\intertext{and we insert an identity $\delta^\sigma_{\diamond \nu}:$}
+&= \Lambda_{\alpha\sigma} \textcolor{Blue}{\delta^\sigma_{\diamond\nu}}x^\nu = \Lambda_{\alpha\sigma}\eta^{\sigma\beta} \eta_{\beta\nu} x^\nu = \Lambda_\alpha^{\diamond\beta}x_\beta
+\end{align*}
+We have thus found the transformation relation for this kind of vector.\\
+
+Summarizing:
+\begin{itemize}
+\item We call a \textbf{contravariant vector} a vector with \q{upper indices}:
+\begin{align*}
+x'^\mu = \Lambda^\mu_{\diamond \nu}x^\nu
+\end{align*}
+\item A \textbf{covariant vector} is then the \textit{lower indices version}:
+\begin{align*}
+x'_\alpha = \Lambda^{\diamond\beta}_\alpha x_\beta
+\end{align*}
+Both kind of vectors are \textit{defined} by their transformation properties.
+\end{itemize}
+
+In fact, vector are defined in physics as entities that transform in a certain manner under rotation. For example, $\vec{F} = m\vec{a}$ implicitly contains an important statement: this law \textit{does not} depend on the specific direction, it is \textit{invariant} (or \textit{covariant}) under rotation.\\
+In analogy, relativity stands from the principle that \textit{laws of physics are the same in every inertial frame of reference}. So it is useful to write physical laws in a \textit{manifestally covariant form}, that is are immediately recognizable as something that transforms in a nice way, respecting the relativity principle.\\
+
+Note that the \textit{contraction} between a contravariant vector and a covariant vector is a \textbf{scalar}, i.e. an object that is \textbf{invariant} under a boost.
+For example, if we contract two boosted vectors we get the same result as if we contracted the same two vectors before boosting:
+\begin{align*}
+A'_\mu B'^\mu = \hlc{Yellow}{\Lambda_\mu^{\diamond\alpha}} A_\alpha \hlc{Yellow}{\Lambda^\mu_{\diamond\beta}}B^\beta = \hlc{Yellow}{\delta^\alpha_{\diamond\beta} }A_\alpha B^\beta = A_\alpha B^\alpha
+\end{align*}
+
+In particular, an important scalar is the infinitesimal four-distance. Its invariance can now be seen immediately by simply applying the rule on lowering indices:
+\begin{align*}
+ds^2 = dx^\mu \eta_{\mu\nu}dx^\nu = dx^\mu dx_\mu
+\end{align*}
+
+Note that when we have a contraction it does not matter which index is up and which is down:
+\begin{align*}
+A_\mu B^\mu =A_\mu \eta^{\mu\nu}B_\nu \underset{(a)}{=} A_\mu \eta^{\nu\mu} B_\nu \underset{(b)}{=} \eta^{\nu\mu} A_\mu B_\nu = A^\nu B_\nu
+\end{align*}
+where in (a) we used the symmetry of $\eta^{\mu\nu}$, allowing the exchange $\nu\leftrightarrow \nu$. By rearranging (b) one can then use $\eta^{\nu\mu}$ to rise the index of $A_\mu$.
+
+\subsection{Tensors}
+Tensors are objects \textit{with many high/low indices}, where each index transforms independently under a boost. For example:
+\begin{align*}
+A'^\alpha = \Lambda^\alpha_{\diamond \mu} A^\mu; \qquad A'_{\mu\nu} = \Lambda^{\diamond\alpha}_\mu \Lambda^{\diamond\beta}_{\nu} A'_{\alpha\beta}; \qquad A'^{\mu\nu}_{\diamond\diamond l} = \Lambda^{\mu}_{\diamond \alpha}\Lambda^\nu
+_{\diamond\beta}\Lambda^{\diamond\gamma}_{l}A^{\alpha\beta}_{\diamond\diamond\gamma}\end{align*}
+(this transformations are \textit{by definition}).\\
+
+Contracting indices between two tensors or within the same tensor reduces their rank (the number of matrices needed for a transformation), because only free indices can transform:
+\begin{align*}
+A'_{\alpha\beta}B'^\beta = \Lambda_{\alpha}^{\diamond \mu}\hlc{Yellow}{\Lambda_{\beta}^{\diamond \nu}}A_{\mu\nu}\hlc{Yellow}{\Lambda^\beta_{\diamond l}}B^l = \Lambda_\alpha^{\diamond \mu}\hlc{Yellow}{\delta^\nu
+_{\diamond l} }A_{\mu\nu} B^l = \Lambda^{\diamond \mu}_\alpha A_{\mu\nu} B^\nu
+\end{align*}
+
+\end{document}
+
+

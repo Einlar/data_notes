@@ -1,0 +1,43 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Digital circuits}
+\lesson{2}{09/10/19}
+Find the lectures notes at \url{https://cernbox.cern.ch/index.php/s/pEVRIXvzLQrRE3Q}, with password \texttt{MAPD1920}.
+
+\subsection{Small history of computing}
+One of the first \textit{calculators} was called \textbf{ENIAC}, and consisted in a (bulky and difficult to manage) \textit{cascade} of \textbf{adders} and \textbf{logic} elements acting on \textbf{accumulators} (memory). By re-wiring the connections between units one could control the kind of computation performed, reaching a speed of about $5$k operations per second.\\
+One of the core elements of ENIAC was an equivalent of modern transistors made using vacuum tubes (much more slower and larger), that could halt the flow of current between two poles depending on a third input.\\
+All of that changed with the inventions of the \textbf{bipolar transistor} and then of \textbf{integrated circuits}, leading to the first "modern" processor: the Intel 4004, designed in 1971, containing about $1$k transistors (with size $\sim \SI{10}{\micro\m}$) and operating at a clock frequency of $\SI{0.75}{\mega\hertz}$. From then, the number of transistors on processors began increasing at an exponential rate, and their size rapidly declined. This led to Moore's law: an empirical observation that set a trend in IC manufacturing speed, and that still holds now.
+
+\subsection{But what is a Transistor?}
+A \textbf{digital transistor} is some kind of device with the following characteristics:
+\begin{itemize}
+    \item Has three terminals: input/output + control
+    \item It works as an electrical \textbf{switch}, i.e. can be turned on/off by applying a certain input signal
+\end{itemize}
+Basically, it is the electrical equivalent of a water tap.\\
+
+Some desired properties are: fast and sharp transition between the two states (on/off), controlled by a relatively small voltage drive ($V_G$), no leakage current when off, unsensitive to noise on the control pin (in particular, it should not be affected by details of the other pins, such as their size). Also, a transistor needs to be able to drive strongly the next stage - that is deliver a high current between the input and output pins (without breaking).\\
+In addition, there should be possible to construct a \textit{complementary} transistor - e.g. such that it turns on when provided with a low control signal (instead of a high one).\\
+
+As of now, one popular kind of transistor is the \textbf{Field Effect Transistor}, based on the \textit{MOS capacitor}.  
+
+\subsection{MOSFET}
+Refer to the slides.
+
+\subsection{Analog vs Digital}
+Thanks to transistors, lots of different useful core elements for computation can be made, such as \textit{adders}, \textit{multipliers}, \textit{operational amplifier}. Equivalent behaving circuits were also developed in the analog world. However, they presented several drawbacks:
+\begin{itemize}
+    \item Circuit's behaviour depended heavily on details of construction, and also on degradation with aging. This led to errors and non-consistent results.
+    \item Components were almost always sensitive to temperature and noise in the input's voltage.
+\end{itemize}
+On the other hand, digital circuits can tolerate large fluctuations on input's voltages. 
+
+
+
+
+
+\end{document}

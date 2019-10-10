@@ -1,0 +1,208 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+
+\lesson{3}{10/10/19}
+There will be 8 lectures by Prof. Baiesi - the first two about some mathematical tools, and then about scattered arguments, to show how to apply the theoretical physics framework to various topics.\\
+
+\section{Gaussian Integrals}
+Recall that:
+\begin{align*}
+    \int_{-\infty}^{\infty} \exp\left(-\frac{a}{2}x^2 \right) \mathrm{dx} = \sqrt{\frac{2}{a} \pi } 
+\end{align*}
+We will show now how to generalize this result to many dimensions.\\
+Let $\vec{x}$ be a vector of $n$ dimension: $\vec{x} = (x_i)_{i=1,\dots, n}$. Suppose that $x_i$ are random variables, that can be correlated - that is $p(x_i | x_j) \neq p(x_i) p(x_j)$. All the information about that is contained in the \textit{covariance matrix}, $A_{i i} = \operatorname{var} (x_i)$ and $A_{ij} = A_{ji} = \operatorname{cov}(x_i, x_j)$. \\
+The covariance matrix induces a metric:
+\begin{align*}
+    \mathbb{A}(\vec{x}) = \sum_{i,j=1}^{n} x_i A_{ij} x_j
+\end{align*}
+We will prove that:
+\begin{align*}
+    Z(\mathbb{A}) = \int d^n x \exp\left(-\frac{1}{2} \mathbb{A}(\vec{x}) \right) = (2\pi)^{n/2} \prod_{i=1}^n a_i^{-1/2} = (2\pi)^{n/2} (\operatorname{det} A)^{-1/2}
+\end{align*}
+where $a_i$ are the eigenvalues of $A$.\\
+
+\textbf{Proof}. We can simply apply a coordinate transform through an orthogonal matrix $O$, with $|\operatorname{det}O|=1$:
+\begin{align*}
+    x_i' = \sum_j O_{ij}x_j
+\end{align*}    
+So that $A$ becomes a diagonal matrix with eigenvalues $a_i$ on the diagonal. Then $Z(\mathbb{A})$ becomes the multi-dimensional integral of independent gaussians, and we can integrate wrt to each variable separately, arriving at the final result.\\
+
+Let's now consider a more general case:
+\begin{align*}
+    Z(A, \vec{b}) = \int_{-\infty}^{\infty} d^n x \exp\left(-\frac{1}{2} \mathbb{A}(\vec{x}) + \vec{b} \cdot \vec{x} \right)
+\end{align*}
+where $\vec{b}\cdot \vec{x} = \sum_i x_i b_i$.\\
+We start by finding the minimum of the exponent, by differentiation:
+\begin{align*}
+    \frac{\partial}{\partial x_i} \left(\frac{1}{2} \mathbb{A}(\vec{x}) - \vec{b} \cdot \vec{x} \right)  = 0 \quad \forall i
+\end{align*} 
+The solution for the minimum is:
+\begin{align*}
+    \sum_j A_{ij} x_j = b_i \Rightarrow x_i^* = \sum_j (A^{-1})_{ij} b_i
+\end{align*}
+Then we apply a coordinate change:
+\begin{align*}
+    \vec{x} \rightarrow \vec{y}; \vec{x} = \vec{x}^* + \vec{y}
+\end{align*}
+so that:
+\begin{align*}
+    -\frac{\mathbb{A}(\vec{x})}{2} + \vec{b}\cdot \vec{x} = -\frac{\mathbb{A}(\vec{y})}{2} + w_2(\vec{b})  
+\end{align*}
+with:
+\begin{align*}
+    w_2(\vec{b}) = \frac{1}{2} \sum_{i,j=1}^n b_i (A^{-1})_{ij} b_i = \frac{1}{2} \vec{b}\cdot \vec{x}^*  
+\end{align*}
+And so:
+\begin{align*}
+    Z(A,\vec{b}) = e^{w_x(\vec{b})} \int d^n y \exp \left(-\frac{1}{2} \mathbb{A}(\vec{y}) \right) = e^{w_2(\vec{b})} (2\pi)^{n/2} (\operatorname{det} A )^{-1/2}
+\end{align*}
+
+\textbf{Exercise}
+Compute $Z(A)$ and $Z(A,\vec{b})$ with:
+\begin{align*}
+    A = \left(\begin{array}{cc}
+    3 & -1 \\ 
+    -1 & 3
+    \end{array}\right); \quad b = \left(\begin{array}{c}
+    1 \\ 
+    0
+    \end{array}\right)
+\end{align*}   
+(Solve the exercise, and put in a notebook to bring to the exam!)
+
+\subsection{Gaussian expectation values}
+We want to compute the average value of the \textit{product} of multiple random variables, following a gaussian distribution of covariance matrix $A$, centered on $0$ ($\vec{b} = 0$).   
+\begin{align*}
+    \langle x_{k_1} x_{k_2} \dots x_{k_l} \rangle \equiv \frac{1}{Z(A)} \int d^n x x_{k_1} x_{k_2} \dots x_{k_l} \exp\left(-\frac{1}{2} \mathbb{A}(\vec{x}) \right) 
+\end{align*}
+where the factor $Z(A)^{-1}$ is just a normalization constant.\\
+We then introduce a term $\vec{b}$ and compute the derivatives:
+\begin{align*}
+    \frac{\partial}{\partial b_k} Z(A,\vec{b}) = \int d^n x x_k \exp\left(+\frac{\mathbb{A}}{2} + \vec{b}\cdot \vec{x} \right) 
+\end{align*} 
+In physics, we say that $b_k$ is \q{coupled} to $x_k$, and that $Z(A,\vec{b})$ is used as "generating function" for $\vec{x}$.\\
+Then we have:
+\begin{align*}
+    \langle x_{k_1} x_{k_2 }\dots x_{k_l} \rangle &= (2\pi)^{-n/2}(\operatorname{det}A )^{-1/2} \left[\frac{\partial}{\partial b_{k_1 }} \frac{\partial}{\partial b_{k_2 }} \dots \frac{\partial}{\partial b_{k_l}} Z(A,\vec{b})   \right]_{\vec{b}=0} =\\
+    &= \frac{\partial}{\partial b_{k_1 }} \frac{\partial}{\partial b_{k_2 }} \dots \frac{\partial}{\partial b_{k_l}} e^{w_2(\vec{b})} \Big|_{\vec{b}=0}
+\end{align*}    
+
+\subsection{Wick's Theorem}
+From the previous formula we know that:
+\begin{align*}
+    \frac{\partial}{\partial b_i} \text{ pulls down a $b_i$ } 
+\end{align*}
+So, if we set $b_i = 0$, the result will also be $0$, as $\langle x_i \rangle = 0$.\\
+However, with more derivatives, the result can be non-zero, due to correlations between different $x_j$:
+\begin{align*}
+    \langle x_i x_j \rangle \text{ may be $\neq$ 0 }
+\end{align*}    
+But always, for an odd number of derivatives, due to the symmetry of the gaussian, we have:
+\begin{align*}
+    \langle x_i x_j x_k \rangle = 0
+\end{align*}
+So the expectation value of the product of different random variables, sampled from the same gaussian distribution centered on $0$, is only non-zero for an even number of variables. \\
+
+(Reference: \q{Path integrals in Physics} vol. 1, Chaidrian \& Demichev)\\
+
+The contribution from every pair $(k_p, k_q)$  from the list of indices $K = \{k_1, k_2, \dots, k_l\}$ is associated with the covariance $(A^{-1})_{k_p, k_q}$. Then we arrive at Wick's theorem:
+\begin{align*}
+    \langle x_{k_1} x_{k_2 } \dots x_{k_l}  \rangle = \sum_{P \in \sigma(K)} A^{-1}_{k_{P_1} k_{P_2}} A^{-1}_{k_{P_3}k_{P_4}}\dots A^{-1}_{k_{P_{l-1}} k_{P_l}} = \sum_{P \in \sigma(K)} \langle x_{k_{P_1 }} x_{k_{P_2}} \dots \langle x_{k_{P_{l-1}}} x_{k_{P_l}} \rangle \rangle
+\end{align*}
+where $P$ is a permutation of indices $K$.  \\
+This is true only for gaussians.\\
+
+
+\textbf{Exercise}.
+For a one variable gaussian distribution:
+\begin{align*}
+    \frac{1}{Z(A)} \exp\left(-\frac{a}{2} x^2 \right) 
+\end{align*}
+prove that:
+\begin{align*}
+    \langle x^2 \rangle &= \frac{1}{a} \\
+    \langle x^4 \rangle &= \frac{3}{a^2} = 3(\langle x^2 \rangle)^2
+\end{align*}
+(Hint for $\langle x^4 \rangle$: $k_1 = 1 = k_2 = k_3 = k_4$).
+
+\section{Steepest Descent Integrals}
+It is possible to use gaussian integrals to solve a more general set of integrals, with the \textit{Steepest Descent Integrals} (or \textit{saddle point method}).\\
+
+The idea is to convert a generic integral to a Gaussian one (with some approximation, depending on a controllable parameter).\\
+We start with:
+\begin{align*}
+    I(\lambda) = \int d^nx e^{-F(\vec{x})/\lambda}
+\end{align*}
+As $\lambda \to 0$, it becomes important to study the integral behaviour around the minimum of $F(\vec{x})$, that is the maximum of $-F(\vec{x})$, which is called the \q{saddle point}. This is because this function is analytic, and in the complex plane there are saddle points at the real coordinate of the maximum.\\
+
+We do this by changing variables:
+\begin{align*}
+    \vec{x} = \vec{x}_c + \sqrt{\lambda} \vec{y}
+\end{align*}
+where $\vec{x}_c$ is the saddle point, and $\vec{y}$ is a given variable.\\
+Then we expand around $\lambda = 0$ and $\vec{x} = \vec{x}_c$, so that:
+\begin{align*}
+    \frac{1}{\lambda}F(\vec{x}) = \frac{1}{\lambda}F(\vec{x}_c) + \cancel{\frac{1}{\lambda}\sum_i \partial_{x_i} F(\vec{x}_c) y_i \sqrt{\lambda} }+ \frac{1}{\lambda}\frac{1}{2!} \sum_{ij} \partial^2_{x_i x_j} F(\vec{x}_c) y_i y_j \lambda + O(\lambda^{1/2})     
+\end{align*}    
+Note that, at the maximum, the first derivative is $0$.\\
+Substituting in the integral (and transforming the differential) we get:
+\begin{align*}
+    I(\lambda) = \lambda^{n/2} \exp\left(-\frac{F(\vec{x}_c)}{\lambda} \right) \int d^n y \exp\left[-\frac{1}{2} \sum_{ij} \partial^2_{x_ix_j} F(\vec{x}_c) y_i y_j - R(y) \right]
+\end{align*}
+
+The idea is that the integrand of $I(\lambda)$ is \q{more and more similar} to a gaussian as $\lambda$ is lower.\\
+
+Then, by taking the limit $\lambda \to 0$:
+\begin{align*}
+    I(\lambda) \underset{\lambda \to 0}{\approx} (2\pi \lambda)^{n/2} [\operatorname{det} \partial^2_{x_i x_i} F ]^{-1/2} \exp\left(-\frac{F(\vec{x}_c)}{\lambda} \right)
+\end{align*} 
+
+Often, in literature, the following expression can be found the case for $d=1$: 
+\begin{align*}
+    I(s) = \int g(z) e^{s f(z)} dz \underset{s \to \infty }{\approx}  \frac{(2\pi)^{1/2} g(z_c) e^{s f(z_c)}}{|s g''(z_c)|}
+\end{align*}
+with $f, g \in \mathbb{R}$, and $z_c$ is the maximum of $f$: $f(z_c) \geq f(z)$.\\
+This formula is useful in physics: $s$ can model the system's size, and $s \to\infty$ is the limit for a large system.\\
+
+\textbf{Example}. We can then derive the Stirling approximation. Recall that:
+\begin{align*}
+    s! = \int_0^\infty x^s e^{-x} dx
+\end{align*} 
+We then perform a change of variables:
+\begin{align*}
+    x = z s
+\end{align*}
+so that:
+\begin{align*}
+    s! = s^{s+1} \int_0^\infty e^{s(\ln z - z)} dz
+\end{align*}
+Then we look for the maximum of $f(z) = \ln z - z$:
+\begin{align*}
+    f'(z) &= \frac{d}{dz}(\ln z - z) = \frac{1}{z} - 1 \Rightarrow z_c = 1\\
+    f''(z) &= -\frac{1}{z^2} \Rightarrow f''(z_c) = -1 
+\end{align*} 
+Using the Steepest Descent formula we get the Stirling approximation for a factorial:
+\begin{align*}
+    s! \approx \frac{\sqrt{2 \pi}}{|s|^{1/2}} s^{s+1} e^{-s} \approx \sqrt{2 \pi} s^{s+1/2} e^{-s}
+\end{align*}
+Note that the integral goes from $0$ to $\infty$. We can use the gaussian integral as the maximum is far from $0$, and so we can neglect the left side.\\
+
+\textbf{Exercise}. Compute the Steepest Descent Approximation for the following integral:
+\begin{align*}
+    I(s) = \int_{-\infty}^{\infty} e^{sx - \cosh x} dx
+\end{align*} 
+Note that, for this peculiar case, the simple 1D formula does not work - and so one should proceed with the general method (full steps: find maximum, second derivative...).\\
+
+\textbf{Exercise}. 
+\begin{align*}
+    I(\lambda) = \int_{0}^{\infty} \cos(x) \exp \left(-N \left[\left(x-\frac{\pi}{3} \right)^2 + \left(x-\frac{\pi}{3} \right)^4\right]\right)dx
+\end{align*} 
+Find also the limit:
+\begin{align*}
+    I(N)  \xrightarrow[N \to \infty]{}  \dots
+\end{align*}
+
+\end{document}

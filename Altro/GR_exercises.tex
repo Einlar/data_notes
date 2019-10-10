@@ -1,0 +1,267 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Homework - Week 1}
+\lesson{1}{09/10/19}
+
+\subsection{Problem 1}
+\textit{Show that the inverse of a Lorentz boost amounts in changing the sign of $x$ in the expressions for the boost.}\\
+Starting from:
+\begin{align}\label{eqn:time}
+    ct' &=  \gamma ct- \beta \gamma x \\
+    x' &= -\beta \gamma ct + \gamma x \label{eqn:x}
+\end{align} 
+We solve for $x$ in the second equation:
+\begin{align*}
+    x = \frac{1}{\gamma} (x' + \beta \gamma c t) 
+\end{align*}
+and substitute in the first:
+\begin{align*}
+    ct' &= \gamma c t - \beta \gamma\frac{1}{\gamma} (x' + \beta \gamma c t) = \\
+    &=  (\gamma - \beta^2 \gamma ) ct - \beta x' 
+\end{align*}
+and then solve for $t$:
+\begin{align*}
+    ct = (ct' + \beta x') \frac{1}{\gamma (1-\beta^2)} 
+\end{align*} 
+Recall that:
+\begin{align*}
+    \gamma = \frac{1}{\sqrt{1-\beta^2}} \Rightarrow (1-\beta^2) = \frac{1}{\gamma^2} 
+\end{align*}
+leading to:
+\begin{align*}
+    ct = \gamma(ct' + \beta x')
+\end{align*}
+which is the same as (\ref{eqn:time}) except for $t \leftrightarrow t'$ and $x \leftrightarrow -x'$.\\
+Then, simply substituting in the equation fo $x$ we finally get:
+\begin{align*}
+    x &= \frac{1}{\gamma}(x' + \beta \gamma^2 [ct' + \beta x']) = \\
+    &=  \frac{1}{\gamma} \frac{x' - \beta^2 x' + \beta ct' + \beta^2 x'}{1-\beta^2} = \\
+    &= \frac{\gamma^2}{\gamma} (x' + \beta ct') = \gamma (x' + \beta ct')  \\
+\end{align*}  
+which is again the same as (\ref{eqn:x}), except for $t \leftrightarrow t'$ and $x \leftrightarrow -x'$.\\
+
+\textit{Using the explicit form of the Lorentz boosts, show that $ds^2 \equiv (c dt)^2 - dx^2 - dy^2 -dz^2$ is a scalar quantity (namely, it is invariant under Lorentz transformations).}\\
+We start from:
+\begin{align*}
+    ds^2 = (c\,dt)^2 - dx^2 - dy^2 - dz^2
+\end{align*}
+and simply apply the (inverse) Lorentz transformations:
+\begin{align*}
+    ct &=  \gamma ct' + \beta \gamma x'  \\
+    x &= \beta \gamma ct' + \gamma x'  \\
+\end{align*}
+to arrive at the prime reference frame:
+\begin{align*}
+    (ds')^2 &= (\gamma c dt' + \beta \gamma dx')^2 - (\beta \gamma ct' + \gamma dx')^2 - (dy')^2 - (dz')^2 = \\
+    &= \gamma^2 c^2 (dt')^2 + \beta^2 \gamma^2 (dx')^2 + \cancel{2\beta \gamma^2 c dt'\, dx' }- \beta^2 \gamma^2 c^2 (dt')^2 - \gamma^2 (dx')^2 \cancel{- 2\beta \gamma^2 c dt'\,dx}' - dy' - dz' =  \\
+    &= \gamma^2 c^2 (dt')^2 [1-\beta^2] + \gamma^2 (dx')^2 [\beta^2 - 1] - (dy')^2 - (dz')^2 = \\
+    &=  c^2 (dt')^2 - (dx')^2 - (dy')^2 - (dz')^2 \\
+\end{align*}
+
+\textit{Using the 4-vector notation, show that this statement is equivalent to requiring that $\Lambda^T \eta \Lambda = \eta$}.\\
+
+Recall that:
+\begin{align*}
+    ds^2 = \eta_{\alpha \beta} dx^\alpha dx^\beta; \quad x'^\mu = \Lambda^\mu_{\diamond \nu} x^\nu
+\end{align*}
+Then, transforming to the prime frame of reference:
+\begin{align*}
+    (ds')^2 &= \eta_{\mu \nu} dx'^\mu dx'^\nu = \eta_{\mu \nu} \Lambda^\mu_{\diamond \alpha} dx^\alpha \Lambda^\nu_{\diamond \beta}dx^\beta \overset{!}{=} \eta_{\alpha \beta} dx^\alpha dx^\beta
+\end{align*}
+Thus:
+\begin{align}
+    \eta_{\mu \nu} \Lambda^\mu_{\diamond \alpha}\Lambda^\mu_{\diamond \beta} = \Lambda^\mu_{\diamond \alpha} \eta_{\mu \nu} \Lambda^\nu_{\diamond \beta} = \eta_{\alpha \beta}
+    \label{eqn:lambda-not}
+\end{align}
+Recall that a matrix multiplication in Einstein notation is denoted by:
+\begin{align*}
+    C^i_{\diamond k} = A^i_{\diamond j} B^j_{\diamond k}
+\end{align*}
+and that $(C^i_{\diamond k})^T = C^k_{\diamond i}$.\\
+Then (\ref{eqn:lambda-not}) is equivalent to $\Lambda^T \eta \Lambda = \eta$ in matrix notation.\\
+
+\textit{Show (by explicit matrix multiplication) that indeed, $\Lambda^T \eta \Lambda = \eta $}\\
+
+Recall that:
+\begin{align*}
+    \Lambda = \Lambda^T = \left(\begin{array}{cccc}
+    \gamma & -\beta \gamma & 0 & 0 \\ 
+    -\beta \gamma & \gamma & 0 & 0 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+    \end{array}\right); \qquad \eta = \left(\begin{array}{cccc}
+    -1 & 0 & 0 & 0 \\ 
+    0 & 1 & 0 & 0 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+    \end{array}\right)
+\end{align*}
+So $\Lambda^T \eta$ is merely $\Lambda$ with a sign change on the first column, and then:
+\begin{align*}
+    \Lambda^T \eta \Lambda = \left(\begin{array}{cccc}
+    -\gamma & -\beta \gamma & 0 & 0 \\ 
+    +\beta \gamma & \gamma & 0 & 0 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+    \end{array}\right)
+    \left(\begin{array}{cccc}
+    \gamma & -\beta \gamma & 0 & 0 \\ 
+    -\beta \gamma & \gamma & 0 & 0 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+    \end{array}\right) = \left(\begin{array}{cccc}
+    -1 & 0 & 0 & 0 \\ 
+    0 & 1 & 0 & 0 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+    \end{array}\right)
+\end{align*}  
+(Recall that $\gamma = (1-\beta)^{-1}$, so that $\gamma^2 (\beta^2 -1) = -1$, and so on)
+
+
+\subsection{Problem 2}
+\begin{enumerate}
+    \item With respect to an observer on Earth, muons travel through $\SI{15}{\kilo\m}$ of atmosphere at a velocity $v = 0.995c$. Thus they arrive at Earth after an interval $\Delta t$:
+    \begin{align*}
+        \Delta t = \frac{h}{v} \approx \SI{50.286}{\micro\s} 
+    \end{align*}  
+    Ignoring relativity effects, given their mean lifetime $\tau \approx \SI{2.2}{\micro\s}$, the survival probability after $\Delta t$ is:
+    \begin{align*}
+        p(\Delta t) = \exp\left(-\frac{\Delta t}{\tau} \right)\approx \num{1.2e-10} \sim 0
+    \end{align*}
+    So, if we ignore SR, it is very unlikely to observe muons at Earth's surface.
+    \item Denote with $O$ the inertial frame of reference of an observer on Earth's surface, stationary wrt the atmosphere, and with $O'$ an observer stationary wrt the muons. If we set the common frame origin at the surface, and take the $x$-axis as vertical, directed towards the sky, then $O'$ is moving downward wrt to $O$, that is with a relative velocity of $v = -0.995c$.\\
+    $O$ considers two events:
+    \begin{itemize}
+        \item Starting point of muons: $x_0 = \SI{15}{\kilo\m}$, at time $t_0 = 0$.
+        \item Final point of muons: $x_1 = \SI{0}{\kilo\m}$, $t_1 = \Delta t$.
+    \end{itemize}
+    The mean lifetime of muons is measured in a reference frame where they are stationary, so we must compute the travel time wrt $O'$, that is $t_1' - t_0'$. Simply by using a Lorentz boost:
+    \begin{align*}
+        ct'_0 &= \gamma ct_0  - \beta \gamma x_0  \\
+        ct'_1 &= \gamma ct_1 - \beta \gamma x_1 
+    \end{align*} 
+    with:
+    \begin{align*}
+        \beta = -0.995; \qquad \gamma = \sqrt{\frac{1}{1-\beta^2} } \approx \num{10.0125}
+    \end{align*} 
+    we get:
+    \begin{align*}
+        t_0' &\approx \frac{0.995 \cdot 10.0125 \cdot \SI{15}{\kilo\m}}{c}  \approx \SI{498.468}{\micro\s}\\
+        t_1' &= \gamma \Delta t \approx \SI{503.49}{\micro\s}
+    \end{align*}
+    so that the \textbf{proper time} is  $\Delta \tau = t_1' - t_0' \approx \SI{5.022}{\micro\s}$, leading to a survival probability of:
+    \begin{align*}
+        p(\Delta \tau) = \exp\left(-\frac{\Delta \tau}{\tau} \right) \approx 10.2\%
+    \end{align*}
+    Notice that the same result can be obtained from the formula of \textbf{time dilation}:
+    \begin{align*}
+        \Delta t = \Delta \tau \gamma \Rightarrow \Delta \tau = \frac{\Delta t}{\gamma} 
+    \end{align*} 
+    Recall in fact that proper time is always the smallest one.
+    \item We know examine the same problem from the point of view of the muons. Denote with $O$ the reference frame of muons, and with $O'$ that of Earth. As only $O'$ is at rest wrt the atmosphere, only $O'$ can measure directly its proper length - which is $\SI{15}{\kilo\m}$. Recall that length is a difference of distances measured at the same time wrt an observer.\\
+    Suppose that $O$ wants to measure the atmosphere's length. Then it will compute the spatial distance of two simultaneous events: one located at the atmosphere's start ($x_0 = 0, t_0 = 0$), and one at the atmosphere's end ($x_1 = L, t_1 = 0$). Notice that $t_0 = t_1$. $L$ is not known at the moment, and can be computed if we use a Lorentz Boost to relate it to the known proper length:   
+    \begin{align*}
+        x' = -\beta \gamma c t + \gamma x
+    \end{align*}
+    We can now compute the difference:
+    \begin{align*}
+        \SI{15}{\kilo\m} = x'_1 - x'_0 = \cancel{- \beta \gamma c t_1 }+ \gamma x_1 + \cancel{\beta \gamma ct_0 }- \gamma x_0 = \gamma(x_1 - x_0)   
+    \end{align*}
+    as $t_0 = t_1$ for the length's definition. So, $O$ measures a length $L$ of:
+    \begin{align*}
+        L = \frac{L'}{\gamma} \approx \frac{\SI{15}{\kilo\m}}{10.0125} \approx \SI{1.498}{\kilo\m}  
+    \end{align*}  
+    And so the muons take only $\Delta \tau$ to cross $L'$:
+    \begin{align*}
+        \Delta \tau = \frac{L'}{v} \approx \frac{\SI{1.498}{\kilo\m}}{0.995 c} \approx \SI{5.022}{\micro\s}  
+    \end{align*}  
+    which is the same result computed at the previous point.
+\end{enumerate}
+
+\subsection{Problem 3}
+\textit{A source emits radiation at an angle $\theta'$ wrt the $x'$-axis in the source rest frame. The source is moving with constant velocity $v$ toward an inertial observer $O$.}\\
+\textit{What is the angle between the direction of the radiation and the $x$-axis in the frame of $O$?}\\
+
+Let's focus on a photon emitted in $O'$, with a velocity $c$ with an angle $\theta'$ wrt the $x'$-axis. Its vector velocity $\vec{V}'$  wrt $O'$ is:
+\begin{align*}
+    \vec{V}' = (c \cos \theta', c \sin \theta')
+\end{align*}
+We need to find $\vec{V}$ in the $O$ frame of reference.\\
+
+Let's start by deriving the formula of velocity addition in a general case. Suppose that $O'$ is moving wrt $O$ at velocity $v$ along a shared $x$-axis (which can be in fact defined as the direction of relative motion). Then consider a particle $P$ moving at velocity $\vec{V}$ as seen by $O$, and $\vec{V}'$ as measured by $O'$.\\
+By differentiating the Lorentz transformations:
+\begin{align*}
+    cdt' &= \gamma c dt - \beta \gamma dx \\
+    dx' &= -\beta \gamma c dt + \gamma dx \\
+    dy' &=  dy \\
+    dz' &=  dz
+\end{align*}
+Then, starting from the definition of velocity:
+\begin{align*}
+    V_x' = \dv{x'}{t'} = \frac{\gamma \frac{dx}{dt} - \beta \gamma c \frac{dt}{dt}  }{\gamma \frac{dt}{dt} - \frac{\beta \gamma}{c} \frac{dx}{dt}   }  = \frac{V_x - v}{1-\frac{vV_x}{c^2}}   
+\end{align*}
+where we divided numerator and denominator by $dt$ (to highlight the velocities wrt $O$), and then by $\gamma$.\\
+We can repeat the same algebra for the other two axes:
+\begin{align*}
+    V_y' &=  \dv{dy'}{dt'} = \frac{dy}{\gamma dt - \frac{\beta \gamma}{c} dx } = \frac{V_y}{\gamma \left(1-\frac{v V_x}{c^2} \right)}    \\
+    V_z' &= \frac{dz'}{dt'} = \frac{dz}{\gamma dt - \frac{\beta \gamma }{c} dx } = \frac{V_z}{\gamma \left(1-\frac{vV_x}{c^2} \right)}   \\
+\end{align*}
+Notice how $V_x$ affects the measured velocities along the other two axes.\\
+
+The inverse relations can be simply obtained by substituting $v \leftrightarrow -v$. For this problem, we are interested in the two dimensional case:
+\begin{align*}
+    V_x &= \frac{V_x + v}{1 + \frac{v V_x}{c^2} }; \qquad V_y = \frac{V_y}{\gamma \left(1+\frac{vV_x}{c^2} \right)} 
+\end{align*} 
+
+The angle measured in $O$ is then:
+\begin{align*}
+    \theta = \arctan\left(\frac{V_y}{V_x} \right)
+\end{align*} 
+And we can compute the ratio using the formulas derived:
+\begin{align*}
+    \frac{V_y}{V_x} = \frac{V_y'}{\gamma (V_x' + v)} = \frac{c \sin \theta'}{\gamma(c \cos\theta' + v)} = \frac{\sin\theta'}{\gamma (\cos \theta' + \beta)}    
+\end{align*}
+
+\textit{Plot how $\theta$ varies as $v$ increases from $v \ll c$ to $v \approx c$.}\\
+If $v \ll c$, $\beta = 0$ and $\gamma = 1$, leading to:
+\begin{align*}
+    \frac{V_y}{V_x} = \tan\theta' \Rightarrow \theta = \theta'
+\end{align*}    
+So, in the classical limits, the angle does not change.\\
+If $v = c$, however, $\beta= 1$ and $\gamma \to \infty$, leading to:
+\begin{align*}
+    \frac{V_y}{V_x} \approx 0 \Rightarrow \theta \approx 0 
+\end{align*}   
+So radiation is \q{bent} on the direction of motion.\\
+If we compute the derivative of $\theta$ wrt $v$ we find:
+\begin{align*}
+    \frac{d}{dv} \frac{\sin \theta'}{\gamma(\cos \theta' + \beta)} = -\frac{\sin\theta'}{\gamma^2(\cos\theta' + \beta)^2} \frac{d}{dv} (\gamma[\cos\theta' + \beta])
+\end{align*}  
+with:
+\begin{align*}
+    \frac{d}{dv} \gamma [\cos\theta' + \beta] = \frac{\beta}{c}\frac{1}{(1-\beta^2)^{3/2}} (\cos\theta' + \beta) + \frac{\gamma}{c}  > 0 \text{ if $\theta' \in (0, \pi/2)$ }
+\end{align*}
+and so the total derivative is always negative, meaning that increasing $v$ decreases the angle $\theta$ from $\theta'$ (with $v=0$) to $0$ (with $v \to c$).\\
+In fact, further analysis shows that derivative has a greater absolute value as $v$ approaches $c$, meaning that the limit is reached with a vertical tangent.\\
+
+\textit{Show that the radiation speed measured by $O$ is also $c$}.\\
+
+We want to show that:
+\begin{align*}
+    \left(\dv{x}{t} \right)^2 + \left(\dv{y}{t} \right)^2 = c^2
+\end{align*}
+Applying the Lorentz transformations:
+\begin{align*}
+    dt &= \gamma dt' + \frac{\beta \gamma}{c} dx' \\
+    dx &= \gamma dx' + \beta \gamma c dt' \\
+    dy &= dy'
+\end{align*}
+we arrive at:
+\begin{align*}
+    \frac{1}{(dt)^2} \left(...\right)
+\end{align*}
+\end{document}

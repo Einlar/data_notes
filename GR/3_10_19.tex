@@ -1,0 +1,176 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Special Relativity}
+\lesson{1}{3/10/2019}
+
+\begin{dfn}
+An \textbf{inertial frame} is a set of coordinates for which the Newton's law of motion are valid, that is a \textit{free} body moves with costant velocity $\vec{v}$.
+\end{dfn}
+
+The existence of inertial frames is not obvious. For example, Earth is not really an inertial frame: it rotates and revolves around the Sun. The Sun revolves also around the galaxy, and the galaxy is currently accelerating towards an another galaxy.\\
+For all practical purposes, however, approximately inertial frames can be used. In fact, the first Newton law of motion simply postulates the existence of inertial frames.\\
+
+Given an inertial frame $O$, another frame of reference $O'$ is inertial if it moves with constant velocity with respect to $O$.\\
+It is possible to convert the set of coordinates of $O$ to that of $O'$. This is done with a \textbf{Lorentz boost}.\\
+Suppose that $O'$ and $O$ share their axes, and $O'$ moves along $\hat{x}$ with velocity $v$. The coordinate transform is then:
+\begin{align*}
+t' &= \frac{t-\frac{vx}{c^2}}{\sqrt{1-\frac{v^2}{c^2}}}\\
+x' &= \frac{x-vt}{\sqrt{1-\frac{v^2}{c^2}}}\\
+y' &= y\\
+z' &= z
+\end{align*} 
+where $c$ is the speed of light in vacuum.\\
+
+The usual Galilean Transformations are obtained in the limit $v\ll c$. This can be obtained by formally taking $c\to \infty$, leading to:
+\begin{align*}
+t' &= t\\
+x' &= x-vt\\
+y' &= y\\
+z' &= z
+\end{align*}
+They do feel as \q{making more sense} because they are connected to how human's perceive the world, living in a specific environment where relativistic effects are too small to be seen.\\
+In the Galilean world, time and space are not mixed at all. In the relativistic world, time and space are still separate things - but they do change together, and so a bigger framework is needed to incorporate both of them. This is the notion of \textbf{spacetime}.\\
+
+Let's consider now $2$ events $A$ and $B$. In fact, because now time and space are correlated, one cannot speak simply about positions, but needs to consider also the time information.\\
+Let $O$ and $O'$ be two inertial frames. $O$ sees $A$ at $(t_A, \vec{x}_A)$, and $B$ at $(t_B, \vec{x}_B)$, while $O'$ sees $A$ at $(t_A', \vec{x}_A')$ and $B$ at $(t_B', \vec{x}_B')$.\\
+
+For $O$ the space separation between the two events is $|\vec{x}_B - \vec{x}_A| = |\Delta \vec{x}|$, and the time separation is $t_B-t_A =\Delta t$.\\
+On the other hand, for $O'$ the same quantities are $|\vec{x}_B'-\vec{x}_A'|=\Delta\vec{x}'$ and $t_B'-t_A'=\Delta t'$.\\
+
+Both observers can compute the following quantities:
+\begin{align*}
+\Delta s^2 &= -c^2 \Delta t^2 + |\Delta \vec{x}|^2\\
+\Delta {s'}^2 &= -c^2\Delta t^2 + |\Delta \vec{x}'|^2
+\end{align*}
+We note that Lorentz Boosts \textit{preserve} this peculiar quantity, that is called the \textbf{invariant four-distance}.
+\begin{align*}
+\Delta s^2 = \Delta {s'}^2
+\end{align*}
+(Prove it as homework)\\
+This is a \textit{four}-distance, because it is a distance over a $4$-dimensional spacetime, and also \textbf{invariant} because it is preserved in coordinate transforms, and it's a quantity that every observer can agree on.
+
+\begin{itemize}
+\item If two events are connected by a ray of light, then $\Delta s^2 = 0$. This is called \textbf{null-separation}.
+\item If two events are connected by something slower than light, then $\Delta s^2 < 0$. This is called \textbf{time-like separation}.
+\item If $\Delta s^2 > 0$ then the two events have \textbf{space-like} separation.
+\end{itemize}
+
+In a \textbf{spacetime diagram}, a $xy$ plane is plotted at different times, over the $ct$ axis. Rays of light are diagonal lines ($45^\circ$ degrees of slope). A particle situated at the origin at time $0$ (defining the $E$ event) can then move only inside a \textbf{light cone}, and only events inside the light cone can influence or be influenced by the event $E$.
+
+
+\subsection{Proper Time \& Time Dilation}
+Consider two inertial frames $O$ and $O'$, with $O'$ moving at velocity $v$ along the shared $x$ axis. Let $A$ and $B$ be the events in which $O'$ starts/stop his stopwatch.\\
+From the point of view of $O'$, $A$ and $B$ occur at the same location, as $O'$ is stationary wrt this frame of reference. However, from $O$ point of view, $O'$ is moving, and then $A$ and $B$ do not happen anymore at the same place.\\
+
+We define the \textbf{proper time} as the \textit{time separation} between $2$ events that occur at the \textbf{same location} for an observer.\\
+Note that:
+\begin{align*}
+\Delta s^2 &= -c^2 \Delta t^2 + \Delta x^2 \quad \text{for $O$}\\
+\Delta {s'}^2 &= -c^2 \Delta \tau^2 +\cancel{\Delta {x'}^2} \>\>\text{for $O'$}
+\end{align*}
+As $\Delta x' = 0$, $\Delta \tau$ is a \textit{proper time}.\\
+As the four-distance is invariant:
+\begin{align*}
+-c^2 \Delta t^2 + \Delta x^2 = -c^2 \Delta \tau^2 \Rightarrow \Delta t^2 - \frac{\Delta x^2}{c^2} = \Delta \tau^2
+\end{align*}
+and so $\Delta \tau < \Delta t$. So, the time measured in a moving reference trame is longer, i.e. it is \textit{dilated}.\\
+
+Let $\Delta x$ be the distance covered by $O'$ in the time $\Delta t$ as measured by $O$. As $O'$ moves at a constant velocity $v$, it holds $\Delta x = v\Delta t$. Substituting in the previous relation:
+\begin{align*}
+\Delta t^2 -  \frac{v^2 \Delta t^2}{c^2} = \Delta \tau^2 \Rightarrow \Delta t^2 \left(1 - \frac{v^2}{c^2}\right) = \Delta \tau^2 \Rightarrow \underbrace{\Delta t}_{\text{Dilated time (from $O$)}} = \frac{\overbrace{\Delta \tau}^{\text{Proper time}}}{\sqrt{1-\frac{v^2}{c^2}}} \equiv \gamma \Delta\tau
+\end{align*}
+where:
+\begin{align*}
+\gamma(v) \equiv \frac{1}{\sqrt{1-\frac{v^2}{c^2}}}
+\end{align*}
+Note that $\gamma(v) \geq 1$, and $\gamma(v) \to +\infty$ as $v\to c$. So, the proper time is always the smaller one.
+
+\subsection{Lorentz Boost inversion}
+Recall the Lorentz Boost relations:
+\begin{align*}
+t' &= \frac{t-\frac{v x}{c^2}}{\sqrt{1-\frac{v^2}{c^2}}}\\
+x' &= \frac{x-vt}{\sqrt{1-\frac{v^2}{c^2}}}\\
+y' &= y\\
+z' &= z
+\end{align*}
+If instead we know the coordinates of $O'$ and want to know the ones of $O$, we must invert them:
+\begin{align*}
+t &= \frac{t'+\frac{vx}{c^2}}{\sqrt{1-\frac{v^2}{c^2}}}\\
+x &= \frac{x'+vt'}{\sqrt{1-\frac{v^2}{c^2}}}\\
+y &= y'\\
+z &= z'
+\end{align*}
+There are two ways to prove this:
+\begin{enumerate}
+\item Solve them explicitly
+\item Consider that if $O'$ moves at velocity $\vec{v}$ with respect to $O$, then $O$ moves at velocity $-\vec{v}$ wrt $O'$.
+\end{enumerate}
+So there is not an inertial frame \q{prettier} than another - there is not one at rest, or one in motion \q{in absolute sense}.\\
+
+Consider:
+\begin{align*}
+t' = \frac{t-\frac{v x}{c^2}}{\sqrt{1-\frac{v^2}{c^2}}}
+\end{align*}
+Multiplying by $c$:
+\begin{align*}
+ct' = \frac{ct-\frac{xv}{c}}{\sqrt{1-\frac{v^2}{c^2}}}
+\end{align*}
+This can be written in a more compact form:
+\begin{align*}
+ct' = \gamma ct - \beta\gamma x; \quad \gamma = \frac{1}{\sqrt{1-\frac{v^2}{c^2}}}; \quad \beta = \frac{v}{c}
+\end{align*}
+Note that the difference between the squares of the two coefficients is equal to $1$:
+\begin{align*}
+\gamma^2 - \beta^2\gamma^2 = \gamma^2-\beta^2\gamma^2 = \gamma^2(1-\beta^2) = \frac{1}{1-\beta^2}(1-\beta^2) = 1
+\end{align*}
+This relation is really similar to $\sinh^2-\cosh^2 = 1$. In fact, there exists an angle $\theta$ for which the first coefficient is equal to $\cosh \theta$, and the second to $\sinh \theta$. Then:
+\begin{align*}
+\tanh \theta = \frac{\sinh\theta}{\cosh\theta} = \frac{\beta\gamma}{\gamma} = \beta = \frac{v}{c}
+\end{align*}
+In this notation, the Lorentz Boost becomes:
+\begin{align}
+\label{eqn:boost-tanh}
+\begin{cases}
+ct' = \cosh\theta ct -\sinh\theta x\\
+x' = \cosh\theta x - \sinh\theta ct
+\end{cases}
+\end{align}
+In matrix notation:
+\begin{align*}
+\begin{pmatrix}ct'\\x'\end{pmatrix} =
+\begin{pmatrix}\cosh\theta & -\sinh\theta\\
+-\sinh\theta & \cosh\theta\end{pmatrix}\begin{pmatrix}
+ct\\ x\end{pmatrix}
+\end{align*}
+which is really similar to a 2D rotation:
+\begin{align*}
+\begin{pmatrix}x'\\ y'\end{pmatrix} =
+\begin{pmatrix}\cos\theta & \sin\theta\\
+-\sin\theta & \cos\theta\end{pmatrix} \begin{pmatrix}x\\ y\end{pmatrix}
+\end{align*}
+So, in a certain sense, a Lorentz Boost is a kind of rotation in an abstract space.\\
+
+Let's now see how to draw axes in a spacetime diagram. Starting by a graph with axes $x$ and $ct$, of observer $O$, we want to draw the axes $x'$ and $ct'$ of observer $O'$.\\
+Noting that the $ct'$ axis is the locus of points with $x'=0$, we can solve:
+\begin{align*}
+0 = -\sinh \theta ct +\cosh\theta x \Rightarrow ct \sinh\theta = x\cosh\theta \Rightarrow ct =\frac{x}{\tanh\theta}
+\end{align*}
+This is a line, passing through the origin, with slope \textit{greater} than $1$ (as the denominator $\tanh\theta =v/c$ is always $\leq 1$).\\
+
+On the other hand, the $x'$ axis is made of points with $ct'=0$. Using again (\ref{eqn:boost-tanh}) we can solve:
+\begin{align*}
+\cosh\theta ct - \sinh\theta x = 0 \Rightarrow ct\cosh\theta = x\sinh\theta \Rightarrow ct = x\tanh\theta
+\end{align*}
+This is a line, passing through the origin, with slope \textit{lower} than $1$.\\
+In summary:
+\begin{itemize}
+\item $ct'$ axis $\displaystyle\equiv x'=0 \equiv ct =\frac{x}{\tanh\theta}$
+\item $x'$ axis $\equiv \displaystyle ct'=0 \equiv ct=x\tanh\theta$
+\end{itemize}
+
+\end{document}
+
+

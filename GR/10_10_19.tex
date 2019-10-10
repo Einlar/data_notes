@@ -1,0 +1,317 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Review}
+\lesson{3}{10/10/19}
+In the last lecture we introduced the concept of a tensor. We started by defining contra-variant and co-variant vectors as objects that transform in a certain way:
+\begin{align*}
+    V^\mu \to V'^\mu = \Lambda^\mu_{\diamond \alpha}V^\alpha; \quad V_\mu \to V'_\mu = \Lambda_\mu^{\diamond \alpha}V_\alpha
+\end{align*}
+with:
+\begin{align*}
+    \Lambda_\mu^{\diamond \alpha} \equiv \eta_{\mu \nu}\eta^{\alpha \beta} \Lambda^\nu_{\diamond \beta}
+\end{align*}
+Contra-variant vectors are also called rank $(1,0)$ tensors, while co-variant vectors are rank $(0,1)$ tensors.\\
+A tensor with more than one index transforms by combining the specific transformation for each index, such in:
+\begin{align*}
+    A_{\mu \nu} \to \Lambda_\mu^{\diamond \alpha} \Lambda_\nu^{\diamond \beta} A_{\alpha \beta}
+\end{align*} 
+
+\section{Maxwell's equations in manifestly covariant form}
+All this notation is really useful to write \q{manifestly covariant} expressions - that is relations that are immediately recognizable as being valid even after Lorentz Boosts/rotations.\\
+
+In particular, we can write Maxwell's equations using the $4$-vector notation. We start by defining a tensor:
+\begin{align*}
+    F_{\mu \nu} = \left(\begin{array}{cccc}
+    0 & E_x/c & E_y/c & E_z/c \\ 
+    -E_x/c & 0 & -B_z & B_y \\ 
+    -E_y/c & B_z & 0 & -B_x \\ 
+    -E_z/c & -B_y & B_x & 0
+    \end{array}\right)
+\end{align*} 
+and a $4$-vector:
+\begin{align*}
+    J^\mu = (c \rho, \vec{j})
+\end{align*} 
+where $\rho$ is the charge density, and $\vec{j}$ is the current density.\\
+Then, the Maxwell's equations can be written as:
+\begin{align*}
+    \partial_\mu F^{\mu \nu} = \mu_0 J^\nu\\
+    \partial_\mu \epsilon^{\mu \nu \alpha \beta}F_{\alpha \beta} = 0
+\end{align*}
+where $\epsilon^{\mu \nu \alpha \beta}$ is a totally anti-symmetric tensor (so that it changes sign when we exchange any two indices), with $\epsilon^{0123} \equiv +1$. \\
+These equations are \textbf{manifestly covariant}, that is the left and right side vary in the same way under a boost: we then know that the laws of electromagnetism are the same in all inertial frames of reference (as we hoped). 
+
+\section{The 4-velocity}
+Consider a massive particle/object that is moving wrt some reference frame $O$. In relativity we need to specify, in addition to the three spatial coordinates, also the time. So we use a $4$-vector $x^\mu$.\\
+The set of points in spacetime reached by the particle during its motion form a curve called \textbf{worldline}. We can parametrize this curve with the proper time $\tau$, that is the time as measured from a reference frame where the particle is at rest. So, we have $x^\mu(\tau)$.\\
+
+We now define the $4$-velocity as the derivative of $x^\mu$ wrt proper time:
+\begin{align*}
+    u^\mu = \frac{dx^\mu}{d \tau} 
+\end{align*}
+Note that:
+\begin{align*}
+    ds^2 &=  -c^2 dt^2 + dx^2 + dy^2 +dz^2 \\
+    &=  -c^2 d \tau^2
+\end{align*}
+and so $d \tau = \sqrt{-ds^2}/c$, leading to:
+\begin{align*}
+    u^\mu = \frac{c dx^\mu}{\sqrt{-ds^2}} 
+\end{align*}
+As $dx^\mu$ is a $4$-vector (in fact, we defined $4$-vectors to represent events in spacetime), and $ds^2$ is a scalar, we immediately know that $u^\mu$ is a 4-vector.\\
+
+Recall now, from the effect of time dilation, that:
+\begin{align*}
+    d \tau = \sqrt{1- v^2/c^2} dt
+\end{align*}
+and so:
+\begin{align*}
+    u^\mu = \frac{dx^\mu}{\sqrt{1-v^2/c^2}dt} = \left(\frac{c \cancel{dt}}{\sqrt{1-v^2/c^2}\cancel{dt}}, \frac{d \vec{x}}{\sqrt{1-v^2/c^2}dt}  \right)  = (\gamma c, \gamma \vec{v})
+\end{align*}
+Note that at $v \ll c$, $\gamma = 1$, and so the spatial components of $u^i = \vec{v}^{\,i}$ are the components of the usual velocity.\\
+In the rest frame of the particle, $v=0$ and so $u^\mu = (c,0)$.\\
+Then, note that $u^\mu u_\mu$ is a scalar (it is a contraction of a $4$-vector with himself), and so it is the same wrt all frame of reference. Thus, we can compute it in the rest frame, where the calculations are simpler:
+\begin{align*}
+    u^\mu u_\mu = -c^2
+\end{align*} 
+Of course, even in different frames we get the same result:
+\begin{align*}
+    u^\mu u_\mu &= \eta_{\mu \nu} u^\mu u^\nu = \eta_{\mu \nu} \frac{dx^\mu}{d \tau} \frac{dx^\nu}{d \tau} = \\
+    &=  \hlc{Yellow}{\eta_{\mu \nu}}  \frac{\hlc{Yellow}{dx^\mu}}{\sqrt{-ds^2}/c} \frac{\hlc{Yellow}{dx^\nu}}{\sqrt{-ds^2}/c} = \\
+    &=  - \frac{\hlc{Yellow}{ds^2}}{ds^2/c^2} = -c^2 
+\end{align*}
+
+\section{Energy-Momentum 4-vector}
+We define:
+\begin{align*}
+    p^\mu = m u^\mu
+\end{align*}
+As $m$ (the invariant mass) is a scalar, this is indeed a $4$-vector.\\
+Note that:
+\begin{align*}
+    u^\mu = (\gamma c , \gamma \vec{v}) \Rightarrow p^\mu= (\gamma m c, \gamma m \vec{v}) 
+\end{align*}
+In the non-relativistic regime we have $\gamma \approx 1$, so that $p^i = mv^i$, which is the non-relativistic momentum.\\
+The time component is:
+\begin{align*}
+    p^0 = \frac{mc}{\sqrt{1-\frac{v^2}{c^2} }} 
+\end{align*}  
+and we want to understand what it means in the non-relativistic limit. If we set $v=0$ we get $mc$, which is difficult to interpret. So, we need an expansion around $v=0$. Recall the common Taylor expansion:
+\begin{align*}
+    (1+\epsilon)^n \underset{|\epsilon| \ll 1}{\approx}  1+ n \epsilon
+\end{align*} 
+So by setting:
+\begin{align*}
+    \epsilon = -\frac{v^2}{c^2}; \qquad n=-\frac{1}{2}  
+\end{align*}
+we get:
+\begin{align*}
+    p^0 \approx mc \left[1+\frac{v^2}{2c^2} \right] = mc + \frac{1}{c} \frac{mv^2}{2}  
+\end{align*}
+Note that $mv^2/2$ is the kinetic energy of the particle. We can rearrange:
+\begin{align*}
+    cp^0 = mc^2 + \frac{1}{2} mv^2 
+\end{align*} 
+We then conclude that also the $mc^2$ term must be some kind of energy - and so we call it the \textbf{rest energy}, as it is the only energy that an object possesses when it is not moving. So:
+\begin{align*}
+    p^0 = \frac{\text{Energy}}{c} 
+\end{align*}  
+This justifies the name of \q{energy-momentum 4-vector} for $p^\mu$.\\
+
+Note that we immediately know how the energy transforms, as:
+\begin{align*}
+    p'^\mu = \Lambda^\mu_{\diamond \alpha}p^\alpha
+\end{align*}
+
+\section{Newton's First Law in SR}
+\begin{center}
+    A free particle moves with constant $u^\mu$ 
+\end{center}
+In mathematical terms:
+\begin{align*}
+    \frac{du^\mu}{d \tau} = \frac{d^2 x^\mu}{d \tau^2} = 0 \text{ for a free particle}
+\end{align*}
+where the derivative of $u^\mu$ generalizes the concept of acceleration:
+\begin{align*}
+    a^\mu = \frac{d u^\mu}{d \tau} = \frac{d^2 x^i}{d \tau^2} = 0 
+\end{align*} 
+and $a^\mu$ is called $4$-acceleration.
+
+\section{Variational Principle}
+It's common knowledge that \q{particles in GR move in straight lines, but straight lines are bent by gravity}. We now want to make sense of this concept, by talking about motion along a path that \textit{minimizes} a certain quantity, and introducing the definition of \textit{geodesics}.\\
+
+Recall Snell's Law of Refraction:
+\begin{align*}
+    \frac{\sin \theta_r}{\sin \theta_i} = \frac{n_i}{n_2}  
+\end{align*}
+A ray of light passing from a medium with refraction index of $n_1$ at an angle $\theta_i$ wrt the interface to another medium with index of $n_2$ is bent at an angle $\theta_r$.\\
+
+This result has another (elegant) interpretation:
+\begin{center}
+    Light chooses the path that minimizes the time to go from the source $S$  to the receiver $R$.
+\end{center}
+
+This concept generalizes for a free particle in special relativity. Consider a free particle $P$  that moves from $A$ and arriving at $B$. We will prove that $P$ travels along the worldline that minimizes the \textbf{proper time} $\tau_{AB}$. We will note that this statement is completely equivalent to requiring:
+\begin{align*}
+    \frac{d^2 x^\mu}{d \tau^2} = 0 
+\end{align*}  
+
+Recall that, near the minimum of a function, the function \q{does not change}, meaning that the first derivative is zero:
+\begin{align*}
+    0 = df = \dv{f}{x} \Big|_{x_0 } dx = 0 \text{ if } \dv{f}{x} \Big|_{x_0 } = 0 \text{ if } x_0 \text{ is a minimum}
+\end{align*}
+
+Now consider a small \q{variation} from the initial worldline $x^\mu$, represented by $x^\mu+ dx^\mu$. We want to prove that:
+\begin{align*}
+    \tau[x^\mu + dx^\mu] - \tau[x^\mu] = d \tau = 0
+\end{align*}
+which is only true if $x^\mu$ minimizes the proper time.\\
+Basically: if the correct $x^\mu$ of a free particle minimizes $\tau$, we expect that by deforming a little the trajectory the value of $\tau$ does not change (at the first order).\\
+
+Let's start by computing the proper time between $A$ and $B$:
+\begin{align*}
+    \tau &= \int_{A}^{B} d \tau = \int_{A}^{B} d \tau \frac{d \tau^2}{d \tau^2} =\\
+    &= \int_{A}^{B} d \tau \frac{dt^2 - \frac{1}{c^2} dx^2 - \frac{1}{c^2} dy^2 - \frac{1}{c^2} dz^2}{d \tau^2} =\\
+    &= \int_{A}^{B} d \tau \left[\left(\frac{d t}{d \tau} \right)^2 -\frac{1}{c^2} \left(\frac{dx}{d \tau} \right)^2 - \frac{1}{c^2}\left(\frac{dy}{d \tau} \right)^2 -\frac{1}{c^2} \left(\frac{dz}{d \tau} \right)^2   \right]   
+\end{align*}
+where $x$, $y$, $z$ are the entries in $x^\mu(\tau)$, as functions of $\tau$: $t(\tau)$, $x(\tau)$, $y(\tau)$, $z(\tau)$.\\
+
+To simplify calculations, let's start by considering a specific kind of deformation, that happens along the first axis:
+\begin{align*}
+    dx^0 &= 0 \\
+    dx^1 &= \delta x^1(\tau) \\
+    dx^2 &= 0 \\
+    dx^3 &= 0 
+\end{align*}
+Then we have:
+\begin{align*}
+    \tau_{AB} [x+dx] &= \int_{A}^{B} d \tau \left[\left(\frac{dt}{d \tau} \right)^2 
+    -\frac{1}{c^2} \left(\frac{dx}{d \tau} + \frac{d \delta x}{d \tau}  \right)^2
+    -\frac{1}{c^2} \left(\frac{dy}{d \tau} \right)^2
+    -\frac{1}{c^2} \left(\frac{dz}{d \tau} \right)^2
+    \right] =\\
+    &= \int_{A}^{B} d \tau \left[\hlc{Yellow}{\left( \frac{dt}{d \tau} \right)^2 
+    }\hlc{Yellow}{-\frac{1}{c^2} \left(\frac{dx}{d \tau} \right)^2 }- \frac{2}{c^2}\frac{dx}{d \tau} \frac{d \delta x}{d \tau}
+    -\cancel{\frac{1}{c^2}\left(\frac{d \delta x}{d \tau} \right)^2 
+    }\hlc{Yellow}{-\frac{1}{c^2} \left(\frac{dy}{d \tau} \right)^2
+    -\frac{1}{c^2} \left(\frac{dz}{d \tau} \right)^2}
+    \right] = \\
+    &\underset{(a)}{=}  \hlc{Yellow}{\tau_{AB}[x]} - \frac{2}{c^2} \int_{A}^{B} d \tau \frac{dx}{d \tau} \frac{d \delta x}{d \tau}    \\
+\end{align*}
+In (a) we removed the second order infinitesimal, and then recognized the proper time of the unperturbed trajectory.\\
+We can now compute:
+\begin{align*}
+    d \tau_{AB} &= \tau_{AB}[x + dx] - \tau_{AB}[x] = - \frac{2}{c^2} \int_{A}^{B} d \tau \frac{dx}{d \tau} \frac{d \delta x}{d \tau} =\\
+    &= -\frac{2}{c^2} \frac{dx}{d \tau} \delta x\Big|_A^B + \frac{2}{c^2} \int_{A}^{B} d \tau \underbrace{\frac{d^2x}{d \tau^2}}_{= 0} \delta x  
+\end{align*}
+The first term vanishes as the deformation does not alter the starting and ending points ($A$ and $B$) of the original particles, meaning that $\delta x$ is $0$ in $A$ and $B$. Then, the integral in the second term also vanishes, because for a \textbf{free particle} we have:
+\begin{align*}
+    \frac{d^2 x}{d \tau^2} \equiv 0 
+\end{align*}    
+
+So, summarizing, we showed that:
+\begin{align*}
+    \text{Free motion} \Leftrightarrow \frac{d^2 x^\mu}{d \tau^2} = 0 \Leftrightarrow \tau_{AB}[x] \text{ is minimum} 
+\end{align*}
+
+Note that also Newtonian Mechanics can be expressed in a variational form, by defining the \textbf{action} $S$ as:
+\begin{align*}
+    S = \int dt [\text{Kinetic Energy} - \text{Potential Energy}]
+\end{align*} 
+and showing that:
+\begin{align*}
+    \text{Newton's Laws} \Leftrightarrow \delta S = 0 \text{ (Action is minimum)}
+\end{align*}
+
+\section{Motion of Light Rays}
+Let's try to replicate the previous passages for a light ray:
+\begin{align*}
+    u^\mu = \frac{dx^\mu}{d \tau}; \qquad d \tau = \frac{\sqrt{-ds^2}}{c} = 0 
+\end{align*}
+which is a problem, because we cannot divide by zero. In fact, when we defined $u^\mu$ we needed $v < c$, and we assumed a \textit{massive particle}.\\
+
+So, we need a different definition.\\
+If a ray of light moves along the $x$-axis, we define:
+\begin{align*}
+    u^\mu= (1,1,0,0) 
+\end{align*}
+and then:
+\begin{align*}
+    x^\mu = \lambda u^\mu
+\end{align*}
+where $\lambda$ is called an affine coordinate, such that:
+\begin{align*}
+    dx\, dx = \lambda^2 du\,du = 0
+\end{align*} 
+
+For the energy-momentum of light we know that a single quantum of light (photon) has energy:
+\begin{align*}
+    E = \hbar \omega; \qquad \hbar = \frac{h}{2\pi} 
+\end{align*} 
+with $h$ being Planck's constant, and:
+\begin{align*}
+    \omega = \frac{2\pi}{T}  = 2\pi f
+\end{align*}
+with $T$ the period and $f$ the frequency of the considered ray of light.\\
+Then the momentum is:
+\begin{align*}
+    \vec{p} = \frac{\hbar }{c}  \vec{k}
+\end{align*}  
+with $\vec{k}$ the wave vector.\\
+
+So we arrive at the $4$-vector:
+\begin{align*}
+    p^\mu = \left(\frac{\text{Energy}}{c}, \text{Momentum} \right) = \left(\frac{\hbar\omega }{c}, \frac{\hbar \vec{k}}{c}  \right) = \frac{\hbar}{c} k^\mu
+\end{align*}
+where:
+\begin{align*}
+    k^\mu = (\omega, \vec{k})
+\end{align*}
+is also a $4$-vector.\\
+Note that:
+\begin{align*}
+    p^2 = 0 \Rightarrow k^\mu k_\mu = 0 \Rightarrow -\omega^2 + \vec{k}^2 = 0 \Rightarrow \omega = |\vec{k}|
+\end{align*}
+
+\section{Doppler Effect}
+Consider a source $S$ emitting radiation at frequency $f$ (wrt a frame of reference $O'$  where $S$ is at rest). Let $O$ be another inertial frame of reference moving at velocity $v$ wrt $O'$ (further away from $S$).\\
+If the radiation is emitted along the $x$ axis, then:
+\begin{align*}
+    k'^\mu = (\omega, \omega, 0, 0)
+\end{align*}
+And $O$ observes:
+\begin{align*}
+    k^\mu = \Lambda^\mu_{\diamond \nu} k^\nu
+\end{align*}
+Explicitly:
+\begin{align*}
+    \omega' = k'^0 = \Lambda^0_{\diamond \nu} k^\nu = \Lambda^0_{\diamond 0} k^0 + \Lambda^0_{\diamond 1} k^1 = \gamma \omega + (-\gamma \beta) \omega = (1-\beta) \gamma \omega
+\end{align*}
+and then:
+\begin{align*}
+    f = \frac{\omega}{2\pi}; \qquad f' = \frac{\omega'}{2 \pi} = (1- \beta) \gamma f  
+\end{align*}
+We finally arrive at:
+\begin{align*}
+    f' = \frac{1-\frac{v}{c} }{\sqrt{1-\frac{v^2}{c^2}} } f
+\end{align*}
+At small speed, $\gamma \approx 1$:
+\begin{align*}
+    f' \approx \left(1-\frac{v}{c} \right) f
+\end{align*}
+Note that $f' < f$ when source \& observer are going away from each other.\\
+Also, we get the same result if we consider the receiver at rest, and the source moving in the opposite direction (as the principle of relativity implies: there is no absolute space, only the relative motion between observers matters).\\
+
+
+If the observer is moving \textit{towards} the source, we will just have to substitute $v \leftrightarrow -v$, obtaining:
+\begin{align*}
+    f' = \frac{1 + \frac{v}{c} }{\sqrt{1 - \frac{v^2}{c^2}} }f 
+\end{align*}  
+
+
+
+
+\end{document}

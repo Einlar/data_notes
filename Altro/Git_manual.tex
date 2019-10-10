@@ -1,0 +1,35 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{What is \texttt{git}?}
+\texttt{Git} is a \textbf{Distributed Version Control System} (DVCS), that is:
+\begin{itemize}
+    \item \textbf{Version control}: a software capable of tracking changes to a set of files (e.g. code for a project), providing the ability to undo modifications, and a certain amount of redundancy and security from data corruption (integrity).
+    \item \textbf{Distributed}: all the changes history can be uploaded to a server, and synced between different clients, so that at every moment all users have local access to the entire data, along with its revisions. That prevents data loss if any of the systems break, and also allow to track changes while being offline (and sync them later). 
+\end{itemize}
+ 
+\section{Basics}
+The core of \texttt{git} is the \texttt{.git} directory (also called a \textit{repository} ), which contains snapshots (compressed copies) of all the versions of the tracked files. We will see later how to create this directory for a new project, or how to download it as part of an existing project, and also how to select the tracked files.\\
+
+For now, know that all tracked files can exist in \textbf{three states}:
+\begin{enumerate}
+    \item \texttt{Modified}, meaning that they are different from the last registered version
+    \item \texttt{Staged}, meaning that they have been tagged to be registered in the next snapshot, when it will be created
+    \item \texttt{Committed}, meaning that they are stored as part of a registered snapshot. 
+\end{enumerate}
+One can \texttt{checkout}, meaning select a registered snapshot to be modified, then modify it, \texttt{stage} it, marking it for the following registration, and then \texttt{commit} it, adding it as part of a new snapshot.
+
+\subsection{New repository}
+There are two ways to obtain a \texttt{git} repository:
+\begin{itemize}
+    \item Create it from scratch, by taking a local directory and turning it into a repository:
+    \hlc{mygray}{\texttt{mkdir FolderName}}, \hlc{mygray}{\texttt{cd FolderName}}, \hlc{mygray}{\texttt{git init}}.\\
+    Tracked files are added with \texttt{git add NameFile}. For example: \texttt{git add *.py} (adds all python files).
+    \item \texttt{Clone} it from an already existing repository
+\end{itemize}
+
+\end{document}
+
+

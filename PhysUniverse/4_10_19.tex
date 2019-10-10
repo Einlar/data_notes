@@ -1,0 +1,192 @@
+%&latex
+%
+\documentclass[../PhysUniverse.tex]{subfiles}
+\begin{document}
+
+\section{Dark matter}
+\lesson{2}{4/10/2019}
+During the last lecture, we introduced the Friedmann equations (without demonstration):
+\begin{align*}
+H^2(t) = \frac{8\pi G}{3} \rho(t) - \frac{kc^2}{a^2(t)}
+\end{align*}
+where $a(t)$ is the scale factor, and $H\equiv \dot{a}/a$.\\
+If we let $k=0$, the $\rho(t)$ we derive is called the \textbf{critical density} $\rho_c(t) = 3H^2(t)/(8\pi G)$.\\
+If $t=t_0$ (current time), $H(t_0)\equiv H_0 = 100 h \si{\km\per\s\per\mega\parsec}$ (recall that $\SI{1}{\mega\parsec}=\SI{3.086e22}{\m}$. $h$ is a un unknown parameter - the Hubble constant. Multiple experiments have given different estimates for $H_0$ - this was due to a problem of interpretation on the largest structure of the universe. Current estimates suggest $h\approx 0.7$.\\
+Knowing $H_0$, we can compute the density $\rho_{0c} =1.88h^2\times 10^{-29}\si{\g\per\centi\m\cubed}$ of the current universe if it were flat.\\
+Then we define the ratio $\Omega(t) \equiv \rho(t)/\rho_c(t)$. By measuring $\Omega_0 = \rho_0/\rho_{0c}$ we can infer the value of $k \in \{0,\pm 1\}$.\\
+
+The tricky part is computing the current universe density $\rho_0$.\\
+Let's start by examining the contribution of all galaxies. This can be computed if we know the mean luminosity of galaxies per unit volume $\mathcal{L}_g$, and the mean mass to light ratio of galaxies $\langle M/L \rangle$:
+\begin{align*}
+\rho_{0g} = \mathcal{L}_g\langle\frac{M}{L}\rangle
+\end{align*}
+Then, following the definition of an expected value:
+\begin{align*}
+\mathcal{L}_g = \int_0^{\infty} dL\, L\, \phi(L)
+\end{align*}
+where $\phi(L)$ is the \textit{luminosity function}, that is the number of galaxies per unit volume and luminosity between $L$ and $L+dL$.\\
+One possibility for the universal luminosity function, based on a fit of observed data that works very well, is the Schechter luminosity function:
+\begin{align*}
+\phi(L) = \frac{\phi_*}{L_*} \left(\frac{L}{L_*}\right)^{-\alpha} \exp\left(-\frac{L}{L_*}\right)
+\end{align*}
+with $\phi_* = 10^{-2}h^3 \si{\per\mega\parsec\cubed}$ (where $h$ is introduced conventionally to \q{tweak} the parameters based on new observations). $L_* = 10^{10} h^{-2}L_\odot$ ($L_\odot = \SI{3.9e20}{\watt}$ is the luminosity of the Sun) - this means that a typical galaxy has about the luminosity of $10^{10}$ suns.\\
+
+The graph of $\phi(L)$ starts as a decreasing power law, that vanishes exponentially for $L>L_*$. That means that there are many galaxies of low luminosities, and very few with really high luminosities.\\
+Note that $\phi(L)$ diverges for $L\to 0$, but still the integral of $\mathcal{L}_g$ converges. That means that the estimate of low luminosity galaxies is not important at all for $\mathcal{L}_g$ - which solves the problem of naively counting the number of observed galaxies.
+\begin{align*}
+\mathcal{L}_g = \phi_* L_* \Gamma(2-\alpha) = 2\times 10^{18}h L_\odot \si{\per\mega\parsec\cubed}
+\end{align*}
+
+Now the problem is to estimate $\langle M/L\rangle$. The $M$ term is tricky, because we cannot measure it directly.\\
+In general, galaxies can be grouped in two types: spiral and elliptical.\\
+
+For spirals, one can measure the velocity $v$ of rotation of stars around the galaxies' center, one can then estimate their mass $M$ - for example by using the Kepler laws:
+\begin{align*}
+GM(R) = v^2(R)R \Rightarrow v(R) \propto \sqrt{\frac{GM(R)}{R}}
+\end{align*}
+The problem is that observations do not agree with theory: we expect $v(R)$ to drop at a certain distance from the galaxy center, but instead it remains constant.\\
+Various possible explanations exist: one is that of MONDs, theories of MOdified Newtonian Dynamics, that add a Yukawa term to the gravitational potential. They, however, can't explain all of the observations.\\
+The most accepted possibility is that of the existance of \q{missing matter}: all galaxies are surrounded by a \textit{dark matter} halo that is (usually) ten times larger than the galaxy size.\\
+Then, one can estimate mass as:
+\begin{align*}
+M = 4\pi \int_0^R dR\, R^2 \rho(R)\qquad \rho \propto \frac{1}{R^2}
+\end{align*}
+There are various possibilities for dark matter composition. One is the neutralino, a particle predicted by supersimmetry theory, that unfortunately has no experimental evidence as of now. Another possibility is given by axions.
+
+
+\begin{figure}[H]
+\begin{centering}
+\includegraphics{Plots/rotational_velocity.pdf}
+\caption{The blue line is the expected $v(R)$ from Kepler laws, while the red line results from observations.}
+\end{centering}
+\end{figure}
+
+On the other hand, stars in elliptical galaxies move \q{randomly} - and no rotational velocity is defined. One can observe that some stars are blueshifted, and others are redshifted, depending on the direction of their motion relative to the observer. So, by measuring the \textit{broadening} of spectral lines (given by the compound effect of red-blueshifting) one can compute the mean squared velocity of stars in an elliptic galaxy.\\
+Supposing that the system is in equilibrium, the virial theorem holds:
+\begin{align*}
+2T + U = 0
+\end{align*}
+The kynetic velocity can be inferred from the mean squared velocity:
+\begin{align}
+T = \frac{3}{2}M \langle v_r^2\rangle
+\label{eqn:virial}
+\end{align}
+where $1/2$ comes from the definition of kynetic energy, and the $3$ factor is because we are countin on three spatial directions.\\
+Then, the potential energy comes from the gravitational interaction:
+\begin{align*}
+U = -\frac{4M^2}{R}
+\end{align*}
+By using (\ref{eqn:virial}) one arrives at:
+\begin{align*}
+\frac{3M}{\langle v_r^2\rangle} = \frac{4M^2}{R}
+\end{align*}
+From observations, the visible mass does not account for the mass required for the previous relation - so even in \textit{elliptic} galaxies dark matter is required.\\
+
+So, accounting from the extra dark mass, the estimate for $\langle M/L\rangle $ becomes:
+\begin{align*}
+\langle \frac{M}{L}\rangle \approx 300h \frac{M_\odot}{L_\odot}
+\end{align*}
+a value $10$ times higher of the one that does not account for dark matter. A value of $1390$ for $\langle M/L\rangle$ would be required to obtain $\Omega=1$ - so something is missing ($\Omega$ should be around $1$, because measures from the CMB are compatible with a flat universe).\\
+
+So, $27\%$ of energy in the universe is made of dark matter, and only $5\%$ is ordinary matter, but we can see only a fraction of this $5\%$.\\
+
+From current observations, we have strict bounds on $\Omega_0$:
+\begin{align*}
+0.013 \leq \Omega_{0b} h^2 \leq 0.025 \Rightarrow 2.6\% \leq \Omega_{0b} \leq 5.1\%
+\end{align*}
+
+So, let's decompose $\Omega_0$ in three terms:
+\begin{align*}
+\Omega_0 = 1 = \underbrace{\Omega_{0b}}_{\text{baryonic}} + \underbrace{\Omega_{0dm}}_{\text{dark matter}} + \underbrace{\Omega_{0de}}_{\text{dark energy}}
+\end{align*}
+
+The third term needs more explaining. We know that:
+\begin{itemize}
+\item It doesn't clump - otherwise it will behave like dark matter
+\item It is the cause of the observed accelerating expansion of the universe. In fact, recall the Friedmann equation:
+\begin{align*}
+\frac{\ddot{a}}{a} = -\frac{4\pi G}{3}\left(\rho + \frac{3P}{c^2}\right)
+\end{align*}
+The only way to obtain an outward acceleration (positive $\ddot{a}$) is to have $\rho < 0$ - that is negative energy density (unphysical) - or a negative isotropic pressure $P$.
+\end{itemize}
+
+So, what is dark energy made of?\\
+One idea is radiation:
+\begin{align*}
+\rho_{0\gamma} = \frac{\sigma_r T_{0\gamma}^4}{c^2} = \SI{4.8e-34}{\g\per\centi\m\cubed}
+\end{align*}
+\begin{align*}
+\sigma_2 \equiv \frac{\pi^2 k_B^4}{15 \hbar^3 c^3}; \quad \sigma_{sb} = \frac{\sigma_2 c}{4}
+\end{align*}
+but it doesn't account for the size of the observed effect.\\
+Another possibility is given by neutrinos. Suppose they were massless, then the only relevant parameter to know is their temperature:
+\begin{align*}
+T_\nu = \left(\frac{4}{11}\right)^3 T_\gamma
+\end{align*}
+However, they have mass. We don't know how much, but we have upper bounds:
+\begin{align*}
+\sum m_\nu \leq \SI{0.12}{\eV}; \qquad \langle m_\nu\rangle \leq \SI{0.04}{\eV}
+\end{align*}
+and so the density of neutrinos is negligible on the cosmological size:
+\begin{align*}
+\rho_{0\nu} = 1.9 N_\nu \frac{\langle m_\nu\rangle}{\SI{10}{\eV}} 10^{-30} \si{\g\per\centi\m\cubed}
+\end{align*}
+
+\section{Dynamics of the universe}
+One of the most important results to explain the evolution of the universe is the \textbf{Hubble Law}, which, in its most simple version states:
+\begin{align*}
+S = H_0 d
+\end{align*}
+By plotting the velocity of galaxies relative to Earth as a function of their distance, a trend can be observed: further galaxies are receding from us at greater speeds.\\
+
+Let's see how this phenomenon emerges, starting from the R-W metric:
+\begin{align*}
+ds^2 = c^2 dt^2 -a^2(t) \left[ \frac{dr^2}{1-kr^2} + r^2 d\Omega^2\right]
+\end{align*}
+For a plane, we have:
+\begin{align*}
+ds^2 = c^2dt^2 -a^2(t) dr^2
+\end{align*}
+and then the distance goes like $d=a(t)r$, $d=\dot{a}r = \dot{a}d/a$.\\
+
+In order to give a more precise demonstation, we need to defain certain elements.\\
+First of all, the redshift $z$:
+\begin{align*}
+z \equiv \frac{\lambda_0 - \lambda_e}{\lambda_e}
+\end{align*}
+where $\lambda_0$ is the wavelength of an observed spectral line, and $\lambda_e$ is its expected value (measured in lab on Earth).\\
+We also need a relation:
+\begin{align*}
+1+ z = \frac{a_0}{a_e}
+\end{align*}
+that will be proved later one.\\
+
+Then:
+\begin{align*}
+\frac{\lambda_0}{\lambda_e} = \frac{a_0}{a_e}
+\end{align*}
+As $\nu\lambda = c$, it holds:
+\begin{align*}
+\frac{\nu_0}{\nu_e} = \frac{a_e}{a_0}
+\end{align*}
+As light is emitted in every direction, the emitted power follows the inverse square law, leading to the definition of luminosity distance:
+\begin{align*}
+d_L \equiv \sqrt{\frac{L}{4\pi l}}
+\end{align*}
+where $L$ is the intrinsic luminosity of an object (it can be known for certain types of stars, the so called \q{standard candles}).
+
+Suppose to have some source $S$ at distance $r$ from an observer $O$, emitting light at time $t_e$, which is received at time $t_0$. As the scale factor changes with time, light will be emitted in a universe of scale factor $a_e$, and observed with $a_0$.\\
+Then, using the inverse square law, we have a relation:
+\begin{align*}
+l = \frac{L}{4\pi r^2 a_0^2} \left( \frac{a_e}{a_0}\right)^2
+\end{align*}
+Substituting in $d_L$:\begin{align*}
+d_L = \frac{a_0^2}{a_e} r
+\end{align*}
+leading to:
+\begin{align*}
+d_L = a_0(1+z)r
+\end{align*}
+\end{document}
+
+
