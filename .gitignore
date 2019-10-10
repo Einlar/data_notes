@@ -1,0 +1,9 @@
+.vscode/
+*.bb
+*.tex.Backup*
+*.py
+*.idx
+*.ilg
+*.ind
+*.ddf
+*.json
