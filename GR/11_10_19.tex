@@ -1,0 +1,257 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+Let's formalize some last concepts before moving onto General Relativity.
+\section{Basis}
+\lesson{4}{11/10/19}
+In basic (Euclidean) geometry we typically choose the \textit{canonical basis}. For example, in $d=2$ we have:
+\begin{align*}
+    \bm{\hat{e}_1} = (1,0); \qquad \bm{\hat{e}}_2 = (0,1)^T
+\end{align*}
+Such that a generic vector can be written as a linear combination of the basis elements:
+\begin{align*}
+    \bm{\vec{v}} = 3 \hat{e}_1 + 4 \hat{e}_2
+\end{align*} 
+Note that this choice of basis has a nice property: $\hat{e}_1$ and $\hat{e}_2$ are orthonormal, that is $\hat{e}_1 \cdot \hat{e}_2 = 0$ and $\norm{\hat{e}_1} = \norm{\hat{e}_2} = 1$. More generally, a basis is orthonormal if:
+\begin{align*}
+    \bm{\hat{e}_i} \cdot \bm{\hat{e}_j} = \delta_{ij}; \qquad \delta_{ij} = \begin{cases}
+        1 & i = j\\
+        0 & i \neq j
+    \end{cases}
+\end{align*}  
+It is easy to generalize this concept to SR, by simply considering the time coordinate:
+\begin{align*}
+    \bm{\hat{e}_0} &= (1,0,0,0) \\
+    \bm{\hat{e}_1} &= (0,1,0,0) \\
+    \bm{\hat{e}_2} &= (0,0,1,0) \\
+    \bm{\hat{e}_3} &= (0,0,0,1)
+\end{align*}
+But now we have:
+\begin{align*}
+    \bm{\hat{e}_\mu} \cdot \bm{\hat{e}_\nu} = \eta_{\mu \nu}
+\end{align*}
+(Note that, in this notation, $\mu$ and $\nu$ do not represent components, but are the names of the vectors - and are in fact written in \textbf{bold} ).\\
+
+In components, we have:
+\begin{align*}
+    (e_\mu)^\alpha (e_\nu)^\beta \eta_{\alpha \beta} = \eta_{\mu \nu}
+\end{align*}
+where $\alpha$, $\beta$ are the components, and $\mu$ and $\nu$ are part of the names.
+
+\section{Observers \& Observations}
+Every observer moves along a trajectory $x^\mu(\tau)$ in spacetime, and so has his own \textit{coordinate system}, that is a basis that is \textit{stationary} wrt that observer. Any kind of measurement made by an observer is then \textit{tied} to his coordinate system.\\
+For example, consider a particle $P$ of mass $m$, seen by an observer $O$  moving along $x^\mu(\tau)$. That observer will measure the energy-momentum $4$-vector of that particle as:
+\begin{align*}
+    p^\mu_P = \left(\text{Energy}/c, \textbf{Momentum}\right)
+\end{align*} 
+So, wrt $O$, the energy of $P$ is $p^0_P c$, which is the same as:
+\begin{align*}
+    \text{Energy Measured} \equiv - \bm{\hat{e}_0} \cdot \bm{p} c
+\end{align*} 
+where $\hat{e}_0 = (1,\vec{0})$ is the first basis vector of the $O$ coordinate system.\\
+Explicitly, recalling the definition of scalar product (using the metric matrix), we have:
+\begin{align*}
+    -\bm{\hat{e}_0} \cdot c\bm{p} &\equiv -(e_0)^\mu cp^\nu \eta_{\mu \nu} =\\
+    &= (1,0,0,0) \left(\begin{array}{cccc}
+    -1 & 0 & 0 & 0 \\ 
+    0 & 1 & 0 & 0 \\ 
+    0 & 0 & 1 & 0 \\ 
+    0 & 0 & 0 & 1
+    \end{array}\right) \begin{pmatrix}
+    \mathcal{E}/c \\ 
+    p_x \\ 
+    p_y \\ 
+    p_z
+    \end{pmatrix} = \\
+    &= -1 \times (-1) \times \frac{\mathcal{E}}{c}c  = \mathcal{E}
+\end{align*}
+where $\mathcal{E}$ denotes the energy.\\
+
+Now, note that:
+\begin{align*}
+    (\bm{\hat{e}_0})^\mu \equiv \frac{u^\mu}{c} 
+\end{align*}
+In fact, recall that:
+\begin{align*}
+    u^\mu = (c \gamma, \gamma \vec{v})
+\end{align*}
+In the $O$'s frame of reference, its own velocity is $0$, and so its $4$-velocity is:
+\begin{align*}
+    u^\mu = (c, \vec{0})
+\end{align*}
+So:
+\begin{align*}
+    \frac{u^\mu}{c} = (1,0,0,0) = \bm{\hat{e}_0} 
+\end{align*}
+Substituting in the previous relation, we arrive at:
+\begin{align*}
+    \mathcal{E}_{\mathrm{observed} } &= -\frac{\bm{u}}{c} \cdot \bm{p} c =  \\
+    &= - \bm{u} \cdot \bm{p} \\
+\end{align*}
+This is a \textit{scalar quantity}, so every observer will agree on this value (it is invariant wrt Lorentz boosts). So, we can compute its value in the frame where it is easier to do so, that is the rest frame of the particle:
+\begin{align*}
+    \bm{p} &= (mc, \vec{0})\\
+    \bm{u} &= (c \gamma, c \bm{v}) \\
+    \Rightarrow & - \bm{u} \cdot \bm{p} = m \gamma c^2 = \frac{m c^2}{\sqrt{1- v^2/c^2}} 
+\end{align*} 
+
+Let's summarize. Start with an observer $O$  that measures the energy of a particle $P$ - that is the $0$-th component of its energy-momentum $4$-vector. Mathematically, this is a \textit{projection} on a particular basis that is \textit{at rest} wrt $O$.\\
+Now, consider another observer $O'$, that sees $O$ and $P$. $O'$ can compute $O$'s measurement by using the $4$-velocity of $O$ - which is a $4$-vector.\\
+Note that $O'$ and $O$ are not comparing their own measurement: $O'$ is instead \textit{describing} $O$'s measurement!
+
+\section{Units}
+For simplicity, \q{from tomorrow $c=1$}.\\
+For example, consider the motion of Earth around the Sun, with a velocity of $v=\SI{30}{\kilo\m\per\s} = 10^{-4}c$. With $c = 1$, we will express this velocity simply as $10^{-4}$.\\
+Then:
+\begin{center}
+    The unit of length is the distance covered by light in one unit of time.
+\end{center}
+In this notation, the Lorentz transformations become:
+\begin{align*}
+    x' &= \frac{x-vt}{\sqrt{1-v^2}}  \\
+    t' &= \frac{t-vx}{\sqrt{1-v^2}} 
+\end{align*}
+
+Note that it is possible to recover the \q{missing $c$} simply by dimensional analysis - and this process is unique.\\
+For example consider:
+\begin{align*}
+    x' = \frac{x-vt}{\sqrt{1-v^2}} 
+\end{align*} 
+In the denominator, we need to make $v^2$ dimensionless, and this is done by dividing by $c^2$. In the numerator, all dimensions are already good, and so we don't need to add any $c$.\\
+Then, consider:
+\begin{align*}
+    t' = \frac{t-vx}{\sqrt{1-v^2}} 
+\end{align*}
+For the denominator the same argument as before still holds. Now, however, the numerator has a difference between time and something of units Length$^2$ Time$^{-1}$. The last one can be converted dividing by $c^2$.
+
+\section{The Equivalence Principle}
+\begin{center}
+    \textit{Experiments in a small free falling system over a short amount of time give the same result as experiments in an inertial frame of reference in empty space} 
+\end{center}
+Basically, a \textit{falling} observer does not measure any gravity.\\
+Note that this works only for small systems and short amounts of time - as the gravitational field is not homogeneous. A sufficiently large object will feel these difference, that are called \textit{tidal effects}. For example, consider a large spaceship that is falling towards Earth, with three point particles on a line, separated by a $L$ distance. Then, from the point of view of the particles, $L$ will vanish over time - as the particles' trajectories are not parallel, but converge towards the center of the Earth.\\  
+
+However, the Equivalence Principle states that \q{gravity can be removed at any given point \textit{locally}}.\\
+
+This would be not possible if there were objects that \q{fell differently}, that is with same \textit{inertial mass} but different \textit{gravitational mass}.\\
+
+More precisely:
+\begin{itemize}
+    \item The \textbf{inertial mass} $m_I$  is the \textit{resistance} to a change in motion, that is the proportionality constant that appears in Newton's Second Law:
+    \begin{align*}
+        m_I = \frac{\norm{\vec{F}}}{\norm{\vec{a}}}  
+    \end{align*}  
+    \item The \textbf{gravitational mass} $m_G$  measures the coupling between an object and the gravitational force. That is the parameters that appear in Newton's Law of Gravitation:
+    \begin{align*}
+        \norm{\vec{F}} = G \frac{M_G m_G}{r^2}
+    \end{align*} 
+\end{itemize}
+In principle, there is no reason to suppose that the two concepts are the same. However, we refer to \textit{gravitational mass} and \textit{inertial mass} as simply \textit{mass}, because experimentally we observe that:
+\begin{align*}
+    m_G = m_I
+\end{align*}   
+
+The most compelling evidence that $m_G = m_I$ is given by a torsion pendulum that measures the ratio between the centrifugal force produced by Earth's rotation (which depends on $m_I$) and the gravitational force (which depends on $m_G$). If $m_G/m_I$ depended on the material used, we could observe an unbalance between the two forces. This has not been measured within an accuracy of $10^{-12}$:
+\begin{align*}
+    \frac{m_I - m_G}{m_I} < O(10^{-12}) 
+\end{align*}   
+
+According to the Equivalence Principle, an inertial frame on Earth, subject to the acceleration of gravity $\vec{g}$, is equivalent to a frame in empty space that is accelerating at $-\vec{g}$ wrt an inertial frame. 
+
+\section{Gravitational Redshift}
+(in \textit{weak field approximation} - as will be specified more clearly later on in the course).\\
+
+Consider two observers, Alice and Bob, in a gravitational field $\vec{g}$. Alice sends a signal to Bob at a frequency $f$, and Bob measures the same signal at a different frequency $f' > f$.\\
+Note that, in this case, there is no \textit{relative motion} between the two observers - that is the redshift is not of kinematic origin.\\
+
+We start by applying the Equivalence Principle, moving to a equivalent frame where Alice and Bob are in a spaceship accelerating at $-\vec{g}$. Suppose Alice is at height $x=h$, and Bob at $x=0$.\\
+Consider now a trail of two full waves, with the following notation:
+\begin{itemize}
+    \item Alice sends the first wave at $t=0$.
+    \item Alice sends the second wave at $t=\Delta t_A$.
+    \item Bob receives the first wave at $t= t_1$.
+    \item Bob receives the second wave at $t=t_1+ \Delta t_B$. 
+\end{itemize}
+where $\Delta t_A$ is the period of radiation from Alice's POV, and $\Delta t_B$ from Bob's POV.\\
+The corresponding frequencies are given by: 
+\begin{align*}
+    f = \frac{1}{\Delta t_A}; \qquad f' = \frac{1}{\Delta t_B} 
+\end{align*}
+We will now prove that $\Delta t_A \neq \Delta t_B$.\\
+
+If the spaceship were at rest, then:
+\begin{align*}
+    t_1 = \frac{h}{c} 
+\end{align*}
+However, as soon as the first wave is produced, the receiver (at the floor) is moving at velocity $v$ towards the radiation, so that the radiation will arrive at Bob in a time smaller than $h/c$. The faster the spaceship goes, the quicker light will arrive.\\
+As the spaceship is accelerating, this effect will be more significant for the second wave - as at this later time the rocket is going faster. This means that the second wave travels for even less time than the first wave, \q{catching up a bit} on the first one. Thus: $\Delta t_B < \Delta t_A$, and then $f' > f$.\\
+
+Finally, by applying the Equivalence Principle, we note that this same effect will be true even in the inertial reference frame on Earth.\\
+
+The final result is:
+\begin{align*}
+    f' = f \left(1 + \frac{gh}{c^2} + O\left(\frac{1}{c^4} \right) \right)
+\end{align*}
+where the additional terms are subdominant in a weak gravitational field.\\
+(The proof is left as homework - refer to the book).\\
+Here, $g$ means acceleration for the spaceship, and gravitational acceleration for the frame on Earth.
+
+\section{Gravitational Potential}
+In electromagnetism the \textbf{potential energy} is defined as:
+\begin{align*}
+    U = f_q \frac{Q q}{r} 
+\end{align*} 
+and the \textbf{electric potential}:
+\begin{align*}
+    V = \frac{U}{q} = f_Q \frac{Q}{r}  
+\end{align*} 
+Note that the electric potential is useful because \textit{it does not depend on the test charge used to measure the electric force}.\\
+In fact, the \textit{electric field} is defined in the same way, as the electric force normalized by the test-charge:
+\begin{align*}
+    \vec{E} = \frac{\vec{F}}{q} 
+\end{align*}  
+
+In the same way, we define the \textbf{gravitational potential} as:
+\begin{align*}
+    \Phi = \frac{U}{m}
+\end{align*} 
+so that if $U = mgh$ then $\Phi = gh$. Recall that any potential is defined up to a constant - so only potential differences have a physical meaning.\\
+If we compare the potential at two different heights we get: $\Delta \Phi= gh$. Substituting in the equation for the gravitational redshift we get:
+\begin{align*}
+    f' = f \left[1+\frac{\Delta \Phi}{c^2} + \dots \right]
+\end{align*}
+The \textit{weak field approximation} means that $\Delta \Phi \ll c^2$.\\
+
+Note that $\Delta \Phi$ has dimensions of Length$^2$ Time$^{-2}$ (the same as $c^2$).\\
+Let's plug some number to get an idea of the effect size:
+\begin{align*}
+    \frac{gh}{c^2} \sim \frac{\SI{10}{\m\per\s\squared} \SI{10}{\m}}{3 \times \SI{3e16}{\m\squared\per\s\squared}} = \num{e-15}  
+\end{align*} 
+So at our usual scales this effect is too tiny to be measured.
+
+\section{Some comments}
+\textbf{Gravitational Time Dilation}. 
+Consider two observers, Alice and Bob, on a building of height $h$, with Alice at the ceiling, and Bob at the floor. Note that $B$ will see that Alice's heart beats \textit{faster} than his - which means that $A$ ages more quickly. This means that, in a gravitational well, time flows slower the closer one is from the gravitational source.\\
+
+
+\textbf{Gravitational Effects for a concentrated body}. Consider a concentrated mass $M$, and set $U=0$ at infinite distance from $M$, so that:
+\begin{align*}
+    \Phi = \frac{GM}{r} 
+\end{align*}   
+Then, the gravitational relativistic effects will be of order:
+\begin{align*}
+    O\left(\frac{\Phi}{c^2} \right) = O\left(\frac{GM}{r c^2} \right)
+\end{align*}
+Note that if all the mass $M$ is concentrated inside a radius $r \sim GM/c^2$, then gravitational relativistic effects are of order $O(1)$ (this is the case of a \textbf{black hole}).\\
+Let's plug some numbers for the Sun:
+\begin{align*}
+    r \sim \frac{\SI{7e-11}{\newton\m\squared\per\kilo\g\squared} \SI{2e30}{\kilo\g}}{3\times\SI{3e16}{\m\squared\per\s\squared}} \approx \SI{1}{\kilo\m} 
+\end{align*}  
+In this situation the weak field approximation is not valid anymore.
+
+
+
+
+\end{document}
