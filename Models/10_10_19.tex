@@ -79,9 +79,10 @@ Their joint pdf is given by a \textbf{multivariate normal distribution} :
 
 \section{Moments and Gaussians}
 We want now to compute the moment generating function for a multivariate gaussian, that is the value of the integral:
-\begin{align*}
+\begin{align}
     M_{\bm{X}}(\bm{t}) = \int_{\mathbb{R}^n} e^{\bm{t}\cdot \bm{x}} f(\bm{x};\bm{\mu},\Sigma) \dd[n]{x}
-\end{align*} 
+    \label{eqn:multivariate_moment}
+\end{align} 
 
 Let's start from the easiest case, and work our way out to the most general one.\\
 
@@ -111,165 +112,268 @@ Notice that the inverse of the covariance matrix $\Sigma^{-1} \equiv A$ is a sym
 \begin{align*}
     \mathbb{A}(\bm{x}) = \sum_{i,j=1}^n x_i A_{ij} x_j
 \end{align*} 
-To compute the integral, then 
-
-
-We will show now how to generalize this result to many dimensions.\\
-Let $\vec{x}$ be a vector of $n$ dimension: $\vec{x} = (x_i)_{i=1,\dots, n}$. Suppose that $x_i$ are random variables, that can be correlated - that is $p(x_i | x_j) \neq p(x_i) p(x_j)$. All the information about that is contained in the \textit{covariance matrix}, $A_{i i} = \operatorname{var} (x_i)$ and $A_{ij} = A_{ji} = \operatorname{cov}(x_i, x_j)$. \\
-The covariance matrix induces a metric:
+The integral can be computed by applying a change of variables, \textit{rotating} $\bm{x}$ such that $A$ becomes diagonal:
 \begin{align*}
-    \mathbb{A}(\vec{x}) = \sum_{i,j=1}^{n} x_i A_{ij} x_j
-\end{align*}
-We will prove that:
-\begin{align*}
-    Z(\mathbb{A}) = \int d^n x \exp\left(-\frac{1}{2} \mathbb{A}(\vec{x}) \right) = (2\pi)^{n/2} \prod_{i=1}^n a_i^{-1/2} = (2\pi)^{n/2} (\operatorname{det} A)^{-1/2}
-\end{align*}
-where $a_i$ are the eigenvalues of $A$.\\
-
-\textbf{Proof}. We can simply apply a coordinate transform through an orthogonal matrix $O$, with $|\operatorname{det}O|=1$:
-\begin{align*}
-    x_i' = \sum_j O_{ij}x_j
-\end{align*}    
-So that $A$ becomes a diagonal matrix with eigenvalues $a_i$ on the diagonal. Then $Z(\mathbb{A})$ becomes the multi-dimensional integral of independent gaussians, and we can integrate wrt to each variable separately, arriving at the final result.\\
-
-Let's now consider a more general case:
-\begin{align*}
-    Z(A, \vec{b}) = \int_{-\infty}^{\infty} d^n x \exp\left(-\frac{1}{2} \mathbb{A}(\vec{x}) + \vec{b} \cdot \vec{x} \right)
-\end{align*}
-where $\vec{b}\cdot \vec{x} = \sum_i x_i b_i$.\\
-We start by finding the minimum of the exponent, by differentiation:
-\begin{align*}
-    \frac{\partial}{\partial x_i} \left(\frac{1}{2} \mathbb{A}(\vec{x}) - \vec{b} \cdot \vec{x} \right)  = 0 \quad \forall i
-\end{align*} 
-The solution for the minimum is:
-\begin{align*}
-    \sum_j A_{ij} x_j = b_i \Rightarrow x_i^* = \sum_j (A^{-1})_{ij} b_i
-\end{align*}
-Then we apply a coordinate change:
-\begin{align*}
-    \vec{x} \rightarrow \vec{y}; \vec{x} = \vec{x}^* + \vec{y}
-\end{align*}
-so that:
-\begin{align*}
-    -\frac{\mathbb{A}(\vec{x})}{2} + \vec{b}\cdot \vec{x} = -\frac{\mathbb{A}(\vec{y})}{2} + w_2(\vec{b})  
-\end{align*}
-with:
-\begin{align*}
-    w_2(\vec{b}) = \frac{1}{2} \sum_{i,j=1}^n b_i (A^{-1})_{ij} b_i = \frac{1}{2} \vec{b}\cdot \vec{x}^*  
-\end{align*}
-And so:
-\begin{align*}
-    Z(A,\vec{b}) = e^{w_x(\vec{b})} \int d^n y \exp \left(-\frac{1}{2} \mathbb{A}(\vec{y}) \right) = e^{w_2(\vec{b})} (2\pi)^{n/2} (\operatorname{det} A )^{-1/2}
-\end{align*}
-
-\textbf{Exercise}
-Compute $Z(A)$ and $Z(A,\vec{b})$ with:
-\begin{align*}
-    A = \left(\begin{array}{cc}
-    3 & -1 \\ 
-    -1 & 3
-    \end{array}\right); \quad b = \left(\begin{array}{c}
-    1 \\ 
-    0
-    \end{array}\right)
+    \bm{y} = O \bm{x}; \qquad O \in \bb{R}^{n\times n}; \quad O^T = O^{-1}, \> \operatorname{det}(O) = 1 
 \end{align*}   
-(Solve the exercise, and put in a notebook to bring to the exam!)
+where $O$ is an orthogonal matrix, with a set of orthogonal eigenvectors of $A$ as columns, such that:
+\begin{align*}
+    O A O^{-1} = \operatorname{diag}(a_1, \dots, a_n) 
+\end{align*}  
+with $a_i$ being the eigenvalues of $A$.\\
+Note that, as $\operatorname{det}(O) = 1$, the volume element in the integral does not change. So, by substituting:
+\begin{align*}
+    \bm{x} = O^{-1} \bm{y}; \qquad \bm{x}^T = \bm{y}^T (O^{-1})^T = \bm{y}^T O
+\end{align*}
+in the integral, we get:
+\begin{align}\nonumber
+    Z(A) &= \int_{\mathbb{R}^n} \dd[n]{\bm{y}} \exp\left(-\frac{1}{2} \bm{y}^T O A O^T \bm{y} \right) = \int_{\mathbb{R}^n} \dd[n]{\bm{y}} \exp\left(-\frac{1}{2} \sum_{i=1}^n a_i y_i^2 \right) =\\
+    &= \prod_{i=1}^n \int_{\mathbb{R}} \dd{y_i} \exp\left(-\frac{1}{2} a_i y_i^2 \right) = (2\pi)^{n/2} \prod_{i=1}^n a_i^{-1/2} \underset{(a)}{=}  (2\pi)^{n/2} (\operatorname{det}(A))^{-1/2}
+    \label{eqn:ZA}
+\end{align} 
+where in (a) we noted that the determinant of a matrix is the product of its eigenvalues.\\
+
+We are now ready to consider the more general case of (\ref{eqn:multivariate_moment}), by simply adding a linear term in the exponential of $Z(A)$:  
+\begin{align}
+    Z(A, \bm{b}) \equiv \int_{-\infty}^{\infty} \dd[n]{\bm{x}} \exp\left(-\frac{1}{2} \mathbb{A}(\bm{x}) + \bm{b} \cdot \bm{x} \right) \qquad \bm{b} \cdot \bm{x} = \sum_{i=1}^n b_i x_i
+    \label{eqn:ZAb-def}
+\end{align}
+To compute this integral, a trick is to translate the maximum of the exponential to the origin. So we start by differentiating:
+\begin{align}
+    \frac{\partial}{\partial x_i} \left(\frac{1}{2} \mathbb{A}(\bm{x}) - \bm{b} \cdot \bm{x} \right) \overset{!}{=}  0 \quad \forall i
+    \label{eqn:derivative}
+\end{align} 
+Note that:
+\begin{align*}
+    \pdv{x_i} \mathbb{A}(\bm{x}) &= \pdv{x_i} \sum_{ab} x_a A_{ab} x_b = \sum_{ab} \delta_{ai} A_{ab} x_b + \sum_{ab} x_a A_{ab} \delta_{bi} =\\
+    &= \sum_b A_{ib} x_b + \sum_{a} x_a A_{ai}
+\intertext{By renaming the first summation variable to $a$, we get:}
+    &= \sum_a (A_{ia} + A_{ai}) x_a \underset{(b)}{=} 2 \sum_a A_{ia} x_a = 2 A \bm{x}
+\end{align*} 
+where in (b) we used the fact that $A$ is symmetrical ($A_{ij} = A_{ji}$).\\
+Substituting in (\ref{eqn:derivative}):
+\begin{align*}
+    \frac{1}{\cancel{2}} \cancel{2} \sum_j A_{ij} x_j = b_i \quad \forall i \underset{(c)}{\Leftrightarrow}  A^T \bm{x} = \bm{b} \underset{(d)}{\Leftrightarrow}  \bm{x^*} = A^{-1} \bm{b}
+\end{align*} 
+In (c) we noted that $b_i$ is the scalar product between the $i$-th column of $A$ and $\bm{x}$, leading to the transpose in the matrix notation. Of course, as $A = A^T$, in (d) we simply dropped the transpose.\\
+
+We can now apply the coordinate change:
+\begin{align*}
+    \bm{x} = \bm{x^*} + \bm{y}
+\end{align*}
+Substituting in the exponential argument:
+\begin{align} \nonumber
+    -\frac{\mathbb{A}(\bm{x})}{2} + \bm{b} \cdot \bm{x} &= -\frac{1}{2} \bm{x}^T A \bm{x} + \bm{x}^T \bm{b} = -\frac{1}{2}(\bm{x^*} + \bm{y})^T A (\bm{x^*} + \bm{y}) + (\bm{x^*} + \bm{y})^T \bm{b} =\\
+    &= -\frac{1}{2}\left [\bm{{x^*}}^T A \bm{x^*} + \bm{y}^T A \bm{y} + \cancel{\bm{{x^*}}^T A \bm{y}} + \cancel{\bm{y}^T A \bm{x^*}} \right] + \bm{{x^*}}^T A \bm{x^*} +\cancel{ \bm{y}^T A \bm{x^*}}
+    \label{eqn:change-A}
+\end{align}
+Note, in fact, that $\bm{y}^T A \bm{x^*} = (\bm{{x^*}}^T A^T \bm{y})^T = (\bm{{x^*}}^T A \bm{y})^T$ because $A$ is symmetric, and then $(\bm{{x^*}}^T A \bm{y})^T = \bm{{x^*}}^T A \bm{y}$ because they are scalars.\\
+Then:
+\begin{align*}
+    \bm{{x^*}}^T A \bm{x^*} = (A^{-1}\bm{b})^T A A^{-1} \bm{b} = \bm{b}^T (A^{-1})^T \bm{b} = \bm{b}^T A^{-1} \bm{b} = \bm{b}\cdot \bm{x^*}
+\end{align*}
+And substituting in (\ref{eqn:change-A}):
+\begin{align*}
+    -\frac{\mathbb{A}(\bm{x})}{2} + \bm{b}\cdot \bm{x} = -\frac{1}{2} \bm{y}^T A \bm{y} + \underbrace{\frac{1}{2} \bm{b}\cdot \bm{x^*}}_{\omega_2(\bm{b})} 
+\end{align*}
+
+To simplify notation, let's define:
+\begin{align}
+    w_2(\bm{b}) = \frac{1}{2} \sum_{i,j=1}^n b_i (A^{-1})_{ij} b_i = \frac{1}{2} \bm{b}\cdot \bm{x^*}  
+    \label{eqn:w2}
+\end{align}
+
+As the change of variables involves only a translation by a constant value, the volume element in the integral does not change, leading to:
+\begin{align}\nonumber
+    Z(A, \bm{b}) &= \int_{-\infty}^{\infty} \dd[n]{\bm{y}} \exp\left(-\frac{\mathbb{A}(\bm{y})}{2}  + \omega_2(\bm{b})\right)
+\intertext{Note that $\omega_2(\bm{b})$ is constant, thus can be extracted from the integral:}
+    &= e^{\omega_2 (\bm{b})} \int_{-\infty}^{\infty} \dd[n]{\bm{y}}\exp\left(-\frac{\mathbb{A}(\bm{y})}{2} \right) \underset{(\ref{eqn:ZA})}{=} e^{\omega_2(\bm{b})} (2 \pi)^{n/2} (\operatorname{det}A )^{-1/2}
+    \label{eqn:ZAb}
+\end{align} 
+
+\begin{expl}
+    Another way to solve the integral for $Z(A,\bm{b})$ is by using the matrix equivalent of \q{completing the square}. We start by considering the argument of the exponential in (\ref{eqn:ZAb-def}):
+    \begin{align*}
+        -\frac{1}{2}(\bm{x}^T A \bm{x} -2\bm{b}^T \bm{x}) 
+    \end{align*}
+    $\bm{x}^T A \bm{x}$ has the role of the square, and $-2\bm{b}^T \bm{x}$ that of the double product. \\
+    We can then sum and subtract a constant vector $\bm{c}$ in order to rewrite:
+    \begin{align*}
+        \bm{x}^T A \bm{x} - 2\bm{b}^T \bm{x} + \bm{c}-\bm{c} = \bm{y}^T A \bm{y} - \bm{c}
+    \end{align*}  
+    for some $\bm{y} \in \bb{R}^n$.\\
+    Comparing to a generic square:
+    \begin{align*}
+        (\bm{a} + \bm{b})^TA(\bm{a} + \bm{b}) = \bm{a}^T A \bm{a} + \bm{b}^T A \bm{b} + 2\bm{a}^T A \bm{b}
+    \end{align*}
+    we note that $\bm{a} = \bm{x}$ and $\bm{b} = -A^{-1}\bm{b}$, leading to:
+    \begin{align*}
+        \bm{x}^T A \bm{x} - 2\bm{b}^T \bm{x} = (\bm{x} - A^{-1}\bm{b})^T A (\bm{x}-A^{-1}\bm{b})- \bm{b}^T A^{-1} \bm{b}
+    \end{align*}  
+    Defining $A^{-1}\bm{b} \equiv \bm{x^*}$ and $\bm{y} = \bm{x}-\bm{x^*}$ then leads to the same calculations as before.  
+\end{expl}
+
+\begin{exo}[Multivariate Gaussian Integral]
+    Compute $Z(A)$ and $Z(A,\vec{b})$ with:
+    \begin{align*}
+        A = \left(\begin{array}{cc}
+        3 & -1 \\ 
+        -1 & 3
+        \end{array}\right); \quad b = \left(\begin{array}{c}
+        1 \\ 
+        0
+        \end{array}\right)
+    \end{align*}   
+    Note that $\operatorname{det}A = 8$, and:
+    \begin{align*}
+        A^{-1} = \frac{1}{8} \left(\begin{array}{cc}
+        3 & 1 \\ 
+        1 & 3
+        \end{array}\right) 
+    \end{align*} 
+    So, by simply using (\ref{eqn:ZA}) and (\ref{eqn:ZAb}):
+    \begin{align*}
+        Z(A,0) &= \frac{(2\pi)^{2/2}}{\sqrt{8}} = \frac{\pi}{\sqrt{2}} \\
+        \span \frac{1}{2} \left(\begin{array}{cc}
+        1 & 0
+        \end{array}\right) \frac{1}{8} \left(\begin{array}{cc}
+        3 & 1 \\ 
+        1 & 3
+        \end{array}\right) \left(\begin{array}{c}
+        1 \\ 
+        0
+        \end{array}\right) = \frac{3}{16} \\
+        Z(A, \bm{b}) &= \frac{\pi}{\sqrt{2}} \exp\left(\frac{3}{16} \right)   
+    \end{align*}
+\end{exo}
 
 \subsection{Gaussian expectation values}
-We want to compute the average value of the \textit{product} of multiple random variables, following a gaussian distribution of covariance matrix $A$, centered on $0$ ($\vec{b} = 0$).   
+The result in (\ref{eqn:ZAb}) is exactly what we need to compute the moment generating function for the multivariate normal (\ref{eqn:multivariate_moment}).\\
+
+So, we can finally compute moments:   
 \begin{align*}
-    \langle x_{k_1} x_{k_2} \dots x_{k_l} \rangle \equiv \frac{1}{Z(A)} \int d^n x x_{k_1} x_{k_2} \dots x_{k_l} \exp\left(-\frac{1}{2} \mathbb{A}(\vec{x}) \right) 
+    \langle x_{k_1} x_{k_2} \dots x_{k_l} \rangle \equiv \frac{1}{Z(A)} \int \dd[n]{\bm{x}} x_{k_1} x_{k_2} \dots x_{k_l} \exp\left(-\frac{1}{2} \mathbb{A}(\bm{x}) \right) 
 \end{align*}
-where the factor $Z(A)^{-1}$ is just a normalization constant.\\
-We then introduce a term $\vec{b}$ and compute the derivatives:
+by simply deriving the generating function $Z(A, \bm{b})$ with respect to certain variables in $\bm{b}$. For example:
 \begin{align*}
-    \frac{\partial}{\partial b_k} Z(A,\vec{b}) = \int d^n x x_k \exp\left(+\frac{\mathbb{A}}{2} + \vec{b}\cdot \vec{x} \right) 
+    \langle x_k \rangle = \frac{1}{Z(A)} \frac{\partial}{\partial b_k} Z(A,\vec{b}) = \frac{1}{Z(A)}  \int \dd[n]{\bm{x}}  x_k \exp\left(-\frac{\mathbb{A}(\bm{x})}{2} + \bm{b}^T \bm{x} \right) 
 \end{align*} 
-In physics, we say that $b_k$ is \q{coupled} to $x_k$, and that $Z(A,\vec{b})$ is used as "generating function" for $\vec{x}$.\\
-Then we have:
+For the general case:
 \begin{align*}
-    \langle x_{k_1} x_{k_2 }\dots x_{k_l} \rangle &= (2\pi)^{-n/2}(\operatorname{det}A )^{-1/2} \left[\frac{\partial}{\partial b_{k_1 }} \frac{\partial}{\partial b_{k_2 }} \dots \frac{\partial}{\partial b_{k_l}} Z(A,\vec{b})   \right]_{\vec{b}=0} =\\
-    &= \frac{\partial}{\partial b_{k_1 }} \frac{\partial}{\partial b_{k_2 }} \dots \frac{\partial}{\partial b_{k_l}} e^{w_2(\vec{b})} \Big|_{\vec{b}=0}
+    \langle x_{k_1} x_{k_2 }\dots x_{k_l} \rangle &= (2\pi)^{-n/2}(\operatorname{det}A )^{-1/2} \left[\frac{\partial}{\partial b_{k_1 }} \frac{\partial}{\partial b_{k_2 }} \dots \frac{\partial}{\partial b_{k_l}} Z(A,\bm{b})   \right]_{\bm{b}=\bm{0}} =\\
+    &= \frac{\partial}{\partial b_{k_1 }} \frac{\partial}{\partial b_{k_2 }} \dots \frac{\partial}{\partial b_{k_l}} e^{w_2(\bm{b})} \Big|_{\bm{b}=\bm{0}}
 \end{align*}    
+In physics, we say that $b_k$ is \q{coupled} to $x_k$, and that $Z(A,\bm{b})$ is used as \q{generating function} for $\bm{x}$.\\
 
 \subsection{Wick's Theorem}
 From the previous formula we know that:
 \begin{align*}
     \frac{\partial}{\partial b_i} \text{ pulls down a $b_i$ } 
 \end{align*}
-So, if we set $b_i = 0$, the result will also be $0$, as $\langle x_i \rangle = 0$.\\
-However, with more derivatives, the result can be non-zero, due to correlations between different $x_j$:
+Explicitly, recall that:
 \begin{align*}
-    \langle x_i x_j \rangle \text{ may be $\neq$ 0 }
-\end{align*}    
-But always, for an odd number of derivatives, due to the symmetry of the gaussian, we have:
+    \omega_2 (\bm{b}) = \frac{1}{2} \bm{b}^T A^{-1} \bm{b}
+\end{align*}
+and so:
+\begin{align*}
+    \pdv{b_i} e^{\omega_2(\bm{b})} = \frac{1}{2} e^{\omega_2{\bm{b}}} \pdv{b_i} \sum_{tk}b_t A^{-1}_{tk} b_k = e^{\omega_2 \bm{b}} \sum_k A_{ik}^{-1} b_k
+\end{align*}
+If we now set $\bm{b} = \bm{0}$, the result will be $0$, meaning that:
+\begin{align*}
+    \langle x_i \rangle = \pdv{b_i} \frac{Z(A,\bm{b})}{Z(A)} = 0 
+\end{align*}  
+This result is expected, as in $Z(A, \bm{b})$ all random variables are centered in $0$.\\
+However, note that if we derive one more time, with respect to some $b_l$:
+\begin{align*}
+    \pdv{b_i} \pdv{b_l} e^{\omega_2(\bm{b})} = e^{\omega_2 \bm{b}} \sum_s A_{ls}^{-1} b_s \sum_k A_{ik}^{-1} b_k + e^{\omega_2 \bm{b}} A_{il}^{-1} 
+\end{align*}   
+And now, if we set $\bm{b} = \bm{0}$, the result may be $\neq 0$.\\
+Note that if we derive one more time we return to the previous situation - and the result will be also $0$.\\    
+
+In general, every moment of odd-order is $0$, due to the symmetry of the gaussian, we have:
 \begin{align*}
     \langle x_i x_j x_k \rangle = 0
 \end{align*}
-So the expectation value of the product of different random variables, sampled from the same gaussian distribution centered on $0$, is only non-zero for an even number of variables. \\
+So the expectation value of the product of different random variables, sampled from the same gaussian distribution centered on $0$, is only non-zero for an even number of variables. This result is known as the \textbf{Wick's theorem} (also known in literature as the \textbf{Isserlis theorem}).\\
 
-(Reference: \q{Path integrals in Physics} vol. 1, Chaichian \& Demichev)\\
-
-The contribution from every pair $(k_p, k_q)$  from the list of indices $K = \{k_1, k_2, \dots, k_l\}$ is associated with the covariance $(A^{-1})_{k_p, k_q}$. Then we arrive at Wick's theorem:
+By extending this argument, one can find a way to compute the even-order moments, leading to the following formula (which we will not prove):
 \begin{align*}
-    \langle x_{k_1} x_{k_2 } \dots x_{k_l}  \rangle = \sum_{P \in \sigma(K)} A^{-1}_{k_{P_1} k_{P_2}} A^{-1}_{k_{P_3}k_{P_4}}\dots A^{-1}_{k_{P_{l-1}} k_{P_l}} = \sum_{P \in \sigma(K)} \langle x_{k_{P_1 }} x_{k_{P_2}} \dots \langle x_{k_{P_{l-1}}} x_{k_{P_l}} \rangle \rangle
+    \langle x_{k_1} x_{k_2 } \dots x_{k_l}  \rangle = \sum_{P \in \sigma(K)} A^{-1}_{k_{P_1} k_{P_2}} A^{-1}_{k_{P_3}k_{P_4}}\dots A^{-1}_{k_{P_{l-1}} k_{P_l}} = \sum_{P \in \sigma(K)} \langle x_{k_{P_1 }} x_{k_{P_2}} \rangle \dots \langle x_{k_{P_{l-1}}} x_{k_{P_l}} \rangle
 \end{align*}
-where $P$ is a permutation of indices $K$.  \\
-This is true only for gaussians.\\
-
-
-\textbf{Exercise}.
-For a one variable gaussian distribution:
+where $(k_p, k_q)$ are a pair of indices from $K = \{k_1, \dots, k_l\}$, and $P$ is a permutation of $K$, so that $(k_{P_1}, k_{P_2})$ is the first pair of indices after the permutation $P$. The sum is over all the distinct ways of partitioning $l=2s$ variables in pairs to obtain distinct products of $s$ groups.\\
+So, the total number of terms to be added will be $(2s)!/(2^s s!)$ - that is the total number of permutation of $2s$ elements, where the order within couples does not matter ($2^s$) and neither the order of the couples themselves ($s!$).\\
+Note that:
 \begin{align*}
-    \frac{1}{Z(A)} \exp\left(-\frac{a}{2} x^2 \right) 
+    \frac{(2s)!}{2^s n!} = (2s-1)! = (2s-1)(2s-3)(2s-5)\dots 
 \end{align*}
-prove that:
+Where $!!$ denotes the \textit{double factorial}, not to be confused with the factorial of a factorial (which requires brackets: $(a!)!$).  
+
+\begin{exo}[Wick's theorem]
+Consider a univariate normal distribution:
+\begin{align*}
+    f(x) = \frac{1}{Z(A)} \exp\left(-\frac{a}{2} x^2 \right) 
+\end{align*}
+Show that:
 \begin{align*}
     \langle x^2 \rangle &= \frac{1}{a} \\
     \langle x^4 \rangle &= \frac{3}{a^2} = 3(\langle x^2 \rangle)^2
 \end{align*}
-(Hint for $\langle x^4 \rangle$: $k_1 = 1 = k_2 = k_3 = k_4$).
 
+Here the $A$ matrix is just the scalar $a = \sigma^{-2}$. As the pdf is univariate, there is only one index possible $K = \{1\}$. As $(2-1)!! = 1!! = 1$, there is only one term in the summation, thus: 
+\begin{align*}
+    \langle x^2 \rangle = A^{-1}_{11} =\frac{1}{a} 
+\end{align*}   
+For the $4$-th order, however, we have more combinations: $(4-1)!! = 3!! = 3 \cdot 1 = 3$. Again, there is only one possible index, so all terms will be the same:
+\begin{align*}
+    \langle x^4 \rangle = A^{-1}_{11}A^{-1}_{11} + A_{11}^{-1} A_{11}^{-1} + A_{11}^{-1} A_{11}^{-1} = \frac{3}{a^2} = 3 (\langle x^2 \rangle)^2 
+\end{align*}
+\end{exo}
 \section{Steepest Descent Integrals}
-It is possible to use gaussian integrals to solve a more general set of integrals, with the \textit{Steepest Descent Integrals} (or \textit{saddle point method}).\\
-
-The idea is to convert a generic integral to a Gaussian one (with some approximation, depending on a controllable parameter).\\
-We start with:
+It is possible to use gaussian integrals to solve a more general set of integrals, thanks to the \textit{Steepest Descent approximation}.\\
+We start with an integral of the form:
+\begin{align}\label{eqn:steepest-form}
+    I(\lambda) \equiv \int_S \dd[n]{x} \exp\left(-\frac{F(\bm{x})}{\lambda} \right)
+\end{align}
+where $\lambda$ is a small parameter (the approximation is more and more accurate as $\lambda \to 0$), $F(\bm{x})$ has a global minimum in $\bm{x_0} \in (a,b)$ and $S \subseteq \mathbb{R}^n$ is a sufficiently large region.\\
+Note that, if $\lambda$ is lowered, the integral is dominated by the neighborhood of the minimum $\bm{x_0}$. In fact:
 \begin{align*}
-    I(\lambda) = \int d^nx e^{-F(\vec{x})/\lambda}
+    h(\bm{x}) \equiv \exp\left(-\frac{F(\bm{x})}{\lambda}\right); \quad \frac{h(\bm{x_0})}{h(\bm{x})} = \exp\left(-\frac{1}{\lambda}(F(\bm{x_0}) - F(\bm{x})) \right) 
 \end{align*}
-As $\lambda \to 0$, it becomes important to study the integral behaviour around the minimum of $F(\vec{x})$, that is the maximum of $-F(\vec{x})$, which is called the \q{saddle point}. This is because this function is analytic, and in the complex plane there are saddle points at the real coordinate of the maximum.\\
+As $F(\bm{x_0})-F(\bm{x}) < 0$, the ratio becomes exponentially higher if $\lambda \to 0$. Basically, for $\lambda \to 0$, the integrand function becomes \q{more and more similar to a gaussian}.\\ 
 
-We do this by changing variables:
+To compute the integral, then, we translate the coordinates about $\bm{x_0}$: 
 \begin{align*}
-    \vec{x} = \vec{x}_c + \sqrt{\lambda} \vec{y}
+    \bm{x} = \bm{x_0} + \sqrt{\lambda} \bm{y} \qquad \dd[n]{\bm{x}} = \lambda^{n/2} \dd[n]{\bm{y}}
 \end{align*}
-where $\vec{x}_c$ is the saddle point, and $\vec{y}$ is a given variable.\\
-Then we expand around $\lambda = 0$ and $\vec{x} = \vec{x}_c$, so that:
+Then we perform a second order Taylor expansion about $\lambda = 0$ and $\bm{x} = \bm{x_0}$:  
 \begin{align*}
-    \frac{1}{\lambda}F(\vec{x}) = \frac{1}{\lambda}F(\vec{x}_c) + \cancel{\frac{1}{\lambda}\sum_i \partial_{x_i} F(\vec{x}_c) y_i \sqrt{\lambda} }+ \frac{1}{\lambda}\frac{1}{2!} \sum_{ij} \partial^2_{x_i x_j} F(\vec{x}_c) y_i y_j \lambda + O(\lambda^{1/2})     
+    \frac{1}{\lambda}F(\bm{x}) = \frac{1}{\lambda}F(\bm{x_0}) + \cancel{\frac{1}{\lambda}\sum_i \partial_{x_i} F(\bm{x_0}) y_i \sqrt{\lambda} }+ \frac{1}{\cancel{\lambda}}\frac{1}{2!} \sum_{ij} \partial^2_{x_i x_j} F(\bm{x_0}) y_i y_j \cancel{\lambda} + O(\lambda^{1/2})     
 \end{align*}    
-Note that, at the maximum, the first derivative is $0$.\\
-Substituting in the integral (and transforming the differential) we get:
+where we cancelled the first derivative, as $\bm{x_0}$ is a stationary point for $F$.\\
+
+Substituting back in the integral we get:
 \begin{align*}
-    I(\lambda) = \lambda^{n/2} \exp\left(-\frac{F(\vec{x}_c)}{\lambda} \right) \int d^n y \exp\left[-\frac{1}{2} \sum_{ij} \partial^2_{x_ix_j} F(\vec{x}_c) y_i y_j - R(y) \right]
+    I(\lambda) = \lambda^{n/2} \exp\left(-\frac{F(\bm{x_0})}{\lambda} \right) \int_{S'}\dd[n]{\bm{y}} \exp\left[-\frac{1}{2} \sum_{ij} \partial^2_{x_ix_j} F(\bm{x_0}) y_i y_j - R(\bm{y}) \right]
 \end{align*}
+This is a gaussian integral $Z(A)$, with $A$ being the Hessian of $F$ evaluated at the minimum $\bm{x_0}$ (or, equivalently, at the maximum of $-F(\bm{x})$).\\
+Now, for $\lambda$ sufficiently small, we can ignore $R(\bm{y})$ and compute the integral with (\ref{eqn:ZA}), leading to the approximation:  
+\begin{align}
+    I(\lambda) \underset{\lambda \to 0}{\approx} (2\pi \lambda)^{n/2} [\operatorname{det} \partial^2_{x_i x_i} F(\bm{x_0})]^{-1/2} \exp\left(-\frac{F(\bm{x_0})}{\lambda} \right)
+    \label{eqn:steepest-descent}
+\end{align} 
+Doing this, we implicitly integrated over the entire $\mathbb{R}^n$. This is fine because, for $\lambda \to 0$, the gaussian is \q{peaked} in a small region around $\bm{x_0}$, and vanishes exponentially moving further away.\\  
 
-The idea is that the integrand of $I(\lambda)$ is \q{more and more similar} to a gaussian as $\lambda$ is lower.\\
+The Steepest Descent approximation generalizes Laplace's method for calculating integrals, which has a much simpler expression for the limited case of univariate integrals:
+\begin{align}
+    I(s) = \int g(z) e^{s f(z)} dz \underset{s \to \infty }{\approx}  \frac{(2\pi)^{1/2} g(z_c) e^{s f(z_c)}}{|s f''(z_c)|^{1/2}}
+    \label{eqn:laplace-formula}
+\end{align}
+with $f, g \in \mathbb{R}$, and $z_c$ is the maximum of $f$, i.e. $f(z_c) \geq f(z)\> \forall z \in (a,b)$.\\
+This formula is useful in physics: $s$ can model the system's size, and $s \to\infty$ is then the limit for a large system.\\
 
-Then, by taking the limit $\lambda \to 0$:
-\begin{align*}
-    I(\lambda) \underset{\lambda \to 0}{\approx} (2\pi \lambda)^{n/2} [\operatorname{det} \partial^2_{x_i x_i} F ]^{-1/2} \exp\left(-\frac{F(\vec{x}_c)}{\lambda} \right)
-\end{align*} 
-
-Often, in literature, the following expression can be found the case for $d=1$: 
-\begin{align*}
-    I(s) = \int g(z) e^{s f(z)} dz \underset{s \to \infty }{\approx}  \frac{(2\pi)^{1/2} g(z_c) e^{s f(z_c)}}{|s g''(z_c)|}
-\end{align*}
-with $f, g \in \mathbb{R}$, and $z_c$ is the maximum of $f$: $f(z_c) \geq f(z)$.\\
-This formula is useful in physics: $s$ can model the system's size, and $s \to\infty$ is the limit for a large system.\\
-
-\textbf{Example}. We can then derive the Stirling approximation. Recall that:
+\begin{example}[Stirling approximation]
+We can use the Steepest Descent approximation to derive the formula for the Stirling approximation of factorials.\\
+Recall that a factorial is merely the $\Gamma$ function evaluated on $\mathbb{N}$:  
 \begin{align*}
     s! = \int_0^\infty x^s e^{-x} dx
 \end{align*} 
@@ -281,30 +385,64 @@ so that:
 \begin{align*}
     s! = s^{s+1} \int_0^\infty e^{s(\ln z - z)} dz
 \end{align*}
-Then we look for the maximum of $f(z) = \ln z - z$:
+This is an integral in the form:
 \begin{align*}
-    f'(z) &= \frac{d}{dz}(\ln z - z) = \frac{1}{z} - 1 \Rightarrow z_c = 1\\
-    f''(z) &= -\frac{1}{z^2} \Rightarrow f''(z_c) = -1 
-\end{align*} 
-Using the Steepest Descent formula we get the Stirling approximation for a factorial:
-\begin{align*}
-    s! \approx \frac{\sqrt{2 \pi}}{|s|^{1/2}} s^{s+1} e^{-s} \approx \sqrt{2 \pi} s^{s+1/2} e^{-s}
+    \int \exp\left(-\frac{F(x)}{\lambda} \right)
 \end{align*}
-Note that the integral goes from $0$ to $\infty$. We can use the gaussian integral as the maximum is far from $0$, and so we can neglect the left side.\\
-
-\textbf{Exercise}. Compute the Steepest Descent Approximation for the following integral:
+if we let $\lambda = 1/s$ and $F(z) = z-\ln z$. So we need to find the minimum of $F(z)$:
+\begin{align*}
+    F'(z) &= \dv{z}(z-\ln z) = 1-\frac{1}{z} \overset{!}{=}  0 \Rightarrow z_c =  1\\
+    F''(z) &= \frac{1}{z^2} \Rightarrow F''(z_c) = 1 > 0 
+\end{align*}   
+We can now apply (\ref{eqn:steepest-descent}), leading to:
+\begin{align*}
+    s! \underset{s \to \infty}{\approx}  \left(\frac{2 \pi}{s} \right)^{1/2} (1)^{1/2} e^{-s} = \sqrt{2 \pi} s^{s+\frac{1}{2} } e^{-s}
+\end{align*}
+Note that the same result can be obtained by using the much simpler (\ref{eqn:laplace-formula}), with $g(z) \equiv 1$ and $f(z) = \ln z - z$.
+\end{example} 
+\clearpage
+\begin{exo}[Steepest Descent Approximation] Compute the Steepest Descent Approximation for the following integral (for $s \to \infty$):
 \begin{align*}
     I(s) = \int_{-\infty}^{\infty} e^{sx - \cosh x} dx
 \end{align*} 
-Note that, for this peculiar case, the simple 1D formula does not work - and so one should proceed with the general method (full steps: find maximum, second derivative...).\\
-
-\textbf{Exercise}. 
+By collecting a $s$ in the exponential argument:
 \begin{align*}
-    I(\lambda) = \int_{0}^{\infty} \cos(x) \exp \left(-N \left[\left(x-\frac{\pi}{3} \right)^2 + \left(x-\frac{\pi}{3} \right)^4\right]\right)dx
-\end{align*} 
-Find also the limit:
+    I(s) = \int_{-\infty}^{\infty} \exp\left(s\left(x-\frac{\cosh x}{s} \right)\right)
+\end{align*}
+we can bring back to the form of (\ref{eqn:steepest-form}) with $F(x) = \cosh x/s -x$ and $\lambda = s^{-1}$.\\
+We find the minimum of $F(x)$ by differentiating:
 \begin{align*}
-    I(N)  \xrightarrow[N \to \infty]{}  \dots
+    F'(x) &= \frac{\sinh x}{s} -1 \overset{!}{=} 0 \Rightarrow x_0 = \sinh^{-1} s\\
+    F''(x) &=  \frac{\cosh x}{s} \Rightarrow F''(x_0) = \frac{\cosh \sinh^{-1} s}{s} = \frac{\sqrt{1+s^2}}{s} > 0 
+\end{align*}   
+Finally, by applying (\ref{eqn:steepest-descent}) we obtain the result:
+\begin{align*}
+    I(s) &\underset{s \to \infty}{\approx} \sqrt{\frac{2 \pi}{s} } \sqrt{\frac{s}{\sqrt{1+s^2}} } \exp\left(\frac{\sqrt{1+s^2}}{s} - \sinh^{-1} s \right) =\\
+    &= \frac{\sqrt{2\pi}}{(1+s^2)^{1/4}} \exp\left(\frac{\sqrt{1+s^2}}{s} - \sinh^{-1}s \right) 
 \end{align*}
 
+Note that, for this peculiar case, the simple 1D formula does not work (why?) - and so one should proceed with the general method (full steps: find maximum, second derivative...).
+\end{exo}
+
+\begin{exo}[Laplace's formula]
+    Compute:
+\begin{align*}
+    I(N) = \int_{0}^{\infty} \cos(x) \exp \left(-N \left[\left(x-\frac{\pi}{3} \right)^2 + \left(x-\frac{\pi}{3} \right)^4\right]\right)dx
+\end{align*} 
+in the limit $N \to \infty$.\\
+
+For this exercise we can use Laplace's formula (\ref{eqn:laplace-formula}) with:
+\begin{align*}
+    g(x) = \cos (x) \qquad f(x) = -\left[\left(x-\frac{\pi}{3} \right)^2 + \left(x-\frac{\pi}{3} \right)^4\right]
+\end{align*} 
+By looking at $f(x)$ one can see directly that it has a global maximum in $x_0 = \pi/3$. In fact:  
+\begin{align*}
+    f'(x) &= -\left[2\left(x-\frac{\pi}{3} \right) + 4\left(x-\frac{\pi}{3} \right)^3 \right] \overset{!}{=} 0 \Leftrightarrow x_0 = \frac{\pi}{3}\\
+    f''(x) &= -\left[2+12\left(x-\frac{\pi}{3} \right)^2\right]  \Rightarrow f''(x_0) = -2 < 0
+\end{align*} 
+And so we arrive at:
+\begin{align*}
+    I(N) \underset{N \to \infty}{\approx}  \frac{(2\pi)^{1/2} \cos(\pi/3) e^{N \cdot 0}}{|N(-2)|^{1/2}} = \frac{1}{2} \sqrt{\frac{\pi}{N}}  
+\end{align*}
+\end{exo}
 \end{document}
