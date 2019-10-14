@@ -7,11 +7,113 @@
 \lesson{3}{10/10/19}
 There will be 8 lectures by Prof. Baiesi - the first two about some mathematical tools, and then about scattered arguments, to show how to apply the theoretical physics framework to various topics.\\
 
-\section{Gaussian Integrals}
-Recall that:
+\section{Moments and Generating Functions}
+Consider a continuous function $f\colon \mathbb{R} \to \mathbb{R}$, ${x} \mapsto f(x)$. The $n$-th \textbf{moment} of $f$ about a point $c \in \mathbb{R}$ is defined as the integral:
+\begin{align*}
+    \mu_n = \int_{-\infty}^{\infty} (x-c)^n f(x) \dd{x}
+\end{align*}
+
+
+Moments provide a way to quantify, in a certain sense, the \textit{shape} of $f$. For example, if $f(x)$ is a linear density ($[\si{\kilo\g\per\m}]$), then the $0$-th moment is the total mass, the first one (with $c=0$) is the center of mass, and the second is the \textit{moment of inertia}.\\
+
+Moments are especially useful if $f(x)$ is a probability density function (pdf), i.e. a non-negative normalized function. In this case the first moment about $0$ is the \textbf{mean}:
+\begin{align*}
+    \mu_1 &\equiv \int_{-\infty}^{\infty} x f(x) \dd{x} = \operatorname{E}[X] \equiv \mu; \qquad X \sim f
+\end{align*}
+where $X$ is a random variable sampled from $f$. Note that, if not specified, a moment is intended to be centered around $c = 0$ (it is a \textit{raw moment} or \textit{crude moment}).\\
+
+The \textit{central second moment}, that is $\mu_2$ with $c = \mu$ is the \textbf{variance}:
+\begin{align*}
+    \int_{-\infty}^{\infty} (x- \mu)^2 f(x) \dd{x} \equiv \operatorname{E} [(X- \mu)^2] = \operatorname{Var}[X] 
+\end{align*}  
+
+
+A \textbf{moment-generating function} of a real-valued random variable is a certain function $f \colon \mathbb{R}^n \to \mathbb{R}$, $\bm{x} \mapsto f(\bm{x})$ that can be used to \textit{compute} the moment of the distribution where $X$ comes from.\\
+More precisely, for a random variable $X$, the moment-generating function $M_X$ is defined as:
+\begin{align*}
+    M_X(t) \equiv \operatorname{E}[e^{tX}], \quad t \in \mathbb{R} 
+\end{align*}
+In fact, recall that:
+\begin{align*}
+    e^{tX} = 1 + tX + \frac{t^2 X^2}{2!} + \dots 
+\end{align*}
+Hence, as the \textit{expected value} is a linear operator: 
+\begin{align*}
+    M_X(t) &= \operatorname{E}[e^{tX}] = 1+ t \operatorname{E}[X] + \frac{t^2 \operatorname{E}[X^2]}{2!} + \dots =\\
+    &= 1 + t \mu_1 + \frac{t^2 \mu_2}{2!} + \dots
+\end{align*}
+Note that the distribution's moments are the coefficients of the power series that defines $M_X(t)$.
+
+\begin{expl}
+    In fact, the more general definition of a \textbf{generating function} is that of a power-series with \q{hand-picked} coefficients $a_n$, such that by simply knowing the function one can compute $a_n$ in an iterative way.   
+\end{expl}
+
+To recover a certain $\mu_n$ we start by differentiating $M_X$ $n$ times with respect to $t$, such that the first $n-1$ terms vanish:
+\begin{align*}
+    \dv[n]{t} M_X(t) = \underbrace{\frac{n(n-1)\dots 1}{n!}}_{=1} \mu_n + \frac{(n+1)n\dots 2}{(n+1)!} t \mu_{n+1} + \dots   
+\end{align*}    
+Then, by setting $t=0$, all $\mu_r$ with $r>n$ vanish, leaving only the desired $\mu_n$:  
+\begin{align*}
+    \dv[n]{t} M_X(t) \big|_{t=0} = \mu_n
+\end{align*}   
+
+Finally, we note that a moment-generating function can be constructed even for a multi-dimensional vector $\bm{X} = (X_1, \dots, X_n)^T$ of random variables, by simply taking a scalar product in the exponential:
+\begin{align*}
+    M_{\bm{X}}(\bm{t}) \equiv \operatorname{E}\left(e^{\bm{t}^T \bm{X}}\right) \qquad \bm{t} \in \mathbb{R}^n
+\end{align*} 
+
+\section{Multivariate Gaussian}
+Consider now a normal pdf in $d=1$:
+\begin{align*}
+    f(x;\mu,\sigma) = \frac{1}{\sqrt{2 \pi}\sigma} \exp\left(-\frac{(x-\mu)^2}{2\sigma^2} \right) 
+\end{align*} 
+We denote a random variable sampled from $f(x;\mu,\sigma)$ as $X \sim \mathcal{N}(\mu,\sigma)$.\\
+Suppose that we have multiple random variables $\{X_i\}_{i=1,\dots,n}$, each normally distributed ($X_i \sim \mathcal{N}(\mu_i, \sigma_i)$), with covariance matrix $\Sigma \in \mathbb{R}^{n\times n}$ defined as:
+\begin{align*}
+    \Sigma_{ij} = \operatorname{E}[(X_i- \mu_i)(X_j - \mu_j)] 
+\end{align*}
+Their joint pdf is given by a \textbf{multivariate normal distribution} :
+\begin{align*}
+    f(x_1, \dots, x_n; \bm{\mu}, \Sigma) = \frac{1}{\sqrt{(2\pi)^n \operatorname{det}(\Sigma) }} \exp \left(-\frac{1}{2}(\bm{x}- \bm{\mu})^T \Sigma^{-1} (\bm{x} - \bm{\mu}) \right) 
+\end{align*}
+
+\section{Moments and Gaussians}
+We want now to compute the moment generating function for a multivariate gaussian, that is the value of the integral:
+\begin{align*}
+    M_{\bm{X}}(\bm{t}) = \int_{\mathbb{R}^n} e^{\bm{t}\cdot \bm{x}} f(\bm{x};\bm{\mu},\Sigma) \dd[n]{x}
+\end{align*} 
+
+Let's start from the easiest case, and work our way out to the most general one.\\
+
+Recall that the \textbf{gaussian integral}, i.e. the $0$-th moment of a normal univariate distribution is:
 \begin{align*}
     \int_{-\infty}^{\infty} \exp\left(-\frac{a}{2}x^2 \right) \mathrm{dx} = \sqrt{\frac{2}{a} \pi } 
 \end{align*}
+
+\begin{expl}
+    \textbf{Proof}. The integral as is can't be computed in terms of elementary functions. However, its square can be calculated:
+    \begin{align*}
+        \left(\int_{-\infty}^{\infty}\dd{x}  \exp\left(-\frac{a}{2}x^2 \right)\right)^2 =
+        \int_{-\infty}^{\infty} \dd{x} \int_{-\infty}^{\infty} \dd{y} \exp \left(-\frac{2}{2} (x^2 + y^2) \right)
+    \end{align*} 
+    Transforming to polar coordinates:
+    \begin{align*}
+        = \int_0^{2\pi} \dd{\theta} \int_{0}^{\infty} \dd{r} \exp\left(-\frac{a}{2}r^2 \right) r = -\frac{2 \pi}{a} \exp\left(-\frac{a}{2}r^2 \right) \Big|_{0}^{\infty} = \frac{2 \pi}{a}  
+    \end{align*}
+    and we arrive at the desired result by simply taking the square root.
+\end{expl}
+
+Consider now the integral of the multivariate case, with $\bm{\mu} = \bm{0}$ (meaning we applied a translation from the general case): 
+\begin{align*}
+    Z(\Sigma) = \int_{\mathbb{R}^n} \dd[n]{\bm{x}}\exp\left(-\frac{1}{2}\bm{x}^T \Sigma^{-1} \bm{x} \right)
+\end{align*}
+Notice that the inverse of the covariance matrix $\Sigma^{-1} \equiv A$ is a symmetric positive-definite matrix, thus can be used to define a quadratic form:
+\begin{align*}
+    \mathbb{A}(\bm{x}) = \sum_{i,j=1}^n x_i A_{ij} x_j
+\end{align*} 
+To compute the integral, then 
+
+
 We will show now how to generalize this result to many dimensions.\\
 Let $\vec{x}$ be a vector of $n$ dimension: $\vec{x} = (x_i)_{i=1,\dots, n}$. Suppose that $x_i$ are random variables, that can be correlated - that is $p(x_i | x_j) \neq p(x_i) p(x_j)$. All the information about that is contained in the \textit{covariance matrix}, $A_{i i} = \operatorname{var} (x_i)$ and $A_{ij} = A_{ji} = \operatorname{cov}(x_i, x_j)$. \\
 The covariance matrix induces a metric:

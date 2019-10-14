@@ -207,8 +207,8 @@ Then, starting from the definition of velocity:
 where we divided numerator and denominator by $dt$ (to highlight the velocities wrt $O$), and then by $\gamma$.\\
 We can repeat the same algebra for the other two axes:
 \begin{align*}
-    V_y' &=  \dv{dy'}{dt'} = \frac{dy}{\gamma dt - \frac{\beta \gamma}{c} dx } = \frac{V_y}{\gamma \left(1-\frac{v V_x}{c^2} \right)}    \\
-    V_z' &= \frac{dz'}{dt'} = \frac{dz}{\gamma dt - \frac{\beta \gamma }{c} dx } = \frac{V_z}{\gamma \left(1-\frac{vV_x}{c^2} \right)}   \\
+    V_y' &=  \dv{y'}{t'} = \frac{dy}{\gamma dt - \frac{\beta \gamma}{c} dx } = \frac{V_y}{\gamma \left(1-\frac{v V_x}{c^2} \right)}    \\
+    V_z' &= \dv{z'}{t'} = \frac{dz}{\gamma dt - \frac{\beta \gamma }{c} dx } = \frac{V_z}{\gamma \left(1-\frac{vV_x}{c^2} \right)}   \\
 \end{align*}
 Notice how $V_x$ affects the measured velocities along the other two axes.\\
 
@@ -262,6 +262,36 @@ Applying the Lorentz transformations:
 \end{align*}
 we arrive at:
 \begin{align*}
-    \frac{1}{(dt)^2} \left(...\right)
+    \left(\dv{x}{t} \right)^2 + \left(\dv{y}{t} \right)^2 = &\frac{1}{(dt)^2} \left(\gamma^2 (dx')^2 + v^2 \gamma^2 (dt')^2 + 2v \gamma^2 dx' + (dy')^2\right) =\\
+    &= \gamma^2 c^2 \frac{(dt')^2}{(dt)^2} \left(\cos^2\theta' + \beta^2 + 2 \beta \cos \theta' + \frac{1}{\gamma^2} \sin^2 \theta' \right) = \\
+    &= \frac{\gamma^2 c^2 (dt')^2}{\gamma^2 (dt')^2 + \beta^2 \gamma^2 (dx')^2/c^2} \left( \cos^2 \theta' + \beta^2 + 2\beta \cos \theta' + \sin^2 \theta'(1-\beta^2)\right) = \\
+    &= c^2 \frac{1}{1+\beta^2 \cos^2 \theta' + 2\beta \cos \theta'} (1+ \beta^2 \cos^2 \theta' + 2\beta\cos \theta') = c^2
 \end{align*}
+
+\textit{Assume that the source emits isotropically in its own rest frame. Does $O$ see the source emitting isotropically? Sketch very roughly what $O$ observes, for $v \approx c$.}\\
+
+As $O$ observes rays emitted at $\theta'$ wrt $O'$ at another angle $\theta$, which is a non linear function of $\theta'$, the source appears to $O$ as non-isotropic.\\
+For example consider a ray emitted at $\theta' = \pi/2$. The corresponding angle observed by $O$ will be:
+\begin{align*}
+    \theta = \arctan \left(\frac{1}{\gamma \beta} \right) \neq \frac{\pi}{2} 
+\end{align*}  
+So, rays emitted within an angle $\alpha'$ from the direction of motion (measured in $O'$, where the source is stationary), are observed by $O$ as emitted within an angle $\alpha < \alpha'$. Basically, radiation is \q{focused} along the direction of motion - and this effect is more and more significant as $v \to c$.\\
+
+More precisely, an isotropic source can be seen as a point emitting photons at an angle $\theta'$ with an uniform pdf:
+\begin{align*}
+    f(\theta') = \frac{1}{2\pi} \qquad \theta' \in [0, 2\pi) 
+\end{align*} 
+As $\theta(\theta')$ is monotonic, the pdf transforms under a coordinate change as:
+\begin{align*}
+    f(\theta') |d \theta'| = g(\theta) |d \theta|
+\end{align*} 
+where $g(\theta)$ is the pdf seen by $O$. We then derive:
+\begin{align*}
+    g(\theta) = \underbrace{f(\theta'(\theta))}_{=1}  \left|\dv{\theta'}{\theta} (\theta)\right|
+\end{align*} 
+The derivative can be computed as:
+\begin{align*}
+    \dv{\theta'}{\theta} = \left(\dv{\theta}{\theta'} (\theta(\theta')) \right)^{-1}
+\end{align*}
+Unfortunately, it is difficult to invert $\theta' \mapsto \theta$. However, this can be done numerically, or approximately by using the implicit function theorem and expanding in a Taylor series. However, it is clear that $O$ sees the source as emitting isotropically only if $g(\theta)$ is constant - which is of course not the case.  
 \end{document}

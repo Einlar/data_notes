@@ -1,0 +1,312 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Continuous Diffusion}
+\lesson{4}{14/10/19}
+In the last lecture, we discussed the solution of the diffusion equation:
+\begin{align*}
+    W_i(t_n) = {n\choose n^+} \frac{1}{2^n}  \xrightarrow[l, \epsilon \downarrow 0]{l^2/\epsilon = 2D} \frac{1}{\sqrt{4 \pi D t}}\exp\left(-\frac{x^2}{4Dt} \right)     
+\end{align*}
+with $x_i = l i \equiv x$, $t_n = n \epsilon \equiv t$.\\
+This is the solution of the \textit{master equation}:
+\begin{align*}
+    W_i(t_{n+1}) = \frac{1}{2}  (W_{i-1}(t_n) + W_{i+1}(t_n))
+\end{align*}  
+(in the case where the probability to walk to the right $P_+$ is equal to that for the left $P_-$).\\
+
+Then:
+\begin{align*}
+    W_i(t_n) = W(x,t) l
+\end{align*}
+and the probability to find a particle in $[a,b] \subset \mathbb{R}$ is given by:
+\begin{align*}
+    \mathbb{P}(x \in [a,b]) = \int_{a}^{b} W(x,t) d
+\end{align*} 
+Substituting the expression for $W_i(t_n)$ in the master equation we have:
+\begin{align*}
+    \bcancel{l} W(x,t+ \epsilon) = \frac{1}{2}\left[ W(x-l, t) + W(x+ l, t)\right]\bcancel{ l}
+\end{align*}
+Expanding the first term in series about $\epsilon = 0$:
+\begin{align*}
+    W(x,t+\epsilon) = W(x,t) + \epsilon \dot{W}(x,t) + \frac{\epsilon^2}{2} \ddot{W}(x,t) + O(\epsilon^3) 
+\end{align*}  
+The same expansion can be made for the other terms:
+\begin{align*}
+    W(x \pm l, t) = W(x,t) \pm l W'(x,t) + \frac{l^2}{2} W''(x,t) + O(l^3) 
+\end{align*}
+(we use $\dot{x}$ for $\partial_t$  and $x'$ for $\partial_x$ (?)).\\
+Summing the two we get:
+\begin{align*}
+    W(x+l,t) + W(x-l, t) = 2 W(x,t) + l^2 W''(x,t) + O(l^4)
+\end{align*}
+Substituting back:
+\begin{align*}
+    \cancel{W }+ \epsilon \dot{W} + \frac{\epsilon^2}{2} = \cancel{W} + \frac{l^2}{2} W'' + O(l^4)  
+\end{align*}
+Dividing by $\epsilon$:
+\begin{align*}
+    \dot{W} + \frac{\epsilon}{2} \ddot{W} = \underbrace{\frac{l^2}{2 \epsilon}}_{D}  W'' + O\left(\frac{l^4}{\epsilon} \right)  
+\end{align*} 
+We can now take the limit $\epsilon, l \downarrow 0$, maintaining the ratio $D = l^2/(2\epsilon)$ fixed, $\ddot{W}$ vanishes, but $W''$ remains:
+\begin{align*}
+    \partial_t W = D \partial_x^2 W
+\end{align*}  
+Recall that the solution for the discrete case was:
+\begin{align*}
+    \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4 D t} \right) 
+\end{align*}
+We want now to check if this solution can be derived from the equation in the continuum limit, without having to resort to a discretization.\\
+So, we start from:
+\begin{align*}
+    \partial_t W(x,t) = D \partial_x^2 W(x,t)
+\end{align*}
+and we search a solution in the field of reals ($\mathbb{R}$), so that the boundary condition becomes:
+\begin{align*}
+    \lim_{|x| \to \infty} W(x,t) = 0
+\end{align*}
+as the probability that the particle is somewhere should be one:
+\begin{align*}
+    \int_{\mathbb{R}} W(x,t) \dd{x} = 1
+\end{align*}
+
+If we had a semi-infinite domain, like $[0, \infty)$, we would have to choose a certain boundary condition at $0$. For example, one could choose a \textit{reflective} boundary, so that a particle reaching $0$ cannot cross it, and remains stationary until it moves right again. Otherwise, an \textit{absorbing} boundary would \textit{remove} every particle that attempts to cross $0$.\\
+
+Note also that $W(x,t)$ needs to be $\geq 0$, as it is a probability density. However, it is not clear if the time evolution, given by solving the differential equation, will satisfy $W(x,t) \geq 0 \quad \forall t$, if one start with a $W(x,0) > 0$.\\
+Fortunately, that is guaranteed by the nature of that partial differential equation.\\
+
+Note that the equation is translationally invariant, meaning that if $W(x,t)$ is a solution, also $W(x + y,t)$ is a solution. This is because the space coordinate appears only in a \textit{second-order derivative}.\\
+This suggests a way to solve the equation, by starting from the eigenfunctions of the laplacian, i.e. the solutions of the eigenvalue equation:
+\begin{align*}
+    \partial_x^2 \varphi_k(x) = \lambda_k \varphi_k(x) \qquad \lambda_k \equiv -k^2
+\end{align*}
+which are:
+\begin{align*}
+    \varphi_k(x) = A_k e^{\pm i k x} \qquad k\in \mathbb{R}
+\end{align*}
+as can easily be checked by substitution.\\
+Note that, as $k \in \mathbb{R}$, the $\pm$ is redundant and can be removed:
+\begin{align*}
+    \varphi_k(x) = A_k e^{ikx}
+\end{align*}  
+These eigenfunctions are the basis of the Fourier transform - that is every function can be expressed as a (infinite) linear combination of these $\varphi_k(x)$.\\
+We choose $A_k = 1$ for simplicity, and then:
+\begin{align*}
+    W(x,t) = \int_{\mathbb{R}} \frac{dk}{2 \pi} e^{ikx} c_k(t) 
+\end{align*}  
+where the $2\pi$ factor is inserted by convention (as in Fourier transforms).\\
+Recall the orthogonality relation:
+\begin{align*}
+    \int_{\mathbb{R}} \dd{x} \varphi_k(x)^* \varphi_{k'}(x) = \int_{\mathbb{R}} \dd{x} e^{i(k'-k)x} = 2\pi \delta(k-k')
+\end{align*} 
+and also:
+\begin{align*}
+    \int_{\mathbb{R}} \frac{\dd{k}}{2 \pi} \varphi_k(x)^* \varphi_k (x') = \dots = \delta(x-x') 
+\end{align*}
+So, by multiplying both sides by $e^{-ik'x}$ and integrate over $x$ we get:
+\begin{align*}
+    \int_{\mathbb{R}} W(x,t) e^{-ik'x} \dd{x} = \int_{\mathbb{R}} \frac{\dd{k}}{2\pi}  \int_{\mathbb{R}} \dd{x} e^{i(k-k')x} c_k(t)
+\end{align*}  
+and we can apply the orthogonality relation, arriving to:
+\begin{align*}
+    \int_{\mathbb{R}} W(x,t) e^{-ik'x}\dd{x} = \int_{\mathbb{R}} \dd{k} \delta(k-k') c_k(t) = c_{k'}(t)
+\end{align*}
+and so:
+\begin{align*}
+    c_k(t) = \int_{\mathbb{R}} \dd{x} e^{-ikx} W(x,t)
+\end{align*}
+Differentiating wrt $t$:
+\begin{align*}
+    \dot{c}_k(t) &= \int_{\mathbb{R}} \dd{x} e^{-ikx} \dot{W}(x,t) = D \int_{-\infty}^{\infty} e^{-ikx} W''(x,t) \dd{x} =  \\
+    &= D W'(x,t) e^{-ikx}\big|_{-\infty}^{\infty} - D \int_{-\infty}^{\infty} \partial_x (e^{-ikx}) W'(x,t) \dd{x} = \\
+    &= -D\underbrace{(\partial_x e^{-ikx})}_{-ik e^{-ikx}} W(x,t) \big|_{-\infty}^{\infty} + D\int_{\mathbb{R}} \underbrace{\partial_x^2 (e^{-ikx})}_{-k^2 e^{-ikx}} W(x,t) \dd{x} \\
+\end{align*} 
+And so:
+\begin{align*}
+    \dot{c}_k(t) = \int_{\mathbb{R}} \dd{x} e^{-ikx} \dot{W}(x,t) = - D k^2 c_k(t)
+\end{align*}
+and by integrating we arrive at the solution:
+\begin{align*}
+    c_k(t) = e^{-D k^2 t} c_{k_-}(0) = e^{-D k^2 t} \int \dd{x_0} e^{-ikx} W(x_0,0)
+\end{align*}
+and finally:
+\begin{align*}
+    W(x,t) &= \int \frac{\dd{k}}{2 \pi} e^{ikx - Dk^2 t} \int \dd{x_0} e^{-ik x_0} W(x_0, 0) =\\
+    &= \int \dd{x_0} \left[\int_{-\infty}^{\infty}  \frac{\dd{k}}{2 \pi}  e^{-D k^2 t + i(k(x-x_0))}\right] W(x_0, 0)
+\end{align*}
+This integral can be computed with the Cauchy residual theorem, by shifting the integral path by $ik(x-x_0)$ on the complex plane. We then arrive to:
+\begin{align*}
+    \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{(x-x_0)^2}{4 D t} \right) 
+\end{align*} 
+and the general solution is:
+\begin{align*}
+    W(x,t) = \int \dd{x_0} \frac{\exp \left(-\frac{(x-x_0)^2}{4 D t} \right)}{\sqrt{4 \pi D t}} W(x_0, 0) 
+\end{align*}
+If we choose an infinite density for the initial condition:
+\begin{align*}
+    W(x_0, 0) = \delta(x_0)
+\end{align*}
+then the solution (given that the particle was at $x_0$ at $t=0$) will be:
+\begin{align*}
+    W(x,t | x_0, 0) = \frac{1}{\sqrt{4 \pi D t}} \exp \left(-\frac{(x-x_0)^2}{4 D t} \right) 
+\end{align*}
+More generally:
+\begin{align*}
+    W(x,t | x_0, t_0 ) = \frac{1}{\sqrt{4 \pi D (t-t_0 )}} \exp \left(-\frac{(x-x_0 )^2}{4 D (t-t_0)} \right) \qquad W(x,t|x_0, t_0 ) = \delta(x- x_0)
+\end{align*}
+We will refer to this as a \textbf{propagator}.\\
+Note that we can rewrite it as:
+\begin{align*}
+    W(x,t|x_0, t_0 ) = \int \dd{x_0 } W(x,t|x_0, t_0) W(x_0, t_0)
+\end{align*} 
+
+Let $x_0 = 0 = t_0$, leading to:
+\begin{align*}
+    W(x,t | 0, 0) = (4 \pi D t )^{-1/2} \exp\left(-\frac{x^2}{4 D t} \right)
+\end{align*} 
+We will now talk about the concept of \textbf{scale invariance}.\\
+We start from:
+\begin{align*}
+    \partial_t W(x,t) = D \partial_x^2 W(x,t); \qquad x'=\lambda x, t' = \lambda^2 t
+\end{align*} 
+so that:
+\begin{align*}
+    \pdv{t'} = \frac{1}{\lambda^2}  \pdv{t}; \qquad \pdv{x'} = \frac{1}{\lambda} \pdv{x} 
+\end{align*}
+By rearranging, we can write the differential equation as the action of an operator:
+\begin{align*}
+    (\partial_t - D \partial_x^2) W(x,t) = 0
+\end{align*}
+which satisfies:
+\begin{align*}
+    \pdv{t} - D \pdv[2]{x} = \frac{1}{\lambda^2} \left(\pdv{t'} - D \pdv[2]{{x'}} \right)  
+\end{align*}
+So if $W(x,t)$ is a solution, then also $W(\lambda x, \lambda^2 t)$ is a solution. For a general integral:
+\begin{align*}
+    W(x,t|0,0) &=  (4 \pi D t)^{-1/2} \exp\left(-\frac{x^2}{4D t} \right) \\
+    W(\lambda x, \lambda^2 t | 0, 0) &= (4 \pi D \lambda^2 t)^{-1/2} \exp\left(-\frac{\cancel{\lambda^2} x^2}{4 D t\cancel{ \lambda^2}} \right)\\
+     &= \frac{1}{\lambda} W(x,t|0,0)  \\
+\end{align*}  
+But why are we getting an extra factor of $\lambda$?\\
+Recall that $W(x,t)$ is a probability density, so that it is normalized:
+\begin{align*}
+    1 = \int_{-\infty}^{\infty} \dd{x} W(x,t)
+\end{align*}  
+So, if we rearrange:
+\begin{align*}
+    \lambda W(\lambda x, \lambda^2 t | 0, 0) = W(x,t | 0,0)
+\end{align*}
+and then integrate both sides:
+\begin{align*}
+    \int \dd{x} \lambda W(\lambda x, \lambda^2 t|0,0) = \int \dd{z} W(z, \lambda^2 t|0,0) = 1
+\end{align*}
+The two integrals are the same up to a change of variables: $x' = \lambda x$, $\dd{x'} = \lambda \dd{x}$.\\
+By choosing $\lambda= 1/ \sqrt{t}$ we get:
+\begin{align*}
+    W(x,t|0,0) = \frac{1}{\sqrt{t}} W\left(\frac{x}{\sqrt{t}}, 1|0,0 \right) = \frac{1}{\sqrt{t}} f\left(\frac{x}{\sqrt{t}} \right) 
+\end{align*}   
+Note that this property can be derived even if we do not know the explicit solution:
+\begin{align*}
+    f(z) = \frac{1}{\sqrt{4 \pi D}} \exp\left(-\frac{z^2}{4D} \right) 
+\end{align*}
+In fact, by an argument of dimensional analysis, note that $[D] = L^2/t$, and so $[Dt] = [x^2]$. Recall that $[W] = 1/x$, as it is a pdf, and $W\dd{x}$ is a pure number. So:
+\begin{align*}
+    W(x,t|0,0) = \frac{1}{x} \frac{x}{\sqrt{D t}} ) = \frac{1}{\sqrt{Dt}} \underbrace{\frac{\sqrt{Dt}}{x} F \left(\frac{x}{\sqrt{Dt}} \right)}_{f(x/\sqrt{Dt})}  
+\end{align*}  
+where $F$ is dimensionless, and $1/x$ restores the correct dimensions.\\
+But if we consider also the initial conditions, we have an extra parameter that can be added to the function:
+\begin{align*}
+    W(x,t|x_0, t_0)
+\end{align*}
+However, by translational invariance, we can simply translate time and space:
+\begin{align*}
+    W(x-x_0, t-t_0 | 0,0)
+\end{align*}
+
+Now, we start again from:
+\begin{align*}
+    W(x,t) &= \int \dd{x_0} \frac{1}{\sqrt{4 \pi D (t-t_0 )}} \exp\left(-\frac{(x-x_0 )^2}{4 D (t-t_0)} \right)  W(x_0, t_0) =\\
+    &= \int d\dd{x_0} W(x,t|x_0, t_0) W(x_0, t_0)
+\end{align*}
+and ask what is the probability that a particle will be at position $x_2$ at $t=t_2$, given that the initial condition was $x_1$ at $t_1$.\\
+We now that:
+\begin{align*}
+    \mathbb{P}(x,t|x_0, t_0) \equiv W(x,t|x_0, t_0)
+\end{align*}
+But can we derive the same result by using the propagator?
+\begin{align*}
+    W(x_2, t_2) &= \int \dd{x_0} W(x_2, t_2|x_0, t_0) W(x_0, t_0)\\
+    W(x_1, t_1) &= \int \dd{x_0} W(x_1, t_1|x_0, t_0) W(x_0, t_0) 
+\end{align*}
+In principle, we can also write what happens at $t_2$ in terms of what happens at $t_1$:
+\begin{align*}
+    W(x_2, t_2) = \int \dd{x_1} W(x_2, t_2 | x_1, t_1) W(x_1, t_1)
+\end{align*}  
+If we substitute $W(x_1, t_1)$ in there:
+\begin{align*}
+    W(x_2, t_2) = \iint \dd{x_1} \dd{x_0} W(x_2, t_2 | x_1, t_1) W(x_1, t_1 | x_0, t_0) W(x_0, t_0)
+\end{align*} 
+By comparing with the previous integrals, we find that:
+\begin{align*}
+    W(x_2, t_2 | x_0, t_0) = \int \dd{x_1} W(x_2, t_2 | x_1, t_1) W(x_1, t_1 | x_0, t_0)
+\end{align*}
+This is the \textbf{ESCK} property of the propagator.\\
+Then, using gaussian integration:
+\begin{align*}
+    W(x,t|x_0, t_0) = \frac{1}{\sqrt{4 \pi D (t-t_0) }} \exp\left(-\frac{(x-x_0)^2}{4 D (t-t_0)} \right) 
+\end{align*} 
+(verify it as exercise).\\
+
+Returning to the integral we found:
+\begin{align*}
+    \mathbb{P}(x_2, t_2; x_1, t_1; x_0, t_0) = W(x_2, t_2|x_1, t_1) W(x_1, t_1 | x_0, t_0) W(x_0, t_0)
+\end{align*}
+This is the joint probability that the particle arrives at $x_1$ at $t_1$ and then at $x_2$ at $t_2$, given that it started in $x_0$ at $t_0$.\\
+We can then compute:
+\begin{align*}
+    \langle x(t_2) x(t_1) \rangle = \iint \dd{x_1} \dd{x_2} \mathbb{P}(x_2, t_2; x_1, t_1) x_2 x_1
+\end{align*}
+
+Let's do an example. Consider:
+\begin{align*}
+    \mathbb{P}(x_2, t_2; x_1, t_1 | 0, 0) = \mathbb{P}(x_2, t_2; x_1, t_1; 0,0)\frac{1}{W(0,0)} = W(x_2, t_2 | x_1, t_1) W(x_1, t_1 | 0,0)
+\end{align*}
+we want to compute $\langle x(t_2) x(t_1) \rangle$:
+\begin{align*}
+    \langle x(t_2) x(t_1) \rangle = \iint \dd{x_1} \dd{x_2} x_1 x_2 \frac{\exp\left(-\frac{(x_2 - x_1)^2}{4D(t_2 -t_1)} \right) }{\sqrt{4 \pi D (t_2 -t_1)}} \frac{\exp\left(-\frac{x_1^2}{4 D t_1} \right)}{\sqrt{4 \pi D t_1}} 
+\end{align*}
+Changing variables ($x_1 = y_1$, $x_2 - x_1 = y_2$) we get:
+\begin{align*}
+    = \frac{1}{\sqrt{4 \pi D (t_2-t_1) }}  \frac{1}{\sqrt{4 \pi D t_1}} \iint \dd{y_1} \dd{y_2} y_1 (y_1 + y_2)\exp\left(-\frac{y_2^2}{4D(t_2 -t_1)} - \frac{y_1^2}{4D t_1} \right) 
+\end{align*}
+Notice that the exponential is an even function, and $y_1 y_2$ is odd, so only the term with $y_1^2$ remains. We arrive at:
+\begin{align*}
+    \langle x(t_2) x(t_1) \rangle &= \frac{1}{\sqrt{4 \pi D(t_2-t_1)}} \frac{1}{\sqrt{4 \pi D t_1}} \int \dd{y_1} y_1^2 \exp\left(-\frac{y_1^2}{4 D t_1} \right)  \cdot \int \dd{y_2} \exp\left(-\frac{y_2^2}{4 \pi D (t_2-t_1) } \right) =\\
+    &= 2D t_1
+\end{align*}
+Here we supposed $t_1 < t_2$. In the general case, we would have:
+\begin{align*}
+    \langle x(t) x(t') \rangle = 2D \min(t, t')
+\end{align*} 
+
+Generalizing:
+\begin{align*}
+    \mathbb{P}(x_i, t_i; i=0, \dots, n) &= \mathbb{P}(x_n, t_n; x_{n-1}, t_{n-1}; \dots; x_1, t_1; x_0, t_0) =\\
+    &= \prod_{i=1}^n W(x_i, t_i | x_{i-1}, t_{i-1}) W(x_0, t_0)
+\end{align*}
+This is the joint probability for a \textit{discrete trajectory}, meaning that we care only about what happens at certain discrete times.\\
+For the average value of a generic function $f$ of the trajectory points:
+\begin{align*}
+    \langle f(x(t_n), x(t_{n-1}), \dots, x(t_0)) \rangle
+\end{align*}  
+we need to use the joint probability:
+\begin{align*}
+    = \int \prod_{i=0}^n W(x_i, t_i; i=0, \dots, n) \cdot f(x_n, x_{n-1}, \dots, x_0)
+\end{align*}
+In the next lecture we will try to see how to generalize this kind of calculation to a function that also depends on the \textit{inbetween points}, that is on a \textit{infinite set of values of the trajectory}. For example:
+\begin{align*}
+    \langle \exp \left(-\int_0^t a(\tau) x(\tau) \dd{\tau}\right) \rangle
+\end{align*}  
+depends on the \textit{whole} trajectory.
+\end{document}
