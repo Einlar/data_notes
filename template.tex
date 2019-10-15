@@ -2,72 +2,75 @@
 %
 \documentclass[12pt]{report} %Modalità draft settata qui
 
+%---General---%
+\usepackage{subfiles} %Modular structure
+\usepackage[ddmmyyyy,hhmmss]{datetime} %Compilation date
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[nointegrals]{wasysym} %fonts support
 
-
-%%%HEADER%%%
-\usepackage{subfiles} %Struttura modulare
-\usepackage{makeidx} %Indice analitico
-\usepackage[ddmmyyyy,hhmmss]{datetime} %Data di compilazione
-\usepackage{hepnames}
-
-%%PACKAGES
-\usepackage[version=4]{mhchem}
-%\usepackage{chemformula}
-
-\usepackage[usenames, dvipsnames, table]{xcolor} %colori
+%---Encoding---%
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+
+%---Math---%
+\usepackage{amsmath,amsthm,amstext,amsbsy,amsfonts,amssymb}
 \usepackage{mathrsfs}
-\usepackage{amsmath}
-\usepackage{amsthm}
-\usepackage{amstext}
-\usepackage{amsbsy}
-\usepackage{amsfonts}
-\usepackage{comment}
-\usepackage{wrapfig}
-\usepackage{booktabs}
-\usepackage{braket}
-\usepackage{pgf,tikz}
-\usepackage{mathrsfs}
-\usetikzlibrary{arrows}
-%\usepackage{subfigure}
-\usepackage{xspace}
-\usepackage{gnuplottex}
-\usepackage{epstopdf}
-\usepackage{marginnote}
-\usepackage{float}
-\usepackage{physics}
-\usetikzlibrary{tikzmark}
-\usepackage{graphicx}
 \usepackage{cancel}
 \usepackage{bm}
 \usepackage{mathtools}
-\usepackage{ragged2e}
-\usepackage[stable]{footmisc}
-\usepackage{hyperref} %hyperref va caricato sempre dopo footmisc, altrimenti le footnotes si buggano e riportano tutte alla prima pagina
-\usepackage[symbol=$\wedge$,numberlinked=false]{footnotebackref}
-\usepackage{enumerate}
 \usepackage{mathdots}
-\usepackage[framemethod=tikz]{mdframed}
-\PassOptionsToPackage{table}{xcolor}
-\usepackage{soul}
-\usepackage{enumerate}
-\usepackage{mathdots}
-\usepackage[framemethod=tikz]{mdframed} %Added 16/10
-\usepackage[italian]{babel} %Added 16/10
-\usepackage{amssymb} %Added
-\usepackage{enumitem}
+\usepackage{thmtools}
 \usepackage{array}
-\usepackage{siunitx}
-\usepackage{mathdots}
 \usepackage{yhmath}
-\usepackage{color}
-\usepackage{multirow}
 \usepackage{gensymb}
-\usetikzlibrary{patterns}
 
-%%%%IMAGES (Inkscape)
+%---Physics---%
+\usepackage{physics}
+\usepackage{siunitx}
+\sisetup{
+separate-uncertainty = true
+}
+%\usepackage{braket}
+\usepackage[version=4]{mhchem}
+\usepackage{hepnames}
+
+%---Tables---%
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\setlength{\aboverulesep}{0pt} %removes annoying spaces in booktabs tables
+\setlength{\belowrulesep}{0pt}
+\setlength{\extrarowheight}{.75ex}
+\setlength\parindent{0pt} 
+
+%---Graphics & Plots---%
+\usepackage{graphicx}
+\usepackage[usenames, dvipsnames, table]{xcolor} %colori
+\usepackage{color}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage[font=footnotesize, labelfont=bf,
+            format=hang, labelformat=parens,
+            labelsep=endash, justification=raggedright,
+            singlelinecheck=on]{caption} %fancy captions
+\usepackage{subcaption} 
+\captionsetup[sub]{font=footnotesize,
+            labelsep=endash, justification=centering}
+
+\usepackage{pgf,tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{patterns}
+\usepackage{epstopdf}
+\usepackage{gnuplottex}
+\usepackage{soul}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{fancybox}
+\usepackage{framed}
+
+%---(Inkscape imports)---%
 \usepackage{import}
 \usepackage{xifthen}
 \usepackage{pdfpages}
@@ -80,7 +83,31 @@
 
 \definecolor{mygray}{gray}{0.6}
 
-%%%%NEW
+%---Indeces, links, bibliography---%
+\usepackage{makeidx} %Indice analitico
+\usepackage[stable]{footmisc}
+\usepackage{hyperref} %hyperref va caricato sempre dopo footmisc, altrimenti le footnotes si buggano e riportano tutte alla prima pagina
+\usepackage[symbol=$\wedge$,numberlinked=false]{footnotebackref}
+
+%---Utilities---%
+\usepackage{comment}
+\usepackage{xspace}
+\usepackage{marginnote}
+\usepackage{ragged2e}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{etoolbox}
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage{lipsum}  
+
+%---Additional symbols---%
+%\bigcdot
+\makeatletter
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+%Circled symbols
 \makeatletter
 \newcommand{\ogeneric}[2][0.7]{%
   \vphantom{\oplus}\mathpalette\o@generic{{#1}{#2}}%
@@ -104,10 +131,11 @@
 }
 \makeatother
 
-\newcommand{\ole}{\mathrel{\ogeneric{<}}}
+\newcommand{\ole}{\mathrel{\ogeneric{<}}} 
 \newcommand{\oleq}{\mathrel{\ogeneric[0.6]{\leq}}}
 \newcommand{\osubseteq}{\mathrel{\ogeneric[0.6]{\subseteq}}}
 
+<<<<<<< HEAD
 %%BOOKTAB
 \setlength{\aboverulesep}{0pt}
 \setlength{\belowrulesep}{0pt}
@@ -132,45 +160,43 @@
   \@setminipage
 }
 \makeatother
+=======
+%---New environments---%
+%Exercises + Examples
+\newenvironment{myleftbar}{%
+\def\FrameCommand{\hspace{0.6em}\vrule width 2pt\hspace{0.6em}}%
+\MakeFramed{\advance\hsize-\width \FrameRestore}}%
+{\endMakeFramed}
+\declaretheoremstyle[
+spaceabove=6pt,
+spacebelow=6pt
+headfont=\normalfont\bfseries,
+headpunct={} ,
+headformat={\cornersize*{2pt}\ovalbox{\NAME~\NUMBER\ifstrequal{\NOTE}{}{\relax}{\NOTE}:}},
+bodyfont=\normalfont,
+]{exobreak}
+
+\declaretheorem[style=exobreak, name=Exercise,%
+postheadhook=\leavevmode\myleftbar, %
+prefoothook = \endmyleftbar]{exo}
+
+\declaretheorem[style=exobreak, name=Example,%
+postheadhook=\leavevmode\myleftbar, %
+prefoothook = \endmyleftbar]{example}
+>>>>>>> 96bf276... Tidied template.tex
  
 
-%%COMANDI
-\newcommand{\q}[1]{``#1''}
-\newcommand{\lamb}[2]{\Lambda^{#1}_{\>{#2}}}
-%\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
-\newcommand{\hs}{\mathcal{H}}
-\newcommand{\minus}{\scalebox{0.75}[1.0]{$-$}}
+%---Custom commands---%
+\newcommand{\q}[1]{``#1''}              %quotes
 \newcommand{\hlc}[2]{%
-  \colorbox{#1!50}{$\displaystyle#2$}}
-\newcommand{\bb}[1]{\mathbb{#1}}
-%\newcommand{\op}[1]{\operatorname{#1}}
-\renewcommand{\figurename}{Fig.}
-\newcommand{\dom}[1]{D#1}
-\newcommand{\avg}[1]{\left\langle{#1}\right\rangle}
-\newcommand{\NN}{\mathbb N}
-\newcommand{\RR}{\mathbb R}
-\newcommand{\CC}{\mathbb C}
-\newcommand{\mS}{\mathcal S}
-\newcommand{\de}{d}
-%\newcommand{\abs}[1]{\left|#1\right|}
-\newcommand{\deriv}[2]{\frac{\de #1}{\de #2}}
-\newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}}
-\newcommand{\vect}[1]{\vec #1}
-\newcommand{\kB}{k_B}
-\newcommand{\sumn}{\sum_{i=1}^N}
-\renewcommand{\ket}{\Ket}
-\renewcommand{\bra}{\Bra}
-\renewcommand{\braket}{\Braket}
-
+  \colorbox{#1!50}{$\displaystyle#2$}}  %highlight
+\newcommand{\bb}[1]{\mathbb{#1}}        %faster \mathbb
 \newcommand{\breakpage}{\begin{center}
   $\ast$~$\ast$~$\ast$
-\end{center}}
-\newcommand{\lesson}[2]{\marginpar{(Lesson #1 of #2)\\Compiled: \today}}
-\DeclareRobustCommand{\MQ}{{\small\textsc{MQ}}\xspace}
-\DeclareRobustCommand{\MC}{{\small\textsc{MC}}\xspace}
-%Prima era \small\textsc{MQ}\xspace
+\end{center}}                           %fancy page separator
+\newcommand{\lesson}[2]{\marginpar{(Lesson #1 of #2)\\Compiled: \today}}  %Lesson number, date and compilation
 
-%%RICHIAMI
+%---Dots---%
 \newcommand{\danger}{{\textcolor{Red}{\fontencoding{U}\fontfamily{futs}\selectfont\char 66\relax}}}
 \newcommand{\reddot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[red,fill=red] (0,0) circle (.5ex);}}
 \newcommand{\bluedot}{\href{\tikz\draw[blue,fill=blue] (0,0) circle (.5ex);}{http://bit.ly/2Tj5OEj}}
@@ -178,7 +204,8 @@
 \newcommand{\orangedot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[orange,fill=orange] (0,0) circle (.5ex);}}
 
 
-%%TESTATINE
+%---Fancy stuff---%
+\usepackage[Bjornstrup]{fncychap}
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhead{} % clear all header fields
@@ -188,7 +215,7 @@
 \cfoot{\thepage}
 
 
-%%AMBIENTI
+%---Theorems---%
 \theoremstyle{plain}
 \newtheorem{thm}{Theorem}[section]
 \newtheorem{lem}{Lemma}[section]
@@ -199,67 +226,36 @@
 \theoremstyle{definition}
 \newtheorem{dfn}{Definition}
 
-\theoremstyle{remark}
-\newtheorem{oss}{Osservazione}
-\newtheorem{es}{Esempio}
-\newtheorem{ex}{Esercizio}
-
-%Spiegazioni/verifiche
+%---Colored blocks---%
 \newenvironment{expl}{\begin{mdframed}[hidealllines=true,backgroundcolor=green!20,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt]}{\end{mdframed}} %Box di colore verde
-
 \newenvironment{appr}{\begin{mdframed}[hidealllines=true,backgroundcolor=blue!10,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt]}{\end{mdframed}} %Approfondimenti matematici (box di colore blu)
 
-%%Domande di Marchetti
-\newtheorem{question}{Domanda}
+%---Geometry (Normal pages)---%
+\usepackage[a4paper]{geometry}
+\newgeometry{inner=20mm,
+            outer=49mm,% = marginparsep + marginparwidth 
+                       %   + 5mm (between marginpar and page border)
+            top=20mm,
+            bottom=25mm,
+            marginparsep=6mm,
+            marginparwidth=30mm}
 
-
-%%OPERATORI
-
-
-%%CONTATORI
-\newcounter{Esercizio}
-\stepcounter{Esercizio}
-
-%%FANCY STUFF
-\usepackage[Bjornstrup]{fncychap}
-\usepackage[font=footnotesize, labelfont=bf,
-            format=hang, labelformat=parens,
-            labelsep=endash, justification=raggedright,
-            singlelinecheck=on]{caption} 
-\usepackage{subcaption} 
-\captionsetup[sub]{font=footnotesize,
-            labelsep=endash, justification=centering}
-\usepackage{microtype}
-\usepackage{lipsum}                     % Dummytext
-\usepackage{xargs}                      % Use more than one optional parameter in a new commands
-% 
-\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
-\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
-\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
-\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
-\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
-\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
-%
-\usepackage[inline,marginclue,lang=italian]{fixme}
-\usepackage{wasysym}
-\sisetup{
-separate-uncertainty = true
-}
-%%%%%%%%%%%%
+%Raggedright marginpar
 \makeatletter
-\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
-\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\renewcommand{\@marginparreset}{%
+  \reset@font\small
+  \raggedright
+  \slshape
+  \@setminipage
+}
 \makeatother
-
-
 \makeindex
-\begin{document}
 
+\begin{document}
+%---Frontpage---%
+%Custom geometry for the frontpage
 \newgeometry{total={170mm,257mm}, left=20mm, top=20mm}
-%Impostazioni booktab (Rimuove quello spazio odioso tra righe)
-\setlength{\aboverulesep}{0pt}
-\setlength{\belowrulesep}{0pt}
-\setlength{\extrarowheight}{.75ex}
+
 \begin{center}
                 \line (1,0){350} \\
                 \textsc{\normalsize Trascrizione degli appunti delle lezioni di}\\
@@ -277,6 +273,9 @@ separate-uncertainty = true
         {\scriptsize Compilato il \today}
 \end{center}
 
+%---Frontpage End---%
+
+%---Geometry (Normal pages)---%
 \newgeometry{inner=20mm,
             outer=49mm,% = marginparsep + marginparwidth 
                        %   + 5mm (between marginpar and page border)
@@ -325,18 +324,13 @@ Buon viaggio! :)
 
 \missingfigure{Test}
 
-%Comandi utili
-%\missingfigure{Testo}
-%\fxnote{Test}, \fxwarning, \fxerror, \fxfatal (in ordine di gravità)
-
-
-%%BIBLIOGRAFIA
+%---Bibliography---%
 \clearpage
 \begin{thebibliography}{9}
 
 \end{thebibliography}
 
-%%INDICE ANALITICO
+%---Analytical Index---%
 \printindex
 
 \end{document}
