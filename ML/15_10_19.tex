@@ -1,0 +1,149 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Multiclass Classification and Regression}
+\lesson{4}{15/10/19}
+We now consider $3$ possible learning problems:
+\begin{enumerate}
+    \item \textbf{Binary classification}, where the target set of labels is discrete, and contains only two elements: $\mathcal{Y} = \{0,1\}$  
+    \item \textbf{Multiclass classification} with $K>2$ classes: same as before, but with a larger $\mathcal{Y} = \{0, 1, \dots, K-1\}$.
+    \item \textbf{Regression} where the target set $\mathcal{Y}$ contains infinite elements (e.g. $\mathcal{Y} = \mathbb{R}$).     
+\end{enumerate}
+
+Note that:
+\begin{itemize}
+    \item Domain set and training data have the same structure for all the problems
+    \item Learner output dimensionality is different
+    $h\colon \mathcal{X} \to \mathcal{Y}$ 
+\end{itemize}
+While it is easy to adapt the binary classification loss to the multiclass problem, a new approach is needed for the more general regression case.
+
+\subsection{Generalized Loss Function}
+Let's start with an hypothesis class $\mathcal{H}$ and a domain $Z = \mathcal{X}\times \mathcal{Y}$.\\
+A loss function is any function $l\colon \mathcal{H}\times Z \to \mathbb{R}_+$.\\
+We then define:
+\begin{itemize}
+    \item \textbf{True risk}
+    \begin{align*}
+        L_D (h) \equiv \mathbb{E}_{z \sim D}[l(h,z)]
+    \end{align*}
+    that is the expected value of the loss evaluated on samples from the underlying (unknown) distribution $D$.
+    \item \textbf{Empirical risk}
+    \begin{align*}
+        L_D(h) = m^{-1} \sum_{i=1}^m l(h, z_i) \qquad z_i \in S
+    \end{align*}
+    i.e. the average loss value on the training dataset $S$. 
+\end{itemize}
+
+Some possibilities for $l$ are:
+\begin{enumerate}
+    \item \textbf{0-1 loss}, commonly used for binary/multiclass classification
+    \begin{align*}
+        l_{0-1}(h, (x,y)) \equiv \begin{cases}
+            0 & h(x) = y\\
+            1 & h(x) \neq y
+        \end{cases}
+    \end{align*} 
+    \item $\bm{L_1}$ loss, commonly used in regression:
+    \begin{align*}
+        l_{\mathrm{abs} }(h, (x,y)) \equiv (h(x) - y)^2    
+    \end{align*}   
+    \item $\bm{L_2}$ loss, also used in regression:
+    \begin{align*}
+        l_{\mathrm{sq}}(h, (x, y)) \equiv (h(x)-y)^2
+    \end{align*} 
+\end{enumerate}
+Note that the $L_1$ loss weights all errors equally, while the $L_2$ penalizes much more large errors.\\
+The choice of $l$ depends on the specific problem that needs to be solved. For example, a security critical application will be highly sensitive to errors - and so it would be better to penalize more false negatives (like a terrorist mistaken for an agent) than false positives (an agent misclassified).
+
+\section{Empirical and True Risk}
+We want now to find a sufficient condition such that the empirical error of \textbf{all} the $h \in \mathcal{H}$ is a good approximation of their true error (i.e. $L_S(h)$ is similar to $L_D(h)$ $\bm{\forall h}$). Note that this is a much stronger condition than the one considered before (e.g. in the \q{overfit theorem}).\\
+
+We start by describing formally the problem. A training set $S$ is said to be $\bm{\epsilon}$\textbf{-representative} (with respect to the domain $Z$, the hypothesis class $\mathcal{H}$, the loss $l$ and distribution $D$) if it leads to similar true and empirical risk for all the models in $\mathcal{H}$:
+\begin{align*}
+    \forall h \in \mathcal{H}\colon \> |L_S(h) - L_D(h)| \leq \epsilon
+\end{align*}     
+
+\begin{thm}
+    Assume that the training set $S$ is $\epsilon/2$-representative (wrt $Z$, $\mathcal{H}$, $l$ and $D$). Then, any output of ERM$_{\mathcal{H}}(S)$ (i.e. any $h_S \in \arg\min_{h\in \mathcal{H}} L_S(h)$) satisfies:
+    \begin{align*}
+        L_D(h_S) \leq \min_{h \in \mathcal{H}} L_D(h) + \epsilon
+    \end{align*}  
+\end{thm}
+\textbf{Corollary}: if with probability at least $1-\delta$, a random training set $S$ is $\epsilon$-representative, then the ERM rule is an agnostic PAC learner.\\
+
+\textbf{Proof}. From the definition of $\epsilon/2$-representative:
+\begin{align*}
+    |L_S(h) - L_D(h)| < \frac{\epsilon}{2} \underset{(a)}{\Rightarrow}  L_D(h) \leq L_S(h) + \frac{\epsilon}{2} \quad \forall h \in \mathcal{H}
+\end{align*} 
+In (a) we assumed that $L_D(h) > L_S(h)$ (as it happens usually).\\
+The same inequality holds over the smaller set of hypotheses learned from the training set $h_S$ (which is a subset of $\mathcal{H}$). So:
+\begin{align*}
+    L_D(h_S) \leq L_S(h_S) + \frac{\epsilon}{2} \underset{(b)}{\leq}  L_S(h) + \frac{\epsilon}{2}  \leq \left( L_D(h) + \frac{\epsilon}{2}\right) + \frac{\epsilon}{2}  
+\end{align*} 
+Where in (b) we applied the property of a ERM solution. So we arrive at the final result:
+\begin{align*}
+    L_D(h) \leq L_D(h) + \epsilon
+\end{align*}
+
+\section{Uniform Convergence}
+\textbf{Definition}. A hypothesis class $\mathcal{H}$ has the \textbf{uniform convergence} property (wrt a domain $Z$ and a loss function $l$) if there exists a function $m_{\mathcal{H}}^{UC}\colon (0,1)^2 \to \mathbb{N}$ such that for every $\epsilon, \delta \in (0,1)$ and for every probability distribution $D$ over $Z$, if $S$ is a sample of $m \geq m_{\mathcal{H}}^{UC}(\epsilon, \delta)$ i.i.d. examples drawn from $D$, then with probability $\geq 1-\delta$, $S$ is $\epsilon$-representative. 
+
+
+\textbf{Proposition}. If a class $\mathcal{H}$ has the uniform convergence property with a function $m_{\mathcal{H}}^{UC}$ then the class is agnostically PAC learnable with the sample complexity $m_{\mathcal{H}}(\epsilon, \delta) \leq m_{\mathcal{H}}^{UC}(\epsilon/2, \delta)$. Furthermore, in that case the ERM$_{HCal}$ paradigm is a successful agnostic PAC learner for $\mathcal{H}$.\\
+
+Summarizing:
+\begin{align*}
+    &\text{Uniform convergent}\\ \Rightarrow& \text{A $m$-sample $(m\geq m_{\mathcal{H}}^{UC}(\epsilon, \delta))$  is $\epsilon$-representative with $p\geq 1-\delta$}\\
+    \Rightarrow& \text{Agnostic PAC with accuracy $\epsilon$}
+\end{align*}
+Note that the converse is not true. However, this is only a sufficient condition, so there may be cases where a smaller training set $m < m_{\mathcal{H}}^{UC}(\epsilon, \delta)$ still leads to an agnostic PAC.
+
+\section{Finite classes are Agnostic PAC Learnable}
+Let $\mathcal{H}$ be a finite hypothesis class ($|\mathcal{H}| < \infty$), let $Z$ be a domain, and let $l\colon \mathcal{H}\times Z \to [0,1]$ be a loss function. Then:
+\begin{itemize}
+    \item $\mathcal{H}$ enjoys the uniform convergence property with sample complexity:
+    \begin{align*}
+        m_{\mathcal{H}}^{UC}(\epsilon, \delta) \leq \left[\frac{\log(2|\mathcal{H}|/\delta)}{2 \epsilon^2} \right]
+    \end{align*} 
+    \item $\mathcal{H}$ is agnostically PAC learnable using the ERM algorithm with sample complexity:
+    \begin{align*}
+        m_{\mathcal{H}}(\epsilon, \delta) \leq m_{\mathcal{H}}^{UC}(\epsilon/2, \delta) \leq \left[\frac{2 \log(2|\mathcal{H}|/\delta)}{\epsilon^2} \right]
+    \end{align*} 
+\end{itemize}
+
+\textbf{Proof}. The basic idea is similar to the proof for the \q{overfit} theorem.\\
+We want to demonstrate that with probability $\geq 1-\delta$ the set of $m$ samples is $\epsilon$-representative, meaning that:   
+\begin{align*}
+    \forall h \in \mathcal{H}\colon |L_S(h) - L_D(h)| \leq \epsilon
+\end{align*}
+Formally, this can be written as:
+\begin{align*}
+    D^m (\{S\colon \forall h \in \mathcal{H}, |L_S(h) - L_D(h)| \leq \epsilon \}) \geq 1-\delta
+\end{align*}
+That is, we want to prove the existance of a \textit{lower bound} on the probability to pick a \q{good $S$}.\\
+Conversely, this means that the probability for a \q{bad case} is \textit{upper bounded}:
+\begin{align}
+    P_{\mathrm{bad}} = D^m(\{S\colon \exists h \in \mathcal{H}, |L_S(h)-L_D(h)| > \epsilon \}) \leq \delta
+    \label{eqn:d2-0}
+\end{align} 
+We can rewrite the inner set as follows:
+\begin{align}
+    \{S\colon \exists h \in \mathcal{H}, |L_S(h) - L_D(h)| > \epsilon \} = \bigcup_{h \in \mathcal{H}} \{S \colon |L_S(h) - L_D(h)| > \epsilon\}
+    \label{e}
+    \mathbb{qn:d2-1}
+\end{align}
+Recall the \textbf{union bound} for probabilities:
+\begin{alignP}\left(\bigcup_i A_i\right) \leq \sum_i \mathbb{P}(A_i)
+    \label{eqn:ubound}
+\end{align} 
+Substituting (\ref{eqn:d2-1}) in (\ref{eqn:d2-0}) we get:
+\begin{align*}
+    P_{\mathrm{bad}} = D^m \left(\bigcup_{h\in \mathcal{H}} \{S\colon |L_S(h) - L_D(h)| > \epsilon \}\right) \underset{(\ref{eqn:ubound})}{\leq} \sum_{h\in \mathcal{H}} D^m ( \{S \colon |L_S(h) - L_D(h)| > \epsilon\})
+\end{align*}
+Consider now the difference $|L_S(h) - L_D(h)|$ for a fixed $h$. Recall that $L_S(h)$ is the loss average over the training set, while $L_D(h)$ is the expected value. So $|L_S(h) - L_D(h)|$ is small if the average is a good estimator of the expectation value - which is true for large sets ($m \to \infty$), thanks to the \textit{law of large numbers}.      
+ 
+
+\end{document}
