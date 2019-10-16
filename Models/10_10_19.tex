@@ -398,6 +398,10 @@ We can now apply (\ref{eqn:steepest-descent}), leading to:
 \begin{align*}
     s! \underset{s \to \infty}{\approx}  \left(\frac{2 \pi}{s} \right)^{1/2} (1)^{1/2} e^{-s} = \sqrt{2 \pi} s^{s+\frac{1}{2} } e^{-s}
 \end{align*}
+Taking the $\ln$ we arrive at the usual form for the Stirling approximation:
+\begin{align*}
+    \ln s! \approx s \ln ns - s + \frac{1}{2} \ln (2 \pi s) + O\left(\frac{1}{s}\right) 
+\end{align*} 
 Note that the same result can be obtained by using the much simpler (\ref{eqn:laplace-formula}), with $g(z) \equiv 1$ and $f(z) = \ln z - z$.
 \end{example} 
 \clearpage
