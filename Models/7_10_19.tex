@@ -226,7 +226,6 @@ then the limit of (\ref{eqn:variance-discrete}) leads to (\ref{eqn:variance-diff
 \end{align*}
 Note that $[D]=\si{\m\squared\per\s}$, and so the previous expression is dimensionally correct.\\
 
-\marginpar{Revise wording}
 This same result, however, can be also obtained in a more simple way.\\
 The idea is to represent the final state of the random walk at time $t_n$ as the sum of $n$ steps:
 \begin{align*}
@@ -343,22 +342,26 @@ If we now take the limit $n \to 0$ we can substitute (\ref{eqn:t-inf}) in (\ref{
 \intertext{As $l^2 \varepsilon^{-1} = 2D$:}
     W(x,t) &= \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4Dt}\right)
 \end{align*} 
-We can now compute the mean value of $x$:
+We can now compute the first two moments of $x$:
 \begin{align*}
     \langle x \rangle_t &= \int_{\mathbb{R}} W(x,t) x \dd{x} = 0\\
     \langle x^2 \rangle_t &= \int_{\mathbb{R}} W(x,t) x^2 \dd{x} = 2Dt
 \end{align*}
-\marginpar{Finish here}
-This last integral can be done in many ways. First, recall that: 
+This last integral can be done in many ways. For example, recall the gaussian integral: 
 \begin{align*}
-    I = \sqrt{\frac{\pi}{\mu}} = \int_{-\infty}^{\infty} e^{-\mu y^2}dy
+    I = \sqrt{\frac{\pi}{\mu}} = \int_{-\infty}^{\infty} e^{-\mu y^2}\dd{y}
 \end{align*}
-Differentiating: 
+Differentiating (according to Leibniz integral rule) with respect to $\mu$:
+\begin{align}
+    \pdv{I}{\mu} = - \int_{\mathbb{R}} e^{-\mu y^2} y^2 \dd{y} = -\frac{1}{2} \sqrt{\frac{\pi}{\mu^3} }
+    \label{eqn:gaussian-2}
+\end{align}
+and so:
 \begin{align*}
-    \frac{\partial I}{\partial \mu} = - \int_{\mathbb{R}} e^{-\mu y^2} y^2 dy
+    \langle x^2 \rangle_t &= \frac{1}{\sqrt{4\pi D t}} \int_{-\infty}^{+\infty} x^2 \exp(-\frac{x^2}{4 D t} ) \dd{x} =\\
+    &= \frac{1}{\sqrt{4 \pi D t}} \int_{-\infty}^{+\infty} e^{-\mu x^2} x^2 \dd{x} \Big|_{\mu = (4Dt)^{-1}} \underset{(\ref{eqn:gaussian-2})}{=}  \frac{1}{\sqrt{4 \pi D t}} \frac{1}{2} \sqrt{\pi (4 D t)^3} = 2 Dt  
 \end{align*}
-%[?]
 
-%Width * height of gaussian \approx 1. 
+
 
 \end{document}
