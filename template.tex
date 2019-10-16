@@ -135,6 +135,32 @@ separate-uncertainty = true
 \newcommand{\oleq}{\mathrel{\ogeneric[0.6]{\leq}}}
 \newcommand{\osubseteq}{\mathrel{\ogeneric[0.6]{\subseteq}}}
 
+%%BOOKTAB
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\setlength{\extrarowheight}{.75ex}
+\setlength\parindent{0pt} %Rimuove indentazione
+
+
+%%GEOMETRIA
+\usepackage[a4paper]{geometry}
+\newgeometry{inner=20mm,
+            outer=49mm,% = marginparsep + marginparwidth 
+                       %   + 5mm (between marginpar and page border)
+            top=20mm,
+            bottom=25mm,
+            marginparsep=6mm,
+            marginparwidth=30mm}
+\makeatletter
+\renewcommand{\@marginparreset}{%
+  \reset@font\small
+  \raggedright
+  \slshape
+  \@setminipage
+}
+\makeatother
+=======
+>>>>>>> untouched
 %---New environments---%
 %Exercises + Examples
 \newenvironment{myleftbar}{%
@@ -157,6 +183,10 @@ prefoothook = \endmyleftbar]{exo}
 \declaretheorem[style=exobreak, name=Example,%
 postheadhook=\leavevmode\myleftbar, %
 prefoothook = \endmyleftbar]{example}
+<<<<<<< HEAD
+=======
+>>>>>>> 96bf276... Tidied template.tex
+>>>>>>> untouched
  
 
 %---Custom commands---%
