@@ -227,43 +227,47 @@ then the limit of (\ref{eqn:variance-discrete}) leads to (\ref{eqn:variance-diff
 Note that $[D]=\si{\m\squared\per\s}$, and so the previous expression is dimensionally correct.\\
 
 \marginpar{Revise wording}
-This same result, however, can be also obtained in a more simple way. Suppose to have a random variable $u_n$, that at every time step can take the values: 
+This same result, however, can be also obtained in a more simple way.\\
+The idea is to represent the final state of the random walk at time $t_n$ as the sum of $n$ steps:
+\begin{align*}
+    x(t_n) = u_1 + u_2 + \dots + u_n
+\end{align*}
+Each step can be on the right or on the left according to some probability distribution. In other words, $u_i$ is a random variable. If we suppose steps of \textit{unit length} symmetrically distributed (i.e. $P_+ = P_- = 1/2$) we get:  
 \begin{align*}
     u_n = \begin{cases}
         +1 & p = 1/2\\
         -1 & p = 1/2
     \end{cases}
 \end{align*} 
-Then, define: 
+Now it is easy to compute the average position:
 \begin{align*}
-    x(t_n) = u_1 + u_2 + \dots + u_n
-\end{align*}
-If we take the average: 
-\begin{align*}
-    \langle x(t_n) \rangle = n\langle u \rangle = 0
+    \langle x(t_n) \rangle &= n\langle u \rangle = 0\\
+    \langle u \rangle &= \frac{1}{2} (+1) + \frac{1}{2} (-1) = 0  
 \end{align*}
 And the average of the square: 
 \begin{align*}
-    \langle x^2 (t_n)\rangle = \langle (u_1 + \dots + u_n)^2 \rangle = n\cdot \underbrace{\langle u^2 \rangle}_{1} + \sum_{i\neq j} \underbrace{\langle u_i \cdot u_j \rangle}_{\langle u_i \rangle \langle u_j\rangle = 0}
+    \langle x^2 (t_n)\rangle &= \langle (u_1 + \dots + u_n)^2 \rangle = n\cdot \underbrace{\langle u^2 \rangle}_{1} + \sum_{i\neq j} 
+    \underbrace{\langle u_i \cdot u_j \rangle}_{\langle u_i \rangle \langle u_j\rangle = 0} = n\\
+    \langle u^2 \rangle &= \frac{1}{2}(+1)^2 + \frac{1}{2}(-1)^2 = 1  
 \end{align*}
-as $u_i$ and $u_j$ are independent. So we showed that $\langle x^2 \rangle_{t_n}$ is linear in the number of time steps ($n$). Here $l^2$ has disappear because the spatial step size is set to $1$.\\
+Note that $\langle u_i \cdot u_j \rangle = \langle u_i \rangle \langle u_j \rangle$ because $u_i$ and $u_j$ are statistically independent.\\
+So we showed that $\langle x^2 \rangle_{t_n}$ is linear in the number of time steps ($n$). Here, the $l^2$ factor from (\ref{eqn:variance-discrete}) is missing because the spatial step size is set to $1$.\\
 
-However, the master equation contains much more information. Let's start with: 
+Another interesting observation comes from the relation:
 \begin{align*}
-    w_i(t_n) = {n \choose n_+} \frac{1}{2^n} = \frac{n!}{n_+! n_-!} \frac{1}{2^n}; \qquad i=2n_+ - n; n_+ = \frac{1}{2}(n+i)
+    i = 2n_+ - n
 \end{align*}
-Note that if $n$ is even, only even positions can be visited, and the same if it is odd. So, $i$ and $n$ must have the same parity.\\
-That is, $i$ and $n$ have the same parity (from $i = 2n_+ - n$).\\  
+Note how $i$ and $n$ must have the same parity, as $2n_+$ is always even. So the particle will be at an even position ($x_i$ with $i$ even) after an even number $n$ of time steps, and at an odd $x_i$ after an odd time $t_n$.
 
 \section{Evolution for large times}
-We can plot $w_i(t_n)$ for a fixed $t_n$ as a function of $i$:
-\begin{align*}
+We can plot $w_i(t_n)$ for a fixed $t_n$ as a function of position ($i$):
+\begin{align}
     w_i(t_n) = \frac{n!}{\left(\frac{n+i}{2}\right)! \left(\frac{n-i}{2}\right)!} \frac{1}{2^n}
-\end{align*}   
-For $n=0$ (starting time), all the particles are at $x_0 $. After one timestep, the probability \q{expands}. %Show some representation
-
-But what happens for $n\to \infty$?\\
-One way to see it is to compute the logarithm:
+    \label{eqn:pdf}
+\end{align}   
+For $n=0$ (starting time), all the particles are at $x_0$. Then, after each timestep the probability distribution \q{expands}, meaning that more and more positions have a non-zero probability of being explored.\\
+We now want to examine what happens after a \textit{long period of time}, that is the asymptotic behaviour at $n \to \infty$.\\
+We start by computing the logarithm of (\ref{eqn:pdf}):
 \begin{align*}
     \ln w_i(t_n) = -n \ln 2 + \ln n! - \ln \left(\frac{n+i}{2}\right)! - \ln \left(\frac{n-i}{2}\right)!
 \end{align*}
@@ -272,7 +276,7 @@ In this way, we can use the Stirling approximation:
     \ln k! &= \ln k + \ln(k-1) + \dots + \ln 2 + \ln 1 = \\
     &\approx k\ln k - k  + \frac{1}{2} \ln(2\pi k) 
 \end{align*}
-We arrive at a complicated expression:
+Thus arriving at a complicated expression:
 \begin{align*}
     \ln w_i(t_n) &\underset{n \gg 1}{\approx} -n \ln 2 +n\ln n - \cancel{n} + \frac{1}{2}\ln(2\pi n) \\
     &\hphantom{abcd} - \frac{n+i}{2} \ln \left(\frac{n+i}{2} \right) + \cancel{\frac{n+i}{2}} -\frac{1}{2}\ln\left(2 \pi \frac{n+i}{2} \right)  \\
@@ -280,26 +284,22 @@ We arrive at a complicated expression:
 \end{align*}
 Let's gradually simplify it. We start by collecting all the $n$:
 \begin{align} \nonumber
-    &\hphantom{abc}n\left(-\ln 2 + \ln n - \frac{1}{2}\ln\left(\frac{n+i}{2} \right) -\frac{1}{2}\ln\left(\frac{n-i}{2} \right) \right) =  \\ \nonumber
-    &= n \ln \left(\frac{n}{2 \sqrt{\frac{n+i}{2} }\sqrt{\frac{n-i}{2} }} \right) = n \ln \left(\frac{n}{\sqrt{n^2 - i^2}} \right) = n\ln \left(\frac{1}{\sqrt{1-i^2/n^{2}}} \right) = \\
+    &\hphantom{abc}n\left(-\ln 2 + \ln n - \frac{1}{2}\ln\left(\frac{n+i}{2} \right) -\frac{1}{2}\ln\left(\frac{n-i}{2} \right) \right) &=  \\ \nonumber
+    &= n \ln \left(\frac{n}{2 \sqrt{\frac{n+i}{2} }\sqrt{\frac{n-i}{2} }} \right) = n \ln \left(\frac{n}{\sqrt{n^2 - i^2}} \right) = n\ln \left(\frac{1}{\sqrt{1-i^2/n^{2}}} \right) &= \\
     &\underset{(a)}{=} n \ln \left(1 + \frac{1}{2}\frac{i^2}{n^2} + O\left(\frac{i^3}{n^3} \right)  \right) \underset{(b)}{=}  \frac{n}{2} \frac{i^2}{n^2} + O\left(\frac{i^3}{n^3} \right) \approx \frac{i^2}{2n} 
     \label{eqn:piece1}
-\end{align} 
-where in (a) and in (b) we used respectively the following Taylor expansions (as $n \to \infty$ and so $1/n \to 0$):
-\begin{align*}
-    (1\pm x)^n = 1 \pm nx + O(x^2) \qquad \ln(1+x) = x + O(x^2)
-\end{align*}
-Then we collect the $i/2$:
-\begin{align} \nonumber
-    &-\frac{i}{2} \left[\ln\left(\frac{n+i}{2} \right)-\ln\left(\frac{n-i}{2} \right)\right]  = -\frac{i}{2} \ln\left(\frac{n+i}{n-i}  \right) =\\ \nonumber
-    &= -\frac{i}{2}\ln\left(\frac{1 + i/n}{1 - i/n}\right) \underset{(a)}{=}  -\frac{i}{2} \ln\left(\left(1+\frac{i}{n} \right)\left(1+\frac{i}{n} + O\left(\frac{i^2}{n^2} \right)\right)\right) =\\
+\intertext{where in (a) and in (b) we used respectively the following Taylor expansions (as $n \to \infty$ and so $1/n \to 0$):}
+    (1\pm x)^n = 1 \pm nx + O(x^2) \qquad \ln(1+x) = x + O(x^2) \span\span
+\intertext{Then we collect the $i/2$:}
+\nonumber
+    &\hphantom{ab}-\frac{i}{2} \left[\ln\left(\frac{n+i}{2} \right)-\ln\left(\frac{n-i}{2} \right)\right]  = -\frac{i}{2} \ln\left(\frac{n+i}{n-i}  \right) &=\\ \nonumber
+    &= -\frac{i}{2}\ln\left(\frac{1 + i/n}{1 - i/n}\right) \underset{(a)}{=}  -\frac{i}{2} \ln\left(\left(1+\frac{i}{n} \right)\left(1+\frac{i}{n} + O\left(\frac{i^2}{n^2} \right)\right)\right) &=\\
     &=-\frac{i}{2} \ln\left(1+\frac{2i}{n} + O\left(\frac{i^2}{n^2} \right) \right) \underset{(b)}{=} -\frac{i}{2} \left(\frac{2i}{n} + O\left(\frac{i^2}{n^2} \right) \right) \approx -\frac{i^2}{n} 
     \label{eqn:piece2}
-\end{align} 
-And finally we consider the remaining terms:
-\begin{align}\nonumber
-    &\frac{1}{2}\left[\ln(2 \pi n) - \frac{1}{2} \ln\left(2 \pi \frac{n+i}{2} \right) - \ln\left(2 \pi \frac{n-i}{2} \right) \right] =\\ \nonumber
-    &\frac{1}{2} \ln \left(\frac{2 \pi n}{ 2 \pi \frac{n+i}{2}  2 \pi \frac{n-i}{2} } \right)   =\frac{1}{2} \ln \left(\frac{2n}{\pi (n^2 - i^2)} \right)  = \frac{1}{2}\ln \left(\frac{2}{\pi n} \frac{1}{1-\frac{i^2}{n^2} }  \right) =\\
+\intertext{And finally we consider the remaining terms:}
+\nonumber
+    &\hphantom{abc}\frac{1}{2}\left[\ln(2 \pi n) - \frac{1}{2} \ln\left(2 \pi \frac{n+i}{2} \right) - \ln\left(2 \pi \frac{n-i}{2} \right) \right] &=\\ \nonumber
+    &=\frac{1}{2} \ln \left(\frac{2 \pi n}{ 2 \pi \frac{n+i}{2}  2 \pi \frac{n-i}{2} } \right)   =\frac{1}{2} \ln \left(\frac{2n}{\pi (n^2 - i^2)} \right)  = \frac{1}{2}\ln \left(\frac{2}{\pi n} \frac{1}{1-\frac{i^2}{n^2} }  \right) &=\\
     &= \frac{1}{2} \ln \left(\frac{2}{\pi n} + O\left(\frac{i^2}{n^2} \right) \right) \approx \frac{1}{2} \ln\left(\frac{2}{\pi n} \right)
     \label{eqn:piece3} 
 \end{align}
@@ -308,33 +308,47 @@ Putting it all back together:
     \ln w_i(t_n) \underset{n \gg 1}{\approx} (\ref{eqn:piece1}) + (\ref{eqn:piece2}) + (\ref{eqn:piece3}) = \frac{1}{2}\ln\left(\frac{2}{\pi n} \right) -\frac{i^2}{2n}
 \end{align*}
 And by exponentiating we get:
-\begin{align*}
+\begin{align}
     w_i(t_n) \underset{n \gg 1}{\approx}  \sqrt{\frac{2}{\pi n} } \exp\left(-\frac{i^2}{2n} \right)
-\end{align*}
+    \label{eqn:t-inf}
+\end{align}
 
-\marginpar{Finish from here}
-Then the probability to find the particle in the interval between $x-\Delta x/2$ and $x+ \Delta x/2$ is denoted with $W(x,t) \Delta x$. For $\Delta x \gg l$ we have: 
+We now want to obtain a \textit{continuous} pdf from the mass probability $w_i(t_n)$. Note that if we regard $w_i(t_n)$ as a function of position at a fixed time $W_{t_n}(x_i)$, and extend the domain to all $\mathbb{R}$ we get a really \q{bumpy} function, as it is non-zero only on $x_i = l i$ with $i \in \mathbb{Z}$. However, if we \textit{integrate} over every \textit{small patch} of $W_{t_n}(x_i)$, we can \q{smooth} all the \q{bumpyness}, and get a nice pdf.\\
+Let's formalize that more carefully. Starting from $W_{t_n}(x_i)$, we can compute the probability to find a particle in an interval $I \subseteq \mathbb{R}$ by simply summing the mass probabilities $w_j(t_n)$ for all the $x_j \in I$.\\
+The idea is now to define a \textit{continuous} pdf $W(x,t)$ as follows:
 \begin{align*}
-    W(x,t) \Delta x = \sum_{j=i- \Delta x/(2l)}^{i+ \Delta x/(2l)} W_j(t) = \frac{\Delta x}{l} \left(\frac{1}{2} \cdot 0 + \frac{1}{2} W_i(t)\right)
-\end{align*}    
-as for half the points the function is $0$, and for the other half we can use the central value as approximation.\\
-Finally, we arrive at: 
-\begin{align*}
-    W(x,t) = \frac{1}{2l} \sqrt{\frac{2}{\pi n}} \exp\left(-\frac{i^2}{2n}\right)
-\end{align*}
-Substituting $x=il$ and $t = n \varepsilon$ we get: 
-\begin{align*}
-    W(x,t) = \sqrt{\frac{2 \varepsilon}{4l^2 \pi t}} \exp \left(-\frac{x^2}{2 \frac{l^2}{\varepsilon} t}\right)
+    W(x,t_n) \Delta x = \mathbb{P}\left(x \in \left[x - \frac{\Delta x}{2}; x + \frac{\Delta x}{2}  \right], t_n\right) \qquad \Delta x \ll 1, \Delta x \gg l 
 \end{align*}  
-As $l^2/\varepsilon = 2D$: 
+That is, $W(x,t_n) \Delta x$ is the probability that a particle lies \q{near} a certain position $x \in \mathbb{R}$ at an instant $t_n$ (i.e. within an interval $I$ centered on $x$ with width $\Delta x$ sufficiently small, but large with respect to the discretization). We will then \q{cure} the discreteness of time by considering the asymptotic behaviour for $t \to \infty$.\\
+By expanding the previous expression we get:
+\begin{align}
+    \mathbb{P}\left (x \in \left[x - \frac{\Delta x}{2}, x + \frac{\Delta x}{2} \right]\right) \underset{(a)}{\approx}  \mathbb{P} \left(i \in \left[i_0- \frac{\Delta x}{2l}; i_0 + \frac{\Delta x}{2l}  \right]\right) = \sum_{j=i_0- \Delta x/(2l)}^{i_0 + \Delta x/(2l)} w_j(t_n)
+    \label{eqn:p-sum}
+\end{align}    
+where in (a) $i_0$ is such that $x_{i_0}$ is closest to $x_i$, that is $i_0 = \lfloor x/l \rceil$  (recall that $x_i = il \Rightarrow i= x_i/l$).\\
+Note that this specific choice of $I$ contains $\Delta x/l$ points (supposing $\Delta x \gg l$). However, depending on the parity of $n$ (fixed by the choice of the instant $t_n$), only half of the positions $x_j$ can be explored, as $n$ and $j$ must have the same parity. For the other half, we approximate and compute $w_{j}(t_n)$ at the center point $j=i_0$. Thus:
+\begin{align}
+    (\ref{eqn:p-sum}) \approx \frac{\Delta x}{l} \left(\frac{1}{2} \cdot 0  + \frac{1}{2} w_{i_0}(t_n) \right) = \frac{\Delta x}{2l} w_{i_0}(t_n) 
+\end{align}  
+We have now an expression for $W(x,t_n)$, which is continuous with respect to $x$:
+\begin{align}
+    W(x,t_n)\cancel{ \Delta x} = \frac{\cancel{\Delta x}}{2l} w_{i}(t_n) 
+    \label{eqn:p-sum2}
+\end{align}
+If we now take the limit $n \to 0$ we can substitute (\ref{eqn:t-inf}) in (\ref{eqn:p-sum2}), leading to:   
 \begin{align*}
-    W(x,t) = \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4Dt}\right)
+    W(x,t) &= \frac{1}{2l} \sqrt{\frac{2}{\pi n}} \exp\left(-\frac{i^2}{2n}\right)
+\intertext{Substituting $x=il$ and $t = n \varepsilon$ we get: }
+    W(x,t) &= \sqrt{\frac{2 \varepsilon}{4l^2 \pi t}} \exp \left(-\frac{x^2}{2 \frac{l^2}{\varepsilon} t}\right)
+\intertext{As $l^2 \varepsilon^{-1} = 2D$:}
+    W(x,t) &= \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4Dt}\right)
 \end{align*} 
 We can now compute the mean value of $x$:
 \begin{align*}
-    \langle x \rangle_t &= \int_{\mathbb{R}} W(x,t) x dx = 0\\
-    \langle x^2 \rangle_t &= \int_{\mathbb{R}} W(x,t) x^2 dx = 2Dt
+    \langle x \rangle_t &= \int_{\mathbb{R}} W(x,t) x \dd{x} = 0\\
+    \langle x^2 \rangle_t &= \int_{\mathbb{R}} W(x,t) x^2 \dd{x} = 2Dt
 \end{align*}
+\marginpar{Finish here}
 This last integral can be done in many ways. First, recall that: 
 \begin{align*}
     I = \sqrt{\frac{\pi}{\mu}} = \int_{-\infty}^{\infty} e^{-\mu y^2}dy
