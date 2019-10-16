@@ -3,232 +3,365 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\section{The Diffusion Equation - part 2}
 \lesson{2}{07/10/19}
-
-In the last lecture we considered the phenomenon of \textit{brownian motion}, and we arrived 
-at the \textbf{diffusion equation}.\\
-Recall the definition of numerical density $\rho_n(\vec{r},t)$:
-\begin{align*}
-    \int \rho_n(\vec{r},t) d^d r = N
-\end{align*}
-where $N$ is the total number of particles available.\\
-The normalized density is:
-\begin{align*}
-    \rho(\vec{r},t) = \frac{\rho_n(\vec{r},t)}{N}
-\end{align*}
-Then, the probability that a particle lies at position $\vec{r}$ at time $t$ is $\rho(\vec{r},t)\Delta t$.\\
-The \textbf{diffusion equation} tells us the time evolution of $\rho$:
-\begin{align*}
-    \dot{\rho} = D \vec{\nabla} \rho; \qquad \vec{j}(\vec{r},t) = -D \vec{\nabla} \rho
-\end{align*}  
-If we consider a single particle in $d=1$, then the equation can be solved by a double integration:
-\begin{align*}
-    \langle x \rangle_t = \int \ddot{\rho}(x,t) x dx
-\end{align*}
-By knowing the initial conditions:
-\begin{align*}
-    \frac{d\langle x \rangle_t}{dt} = 0; \qquad \langle x\rangle_t = \langle x \rangle_0 = 0
-\end{align*}
-
-[...]
-
 \section{Brownian motion and Markov Processes}
-Let us discretize the line where the particle moves, by dividing it in points of $l$ distance apart, so that positions are denoted with $x_i = i \cdot l$.\\
-Time is discretized too: $t=N \cdot \varepsilon$. The $n$-th instant will be denoted by $t_n \equiv n \varepsilon$\\
-The collision process is stochastic. Suppose that the particle lies in a certain known position at $t=0$,
-and has a probability $P_+$ to move right, $P_-$ to the left and $P_0$ to remain at the same place, with:
+Let's tackle the diffusion problem with a different approach.\\
+Consider a particle moving in $d=1$. We start by discretizing time and space intervals, so that we only focus on positions $x_i$ at instants $t_n$:
+\begin{align}
+    x_i \equiv i \cdot l\qquad tn \equiv n \cdot \varepsilon
+    \label{eqn:discretization}
+\end{align} 
+The diffusion process is intrinsically stochastic, meaning that the motion of grains is given by collisions at the microscopical level, which are essentially random.\\
+So, suppose that the particle lies in a certain known position at $t=0$. After an instant, the particle may have moved to the right (with probability $P_+$) or to the left ($P_-$), or have remained in the same position as before ($P_0$). As these cases cover all the possibilities, it holds:
 \begin{align*}
     P_+ + P_- + P_0 = 1
 \end{align*}
-\\
-Denote with $W_i(t_n)$ the probability that the particle is at position $x_i$ at time $t_n$.\\
-The probability for the next timestep is then given by:
+Denote with $w_i(t_n)$ the probability that the particle lies at position $x_i$ at time $t_n$.\\
+The probability for the next timestep is then given by the \textbf{Master Equation} :
+\begin{align}
+    w_i(t_{n+1}) = P_0 w_i(t_n) + P_+ w_{i-1}(t_n) + P_- w_{i+1}(t_n)
+    \label{eqn:master-eq}
+\end{align}
+In fact, if the particle were at position $i$ at time $t_n$, then it will remain in the same position with probability $P_0$. Otherwise, it could have been one position left and moved to the right ($P_+$), or one position right and moved to the left ($P_-$).\\
+Here we supposed that $\varepsilon$ is sufficiently small, so that the particle will only take one step at a time.\\
+
+Stochastic systems for which the state at a certain time depends only on the state one instant before are called \textbf{Markov's Processes} .\\
+
+Note that, as the particle cannot \q{escape from the system}, its probabily to be in \textit{any} position is conserved at any given time: 
 \begin{align*}
-    W_i(t_{n+1}) = P_0 W_i(t_n) + P_+ W_{i-1}(t_n) + P_- W_{i+1}(t_n)
-\end{align*}
-In fact, if the particle were at position $i$ at time $t_n$, then it will remain in the same position with probability $P_0$. By accounting for all other possibilities, one arrives at the previous equation, which is called a \textbf{Master Equation}. 
-This is a characteristic relation for Markov's Processes, i.e. phenomenons where the state at a certain time depends only on the state one instant before. \\
-In particular, as the particle \q{cannot escape}, its probabily to be in \textit{any} position is always conserved: 
-\begin{align*}
-    \sum_{i=-\infty}^{\infty} W_i(t_{n+1}) = \sum_{i=-\infty}^{\infty} W_i(t_n) = \dots = \sum_{i=-\infty}^{\infty} W_i(0)
+    \sum_{i=-\infty}^{\infty} w_i(t_{n+1}) = \sum_{i=-\infty}^{\infty} w_i(t_n) = \dots = \sum_{i=-\infty}^{\infty} w_i(0)
 \end{align*}
 
-Suppose that the particle \q{always moves}, that is $P_0 = 0$ and $P_+ = P_- = 0.5$. The final position $i$ at time $t_n$ is given by the number of steps to the right $n_+$ minus the number of steps to the left $n_- \in \mathbb{N}$:
+Suppose that the particle \q{always moves}, that is $P_0 = 0$, and also that it \q{is balanced} ($P_+ = P_- = 0.5$). The final position $i$ at time $t_n$ is given by the number of steps to the right $n_+$ minus the number of steps to the left $n_- \in \mathbb{N}$:
 \begin{align*}
     \mathbb{Z} \ni i = n_+ - n_-
 \end{align*}
-Denoting the total number of steps as $n = n_+ + n_-$, then the probability for the particle to be in position $x_i$ is given by a combinatorial calculation: 
-\begin{align*}
-    W_i(t_n) = \frac{1}{2^n} {{n}\choose{n_+}} = {n\choose n_-} \frac{1}{2^n}
-\end{align*}
+This process can be simulated by flipping a coin at each timestep: if it lands on heads the particle will move to the right, otherwise to the left. So, denoting the total number of steps as $n = n_+ + n_-$, then the probability for the particle to be in position $x_i$ is 
+given by a binomial distribution:  
+\begin{align}
+    w_i(t_n) =  {{n}\choose{n_+}} \frac{1}{2^{n_+}} \frac{1}{2^{n_-}} = \frac{1}{2^n} {{n}\choose{n_+}} = {n\choose n_-} \frac{1}{2^n}
+    \label{eqn:binomial-markov}
+\end{align}
 This can be generalized to the case where $P_+ \neq P_-$:
-\begin{align*}
-    W_i(t_n) = {n\choose n_-} P_+^{n_+} P_-^{n_-}
-\end{align*}
-As exercise, prove that this equation satisfies: 
-\begin{align*}
-    W_i(t_{n+1}) = \frac{1}{2} [W_{i+1}(t_n) - W_{i-1}(t_n)]
-\end{align*}
+\begin{align}
+    w_i(t_n) = {n\choose n_-} P_+^{n_+} P_-^{n_-}
+    \label{eqn:witn}
+\end{align}
 
-\section{Generating function method}
-Let's introduce a useful mathematical tool to deal with the binomial coefficient. 
+\begin{expl}
+    Note that (\ref{eqn:binomial-markov}) satisfies the Master Equation (\ref{eqn:master-eq}), that is:
+    \begin{align*}
+        w_i(t_{n+1}) = \frac{1}{2}(w_{i+1}(t_n) + w_{i-1}(t_n)) 
+    \end{align*}
+    We start by noting that if $i = n_+ - n_-$ and $n= n_+ + n_-$, then:
+    \begin{align*}
+        n_+ = \frac{n+i}{2} \qquad n_- = \frac{n-i}{2}  
+    \end{align*}  
+    And so:
+    \begin{align}
+        \frac{1}{2}(w_{i+1}(t_n) + w_{i-1}(t_n)) = \frac{1}{2^{n+1}} \left[{n\choose \frac{n+i+1}{2}} + {n \choose \frac{n+i-1}{2} }\right]
+        \label{eqn:binom1} 
+    \end{align}
+    Recall now the recurrence relation for the binomial coefficient:
+    \begin{align*}
+        {n\choose k} = {n-1 \choose k} + {n-1 \choose k-1}
+    \end{align*}
+    which leads to the desired result:
+    \begin{align*}
+        (\ref{eqn:binom1}) = \frac{1}{2^{n+1}} {n+1 \choose \frac{n+i+1}{2} } = w_{i}(t_{n+1})
+    \end{align*}
+\end{expl}
+
+\section{Probability Generating Functions}
+Let's introduce a useful mathematical tool to deal with the binomial coefficient.\\
+Let $X$ be a discrete random variables taking values in the non-negative integers ($\mathbb{N}$). The \textbf{probability generating function} of $X$ is defined as:
 \begin{align*}
-    \widetilde{W} (z,n) = \sum_{n_+=0}^{n} z^{n_+} W_i(t_n) |_{i = 2n_+ -n}
-\end{align*}
-Then the $q$-th moment is:
+    G(z) \equiv \mathbb{E}[z^X] = \sum_{x=0}^{+\infty} p(x) z^x 
+\end{align*}  
+where $p$ is the \textit{probability mass function} of $X$, i.e. $p(x)$ is the probability that $X = x$ ($p(x) = \mathbb{P}(X=x)$).\\
+$G(z)$ is useful because we can retrieve $p(k)$ for any $k \in \mathbb{N}$ by simply differentiating $k$ times with respect to $z$ and setting $z = 0$:
 \begin{align*}
-    \langle x_i^q \rangle_{t_n} = \sum_i W_i(t_n) (l\cdot i)^q
-\end{align*}
-With $q=1$ we get the average position: 
+    G(z) = p(0) + p(1)z + p(2)z^2 + \dots \Rightarrow \dv[k]{z} G(z) \Big|_{z=0} = p(k)
+\end{align*}       
+Note that $G(1) = 1$ because of the normalization:
 \begin{align*}
-    \langle x_i \rangle &= l \cdot \sum_i W_i(t_n) i =\\
-    &= l \sum_i W_i(t_n) (2n_+ - n) =\\
-    &= l(2\langle n_+ \rangle_{t_n} - n)
-\end{align*}
-as $\sum_i W_i(t_n) = 1 \> \forall n$. So the average of $x$ is related to that of $n_+$.
-If we derive wrt $z$:
-\begin{align*}
-    \frac{\partial}{\partial z}\widetilde{W}(z,n) |_{z=1} = \sum_{n_+} n_+ z^{n_+ - 1}W_i(t_n) |_{i=2n_+ - n}
+    G(1) = \sum_{x=0}^{+\infty} p(x) 1^x = \sum_{x=0}^{+\infty} p(x) = 1
 \end{align*} 
-and if we set $z=1$ we arrive at: 
+Then, if we evaluate the first derivative for $z=1$ we get:
+\begin{align}
+    G'(1) &= p(1) + 2p(2)z + 3p(3)z + \dots \Big|_{z=1} =
+    \sum_{x=1}^{+\infty} p(x) x z^{x-1} \Big|_{z=1} =\\
+    &= \sum_{x=1}^{+\infty} x p(x) = (0\cdot p(0)) + 1\cdot p(1) + 2\cdot p(2) + \dots = \mathbb{E}[X] 
+    \label{eqn:first-moment}
+\end{align} 
+However, the second derivative of $G$ evaluated at $z=1$ does not give the second moment:
 \begin{align*}
-    \langle n_+ \rangle = \sum_i n_+ W_i(t_n) |_{i=2n_+ - n} = \sum_{n_+=0}^{n} n_+ W_i(t_n)|_{i=2n_+ - n} 
-\end{align*}
-
-Note that:
+    G''(1) &= 2\cdot 1 p(2) + 3\cdot 2 p(3)z + 4\cdot 3 p(4)z^2 +\dots \Big|_{z=1} = \sum_{x=2}^{+\infty} x(x-1)z^{x-2} p(x) \Big|_{z=1} =\\
+    &= \mathbb{E}(X(X-1))
+\end{align*}  
+More generally:
 \begin{align*}
-    X=aY+b; \quad \langle X\rangle = a\langle Y \rangle + b
-\end{align*} [...]
-And so in this case:
-\begin{align*}
-    \op{var}(X) = 4l^2 \op{var}(n_+) = 4l^2 (\langle n_+^2\rangle - \langle n_+ \rangle^2)
-\end{align*}
-The moments can be computed as:
-\begin{align*}
-    \langle n_+ \rangle_{t_n} &= \frac{\partial}{\partial z} \widetilde{W}(z,n) |_{z=1}\\
-    \langle n_+^2 \rangle_{t_n} &= \left(
-    z \frac{\partial}{\partial z}
-    \right )^2 \widetilde{W}(z,n)|_{z=1} =\\
-    &= z\frac{\partial}{\partial z} z \frac{\partial}{\partial z} \widetilde{W}|_{z=1} = z \frac{\partial}{\partial z} z \sum_{n_+} n_+ z^{n_+-1} W_i(t_n) =\\
-    &= z \sum_{n_+} n_+^2 z^{n_+ - 1} W_i(t_n) |_{z=1} = \sum_{n_+} n_+^2 W_i(t_n)
-\end{align*}
-We can then compute the generating function as: 
-\begin{align*}
-    \widetilde{W}(z,n) &= \sum_{n_+=0}^n z^{n_+} W_i(t_n)|_{i=2n_+ - n} =\\
-    &= \sum_{n_+=0}^{n} \frac{1}{2^n} {n\choose n_+} z^{n_+} = \frac{1}{2^n} (1+z)^n 
-\end{align*}
-Note that $\widetilde{W}(z=1, n)=1$ as should be expected.\\
-Finally: 
-\begin{align*}
-    \langle n_+ \rangle_{t_n} = \frac{\partial}{\partial z} \widetilde{W}(z,n) |_{z=1} = \frac{n}{2^n}(1+z)^{n-1}|_{z=1} = \frac{n}{2}
+    G^{(k)}(1) = \mathbb{E}(X (X-1) \dots (X-k+1)) = \mathbb{E}\left(\frac{X!}{(X-k)!} \right)
 \end{align*} 
-as expected.
+which is called the $k$-th factorial moment of $X$.\\
+But how can we get the \q{usual} moments from $G$? One possibility is to \q{compensate} the difference between a factorial moment and a usual one by adding other terms. For example, note that:
 \begin{align*}
-    \langle n_+ \rangle^2_{t_n} &= \left( z \frac{\partial}{\partial z}\right)^2 \widetilde{W}(z,n) |_{z=1} = \\
-    &= z \frac{\partial}{\partial z}\left( z(1+z)^{n-1}\right) \frac{n}{2^n}|_{z=1} = \\
-    &= z \left[(1+z)^{n-1} + z(n-1)(1+z)^{n-2}\right] \frac{n}{2^n} |_{z=1} = \frac{2^{n-1} + (n-1) 2^{n-2}}{2^n} n=\\
-    &= \frac{n}{4}(n+1)
-\end{align*}
-And so: 
+    G''(1) = \mathbb{E}(X(X-1)) = \mathbb{E}(X^2) - \mathbb{E}(X)
+\end{align*}   
+and so:
 \begin{align*}
-    \langle x \rangle_{t_n} &= [2\langle n_+\rangle -n] = 0\\
-    \op{var}x &= 4l^2 \op{var} n_+ = 4l^2 \left[ \frac{n(n+1)}{4} - \frac{n^2}{4}\right] = l^2 n
+    G''(1) + G'(1) = (\mathbb{E}(X^2) - \mathbb{E}(X)) + \mathbb{E}(X) = \mathbb{E}(X^2)
 \end{align*}
-Note that the variance is always proportional to the time ($n$), even if $P_+ \neq P_-$).
+A more clever way is to consider the operator $\theta(z)$ defined as:
+\begin{align*}
+    \theta(z) \equiv z\pdv{z}
+\end{align*}
+on $G$. In fact:
+\begin{align*}
+    \theta(z) G(z) = z \pdv{z} \sum_{x=0}^{+\infty} p(x) z^x = z \sum_{x=1}^{+\infty} x p(x) z^{x-1} = \sum_{x=1}^{+\infty} x p(x) z^x
+\end{align*} 
+And setting $z=1$ leads back to the $\mathbb{E}[X]$. If we apply $\theta(z)$ again, however, something interesting happens:
+\begin{align}
+    \theta(z)^2 G(z) = \left(z \pdv{z}\right)\left(z \pdv{z}\right) G(z) = z \pdv{z} \sum_{x=1}^{+\infty} xp(x) z^x = \sum_{x=1}^{+\infty} x^2 p(x) z^{x}
+    \label{eqn:second-moment}
+\end{align}
+Now setting $z=1$ leads to $\mathbb{E}[X^2]$. In general:
+\begin{align*}
+    \theta(z)^k G(z) \Big|_{z=1} = \mathbb{E}[X^k]
+\end{align*}  
+Note how the exponent of $z$ never changes, as it is lowered by $1$ by the $\partial_z$, and then rised back by the $z$ factor. So, every new application of the $\theta(z)$ operator merely brings down another $x$ factor, rising the $x$ exponent inside the sum - which is exactly what we want to compute moments.      
 
+\section{The Diffused Distribution}
+Let's focus on our specific (discrete) case, with the particle moving on a discretized line. At any given time $t_n$ we can compute the mass probability function $W_{t_n}\colon \mathbb{Z} \to \mathbb{R}_+$, with $W_{t_n}(x_i) \equiv w_i(t_n)$. In other words, this is the function that maps every position $x_i$ with the probability of containing a particle at time $t_n$.\\
+We are interested in knowing the \textit{shape} of $W_{t_n}$, that is its moments:  
 \begin{align*}
+    \langle x^q \rangle_{t_n} = \sum_{i=-\infty}^{+\infty} W_{t_n}(x_i) x_i^q \underset{(\ref{eqn:discretization})}{=}  \sum_{i=-\infty}^{+\infty} w_i(t_n)  (l\cdot i)^q \qquad q \in \mathbb{N}
+\end{align*}
+The first moment ($q=1$) gives the average position:
+\begin{align}\nonumber
+    \langle x \rangle_{t_n} &= l \cdot \sum_{i=-\infty}^{+\infty} w_i(t_n) i =\\ \nonumber
+    &= l \sum_{i=-\infty}^{+\infty} w_i(t_n) (2n_+ - n) =\\
+    & \underset{(a)}{=}  l\left(2\langle n_+ \rangle_{t_n} - n\right)
+    \label{eqn:x-nplus}
+\end{align}
+where in (a) we used the normalization condition ($\forall n \in \mathbb{N},\sum_i w_i(t_n) = 1$). Thus, we found that
+the average position $\langle x \rangle$ of the particle at time $t_n$  is related to the value of $n_+$.\\
+
+So, let $n_+$ be the random variable of interest. Recall that $n_+$ is sampled from a binomial distribution (\ref{eqn:witn}), and that $n_+ = (n+1)/2$ and so $i = 2n_+ - n$.\\
+Then, the \textit{probability generating function} of $n_+$ is given by:   
+\begin{align*}
+    \widetilde{W} (z,n) &\equiv \sum_{n_+=0}^{n} z^{n_+} w_i(t_n)\big |_{i = 2n_+ -n} \underset{(\ref{eqn:witn})}{=}  \sum_{n_+=0}^{n} z^{n_+} {n\choose n_+} P_+^{n_+} P_-^{n-n_+} =\\
+    & \underset{(a)}{=} (P_+ z + P_-)^n
+\end{align*}
+where in (a) we used the binomial theorem.\\
+
+We can now use the property (\ref{eqn:first-moment}) of the probability generating function to compute $\langle n_+ \rangle$: 
+\begin{align}
+    \langle n_+ \rangle = \frac{\partial}{\partial z}\widetilde{W}(z,n) \Big|_{z=1} = n(P_+ z + P_-)^{n-1} P_+ \Big|_{z=1} = n\underbrace{(P_+ + P_-)}_{=1} P_+ = nP_+
+    \label{eqn:nplus-mean}
+\end{align} 
+
+For computing the second moment, we apply the $\theta(z)$ operator, as seen in (\ref{eqn:second-moment}):
+\begin{align} \nonumber
+    \langle n_+^2 \rangle &= \left(z \pdv{z} \right)^2 \widetilde{W}(z,n) \Big|_{z=1}= z\pdv{z} zn(P_+ z +P_-)^{n-1}P_+ \Big|_{z=1}=\\
+    \nonumber
+    &= z(n(P_+ z + P_-)^{n-1}P_+ + znP_+^2 (n-1) (P_+ z + P_-)^{n-2}) \Big|_{z=1} =\\
+    &= nP_+ (1+(n-1)P_+)
+    \label{eqn:nplus-secondmoment}
+\end{align}
+We can now compute $\operatorname{Var}(n_+)$ recalling that:
+\begin{align*}
+    \operatorname{Var}[X] = \mathbb{E}[X^2] - (E[X])^2 
+\end{align*} 
+Thus:
+\begin{align}
+    \operatorname{Var}[n_+] = \langle n_+^2 \rangle - \langle n_+ \rangle^2 = nP_+ (1+P_+)
+    \label{eqn:nplus-variance}
+\end{align}
+We now go back to $\langle x \rangle_{t_n}$, recalling the relation (\ref{eqn:x-nplus}):
+\begin{align*}
+    \langle x \rangle_{t_n} = l(2 \langle n_+ \rangle_{t_n} - n) \underset{(\ref{eqn:nplus-mean})}{=} nl(2P_+ - 1) \underset{(a)}{=}  nl(P_+ - P_-)
+\end{align*}
+where in (a) we used $P_+ + P_- = 1$.\\
+For the variance, recall that:
+\begin{align*}
+    \operatorname{Var}[aX + b] = a^2\operatorname{Var}[X]  
+\end{align*} 
+and so, starting again from (\ref{eqn:x-nplus}):
+\begin{align*}
+    \operatorname{Var}[x]_{t_n} = 4l^2 \operatorname{Var}[n_+] \underset{(\ref{eqn:nplus-variance})}{=}  4nl^2 P_+(1-P_+) = 4nl^2 P_+ P_-
+\end{align*}
+Note that the variance is always proportional to time ($n$), even if $P_+ \neq P_-$. However, if we go back and compute the $\langle x^2 \rangle_{t_n}$, we will note that it is not linear in time:
+\begin{align*}
+    \langle x^2 \rangle_{t_n} &= \operatorname{Var}[x]_{t_n} + \langle x \rangle_{t_n}^2 = 4nl^2 P_+(1-P_+) + (nl(P_+ - P_-))^2 =\\
+    &= nl^2 (4P_+P_- + n(P_+ - P_-)^2)
+\end{align*} 
+
+Let's evaluate the previous quantities for the simple symmetrical case, where $P_+ = P_- = 1/2$:
+\begin{align*}
+    \langle n_+ \rangle = \frac{n}{2}; \qquad \langle n_+^2 \rangle = \frac{n}{4}(n+1); \qquad \operatorname{Var}[n_+] = \frac{3}{4}n\\
+    \langle x \rangle_{t_n} = 0;\qquad \langle x^2 \rangle_{t_n} = nl^2 \qquad \operatorname{Var}(x)_{t_n} = nl^2 \span    
+\end{align*}
+As expected, the average number of steps to the right is half the total steps (as $P_+ = 1/2$), and the average position is $0$. 
+
+\section{Continuum Limit}
+Recall that $t_n = n \varepsilon$, and so, for the symmetrical case ($P_+ = P_-$):
+\begin{align}
     \langle x \rangle_{t_n} = 0; \qquad \langle x^2 \rangle_{t_n} = l^2 n = \frac{l^2}{\varepsilon} t_n
-\end{align*}
-
-If we now take the continuum limit ($\varepsilon \to 0$ and $n \to 0$) the previous expressions are undefined. We must specify \textit{how} they go to $0$, and the only meaningful way is by keeping $l^2/\varepsilon = 2D$ constant. So: $l^2 = 2D \varepsilon$, with $[D] = \si{\m\squared\per\s}$. In this case, we have: 
+    \label{eqn:variance-discrete}
+\end{align}
+The analysis of the diffusion equation in $d=1$ showed that, for a particle starting at $x(t=0) = 0$: 
+\begin{align}
+    \langle x^2 \rangle_t = 2Dt
+    \label{eqn:variance-diffusion}
+\end{align}
+The correct \textit{continuum limit} should reproduce the result of (\ref{eqn:variance-diffusion}) from (\ref{eqn:variance-discrete}).\\
+Notice that if we simply let $\varepsilon \to 0$ and $l \to 0$, $\langle x^2 \rangle$ becomes undefined. Therefore, we need to fix the ratio $l^2 \varepsilon^{-1}$ during the limit. If we define this ratio as:
 \begin{align*}
-    \langle x^2 \rangle_{t_n} = \frac{l^2}{\varepsilon} t_n \to 2D t
+    \frac{l^2}{\varepsilon} \equiv 2D 
+\end{align*}    
+then the limit of (\ref{eqn:variance-discrete}) leads to (\ref{eqn:variance-diffusion}) as desired:
+\begin{align*}
+    \langle x^2 \rangle_{t_n} = \frac{l^2}{\varepsilon} t_n  \xrightarrow[l,\varepsilon \to 0]{l^2/\varepsilon = 2D} 2Dt = \langle x^2 \rangle_t  
 \end{align*}
-and this is coherent with what we obtained with the diffusion equation.\\
+Note that $[D]=\si{\m\squared\per\s}$, and so the previous expression is dimensionally correct.\\
 
-This same result, however, can be also obtained in a more simple way. Suppose to have a random variable $u_n$, that at every time step can take the values: 
+This same result, however, can be also obtained in a more simple way.\\
+The idea is to represent the final state of the random walk at time $t_n$ as the sum of $n$ steps:
+\begin{align*}
+    x(t_n) = u_1 + u_2 + \dots + u_n
+\end{align*}
+Each step can be on the right or on the left according to some probability distribution. In other words, $u_i$ is a random variable. If we suppose steps of \textit{unit length} symmetrically distributed (i.e. $P_+ = P_- = 1/2$) we get:  
 \begin{align*}
     u_n = \begin{cases}
         +1 & p = 1/2\\
         -1 & p = 1/2
     \end{cases}
 \end{align*} 
-Then, define: 
+Now it is easy to compute the average position:
 \begin{align*}
-    x(t_n) = u_1 + u_2 + \dots + u_n
-\end{align*}
-If we take the average: 
-\begin{align*}
-    \langle x(t_n) \rangle = n\langle u \rangle = 0
+    \langle x(t_n) \rangle &= n\langle u \rangle = 0\\
+    \langle u \rangle &= \frac{1}{2} (+1) + \frac{1}{2} (-1) = 0  
 \end{align*}
 And the average of the square: 
 \begin{align*}
-    \langle x^2 (t_n)\rangle = \langle (u_1 + \dots + u_n)^2 \rangle = n\cdot \underbrace{\langle u^2 \rangle}_{1} + \sum_{i\neq j} \underbrace{\langle u_i \cdot u_j \rangle}_{\langle u_i \rangle \langle u_j\rangle = 0}
+    \langle x^2 (t_n)\rangle &= \langle (u_1 + \dots + u_n)^2 \rangle = n\cdot \underbrace{\langle u^2 \rangle}_{1} + \sum_{i\neq j} 
+    \underbrace{\langle u_i \cdot u_j \rangle}_{\langle u_i \rangle \langle u_j\rangle = 0} = n\\
+    \langle u^2 \rangle &= \frac{1}{2}(+1)^2 + \frac{1}{2}(-1)^2 = 1  
 \end{align*}
-as $u_i$ and $u_j$ are independent.\\
+Note that $\langle u_i \cdot u_j \rangle = \langle u_i \rangle \langle u_j \rangle$ because $u_i$ and $u_j$ are statistically independent.\\
+So we showed that $\langle x^2 \rangle_{t_n}$ is linear in the number of time steps ($n$). Here, the $l^2$ factor from (\ref{eqn:variance-discrete}) is missing because the spatial step size is set to $1$.\\
 
-However, the master equation contains much more information. Let's start with: 
+Another interesting observation comes from the relation:
 \begin{align*}
-    W_i(t_n) = {n \choose n_+} \frac{1}{2^n} = \frac{n!}{n_+! n_-!} \frac{1}{2^n}; \qquad i=2n_+ - n; n_+ = \frac{1}{2}(n+i)
+    i = 2n_+ - n
 \end{align*}
-Note that if $n$ is even, only even positions can be visited, and the same if it is odd. So, $i$ and $n$ must have the same parity.\\
-We can plot $W_i(t_n)$ for a fixed $t_n$ as a function of $i$:
-\begin{align*}
-    W_i(t_n) = \frac{n!}{\left(\frac{n+i}{2}\right)! \left(\frac{n-i}{2}\right)!} \frac{1}{2^n}
-\end{align*}   
-For $n=0$ (starting time), all the particles are at $x_0 $. After one timestep, the probability \q{expands}. %Show some representation
+Note how $i$ and $n$ must have the same parity, as $2n_+$ is always even. So the particle will be at an even position ($x_i$ with $i$ even) after an even number $n$ of time steps, and at an odd $x_i$ after an odd time $t_n$.
 
-But what happens for $n\to \infty$?\\
-One way to see it s to compute the logarithm:
+\section{Evolution for large times}
+We can plot $w_i(t_n)$ for a fixed $t_n$ as a function of position ($i$):
+\begin{align}
+    w_i(t_n) = \frac{n!}{\left(\frac{n+i}{2}\right)! \left(\frac{n-i}{2}\right)!} \frac{1}{2^n}
+    \label{eqn:pdf}
+\end{align}   
+For $n=0$ (starting time), all the particles are at $x_0$. Then, after each timestep the probability distribution \q{expands}, meaning that more and more positions have a non-zero probability of being explored.\\
+We now want to examine what happens after a \textit{long period of time}, that is the asymptotic behaviour at $n \to \infty$.\\
+We start by computing the logarithm of (\ref{eqn:pdf}):
 \begin{align*}
-    \ln W_i(t_n) = -n \ln 2 + \ln n! - \ln \left(\frac{n+i}{2}\right)! - \ln \left(\frac{n-i}{2}\right)!
+    \ln w_i(t_n) = -n \ln 2 + \ln n! - \ln \left(\frac{n+i}{2}\right)! - \ln \left(\frac{n-i}{2}\right)!
 \end{align*}
 In this way, we can use the Stirling approximation:
 \begin{align*}
     \ln k! &= \ln k + \ln(k-1) + \dots + \ln 2 + \ln 1 = \\
     &\approx k\ln k - k  + \frac{1}{2} \ln(2\pi k) 
 \end{align*}
-(check if the last term is correct).\\
-
-[...]
-
-So, for large times, we arrive at: 
+Thus arriving at a complicated expression:
 \begin{align*}
-    W_i(t_n) \xrightarrow[n\gg 1]{} \sqrt{\frac{2}{\pi n}} \exp\left({-\frac{i^2}{2n}}\right)
-\end{align*} 
-Then the probability to find the particle in the interval between $x-\Delta x/2$ and $x+ \Delta x/2$ is denoted with $W(x,t) \Delta x$. For $\Delta x \gg l$ we have: 
-\begin{align*}
-    W(x,t) \Delta x = \sum_{j=i- \Delta x/(2l)}^{i+ \Delta x/(2l)} W_j(t) = \frac{\Delta x}{l} \left(\frac{1}{2} \cdot 0 + \frac{1}{2} W_i(t)\right)
-\end{align*}    
-as for half the points the function is $0$, and for the other half we can use the central value as approximation.\\
-Finally, we arrive at: 
-\begin{align*}
-    W(x,t) = \frac{1}{2l} \sqrt{\frac{2}{\pi n}} \exp\left(-\frac{i^2}{2n}\right)
+    \ln w_i(t_n) &\underset{n \gg 1}{\approx} -n \ln 2 +n\ln n - \cancel{n} + \frac{1}{2}\ln(2\pi n) \\
+    &\hphantom{abcd} - \frac{n+i}{2} \ln \left(\frac{n+i}{2} \right) + \cancel{\frac{n+i}{2}} -\frac{1}{2}\ln\left(2 \pi \frac{n+i}{2} \right)  \\
+    &\hphantom{abcd} -\frac{n-i}{2} \ln\left(\frac{n-i}{2} \right) +\cancel{\frac{n-i}{2}} - \frac{1}{2}\ln\left(2 \pi \frac{n-i}{2} \right)   
 \end{align*}
-Substituting $x=il$ and $t = n \varepsilon$ we get: 
+Let's gradually simplify it. We start by collecting all the $n$:
+\begin{align} \nonumber
+    &\hphantom{abc}n\left(-\ln 2 + \ln n - \frac{1}{2}\ln\left(\frac{n+i}{2} \right) -\frac{1}{2}\ln\left(\frac{n-i}{2} \right) \right) &=  \\ \nonumber
+    &= n \ln \left(\frac{n}{2 \sqrt{\frac{n+i}{2} }\sqrt{\frac{n-i}{2} }} \right) = n \ln \left(\frac{n}{\sqrt{n^2 - i^2}} \right) = n\ln \left(\frac{1}{\sqrt{1-i^2/n^{2}}} \right) &= \\
+    &\underset{(a)}{=} n \ln \left(1 + \frac{1}{2}\frac{i^2}{n^2} + O\left(\frac{i^3}{n^3} \right)  \right) \underset{(b)}{=}  \frac{n}{2} \frac{i^2}{n^2} + O\left(\frac{i^3}{n^3} \right) \approx \frac{i^2}{2n} 
+    \label{eqn:piece1}
+\intertext{where in (a) and in (b) we used respectively the following Taylor expansions (as $n \to \infty$ and so $1/n \to 0$):}
+    (1\pm x)^n = 1 \pm nx + O(x^2) \qquad \ln(1+x) = x + O(x^2) \span\span
+\intertext{Then we collect the $i/2$:}
+\nonumber
+    &\hphantom{ab}-\frac{i}{2} \left[\ln\left(\frac{n+i}{2} \right)-\ln\left(\frac{n-i}{2} \right)\right]  = -\frac{i}{2} \ln\left(\frac{n+i}{n-i}  \right) &=\\ \nonumber
+    &= -\frac{i}{2}\ln\left(\frac{1 + i/n}{1 - i/n}\right) \underset{(a)}{=}  -\frac{i}{2} \ln\left(\left(1+\frac{i}{n} \right)\left(1+\frac{i}{n} + O\left(\frac{i^2}{n^2} \right)\right)\right) &=\\
+    &=-\frac{i}{2} \ln\left(1+\frac{2i}{n} + O\left(\frac{i^2}{n^2} \right) \right) \underset{(b)}{=} -\frac{i}{2} \left(\frac{2i}{n} + O\left(\frac{i^2}{n^2} \right) \right) \approx -\frac{i^2}{n} 
+    \label{eqn:piece2}
+\intertext{And finally we consider the remaining terms:}
+\nonumber
+    &\hphantom{abc}\frac{1}{2}\left[\ln(2 \pi n) - \frac{1}{2} \ln\left(2 \pi \frac{n+i}{2} \right) - \ln\left(2 \pi \frac{n-i}{2} \right) \right] &=\\ \nonumber
+    &=\frac{1}{2} \ln \left(\frac{2 \pi n}{ 2 \pi \frac{n+i}{2}  2 \pi \frac{n-i}{2} } \right)   =\frac{1}{2} \ln \left(\frac{2n}{\pi (n^2 - i^2)} \right)  = \frac{1}{2}\ln \left(\frac{2}{\pi n} \frac{1}{1-\frac{i^2}{n^2} }  \right) &=\\
+    &= \frac{1}{2} \ln \left(\frac{2}{\pi n} + O\left(\frac{i^2}{n^2} \right) \right) \approx \frac{1}{2} \ln\left(\frac{2}{\pi n} \right)
+    \label{eqn:piece3} 
+\end{align}
+Putting it all back together:
 \begin{align*}
-    W(x,t) = \sqrt{\frac{2 \varepsilon}{4l^2 \pi t}} \exp \left(-\frac{x^2}{2 \frac{l^2}{\varepsilon} t}\right)
+    \ln w_i(t_n) \underset{n \gg 1}{\approx} (\ref{eqn:piece1}) + (\ref{eqn:piece2}) + (\ref{eqn:piece3}) = \frac{1}{2}\ln\left(\frac{2}{\pi n} \right) -\frac{i^2}{2n}
+\end{align*}
+And by exponentiating we get:
+\begin{align}
+    w_i(t_n) \underset{n \gg 1}{\approx}  \sqrt{\frac{2}{\pi n} } \exp\left(-\frac{i^2}{2n} \right)
+    \label{eqn:t-inf}
+\end{align}
+
+We now want to obtain a \textit{continuous} pdf from the mass probability $w_i(t_n)$. Note that if we regard $w_i(t_n)$ as a function of position at a fixed time $W_{t_n}(x_i)$, and extend the domain to all $\mathbb{R}$ we get a really \q{bumpy} function, as it is non-zero only on $x_i = l i$ with $i \in \mathbb{Z}$. However, if we \textit{integrate} over every \textit{small patch} of $W_{t_n}(x_i)$, we can \q{smooth} all the \q{bumpyness}, and get a nice pdf.\\
+Let's formalize that more carefully. Starting from $W_{t_n}(x_i)$, we can compute the probability to find a particle in an interval $I \subseteq \mathbb{R}$ by simply summing the mass probabilities $w_j(t_n)$ for all the $x_j \in I$.\\
+The idea is now to define a \textit{continuous} pdf $W(x,t)$ as follows:
+\begin{align*}
+    W(x,t_n) \Delta x = \mathbb{P}\left(x \in \left[x - \frac{\Delta x}{2}; x + \frac{\Delta x}{2}  \right], t_n\right) \qquad \Delta x \ll 1, \Delta x \gg l 
 \end{align*}  
-As $l^2/\varepsilon = 2D$: 
+That is, $W(x,t_n) \Delta x$ is the probability that a particle lies \q{near} a certain position $x \in \mathbb{R}$ at an instant $t_n$ (i.e. within an interval $I$ centered on $x$ with width $\Delta x$ sufficiently small, but large with respect to the discretization). We will then \q{cure} the discreteness of time by considering the asymptotic behaviour for $t \to \infty$.\\
+By expanding the previous expression we get:
+\begin{align}
+    \mathbb{P}\left (x \in \left[x - \frac{\Delta x}{2}, x + \frac{\Delta x}{2} \right]\right) \underset{(a)}{\approx}  \mathbb{P} \left(i \in \left[i_0- \frac{\Delta x}{2l}; i_0 + \frac{\Delta x}{2l}  \right]\right) = \sum_{j=i_0- \Delta x/(2l)}^{i_0 + \Delta x/(2l)} w_j(t_n)
+    \label{eqn:p-sum}
+\end{align}    
+where in (a) $i_0$ is such that $x_{i_0}$ is closest to $x_i$, that is $i_0 = \lfloor x/l \rceil$  (recall that $x_i = il \Rightarrow i= x_i/l$).\\
+Note that this specific choice of $I$ contains $\Delta x/l$ points (supposing $\Delta x \gg l$). However, depending on the parity of $n$ (fixed by the choice of the instant $t_n$), only half of the positions $x_j$ can be explored, as $n$ and $j$ must have the same parity. For the other half, we approximate and compute $w_{j}(t_n)$ at the center point $j=i_0$. Thus:
+\begin{align}
+    (\ref{eqn:p-sum}) \approx \frac{\Delta x}{l} \left(\frac{1}{2} \cdot 0  + \frac{1}{2} w_{i_0}(t_n) \right) = \frac{\Delta x}{2l} w_{i_0}(t_n) 
+\end{align}  
+We have now an expression for $W(x,t_n)$, which is continuous with respect to $x$:
+\begin{align}
+    W(x,t_n)\cancel{ \Delta x} = \frac{\cancel{\Delta x}}{2l} w_{i}(t_n) 
+    \label{eqn:p-sum2}
+\end{align}
+If we now take the limit $n \to 0$ we can substitute (\ref{eqn:t-inf}) in (\ref{eqn:p-sum2}), leading to:   
 \begin{align*}
-    W(x,t) = \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4Dt}\right)
+    W(x,t) &= \frac{1}{2l} \sqrt{\frac{2}{\pi n}} \exp\left(-\frac{i^2}{2n}\right)
+\intertext{Substituting $x=il$ and $t = n \varepsilon$ we get: }
+    W(x,t) &= \sqrt{\frac{2 \varepsilon}{4l^2 \pi t}} \exp \left(-\frac{x^2}{2 \frac{l^2}{\varepsilon} t}\right)
+\intertext{As $l^2 \varepsilon^{-1} = 2D$:}
+    W(x,t) &= \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4Dt}\right)
 \end{align*} 
-We can now compute the mean value of $x$:
+We can now compute the first two moments of $x$:
 \begin{align*}
-    \langle x \rangle_t &= \int_{\mathbb{R}} W(x,t) x dx = 0\\
-    \langle x^2 \rangle_t &= \int_{\mathbb{R}} W(x,t) x^2 dx = 2Dt
+    \langle x \rangle_t &= \int_{\mathbb{R}} W(x,t) x \dd{x} = 0\\
+    \langle x^2 \rangle_t &= \int_{\mathbb{R}} W(x,t) x^2 \dd{x} = 2Dt
 \end{align*}
-This last integral can be done in many ways. First, recall that: 
+This last integral can be done in many ways. For example, recall the gaussian integral: 
 \begin{align*}
-    I = \sqrt{\frac{\pi}{\mu}} = \int_{-\infty}^{\infty} e^{-\mu y^2}dy
+    I = \sqrt{\frac{\pi}{\mu}} = \int_{-\infty}^{\infty} e^{-\mu y^2}\dd{y}
 \end{align*}
-Differentiating: 
+Differentiating (according to Leibniz integral rule) with respect to $\mu$:
+\begin{align}
+    \pdv{I}{\mu} = - \int_{\mathbb{R}} e^{-\mu y^2} y^2 \dd{y} = -\frac{1}{2} \sqrt{\frac{\pi}{\mu^3} }
+    \label{eqn:gaussian-2}
+\end{align}
+and so:
 \begin{align*}
-    \frac{\partial I}{\partial \mu} = - \int_{\mathbb{R}} e^{-\mu y^2} y^2 dy
+    \langle x^2 \rangle_t &= \frac{1}{\sqrt{4\pi D t}} \int_{-\infty}^{+\infty} x^2 \exp(-\frac{x^2}{4 D t} ) \dd{x} =\\
+    &= \frac{1}{\sqrt{4 \pi D t}} \int_{-\infty}^{+\infty} e^{-\mu x^2} x^2 \dd{x} \Big|_{\mu = (4Dt)^{-1}} \underset{(\ref{eqn:gaussian-2})}{=}  \frac{1}{\sqrt{4 \pi D t}} \frac{1}{2} \sqrt{\pi (4 D t)^3} = 2 Dt  
 \end{align*}
-[?]
 
-%Width * height of gaussian \approx 1. 
-\to \mapsto \omega \Omega @@ \infty
+
+
 \end{document}
