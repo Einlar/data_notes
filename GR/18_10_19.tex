@@ -1,0 +1,188 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Covariant Derivative}
+\lesson{6}{18/10/19}
+Let's start by considering a univariate function. If we know $f(x)$ and want to know the value \q{a little past $x$} we can use the derivative:
+\begin{align*}
+    f(x+ \dd{x}) = f(x) + \pdv{f}{x} \dd{x}
+\end{align*} 
+So, thanks to the derivative, we can \q{move} the function evaluation, in a certain sense.\\
+This expression can be extended to more dimensions by using the \textit{gradient}: 
+\begin{align*}
+    f(\bm{x} + \dd{\bm{x}}) = f(\bm{x}) + \pdv{f}{\bm{x}}\Big|_{\bm{x}} \cdot \dd{\bm{x}} = f(\bm{x}) + \bm{\nabla}f \cdot \dd{\bm{x}}
+\end{align*}
+In spacetime, we simply rewrite this relation using the Einstein summation notation:
+\begin{align}
+    f(\bm{x} + \dd{\bm{x}}) = f(\bm{x}) + \pdv{f}{x^{\mu}} \dd{x^\mu}
+    \label{eqn:move-function}
+\end{align}
+From now one, we will use the following more compact notation:
+\begin{align*}
+    \pdv{x^\mu} \equiv \partial_\mu
+\end{align*}
+
+Now, if $f(\bm{x})$ is a scalar, $\partial_\mu f$ is a rank $(0,1)$ tensor.\\
+\textbf{Proof}. Introduce a $4$-vector transformation $x \to x'$. Then $f(x) \to f'(x') = f(x)$ and the derivative:
+\begin{align*}
+    \pdv{f(x)}{x^\mu} \to \pdv{f'(x')}{x'^\mu} = \pdv{x^\alpha}{x'^\mu} \pdv{x^\alpha}f(x)
+\end{align*}       
+which is exactly the transformation rule for a co-variant $4$-vector:
+\begin{align*}
+    \partial_\mu f \to \pdv{x^\alpha}{x'^\mu} \partial_\alpha f
+\end{align*} 
+
+We now want to generalize all this to vectors. How can we \q{move} a vector? Naively, we could adapt (\ref{eqn:move-function}), leading to:
+\begin{align*}
+    A^\mu(x+\dd{x}) = A^\mu(x) +  \hlc{Yellow}{\pdv{A^\mu}{x^\nu} \dd{x^\nu}}
+\end{align*}
+The problem is that if $A^\mu$ is a vector, then $\partial_\nu A^\mu$ is \textbf{not} a tensor. In fact, consider a transformation $x \to x'$. Then:
+\begin{align*}
+    \pdv{A^\mu (x)}{x^\nu} &\to \hlc{ForestGreen}{\pdv{x'^\nu}} \hlc{SkyBlue}{A'^\mu(x')} = \hlc{ForestGreen}{\pdv{x^\alpha}{x'^\nu} \pdv{x^\alpha}}\left[\hlc{SkyBlue}{\pdv{x'^\mu}{x^\beta} A^\beta (x)}\right] =\\
+    &= \pdv{x^\alpha}{x'^\nu} \pdv{x'^\mu}{x^\alpha}{x^\beta} A^\beta + \pdv{x^\alpha}{x'^\nu} \pdv{x'^\mu}{x^\beta} \pdv{A^\beta}{x^\alpha} = \pdv{A'{\mu}}{x'^\nu}
+\end{align*}   
+The problem is that the derivative acts both on $A^\beta(x)$ and the derivative $\partial x'^\mu / \partial x^\beta$ used for the $4$-vector transformation, leading to an additional term that \textit{spoils} the transformation rule.\\
+Note that in special relativity this problem disappears, as:
+\begin{align*}
+    \partial_\nu A^\mu \to \Lambda^\alpha_{\diamond \nu} \partial_\alpha (\Lambda^\mu_{\diamond \beta} A^\beta) = \Lambda^\alpha_{\diamond \nu} \Lambda^\mu_{\diamond \beta}\partial_\alpha A^\beta
+\end{align*}    
+as $\Lambda$ is a \textit{constant}.\\
+
+So, we need to construct a new object for differentiating, called the \textbf{covariant derivative} $\nabla_\nu A^\mu$, with the following properties:
+\begin{itemize}
+    \item The covariant derivative of a tensor is a tensor of higher rank
+    \item $\nabla_\mu \to \partial_\mu$ in flat spacetime, meaning that the covariant derivative coincides with the usual derivative in Minkowski space. 
+\end{itemize}
+To construct $\nabla_\mu$ we introduce the \textit{Christoffel Symbols}:
+\begin{align*}
+    \Gamma^\alpha_{\mu \nu} = \frac{1}{2} g^{\alpha \lambda} (g_{\lambda \mu, \nu} + g_{\lambda \nu, \mu} - g_{\mu \nu, \lambda}) 
+\end{align*}
+where we use the most compact notation for a derivative:
+\begin{align*}
+    \pdv{x^\mu} f \equiv \partial_\mu f \equiv f_{,\mu}
+\end{align*}
+Note that $\Gamma^\alpha_{\mu \nu} = \Gamma^\alpha_{\nu \mu}$, and that they are \textbf{not} a tensor, as they contain the normal derivative of the metric, which is a tensor, and we know from the previous example that the normal derivative of a tensor is \textbf{not} a tensor.\\
+
+We assume (without derivation), that the following holds:
+\begin{align*}
+    \Gamma^\mu_{\nu k} \to \Gamma'^\mu_{\nu k} = \pdv{x'^\mu}{x^\alpha} \pdv{x^\beta}{x'^\nu} \pdv{x^\gamma}{x'^k} \Gamma^\alpha_{\beta \gamma} + \pdv{x'^\mu}{x^\alpha} \pdv{x^\alpha}{x'^\nu}{x'^k}
+\end{align*}
+For a covariant vector, the \textit{covariant derivative} is defined as:
+\begin{align*}
+    \nabla_\nu V_k = \partial_\nu V_k - \Gamma^\alpha_{\nu k} V_\alpha
+\end{align*} 
+Memo: put a minus when acting on a lower index, and the Christoffel symbols has the index $\nu$ of the derivative, followed by the index $k$ we are acting on, and a dummy index $\alpha$. The idea is that $\Gamma$ \q{cures} the problem we had in differentiating vectors.\\
+We will now prove that while $\partial_\nu V_k$ nor $\Gamma^\alpha_{\nu k} V_\alpha$ are \textbf{not} tensor, $\nabla_\nu V_k$ \textbf{is}.\\
+
+\textbf{Proof}. We need to transform $\nabla_\nu V_k$:
+\begin{align*}
+    \nabla_\nu' V_k' &= \pdv{x'^\nu} \hlc{Yellow}{V_k'} -\hlc{ForestGreen}{ \Gamma'^\mu_{\nu k}} \hlc{SkyBlue}{V_\mu'} = \pdv{x'^\nu}\left(\hlc{Yellow}{\pdv{x^\lambda}{x'^k}V_\lambda}\right) - \left(\hlc{ForestGreen}{
+    \pdv{x'^\mu}{x^\alpha} \pdv{x^\beta}{x'^\nu} \pdv{x^\gamma}{x'^k} \Gamma^\alpha_{\beta \gamma} + \pdv{x'^\mu}{x^\alpha} \pdv{x^\alpha}{x'^\nu}{x'^k}}
+    \right) \hlc{SkyBlue}{\pdv{x^\lambda}{x'^\mu} V_\lambda} =\\
+    &= \pdv{x^\lambda}{x'^\nu}{x'^k} V_\lambda + \pdv{x^\lambda}{x'^k}\pdv{V_\lambda}{x'^\nu} - \hlc{Yellow}{\pdv{x'^\mu}{x^\alpha}}\left(\pdv{x^\beta}{x'^\nu}\pdv{x^\gamma}{x'^k} \Gamma^\alpha_{\beta \gamma} + \pdv{x^\alpha}{x'^\nu}{x'^k}\right)\hlc{Yellow}{ \pdv{x^\lambda}{x'^\mu}} V_\lambda =\\
+    &=\pdv{x^\lambda}{x'^\nu}{x'^k} V_\lambda + \pdv{x^\lambda}{x'^k}\pdv{x^\alpha}{x'^\nu}\pdv{V_\lambda}{x^\alpha} - \left(\pdv{x^\beta}{x'^\nu} \pdv{x^\gamma}{x'^k} \Gamma^\alpha_{\beta \gamma} + \pdv{x^\alpha}{x'^\nu}{x'^k}\right) \hlc{Yellow}{\delta^\lambda_{\diamond \alpha} }\hlc{SkyBlue}{V_\lambda} =\\
+    &= \cancel{\pdv{x^\lambda}{x'^\nu}{x'^k} V_\lambda} + \pdv{x^\lambda}{x'^k}\pdv{x^\alpha}{x'^\nu} \pdv{V_\lambda}{x^\alpha} - \pdv{x^\beta}{x'^\nu} \pdv{x^\gamma}{x'^k} \Gamma^\alpha_{\beta \gamma} \hlc{SkyBlue}{V_\alpha }- \cancel{\pdv{x^\alpha}{x'^\nu}{x'^k} \hlc{SkyBlue}{V_\alpha}} =\\
+    &\underset{(a)}{=}  \pdv{x^\lambda}{x'^k} \pdv{x^\alpha}{x'^\nu} \left(\pdv{V_\lambda}{x^\alpha} - \Gamma^\sigma_{\alpha \lambda} V_\sigma \right) = \pdv{x^\lambda}{x'^k} \pdv{x^\alpha}{x'^\nu}\nabla_\alpha V_\lambda
+\end{align*}  
+where in (a) we rename $\gamma \to \lambda$, $\beta \to \alpha$ and $\alpha \to \sigma$ so that we can factor the two middle terms. Note that in the first (non-cancelled) term, $\partial x^\lambda/\partial x'^{k}$, and so $\lambda$ corresponds to $k$. We want to replicate this in the other term, so we rename $ \gamma \to \lambda$. The same thing happens with $\beta \to \alpha$. But then we have to rename $\alpha \to \sigma$ to not have more than two copies of $\alpha$.\\
+
+
+We define the covariant derivative of a contra-variant vector as follows:
+\begin{align*}
+    \nabla_\nu V^\mu \equiv \partial_\nu V^\mu + \Gamma_{\nu k} ^\mu V^k
+\end{align*}
+Memo: put a $+$ if the vector index is up, and then $\Gamma$ contains a down index $\nu$ (from the derivative) and a up index $\mu$ (from the vector), followed by the dummy down index $k$.\\
+
+\textbf{Proof}. We now show that $\nabla_\nu V^\mu$ is a tensor, and so we compute its transformation:
+\begin{align*}
+    \nabla_\nu' V'^\mu &\underset{(a)}{=}  \pdv{V'^\mu}{x'^\nu} + \Gamma'^\mu_{\nu k} V'^k = \pdv{x^\lambda}{x'^\nu} \pdv{x^\lambda} \left(\pdv{x'^\mu}{x^\alpha}V^\alpha\right)+ \left[\pdv{x'^\mu}{x^\alpha} \pdv{x^\beta}{x'^\nu} \hlc{Yellow}{\pdv{x^\gamma}{x'^k}} \Gamma^\alpha_{\beta \gamma} + \pdv{x'^\mu}{x^\alpha} \pdv{x^\alpha}{x'^\nu}{x'^k}\right] \hlc{Yellow}{\pdv{x'^k}{x^\sigma}} V^\sigma =\\
+    &= \pdv{x^\lambda}{x'^\nu} \pdv{x'^\mu}{x^\lambda}{x^\alpha} V^\alpha + \pdv{x^\lambda}{x'^\nu} \pdv{x'^\nu}{x^\alpha} \pdv{V^\alpha}{x^\lambda} + \underbrace{\pdv{x'^\mu}{x^\alpha}\pdv{x^\beta}{x'^\nu} \hlc{Yellow}{\delta^\gamma_{\diamond \sigma} }\Gamma^\alpha_{\beta \gamma}V^\sigma}_{\pdv{x'^\mu}{x^\alpha} \pdv{x^\beta}{x'^\nu} \Gamma^\alpha_{\beta \sigma} V^\sigma} + \pdv{x'^\mu}{x^\alpha}\pdv{x^\alpha}{x'^\nu}{x'^k} \pdv{x'^k}{x^\sigma} V^\sigma =\\
+    &\underset{(b)}{=}  \pdv{x^\lambda}{x'^\nu} \pdv{x'^\mu}{x^\lambda}{x^\alpha} V^\alpha + \pdv{x^\lambda}{x'^\nu} \pdv{x'^\mu}{x^\alpha}\left(\pdv{V^\alpha}{x^\lambda} + \Gamma^\alpha_{\lambda \gamma} V^\gamma \right) + \pdv{x'^\mu}{x^\alpha} \pdv{x^\alpha}{x'^\nu}{x'^k} \pdv{x'^k}{x^\sigma} V^\sigma 
+\end{align*}  
+In (a), as before, we employ the chain-rule to transform the derivative, and then the transformation rule for contra-variant vectors and for the Christoffel symbol.\\
+In (b) we apply a relabelling $\beta \to \lambda$ to collect the middle terms.\\
+We arrive at:
+\begin{align*}
+    \nabla_\nu' V'^\mu &= \underbrace{\pdv{x^\lambda}{x'^\nu} \pdv{x'^\mu}{x^\alpha} \nabla_{\lambda}V^\alpha }_{\text{Nice tensor transformation}}+ \underbrace{\pdv{x^\lambda}{x'^\nu} \pdv{x'^\mu}{x^\lambda}{x^\alpha}V^\alpha + \pdv{x'^\mu}{x^\alpha} \pdv{x^\alpha}{x'^\nu}{x'^k} \pdv{x'^k}{x^\sigma}V^\sigma}_{\textbf{Goal: } \text{Show that this is zero!}}
+\end{align*}
+Note that the first term is the one we want in a transformation of a tensor. So, we need to show that the last two terms sum to $0$:
+\begin{align*}
+    \text{Last two terms} = \left(\pdv{x^\lambda}{x'^\nu} \pdv{x'^\mu}{x^\lambda}{x^\alpha} + \hlc{Yellow}{\pdv{x'^\mu}{x^\sigma}} \pdv{\hlc{SkyBlue}{x^\sigma}}{x'^\nu}{x'^k} \pdv{x'^k}{\hlc{ForestGreen}{x^\alpha}}\right)V^\alpha
+\end{align*}
+where we swapped $\alpha \leftrightarrow \sigma$ to be able to factor $V^\alpha$. We can now focus on the terms inside the parentheses, where we relabel $\sigma \to \lambda$ and apply the \q{inverse} chain rule:
+\begin{align*}
+    (\dots) &= \pdv{x^\lambda}{x'^\nu} \pdv{x^\alpha} \pdv{x'^\mu}{x^\lambda} + \hlc{Yellow}{\pdv{x'^\mu}{x^\lambda}} \pdv{x'^k}{\hlc{ForestGreen}{x^\alpha}}\pdv{x'^k}\hlc{SkyBlue}{\pdv{x^\lambda}{x'^\nu}} =\\
+    &= \pdv{x^\lambda}{x'^\nu} \pdv{x^\alpha} \pdv{x'^\mu}{x^\lambda} + \pdv{x'^\mu}{x^\lambda} \pdv{x^\alpha} \pdv{x^\lambda}{x'^\nu} =\\
+    &= \pdv{x^\alpha} \left(\pdv{x^\lambda}{x'^\nu}\pdv{x'^\mu}{x^\lambda}\right) = \pdv{x^\alpha} \delta^\mu_{\diamond \nu} = 0
+\end{align*}  
+
+To covariantly differentiate a generic tensor, add Christoffel symbols for each index:
+\begin{align*}
+    \nabla_\mu V_{\alpha \beta} &= \partial_\mu V_{\alpha \beta} - \Gamma_{\mu \alpha}^\lambda V_{\lambda \beta}  - \Gamma_{\mu \beta}^\lambda V_{\alpha \lambda}\\
+    \nabla_\mu V_{\textcolor{Red}{\alpha}}^{\diamond \textcolor{Blue}{\beta}} &= \partial_\mu V_\alpha^{\diamond \beta} \textcolor{Red}{-} \Gamma_{\mu \textcolor{Red}{\alpha}}^\lambda V_\lambda^{\diamond \beta} \textcolor{Blue}{+} \Gamma_{\mu \lambda}^{\textcolor{Blue}{\beta}} V_\alpha^{\diamond \lambda}
+\end{align*}
+
+\subsection{Properties of the Covariant Derivative}
+\begin{itemize}
+    \item The covariant derivative of a tensor is a tensor of higher rank (it has one more index)
+    \item Leibniz rule holds, meaning that if $A$ and $B$ are two tensors (of whatever indices), the following holds:  
+    \begin{align*}
+        \nabla_\mu(A B) = (\nabla_\mu A)B + A(\nabla_\mu B)
+    \end{align*}
+    \item The metric is covariantly constant, that is:
+    \begin{align*}
+        \nabla_\mu g_{\alpha \beta} = 0    
+    \end{align*}
+\end{itemize}
+
+\begin{example}[Leibniz verification]
+    Let's show that:
+    \begin{align*}
+        \nabla_\mu (A_\alpha B^\alpha) \overset{?}{=} (\nabla_\mu A_\alpha) B^\alpha + A_\alpha (\nabla_\mu B^\alpha)
+    \end{align*}
+    Note that $A_\alpha B^\alpha$ is a scalar, thus $\nabla_\mu (A_\alpha B^\alpha) = \partial_\mu (A_\alpha B^\alpha)$.\\
+    Computing all the terms:
+    \begin{align*}
+        \nabla_\mu(A_\alpha)B^\alpha + A_\alpha (\nabla_\mu B^\alpha) &= (\partial_\mu A_\alpha - \Gamma^\lambda_{\mu \alpha} A_\lambda) B^\alpha + A_\alpha (\partial_\mu B^\alpha + \Gamma^\alpha_{\mu \lambda} B^\lambda) =\\
+        &=\partial_\mu A_\alpha B^\alpha - \Gamma^\lambda_{\mu \alpha} A_\lambda B^\alpha + A_\alpha \partial_\mu B^\alpha + \Gamma^\alpha_{\mu \lambda} A_\alpha B^\lambda
+    \end{align*}
+    and by swapping $\alpha \leftrightarrow \lambda$ we can see that the Christoffel symbols cancel out, leading to a normal derivative:
+    \begin{align*}
+        = \partial_\mu A_\alpha B^\alpha + A_\alpha \partial_\mu B^\alpha
+    \end{align*} 
+\end{example}
+
+\section{Parallel Transport along a Curve}
+Consider a curve in spacetime parametrized by a function $x^\alpha(\lambda)$, where $\lambda$ is a parameter along the curve. Suppose that $V^\mu$ is a vector on this curve. We can \textit{move} $V^\mu$ along $x^\alpha(\lambda)$, meaning that for an infinitesimal displacement the transformation rule is:
+\begin{align*}
+    \dd{\bm{V}} = \dd{\bm{x}} \cdot \bm{\nabla}V
+\end{align*}
+where, in components:
+\begin{align*}
+    \dd{V^\mu} = \dd{x^\alpha} \nabla_\alpha V^\mu
+\end{align*}
+This is the same formula as the one from the start of the lecture, but using the covariant derivative instead of the normal derivative, so that we now that the \textit{change} in the vector is also a \textit{tensor}.\\
+
+We define \textbf{parallel transport} as the method to \textit{transport} a vector along a curve without \textit{changing} it, meaning that:
+\begin{align*}
+    \nabla_{\bm{t}} V^\mu = 0 \text{ along the curve} 
+\end{align*}   
+where $t^\alpha$ is the tangent of the curve:
+\begin{align*}
+    t^\alpha = \dv{x^\alpha}{\lambda}
+\end{align*} 
+and so in components:
+\begin{align*}
+    (\nabla_{\bm{t}} \bm{V})^\mu = \dv{x^\alpha}{\lambda} \nabla_\alpha V^\mu = 0
+\end{align*}
+as in a derivative along a curve we take the scalar product between the direction of motion ($\dd{x^\alpha}/{\dd{\lambda}}$) and the covariant derivative of the vector.\\
+
+Compare this with the \q{transport of a function value}:
+\begin{align*}
+    \dd{f} = \bm{\nabla} f \cdot \dd{\bm{x}}
+\end{align*}
+We will see in the next homework some examples about this.
+
+\end{document}
