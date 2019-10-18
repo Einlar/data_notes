@@ -3,10 +3,10 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\section{Homework - Week 1}
+\chapter{Homework - Week 1}
 \lesson{1}{09/10/19}
 
-\subsection{Problem 1}
+\section{Problem 1}
 \textit{Show that the inverse of a Lorentz boost amounts in changing the sign of $x$ in the expressions for the boost.}\\
 Starting from:
 \begin{align}\label{eqn:time}
@@ -122,7 +122,7 @@ So $\Lambda^T \eta$ is merely $\Lambda$ with a sign change on the first column, 
 (Recall that $\gamma = (1-\beta)^{-1}$, so that $\gamma^2 (\beta^2 -1) = -1$, and so on)
 
 
-\subsection{Problem 2}
+\section{Problem 2}
 \begin{enumerate}
     \item With respect to an observer on Earth, muons travel through $\SI{15}{\kilo\m}$ of atmosphere at a velocity $v = 0.995c$. Thus they arrive at Earth after an interval $\Delta t$:
     \begin{align*}
@@ -182,7 +182,7 @@ So $\Lambda^T \eta$ is merely $\Lambda$ with a sign change on the first column, 
     which is the same result computed at the previous point.
 \end{enumerate}
 
-\subsection{Problem 3}
+\section{Problem 3}
 \textit{A source emits radiation at an angle $\theta'$ wrt the $x'$-axis in the source rest frame. The source is moving with constant velocity $v$ toward an inertial observer $O$.}\\
 \textit{What is the angle between the direction of the radiation and the $x$-axis in the frame of $O$?}\\
 
@@ -294,4 +294,110 @@ The derivative can be computed as:
     \dv{\theta'}{\theta} = \left(\dv{\theta}{\theta'} (\theta(\theta')) \right)^{-1}
 \end{align*}
 Unfortunately, it is difficult to invert $\theta' \mapsto \theta$. However, this can be done numerically, or approximately by using the implicit function theorem and expanding in a Taylor series. However, it is clear that $O$ sees the source as emitting isotropically only if $g(\theta)$ is constant - which is of course not the case.  
+
+\chapter{Week 2}
+\section{Problem 1}
+\textit{Consider a rocket moving along the $x$-axis whose position as a function of time is:}
+\begin{align}
+    x(t) = \frac{c}{k}(\sqrt{1+k^2 t^2}-1) \qquad k>0; \> [k] = \si{\m\per\s}
+    \label{eqn:x-t} 
+\end{align} 
+\textit{where $c$ is the speed of light, and $k$ a positive constant having the dimensions of an inverse time. Namely the rocket starts at $x=\infty$ at time $t=-\infty$, reaches $x=0$ at time $t=0$ and then goes back to $x=\infty$ at the time $t=\infty$}
+\begin{enumerate}
+    \item \textit{Find and plot the velocity $v_x = \dd{x}/\dd{t}$ of the rocket as a function of time, and show that the speed (the magnitude of the velocity) of the rocket never exceeds $c$.}\\
+    Differentiating $x(t)$ with respect to $t$:
+    \begin{align*}
+        v_x(t) \equiv \dv{x}{t} = \frac{ckt}{\sqrt{1+k^2 t^2}} = \pm \frac{c}{\sqrt{1+\frac{1}{k^2 t^2} }} 
+    \end{align*}   
+    Note that $v_x(-\infty) = -c/k$, $v_x(0) = 0$ and $v_x(\infty) = c/k$. In fact, $v_x(t)$ is always increasing:
+    \begin{align*}
+        \dv{v_x}{t} = \frac{ck}{(1+k^2t^2)^{3/2}} > 0 \> \quad \forall t 
+    \end{align*}    
+    If we compute the square modulus it is easy to see that $v_x$ is always strictly less than $c$.  
+    \begin{align*}
+        \left| \dv{x}{t} \right|^2 = \frac{c^2}{1+\frac{1}{k^2 t^2}} < c \qquad \forall t \> \forall k > 0
+    \end{align*}
+    \item \textit{Calculate the components of the rocket $4$-velocity $u^\mu$}\\
+    Recall the expression for the components of $u^\mu$:
+    \begin{align*}
+        u^\mu = (\gamma c, \gamma \vec{v})
+    \end{align*} 
+    with:
+    \begin{align*}
+        \vec{v} = \left(\frac{ckt}{\sqrt{1+k^2 t^2}}, 0, 0\right)
+    \end{align*}
+    We start by computing $\gamma$:
+    \begin{align*}
+        \gamma^2 = \frac{1}{1-\frac{v^2}{c^2} }  = 1 + k^2 t^2 \Rightarrow \gamma = \sqrt{1+k^2 t^2}
+    \end{align*} 
+    leading to:
+    \begin{align*}
+        u^\mu = (c(1+k^2t^2)^{1/2}, ckt)
+    \end{align*}
+    \item \textit{Express $x$ and $t$ as a function of proper time $\tau$ along the trajectory of the rocket (integrate the relation between $\dd{t}$ and $\dd{\tau}$ and impose that $\tau = 0$ when $t=0$)}\\
+    We start from:
+    \begin{align*}
+        c^2 \dd{\tau}^2 &= c^2 \dd{t}^2 - \dd{x}^2 = \dd{t}^2 - \left(\dv{x}{t}\right)^2 \dd{t}^2 =\\
+        &= c^2 \dd{t}^2 - \frac{c^2 k^2 t^2}{1+k^2 t^2} \dd{t}^2 = \frac{c^2}{1+k^2 t^2} \dd{t}^2 \Rightarrow \dd{\tau} = \frac{1}{\gamma}\dd{t}   
+    \end{align*} 
+    which is the same result obtained from the \textit{time dilation} formula. Then, by integrating both sides:
+    \begin{align*}
+        \tau = \int \frac{1}{\sqrt{1+k^2 t^2}}\dd{t} = \frac{1}{k} \tanh^{-1}(kt) + c  
+    \end{align*} 
+    and setting $t=0$ when $\tau = 0$ leads to $c = 0$.
+    \begin{expl}
+        Alternatively, note that $u^0 = \dd{t}/\dd{\tau} = \gamma c$, and so $\dd{\tau} = \dd{t}/(\gamma c)$.  
+    \end{expl}
+    We can now invert the relation to find $t(\tau)$:
+    \begin{align*}
+        t(\tau) = \frac{1}{k} \sinh(k \tau) 
+    \end{align*}
+    and substitute in (\ref{eqn:x-t}) to get $x(\tau)$:
+    \begin{align*}
+        x(\tau) = \frac{c}{k}(\cosh(k \tau)-1) 
+    \end{align*} 
+    \item \textit{What is the $4$-acceleration $a^\mu = \dd{u^\mu}/\dd{\tau}$ of the rocket?}
+    \item \textit{Compute the $4$-velocity $u^\mu$ and the $4$-acceleration $a^\mu$ in the instantaneous rest frame of the rocket. This is the frame in which, at any given time, the rocket is at rest. In practice, you need to take the $4$-velocity and the $4$-acceleration computed above, and do a Lorentz boost with the velocity that the particle has at that time. Recall that, at small speeds, the spatial components of the acceleration reduce to the non-relativistic acceleration. Therefore, the spatial components of the $4$-acceleration in the instantaneous rest-frame give the acceleration experienced by people on the rocket. For this problem, you should find that this acceleration is constant in time, and equal to $ck$.}\\  
+
+\end{enumerate}
+
+\section{Problem 2}
+\textit{A proton (particle A) of mass $m$ and an anti-proton (particle B) annihilate in two photons (particle C and D). Energy and momentum are conserved in the process, $p_A^\mu + p_B^\mu = p_C^\mu + p^\mu_D$. Denote with $p$ the spatial component of $p_A^\mu$ along the $x$-axis.}
+
+\begin{enumerate}
+    \item \textit{Write the $4$-momenta of the four particles in the center of mass frame.}\\
+    In the center of mass frame, $\vec{p}_A \parallel \hat{x}$, and $\vec{p}_C$ forms an angle of $\theta$ with $\hat{x}$. As total momentum wrt center of mass is $0$, $\vec{p}_A = -\vec{p}_B$ and $\vec{p}_C = - \vec{p}_D$.\\
+    Recall that, for a massive particle, the $4$-momentum has the following components:
+    \begin{align*}
+        p^\mu = (m \gamma c, m \gamma \vec{v}) = \left(\frac{\mathcal{E}}{c}, \vec{p}\right)
+    \end{align*}           
+    And its self-contraction leads to the mass-shell relation:
+    \begin{align*}
+        p^\mu p_\mu = -\frac{\mathcal{E}^2}{c^2} + \norm{\vec{p}}^2 = -mc^2 \Rightarrow \mathcal{E}^2 = m^2 c^4 + \norm{\vec{p}}^2 c^2 
+    \end{align*}
+    Then:
+    \begin{align*}
+        p^0 = \frac{\mathcal{E}}{c} = \frac{\sqrt{m^2 c^4 + p^2 c^2}}{c}  
+    \end{align*}
+    leading to:
+    \begin{align*}
+        p_A^\mu &= \left(\frac{\sqrt{m^2 c^4 + p^2 c^2}}{c}, +p, 0, 0 \right)\\
+        p_B^\mu &= \left(\frac{\sqrt{m^2 c^4 + p^2 c^2}}{c}, -p, 0, 0 \right)
+    \end{align*}
+    as $A$ and $B$ collide \q{head on} in the center of mass frame.\\
+    Photons $C$ and $D$ will have the same energy $\mathcal{E}$ of the protons, but with a differently directed momentum ($=\mathcal{E}/c$ from mass-shell):
+    \begin{align*}
+        p_\mu^C &= \left(\frac{\mathcal{E}}{c}, \frac{\mathcal{E}}{c} \cos \theta, \frac{\mathcal{E}}{c} \sin \theta, 0   \right)\\
+        p_\mu^D &= \left(\frac{\mathcal{E}}{c}, -\frac{\mathcal{E}}{c} \cos \theta, -\frac{\mathcal{E}}{c} \sin \theta, 0   \right)
+    \end{align*}     
+
+    \item \textit{Find the velocity of the particle B in the center of mass frame}.\\
+    We start from:
+    \begin{align*}
+        p^1 = m \gamma v = p \Rightarrow v = \frac{p}{m \gamma}    
+    \end{align*}
+    \item \textit{Find the $4$-momenta of the two initial particles in the lab frame (it is the rest frame of B). Hint: perform a Lorentz boost with the velocity obtained in (2) of the quantities obtained in (1).}   
+\end{enumerate}
+
+ 
 \end{document}
