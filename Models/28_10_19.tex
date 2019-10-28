@@ -1,0 +1,340 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{The 3rd integral}
+\lesson{6}{28/10/19}
+We considered the following integral:
+\begin{align*}
+    \langle F\left(\int_{0}^{t} a(\tau) x(\tau) \dd{\tau}\right) \rangle
+\end{align*}
+To solve this, we need to discretize the path, and then consider the continuum limit.\\
+We start by applying the transformation:
+\begin{align*}
+    A(\tau) = \int_{\tau}^{t} a(\tau') \dd{\tau'}
+\end{align*}
+Note that $\partial_\tau A(\tau) = -a(\tau)$, and that $A(t) = 0$. The integral becomes:
+\begin{align*}
+    \int_{0}^{t} a(\tau) x(\tau) \dd{\tau} = - \int_{0}^{t} \partial_\tau  A(\tau) x(\tau) \dd{\tau} 
+\end{align*}  
+Integrating by parts we get:
+\begin{align*}
+    = - A(\tau) x(\tau) \Big|_0^t + \int_0^t A(\tau) \dot{x}(\tau) \dd{\tau}
+\end{align*}
+The first term is $0$, as $A(\tau) = 0$, and $x(0) = 0$ (paths, for simplicity, always start from $0$ - as any generic path can be shifted to satisfy this condition).\\
+We then discretize the path, starting from $t_0 = 0$ and arriving to $t_N$. Let $\dot{x}(\tau) \dd{\tau} \equiv \dd{x} = x_i - x_{i-1}$, where $x_i \equiv x(t_i)$. Then, the integral is just the limit of the Riemann sum:
+\begin{align*}
+    = \lim_{N \to \infty} \sum_{i=1}^N A(t_i) (x_i - x_{i-1})
+\end{align*}        
+For simplicity, denote $A_i \equiv A(t_i)$ and $(x_i - x_{i-1}) \equiv \Delta x_i$. Then:
+\begin{align*}
+    F\left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right) = F\left(\int_{0}^{t} A(\tau) \dot{x}(\tau) \dd{\tau} \right) = \lim_{N \to \infty} F\left(\sum_{i=1}^N A_i \Delta x_i\right)
+\end{align*}  
+We consider now the expectation value. If we are allowed to bring the average inside the integral, we get:
+\begin{align*}
+    \langle F\left(\int_{0}^{t} a(\tau) x(\tau)\dd{\tau}\right) \rangle = \lim_{N \to \infty} \int \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp \left(-\sum_{i=1}^N \frac{\Delta x_i^2}{\Delta t_i} \right)  \cdot F\left(\sum_{i=1}^N \Delta x_i A_i\right) \int \dd{z}\\
+    \cdot \delta\left(z-\sum_{i=1}^N A_i \Delta x_i\right)
+\end{align*}
+where $D=1/4$ and $t = t/(4D)$. The last term is equal to $1$, and it is introduced just to exchange the integrals and lead to:
+\begin{align*}
+    \int \dd{z} F(z) \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} F\left(\sum_i A_i \Delta x_i\right) \delta\left(z \sum_i A_i \Delta x_i\right) \cdot \exp\left(-\sum_i \frac{\Delta x_i^2}{\Delta t_i} \right)
+\end{align*}   
+Then we write the $\delta$ in terms of its Fourier transform:
+\begin{align*}
+    \delta(z \sum_i A_i \Delta x_i) = \int_{\mathbb{R}} \frac{\dd{\alpha}}{2\pi} \exp(i \alpha (z- \sum_i A_i \Delta x_i)) 
+\end{align*} 
+leading to:
+\begin{align*}
+    = \int \frac{\dd{\alpha}}{2 \pi} \int \dd{z} F(z) e^{i \alpha z} \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} \exp \left(-\sum_{i=1}^N \frac{\Delta x_i^2}{\Delta t_i} - i \sum_{i=1}^N A_i \Delta x_i \right)  
+\end{align*}
+Then consider the change of variables: $y_i = \Delta x_i = x_1 - x_0 = x_1$, $y_2 = \Delta x_2 = x_2 - x_1; \dots, y_N = \Delta x_N = x_N - x_{N-1}$. The volume element will be transformed by the determinant of the Jacobian:
+\begin{align*}
+    J = \operatorname{det} \frac{\partial (x_1 \dots x_N)}{\partial(y_1 \dots y_N)} = \left[\operatorname{det} \frac{\partial (y_1 \dots y_N)}{\partial (x_1 \dots x_N)}  \right]^{-1} = \left|
+    \begin{array}{ccccc}
+    1 & 0 & 0 & \dots & 0 \\ 
+    -1 & 1 & 0 & \dots & 0 \\ 
+    0 & -1 & 1 & 0 & \vdots \\ 
+    \vdots & \ddots & \ddots & \ddots & \vdots \\ 
+    0 & 0 & 0 & \dots & 1
+    \end{array}
+    \right|^{-1} = 1
+\end{align*}
+(It is a tri-diagonal matrix).\\
+Then we arrive at:
+\begin{align*}
+    \int \frac{\dd{\alpha}}{2 \pi} \int \dd{z} F(z) e^{i \alpha z} \int \prod_{i=1}^N \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}} \exp\left(-\sum_{i=1}^N \frac{y_i^2}{\Delta t_i} - i \sum_{i=1}^N A_i y_i \right) \prod_{i=1}^N \int \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}} \exp\left(-\frac{y_i^2}{\sqrt{\pi \Delta t_i}} - i \alpha A_i y_i \right)   
+\end{align*}
+which is a gaussian integral, with solution:
+\begin{align*}
+    = \int \frac{\dd{\alpha}}{2 \pi} \left[\int \dd{z} F(z) \prod_i \exp\left(-\frac{\alpha^2}{4} A_i^2 \Delta t_i \right) e^{i \alpha z}\right] 
+\end{align*}
+Note that:
+\begin{align*}
+    \prod_i \exp\left(-\frac{\alpha^2}{4} A_i^2 \Delta t_i \right) =
+    \exp\left(-\frac{\alpha^2}{4} \sum_{i=1}^N A_i^2 \Delta t_i \right)
+\end{align*}
+and then, in the limit the Riemann summation becomes an integral:
+\begin{align*}
+    \sum_{i=1}^N A^2(t_i) \Delta t_i  \xrightarrow[N \to \infty]{}  \int_0^t A^2(\tau) \dd{\tau}
+\end{align*}
+so that:
+\begin{align*}
+    \int_0^t \dd{\tau} A^2(\tau) = \int_0^t \dd{\tau} \left(\int_{\tau}^t \dd{\tau} a(\tau)\right)^2 \equiv R(t)
+\end{align*}
+Finally, we arrive at:
+\begin{align*}
+    \langle F\left(\int_{0}^t a(\tau )x(\tau)\right) \rangle = \int \dd{z} \int \frac{\dd{\alpha}}{2 \pi} \exp\left(-\frac{\alpha^2}{4} R(t) + i \alpha z \right) 
+\end{align*}
+which is also a gaussian integral!
+\begin{align*}
+    = \int \dd{z} F(z) \frac{1}{2 \pi} \sqrt{\frac{4 \pi}{R(t)} } \exp\left(-\frac{z^2}{R(t)} \right) = \int \dd{z} F(z) \sqrt{\frac{\pi}{R(t)} } \exp\left(-\frac{z^2}{R(t)} \right)  
+\end{align*}
+
+So, we showed that:
+\begin{align*}
+    \langle F\left(\int_0^t a(\tau) x(\tau)\dd{\tau}\right) \rangle = \sqrt{\frac{\pi}{R(t)} } \int \exp\left(-\frac{z^2}{R(t)} F(z) \dd{z}\right); \qquad R(t) \equiv \int_0^t \left(\int_\tau^t a(\tau') \dd{\tau'}\right)^2
+\end{align*}
+
+\subsection{Example 1}
+Choose:
+\begin{align*}
+    F(z) = e^{hz}
+\end{align*} 
+Then:
+\begin{align*}
+    \langle \exp\left(h \int_0^\tau a(\tau) x(\tau) \dd{\tau}\right) \rangle = \sqrt{\frac{\pi}{R} } \int \dd{z} \exp\left(-\frac{z^2}{R} + hz \right) = \exp\left(\frac{h^2 R}{4} \right) \equiv G(h)
+\end{align*}
+This is just the \textit{generating function} of $h(z)$. In fact: 
+\begin{align*}
+    G'(h) = \langle \int_0^t a(\tau) x(\tau) \dd{\tau} \exp\left(h \int_0^\tau a x \dd{\tau}\right) \rangle
+\end{align*}
+and setting $h = 0$ leads to the first moment of $h(z)$:
+\begin{align*}
+    G'(0) = \langle \int_0^t a(\tau) x(\tau) \dd{\tau} \rangle
+\end{align*}  
+As we know $G(z)$, we can differentiate the result, obtaining:
+\begin{align*}
+    G'(h) = \frac{h}{2} R \exp\left(\frac{h^2 R}{4} \right) 
+\end{align*} 
+and then $G'(0) = 0$.\\
+Then, for the second moment:
+\begin{align*}
+    G''(h) = \frac{R}{2} \exp\left(\frac{h^2 R}{4} \right) + \frac{h^2}{4} R^2 \exp\left(\frac{h^2 R}{4} \right) \Rightarrow G''(0) = \frac{R}{2}  
+\end{align*} 
+
+Consider now a generic odd moment:
+\begin{align*}
+    \langle \left(\int_0^t a(\tau)x(\tau) \dd{\tau}\right)^{2k+1} \rangle = 0 \qquad \forall k \in \mathbb{N}
+\end{align*}
+In fact, if we expand $G(h)$, we get:
+\begin{align*}
+    G(h) = \sum_{n=0}^\infty
+ \left(\frac{R}{4} \right)^n \frac{1}{n!} h^{2n} \end{align*}
+Since all the powers are even, if we differentiate an odd number of times and set $h=0$ we are \q{selecting} an odd power - which just is not there - and so the result will be $0$.\\
+On the other hand, an even moment leads to:
+\begin{align*}
+    \langle \left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right)^{2k} \rangle = R^{k} \frac{(2k)!}{2^{k} k!} 
+\end{align*}
+
+\section{The 4th integral}
+Consider now:
+\begin{align*}
+    \langle \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \rangle
+\end{align*}
+To solve this, we will use a method introduced by Gelfand-Yaglom.\\
+Expanding the average:
+\begin{align*}
+    \int \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} \exp\left(-\sum_i \frac{\Delta x_i^2}{\Delta t_i} - \sum_{i=1}^N P_i x_i^2 \Delta t_i\right) 
+\end{align*}
+with $x_i \equiv x(t_i), P_i \equiv P(t_i)$, and we consider the limit for $N \to \infty$ in the Riemann summation. Recall that $\Delta x_i = x_i - x_{i-1}$, and denote $\Delta t_i = \epsilon = t/N$ (regular discretization in time - in fact the result is independent on the chosen mesh, but proving involves a much more heavy notation, which is omitted for simplicity). This leads to:
+\begin{align*}
+    \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} e^{-\bm{x}^T a \bm{x}}
+\end{align*}   
+where $a$ is a $N \times N$ tri-diagonal matrix: 
+\begin{align*}
+    a = \left(\begin{array}{ccccc}
+    a_1 & - 1/\epsilon & 0 & \dots & 0 \\ 
+    -\epsilon^{-1} & a_2 & -\epsilon^{-1} & 0 & \vdots\\ 
+    0 & \ddots & \ddots & \ddots & 0\\ 
+    0 & 0 & -\epsilon^{-1} & a_{N-1} & -\epsilon^{-1}\\
+    0 & 0 & 0 & -\epsilon^{-1} & a_N
+    \end{array}\right)
+\end{align*}
+so that the integral becomes:
+\begin{align*}
+    = \frac{1}{\epsilon^{N/2} (\operatorname{det} a )^{1/2}} = \frac{1}{(\operatorname{det}(\epsilon a))^{1/2} }  
+\end{align*}
+Consider the determinant:
+\begin{align*}
+    \epsilon a = \left|\begin{array}{ccccc}
+    \epsilon a_1 & -1 & 0 & \dots & 0 \\ 
+    -1 & \epsilon a_2 & -1 & 0 & \vdots \\ 
+    0 & \ddots & \ddots & \ddots & \vdots \\ 
+    \vdots & \ddots & -1 & \epsilon a_{N-1} & -1 \\ 
+    0 & \dots & 0 & -1 & \epsilon a_N
+    \end{array}\right| \equiv D_1^{(N)}
+\end{align*}
+If we consider the block starting from $a_k$:
+\begin{align*}
+    D_k^{(N)} \equiv = \left|\begin{array}{ccccc}
+    \epsilon a_k & -1 & 0 & \dots & 0 \\ 
+    -1 & \epsilon a_{k+1} & -1 & 0 & \vdots \\ 
+    0 & \ddots & \ddots & \ddots & \vdots \\ 
+    \vdots & \ddots & -1 & a_{N-1} & -1 \\ 
+    0 & \dots & 0 & -1 & \epsilon a_N
+    \end{array}\right|
+\end{align*} 
+then we note that $a_1 = \epsilon P_i + 2/\epsilon$ for $0<i<N$ and $a_N = \epsilon P_n + 1/\epsilon$, leading to:
+\begin{align*}
+    D_k^{(N)} = \epsilon a_k D_{k+1}^{(N)} + 1 \left|\begin{array}{ccccc}
+    -1 & -1 & 0 & \dots & 0 \\ 
+    0 & \epsilon a_{k+2} & -1 & \ddots & \vdots \\ 
+    0 & \ddots & \ddots & \ddots & 0 \\ 
+    0 & \dots & 0 & -1 & \epsilon a_N 
+    \end{array}\right| = \epsilon a_k D^{(N)}_{k+1} -1 D_{k+2}^{(N)}
+\end{align*}
+If we now consider:
+\begin{align*}
+    D_k^{(N)} - 2 D_{k+1}^{(N)} + D_{k+2}^{(N)} = \epsilon a_k D_{k+1}^{(N)} - 2 D_{k+1}^{(N)} = D_{k+1}^{(N)} (\epsilon a_k - 2)
+\end{align*}
+Denote $t = N \epsilon$, $\tau = (k-1)\epsilon$, so that:
+\begin{align*}
+    D_k^{(N)}  \xrightarrow[N \to \infty]{\epsilon \downarrow 0, \tau \text{ const}} D(\tau)  
+\end{align*}  
+and so the difference considered before becomes the second derivative:
+\begin{align*}
+    D(\tau) - 2D(\tau + \epsilon) + D(\tau + 2 \epsilon) = \epsilon^2 P(\tau + \epsilon) D(\tau + \epsilon) 
+\end{align*}
+as:
+\begin{align*}
+    \epsilon a_k - 2 = \epsilon^2 P_k + 2 - 2 = \epsilon^2 P_k \to \epsilon^2 P(\tau + 2) = \epsilon^2 P(\tau) + O(\tau^3)
+\end{align*}
+Dividing by $\epsilon^2$:
+\begin{align*}
+    \frac{D(\tau + \epsilon) + D(\tau) - 2D(\tau + \epsilon)}{\epsilon^2} = P(\tau + \epsilon) D(\tau + \epsilon) 
+\end{align*} 
+Expanding $D(\tau)$ around $\tau + \epsilon$:
+\begin{align*}
+    D(\tau) = D(\tau + \epsilon) - \epsilon D'(\tau + \epsilon) + \frac{\epsilon^2}{2} D''(\tau + \epsilon) 
+\end{align*}  
+and also for $D(\tau + 2\epsilon)$ :
+\begin{align*}
+    D(\tau + 2\epsilon) = D(\tau + \epsilon) + \epsilon D'(\tau + \epsilon) + \frac{\epsilon^2}{2} D''(\tau + \epsilon) + O(\epsilon^3)  
+\end{align*}
+Subtracting term by term and dividing by $\epsilon^2$: 
+\begin{align*}
+    D''(\tau + \epsilon) + O(\epsilon^2) = P(\tau + \epsilon) D(\tau + \epsilon)
+\end{align*}
+and for $\epsilon \to 0$ we are left with:
+\begin{align*}
+    D''(\tau) = P(\tau) D(\tau)
+\end{align*} 
+This is the Gelfand method, to represent an infinite dimensional matrix in a recursive way and arrive at a differential equation.\\
+Returning to the initial integral:
+\begin{align*}
+    \langle \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \rangle = \lim_{N \uparrow \infty} \frac{1}{\sqrt{D_1^{(N)}}} = \frac{1}{\sqrt{D(0) }}  \equiv I_0
+\end{align*}
+However, to be able to integrate this differential equation, we need two boundary conditions.\\
+We start from:
+\begin{align*}
+    D_N^{(N)} = \epsilon a_N = \epsilon^2 P_N + 1  \xrightarrow[\epsilon \to 0]{}   1 = D(t)
+\end{align*}
+as:
+\begin{align*}
+    \tau = (k-1)\epsilon \underset{k=N}{=} (N-1)\epsilon = t- \tau = \dots 
+\end{align*}
+For the first derivative, we need:
+\begin{align*}
+    D_{N-1}^{(N)} = \left|\begin{array}{cc}
+    \epsilon a_{N-1} & -1 \\ 
+    -1 & \epsilon a_N
+    \end{array}\right| = 1 + \epsilon^2 P_{N-1} + 2 \epsilon^2 P_N + P_N P_{N-1} \epsilon^4
+\end{align*}
+so that:
+\begin{align*}
+    D'(t) = \frac{D^{(N)}_N - D^{(N)}_{N-1}}{\epsilon} = -(P_N P_{N-1} \epsilon^4 + \epsilon^2 P_N + \epsilon^2 P_{N-1}) \frac{1}{\epsilon} \to 0  
+\end{align*}
+So we get the two boundary conditions:
+\begin{align*}
+    D(t) = 1 \qquad D'(t) = 0
+\end{align*}
+
+Before proceeding with the solution, we need another result:
+\begin{align*}
+    \langle \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \delta(x(t) - x) \rangle \equiv I
+\end{align*}
+which is computed by resorting to the discretization trick:
+\begin{align*}
+    I_N = \int \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} \exp\left(-\sum_{i=1}^N \frac{\Delta x_i^2}{\Delta t_i} - \sum_i \epsilon P_i x_i^2 \right) \delta(x_N - x)
+\end{align*}
+using the Fourier transform for the $\delta$:
+\begin{align*}
+    \delta(x_N - x) = \int \frac{\dd{\alpha}}{2 \pi} e^{i \alpha (x_N - x)} 
+\end{align*} 
+and exchanging the integrals:
+\begin{align*}
+    = \int \dd{\alpha} e^{-i \alpha x} \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} \exp\left(\underbrace{-\sum_i \left(\frac{\Delta x_i^2}{\epsilon} + P_i \epsilon x_i^2 \right) }_{\bm{x}^T a \bm{x}}+ i \alpha x_N\right)
+\end{align*}
+Leading to:
+\begin{align*}
+    I_N = \int \frac{\dd{\alpha}}{2 \pi} e^{i \alpha x} \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} \exp(-\bm{x}^T a \bm{x} + i \alpha x_N)  
+\end{align*}
+If we denote $i \alpha x_N = \bm{h}^T \bm{x}$, with $h_l = \delta_{lN} (-i \alpha)$, then:
+\begin{align*}
+    \int \exp(-\bm{x}^T a \bm{x} + \bm{h}^T \bm{x}) = \frac{\pi^{N/2}}{|a|^{1/2}}\exp\left(\frac{1}{4} \bm{h}^T a^{-1}\bm{h} \right) = \frac{\pi^{N/2}}{|a|^{1/2}} \exp\left(-\frac{1}{4}\alpha^2 (a^{-1})_{NN} \right)  
+\end{align*}
+Substituting back:
+\begin{align*}
+    I_N = I_0 \int \frac{\dd{\alpha}}{2 \pi} \exp\left(i \alpha x - \frac{1}{4} \alpha^2 (a^{-1})_{NN}\right)  = I_0 \frac{1}{2 \pi} \sqrt{4 \pi} \left(\frac{1}{(a^{-1})_{NN}} \right)^{1/2} \exp\left(-\frac{x^2}{(a^{-1})_{NN}} \right) 
+\end{align*}
+Recalling the form of $a$, we can compute $(a^{-1})_{NN}$:
+\begin{align*}
+    (a^{-1})_{NN} = \dots = \text{See the notes}
+\end{align*}  
+
+And through the magical power of friendship, we finally arrive to:
+\begin{align*}
+    I = \lim_{N \to \infty} I_N = \frac{1}{\sqrt{\pi \widetilde{D}(0)}} \exp\left(-x^2 \frac{D(0)}{\widetilde{D}(0)} \right) 
+\end{align*}
+where:
+\begin{align*}
+    \widetilde{D}''(\tau) = P(\tau) \widetilde{D}(\tau); \qquad \widetilde{D}(t) = 0 \quad \widetilde{D}(t) = -1
+\end{align*}
+which are different initial conditions than that of $D$:
+\begin{align*}
+    D''(\tau) = P(\tau) D(\tau) \qquad D(t)=1; \quad D'(t) = 0
+\end{align*} 
+As $P(\tau) = k^2$ independent of $\tau$, we arrive at:
+\begin{align*}
+    I_0 &= \langle \exp\left({-k^2} \int_0^t x^2 (\tau) \dd{\tau}\right) \rangle \\
+    I &= \langle \exp\left(-k^2 \int_0^t x^2(\tau) \dd{\tau} \delta(x- x(t))\right) \rangle
+\end{align*}  
+Recall that:
+\begin{align*}
+    D''(\tau) = k^2 D(\tau); \quad D(\tau) = A e^{k \tau} + B e^{-k \tau}
+\end{align*}
+Imposing the initial conditions:
+\begin{align*}
+    D(t) &= Ae^{kt} + Be^{-kt} = 1\\
+    D'(t) &= kAe^{kt} - kB e^{-kt} = 0
+\end{align*}
+Solving for $A$ and $B$ we get:
+\begin{align*}
+    D(\tau) = \frac{1}{2} (e^{k(t- \tau)} + e^{-k(t - \tau)}) = \cosh (k(t- \tau))
+\end{align*}  
+If we repeat the same steps for $\widetilde{D}$, with $\widetilde{D}(t) = 0$ and $\widetilde{D}'(t) = -1$, the solution will be:
+\begin{align*}
+    \widetilde{D}(\tau) = \widetilde{A} e^{k \tau} + \widetilde{B} e^{-k \tau}
+\end{align*} 
+and solving for $\widetilde{A}$ and $\widetilde{B}$ leads to:
+\begin{align*}
+    D(\tau) = \frac{1}{2 k}(e^{k(t-\tau)} + e^{-k(t-\tau)})  = \frac{1}{k}\sinh(k(t-\tau)) 
+\end{align*}    
+Ans substituting back:
+\begin{align*}
+    I = \sqrt{\frac{k}{\pi \sinh(kt)}} \exp\left(-x^2 k \coth (kt)\right)
+\end{align*}
+
+\end{document}
+
