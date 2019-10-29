@@ -3,56 +3,73 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\section{Continuous Diffusion}
+\section{The continuum limit - part 2}
 \lesson{4}{14/10/19}
-In the last lecture, we discussed the solution of the diffusion equation:
-\begin{align*}
-    W_i(t_n) = {n\choose n^+} \frac{1}{2^n}  \xrightarrow[l, \epsilon \downarrow 0]{l^2/\epsilon = 2D} \frac{1}{\sqrt{4 \pi D t}}\exp\left(-\frac{x^2}{4Dt} \right)     
-\end{align*}
-with $x_i = l i \equiv x$, $t_n = n \epsilon \equiv t$.\\
-This is the solution of the \textit{master equation}:
-\begin{align*}
-    W_i(t_{n+1}) = \frac{1}{2}  (W_{i-1}(t_n) + W_{i+1}(t_n))
-\end{align*}  
-(in the case where the probability to walk to the right $P_+$ is equal to that for the left $P_-$).\\
 
-Then:
+\textbf{Summary of the last lessons}.
+Analysing the dynamics of the Diffusion Problem led to the Master Equation, which in the symmetrical case reduces to:
+\begin{align}
+    w_i(t_{n+1}) = \frac{1}{2}(w_{i-1}(t_n) + w_{i+1}(t_n)) 
+    \label{eqn:master_equation}
+\end{align}
+where $w_i(t_n)$ is the (mass) probability function for a particle, i.e. $w_i(t_n)$ is the probability that a particle will be at position $x_i = i\cdot l$ at time $t_n = n \cdot \epsilon$.\\
+Further evaluation, in terms of the Binomial distribution, leads to the exact solution:
+\begin{align}
+    w_i(t_n) = \frac{1}{2^n} {n\choose n_+} 
+    \label{eqn:discrete_sol}
+\end{align}
+where $n_+$ is a random variable representing the number of steps in which the particle moves to the \textit{right}.\\
+Then we considered the continuum limit, with $l, \epsilon \downarrow 0$ (keeping $l^2 \epsilon^{-1} = 2D$ constant), arriving to:
 \begin{align*}
-    W_i(t_n) = W(x,t) l
-\end{align*}
-and the probability to find a particle in $[a,b] \subset \mathbb{R}$ is given by:
-\begin{align*}
-    \mathbb{P}(x \in [a,b]) = \int_{a}^{b} W(x,t) d
+    w_i(t_n) = \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4 D t} \right) 
 \end{align*} 
-Substituting the expression for $W_i(t_n)$ in the master equation we have:
+which is the pdf for a particle that starts at $x=0$ at $t=0$.\\  
+
+The same result can be obtained by taking directly the continuum limit of the ME (\ref{eqn:master_equation}), which will lead to a differential equation that can
+\textit{then} be solved.\\
+We start by recalling that, for a fine discretization, $w_i(t_n)$ is approximately equal to the probability of being around a generic $(x,t)$ (i.e. $W(x,t)\Delta x$), up to a normalization constant:
 \begin{align*}
-    \bcancel{l} W(x,t+ \epsilon) = \frac{1}{2}\left[ W(x-l, t) + W(x+ l, t)\right]\bcancel{ l}
+    W(x_0,t_n)\Delta x = \mathbb{P}(x \in [x_0 - \Delta x/2, x_0 + \Delta x/2]) \approx \frac{\Delta x}{2l} w_{i_0}(t_n) \qquad i_0 = \lfloor \Delta x/l \rceil
+\end{align*} 
+And so, with a slight abuse of notation:
+\begin{align*}
+    w_i(t_n) \approx 2l W(x,t) \qquad i = \lfloor x/l \rceil, n = \lfloor t/\epsilon \rceil
 \end{align*}
-Expanding the first term in series about $\epsilon = 0$:
+Substituting in (\ref{eqn:master_equation})
+leads to:
+\begin{align}
+    \cancel{2l} W(x,t+\epsilon) = \cancel{2l}\frac{1}{2}(W(x-l,t) + W(x+l,t))
+    \label{eqn:master_2} 
+\end{align}
+which means that an analogous Master Equation holds even for $W(x,t)$, which is a continuous pdf, and thus can be differentiated. In particular, we can compute $W(x,t+\epsilon)$ in terms of $W(x,t)$ (and derivatives) by expanding around $\epsilon = 0$:
+\begin{align}
+    W(x,t+ \epsilon) &= W(x,t) + \epsilon \pdv{\tau}W(\chi, \tau) \Big|_{(x,t)} + \frac{\epsilon^2}{2} \pdv[2]{\tau} W(\chi, \tau)\Big|_{(x,t)} + O(\epsilon^3) \label{eqn:time_der}
+\intertext{And also $W(x \pm l, t)$ by expanding around $l = 0$:}
+W(x \pm l, t) &= W(x,t) \pm l\pdv{\chi}W(\chi,\tau)\Big|_{(x,t)} + \frac{l^2}{2} \pdv[2]{\chi} W(\chi, \tau)\Big|_{x,t} + O(l^3) \label{eqn:space_der}
+\end{align} 
+We then introduce the following notation for the space and time derivatives:
 \begin{align*}
-    W(x,t+\epsilon) = W(x,t) + \epsilon \dot{W}(x,t) + \frac{\epsilon^2}{2} \ddot{W}(x,t) + O(\epsilon^3) 
-\end{align*}  
-The same expansion can be made for the other terms:
-\begin{align*}
-    W(x \pm l, t) = W(x,t) \pm l W'(x,t) + \frac{l^2}{2} W''(x,t) + O(l^3) 
+    \dot{W}(x,t) = \pdv{\tau} W(\chi, \tau)\Big|_{(x,t)} \qquad W'(x,t) = \pdv{\chi} W(\chi, \tau)\Big|_{(x,t)}
 \end{align*}
-(we use $\dot{x}$ for $\partial_t$  and $x'$ for $\partial_x$ (?)).\\
-Summing the two we get:
+so that a space derivative is denoted with $a'$ ($a''$ for the second derivative), and a time derivative with $\dot{a}$ ($\ddot{a}$ for the second derivative).\\
+We can now substitute back in (\ref{eqn:master_2}). We start with the right side:
 \begin{align*}
     W(x+l,t) + W(x-l, t) = 2 W(x,t) + l^2 W''(x,t) + O(l^4)
 \end{align*}
-Substituting back:
+where the $O(l^4)$ is given by the cancellation of the odd powers (including $l^3$). Equating to the left side of (\ref{eqn:master_2}) leads to:  
 \begin{align*}
-    \cancel{W }+ \epsilon \dot{W} + \frac{\epsilon^2}{2} = \cancel{W} + \frac{l^2}{2} W'' + O(l^4)  
+    \cancel{W(x,t)}+ \epsilon \dot{W}(x,t) + \frac{\epsilon^2}{2} = \cancel{W(x,t)} + \frac{l^2}{2} W''(x,t) + O(l^4)  
 \end{align*}
 Dividing by $\epsilon$:
 \begin{align*}
-    \dot{W} + \frac{\epsilon}{2} \ddot{W} = \underbrace{\frac{l^2}{2 \epsilon}}_{D}  W'' + O\left(\frac{l^4}{\epsilon} \right)  
+    \dot{W}(x,t) + \frac{\epsilon}{2} \ddot{W}(x,t) &= \underbrace{\frac{l^2}{2 \epsilon}}_{D}  W''(x,t) + O\left(\frac{l^4}{\epsilon} \right)  \\
+    &= D W''(x,t) + O(4 \epsilon D^2)
 \end{align*} 
-We can now take the limit $\epsilon, l \downarrow 0$, maintaining the ratio $D = l^2/(2\epsilon)$ fixed, $\ddot{W}$ vanishes, but $W''$ remains:
+If we now take the continuum limit, then $\epsilon, l \to 0$ with the ratio $D = l^2/(2\epsilon)$ fixed, and both $\ddot{W}(x,t)$ and the error term vanish, leading to:
 \begin{align*}
-    \partial_t W = D \partial_x^2 W
+    \partial_t W(x,t) = D \partial_x^2 W(x,t)
 \end{align*}  
+
 Recall that the solution for the discrete case was:
 \begin{align*}
     \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4 D t} \right) 
