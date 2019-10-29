@@ -1,0 +1,108 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Logistic Regression}
+\lesson{6}{29/10/19}
+Simple model that can be used both in \textbf{regression} or in \textbf{classification}:
+\begin{itemize}
+    \item \textbf{Regression}: model $h\colon \mathbb{R}^d \to [0,1]$
+    \item \textbf{Classification}: interpret $h$ as the probability that the label is $1$     
+\end{itemize}  
+The hypothesis class is given by applying a \textit{non linear activation} (sigmoid $\phi_{\mathrm{sig} }$ ) to the output of an affine function $L_d$, that is: $\mathcal{H}\colon \phi_{\mathrm{sig} } \circ L_d$, with $\phi\colon \mathbb{R} \to [0,1]$, $\phi_{\mathrm{sig} }(z) = (1+e^{-z})^{-1}$.\\
+Note that:
+\begin{align*}
+    \phi_{\mathrm{sig} }(z) = \begin{cases}
+        > 1/2 & z > 0\\
+        < 1/2 & z < 0\\
+        \to 1 & z \to +\infty\\
+        \to -1 & z \to -\infty
+    \end{cases}
+\end{align*}      
+Basically, $\phi_{\mathrm{sig} }(z)$ is a \textit{scaled}, and \textit{shifted} \q{soft} sign function, that instead of \q{jumping} from $-1$ to $+1$ (\q{hard choice}) has a smooth transition.\\
+So, adding the affine function, the total model becomes:
+\begin{align*}
+    H_{\mathrm{sig} } = \phi_{\mathrm{sig} } \circ L_d = \{ \bm{x} \to \phi_{\mathrm{sig} }(\langle \bm{w}, \bm{x} \rangle) \colon \bm{w} \in \mathbb{R}^d \}
+\end{align*}
+That is, a generic function in $H_{\mathrm{sig}}$ is:
+\begin{align*}
+    h_{\bm{w}}(\bm{x}) = \frac{1}{1 + e^{-\langle \bm{w}, \bm{x} \rangle}} 
+\end{align*} 
+Let's examine the classification case, where the labels are $y = \{ \pm 1\}$. If $y = 1$, then we want, for a good model, $h_{\bm{w}}(\bm{x}) \to 1$. We can rewrite $h_{\bm{w}}$ by multiplying the exponential by $y = 1$:
+\begin{align*}
+    h_{\bm{w}}(\bm{x}) = \frac{1}{1+ e^{-\langle \bm{w}, \bm{x} \rangle}} = \frac{1}{1 + e^{-y \langle \bm{w}, \bm{x} \rangle}}  
+\end{align*}
+Then we note that $h_{\bm{w}} \to +1$ if $\langle \bm{w}, \bm{x} \rangle$ is positive and large, otherwise $h_{\bm{w}} \to 0$.\\
+In the case of $y=-1$, the probability of being in the correct class is $\mathbb{P}(-1) = 1- \mathbb{P}(1)$, i.e. we want $1- h_{\bm{w}}(\bm{x}) \to 1 \Rightarrow h_{\bm{w}}(\bm{x}) \to 0$. We can then rewrite:
+\begin{align*}
+    1-h_{\bm{w}}(\bm{x}) = 1-\frac{1}{1+ e^{-\langle \bm{w}, \bm{x} \rangle}} = \frac{1 + e^{-\langle \bm{w}, \bm{x} \rangle -1}}{1 + e^{-\langle \bm{w}, \bm{x} \rangle}} = \frac{1}{e^{\langle \bm{x}, \bm{w} \rangle} +1}  = \frac{1}{1+e^{-y \langle \bm{w}, \bm{x} \rangle}} 
+\end{align*}
+And so, for a good solution, we want $\langle \bm{w}, \bm{x} \rangle$ to be large - that is the same condition for the other case ($y = +1$). This shows that a good loss function must \textit{increase} when $\langle \bm{w}, \bm{x }\rangle$ increases, or - equivalently - as $e^{-y \langle \bm{w}, \bm{x} \rangle}$ increases. For practical reasons, related to efficiency and precision, we \q{wrap} this exponential with a logarithm, adding a $1$ to avoid a singularity:
+\begin{align*}
+    \ell (h_{\bm{w}}, (\bm{x}, y)) = \log(1 + e^{-y \langle \bm{w}, \bm{x} \rangle})
+\end{align*} 
+
+Then, the ERM problem becomes that of minimizing this loss function, i.e. finding:
+\begin{align*}
+    \arg\min_{\bm{w} \in \mathbb{R}^d} \frac{1}{m} \sum_{i=1}^{m} \log(1+ e^{-y_i \langle \bm{w}, \bm{x}_i \rangle}) 
+\end{align*}
+where $\bm{x}_i$ are elements of the training dataset.
+
+\subsection{Maximum Likelihood Estimation (MLE)}
+\textbf{MLE} is a statistical approach for finding the parameters that maximize the joint probability of a given dataset assuming a specific parametric probability function.\\
+We start with a training set $S = \{(\bm{x}_1, y_1), \dots, (\bm{x}_m, y_m)\}$, and assume that each element $(\bm{x}_i, y_i)$ is i.i.d. according to some unknown probability distribution $\mathcal{D}$  that we can model with a certain set of parameters. If we can find these parameters, we have access to a good model for predicting labels $y_i$ knowing samples $\bm{x}_i$.\\
+The idea is to compute $\mathbb{P}[S|\theta]$, i.e. the likelihood of data given the parameters (the probability of actually measuring a certain set of $S$ given the values $\theta$ of the distribution parameters). Then, for calculation simplicity, we compute the logarithm (log likelihood) $L(S;\theta) = \log(\mathbb{P}[S|\theta])$ and pick the value $\hat{\theta}$ of the parameters such that it maximizes $L(S;\theta)$:
+\begin{align*}
+    \hat{\theta} = \arg \max_{\theta} L(S;\theta)
+\end{align*} 
+We will now show that finding the ERM solution for \textit{logistic regression} is equivalent to the solving for the maximum log likelihood. We compute the probabilities of getting a label $+1$ or $-1$:
+\begin{align*}
+    \mathbb{P}[y_i = +1] &= h_{\bm{w}}(\bm{x}_i) = \frac{1}{1 + e^{-\langle \bm{x}, \bm{x}_i \rangle}} = \frac{1}{1 + e^{-y_i \langle \bm{w}, \bm{x}_i \rangle}}\\
+    \mathbb{P}[y_i = -1] &= 1 - h_{\bm{w}}(\bm{x}_i) = \frac{1}{1+ e^{\langle \bm{w}, \bm{x}_i \rangle}} = \frac{1}{1 + e^{-y_i \langle \bm{x}, \bm{x}_i \rangle}}  
+\end{align*}  
+So we can use the same expression in both cases. Then, we compute the joint probability of getting $S$ given a certain $\bm{w}$ vector, which is simply the product of all the probabilities for each element (as they are i.i.d.):
+\begin{align*}
+    \mathbb{P}[S|\bm{w}] = \prod_{i=1}^m \left(\frac{1}{1 + e^{-y_i \langle \bm{w}, \bm{x}_i \rangle}} \right) &\underset{\log}{\Rightarrow}  \sum_{i=1}^m \log \left(\frac{1}{1 + e^{-y_i \langle \bm{w}, \bm{x}_i \rangle}} \right) =\\
+    &= - \sum_{i=1}^m \log ( 1 + e^{-y_i \langle \bm{w}, \bm{x}_i \rangle}) = - \sum_{i=1}^m \ell  (h_{\bm{w}}, (\bm{x}_i, y_i))
+\end{align*}  
+Then, the maximum likelihood is given by:
+\begin{align*}
+    \arg \max_{\bm{w}} L(S; \bm{w}) = \arg\max_{\bm{w}} \log(\mathbb{P}(S|\bm{w})) = \arg\min_{\bm{w}} \sum_{i=1}^m \log(1+ e^{-y_i \langle \bm{w}, \bm{x}_i \rangle})
+\end{align*}
+
+\section{PAC learnability of infinite classes}
+We know that $|\mathcal{H}| < \infty \Rightarrow \mathcal{H}$ is PAC learnable. However, this is just a \textbf{sufficient condition} - and so there may be hypothesis classes of infinite dimension that are PAC learnable.\\
+For example, consider the set of \textit{threshold functions}: $\mathcal{H} = \{h_a, a \in \mathbb{R}\}$ with:
+\begin{align*}
+    h_a = \begin{cases}
+        1 & x < a\\
+        0 & x \geq a
+    \end{cases}
+\end{align*}   
+As $a \in \mathbb{R}$, $|\mathcal{H}| = \infty$. Denote with $\mathcal{D}_x$ the distribution that produces samples $x$, and suppose that there is an optimal model $h^*$ (i.e. such that $L_D(h^*) = 0$ - \textbf{realizability assumption}).\\
+Let $a_0, a_1 \in \mathbb{R}$ such that $a_0 < a^* < a_1$, where $a^*$ is the threshold of $h^*$. We choose $a_0$ and $a_1$ so that the probability of getting a sample in the left side ($[a_0, a^*]$) is the same ($\epsilon$) as that of the right side ($[a^*, a_1]$):
+\begin{align*}
+    \mathbb{P}_{x \sim \mathcal{D}_x}[x \in (a_0, a^*)] = \mathbb{P}_{x \sim \mathcal{D}_x}[x \in [a^*, a_1]] = \epsilon
+\end{align*}             
+
+The probability of a bad case (i.e. the algorithm learns a bad solution):
+\begin{align*}
+    \mathbb{P}_{S \sim \mathcal{D}^m} [L_D(h_S) > \epsilon] \leq \mathbb{P}_{S \sim \mathcal{D}^m} [ (h_0 < a_0) \lor (h_1 > a_1)] \underset{U.B.}{\leq} \mathbb{P}[h_0 < a_0] + \mathbb{P}[h_1 > a_1] 
+\end{align*}
+then:
+\begin{align*}
+    \mathbb{P}_{S \sim \mathcal{D}^m}[h_0 < a_0] = (1- \epsilon)^m \leq e^{-\epsilon m}
+\end{align*}
+so that:
+\begin{align*}
+    \mathbb{P}[h_0 < a_0 ] + \mathbb{P}[h_1 > a_1] \leq 2 e^{-\epsilon m}
+\end{align*}
+We can then choose $m$ so that the probability of a bad case is $\geq \delta$:
+\begin{align*}
+    -2 e^{-\epsilon m} \leq \delta \Rightarrow m \geq \frac{1}{\epsilon} \log\left(\frac{2}{\delta} \right)  
+\end{align*} 
+
+
+
+\end{document}
