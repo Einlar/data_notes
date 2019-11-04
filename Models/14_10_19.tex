@@ -3,7 +3,6 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\section{The continuum limit - part 2}
 \lesson{4}{14/10/19}
 
 \textbf{Summary of the last lessons}.
@@ -20,12 +19,14 @@ Further evaluation, in terms of the Binomial distribution, leads to the exact so
 \end{align}
 where $n_+$ is a random variable representing the number of steps in which the particle moves to the \textit{right}.\\
 Then we considered the continuum limit, with $l, \epsilon \downarrow 0$ (keeping $l^2 \epsilon^{-1} = 2D$ constant), arriving to:
-\begin{align*}
-    w_i(t_n) = \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4 D t} \right) 
-\end{align*} 
-which is the pdf for a particle that starts at $x=0$ at $t=0$.\\  
+\begin{align}
+    w_i(t_n) = \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4 D t} \right)
+    \label{eqn:solution-from-discrete} 
+\end{align} 
+which is the pdf for a particle that starts at $x=0$ at $t=0$.
 
-The same result can be obtained by taking directly the continuum limit of the ME (\ref{eqn:master_equation}), which will lead to a differential equation that can
+\section{Continuum limit of the Master Equation}
+The same result can be obtained by taking directly the continuum limit of the ME (\ref{eqn:master_equation}), which will lead to a differential equation that can \marginpar{Not so sure about this part}
 \textit{then} be solved.\\
 We start by recalling that, for a fine discretization, $w_i(t_n)$ is approximately equal to the probability of being around a generic $(x,t)$ (i.e. $W(x,t)\Delta x$), up to a normalization constant:
 \begin{align*}
@@ -65,67 +66,57 @@ Dividing by $\epsilon$:
     \dot{W}(x,t) + \frac{\epsilon}{2} \ddot{W}(x,t) &= \underbrace{\frac{l^2}{2 \epsilon}}_{D}  W''(x,t) + O\left(\frac{l^4}{\epsilon} \right)  \\
     &= D W''(x,t) + O(4 \epsilon D^2)
 \end{align*} 
-If we now take the continuum limit, then $\epsilon, l \to 0$ with the ratio $D = l^2/(2\epsilon)$ fixed, and both $\ddot{W}(x,t)$ and the error term vanish, leading to:
-\begin{align*}
-    \partial_t W(x,t) = D \partial_x^2 W(x,t)
-\end{align*}  
+If we now take the continuum limit, then $\epsilon, l \to 0$ with the ratio $D = l^2/(2\epsilon)$ fixed, both $\ddot{W}(x,t)$ and the error term vanish, leading to the \textbf{diffusion equation}: 
+\begin{align}
+    \dot{W}(x,t) = D W''(x,t)
+    \label{eqn:diffusion-equation}
+\end{align}  
 
-Recall that the solution for the discrete case was:
-\begin{align*}
-    \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{x^2}{4 D t} \right) 
-\end{align*}
-We want now to check if this solution can be derived from the equation in the continuum limit, without having to resort to a discretization.\\
+\subsection{Solution of the Continuous Master Equation}
+We want now to solve (\ref{eqn:diffusion-equation}), and show that the solution will be the same we previously derived in (\ref{eqn:solution-from-discrete}).\\
 So, we start from:
 \begin{align*}
     \partial_t W(x,t) = D \partial_x^2 W(x,t)
 \end{align*}
-and we search a solution in the field of reals ($\mathbb{R}$), so that the boundary condition becomes:
+This is a second order partial differential equation. To be able to solve it, we must first define its \textbf{boundary conditions}. In this case, we suppose that the particle is unconstrained, and so the spatial domain coincides with $\mathbb{R}$.\\
+As $W(x,t)$ is a pdf, the following conditions must hold:
 \begin{align*}
-    \lim_{|x| \to \infty} W(x,t) = 0
-\end{align*}
-as the probability that the particle is somewhere should be one:
+    W(x,t) \geq 0 \quad \forall (x,t) \qquad \int_{\mathbb{R}} W(x,t) = 1
+\end{align*}   
+From the normalization, it follows that $W(x,t)$ - and its spatial derivative $W'(x,t)$ - must vanish as $|x| \to \infty$, so that the integral does not diverge:
 \begin{align*}
-    \int_{\mathbb{R}} W(x,t) \dd{x} = 1
-\end{align*}
+    \lim_{|x| \to \infty} W(x,t) = 0 \qquad \lim_{|x| \to \infty} W'(x,t) = 0
+\end{align*}   
+However, it is not obvious that $W(x,t) \geq 0$ will always hold, assuming we choose an initial condition $W(x,t_0) \geq 0$. This will be obvious \textit{a posteriori} - and in fact can justified by the peculiar properties of this differential equation.\\
 
-If we had a semi-infinite domain, like $[0, \infty)$, we would have to choose a certain boundary condition at $0$. For example, one could choose a \textit{reflective} boundary, so that a particle reaching $0$ cannot cross it, and remains stationary until it moves right again. Otherwise, an \textit{absorbing} boundary would \textit{remove} every particle that attempts to cross $0$.\\
+To solve (\ref{eqn:diffusion-equation}), as the spatial domain is all $\mathbb{R}$, one standard technique is that of Fourier integral transform, which allows to \q{remove} derivatives: $\partial_x \psi \to ik\psi$, $\partial_{xx} \to -k^2 \psi$. Thus, if we can \q{remove} the second-order space derivative, we will be left with a much more simpler first order differential equation in the time variable.
 
-Note also that $W(x,t)$ needs to be $\geq 0$, as it is a probability density. However, it is not clear if the time evolution, given by solving the differential equation, will satisfy $W(x,t) \geq 0 \quad \forall t$, if one start with a $W(x,0) > 0$.\\
-Fortunately, that is guaranteed by the nature of that partial differential equation.\\
+\begin{expl}
+    \textbf{Translational invariance}. This approach is suggested by the translational invariance of solutions of (\ref{eqn:diffusion-equation}). In fact, if $W(x,t)$ is a solution, then also $\tilde{W}(x,t) = W(x-a,t)$ is a solution.\\
+    The generator of the translations is the \textit{momentum}, and its eigenfunctions are the \textit{plane waves}, i.e. the Fourier basis. So, by expressing a function in this base, we will harness the equation's symmetry - simplifying the problem.\\
+    In other words, the Fourier basis diagonalizes the Laplacian operator which appears in (\ref{eqn:diffusion-equation}):
+    \begin{align*}
+        \partial_x^2 \varphi_k(x) = \lambda_k \varphi_k(x) \qquad \lambda_k \equiv -k^2 \qquad \varphi_k(x) = A_k e^{\pm i k x}, k \in \mathbb{R}
+    \end{align*}
+    In a general case, the Fourier integral trick can be tried for every variable, starting from the one with the higher order derivative, and then the case which leads to the most simplification can be pursued.
+\end{expl}
 
-Note that the equation is translationally invariant, meaning that if $W(x,t)$ is a solution, also $W(x + y,t)$ is a solution. This is because the space coordinate appears only in a \textit{second-order derivative}.\\
-This suggests a way to solve the equation, by starting from the eigenfunctions of the laplacian, i.e. the solutions of the eigenvalue equation:
-\begin{align*}
-    \partial_x^2 \varphi_k(x) = \lambda_k \varphi_k(x) \qquad \lambda_k \equiv -k^2
-\end{align*}
-which are:
-\begin{align*}
-    \varphi_k(x) = A_k e^{\pm i k x} \qquad k\in \mathbb{R}
-\end{align*}
-as can easily be checked by substitution.\\
-Note that, as $k \in \mathbb{R}$, the $\pm$ is redundant and can be removed:
-\begin{align*}
-    \varphi_k(x) = A_k e^{ikx}
-\end{align*}  
-These eigenfunctions are the basis of the Fourier transform - that is every function can be expressed as a (infinite) linear combination of these $\varphi_k(x)$.\\
-We choose $A_k = 1$ for simplicity, and then:
-\begin{align*}
-    W(x,t) = \int_{\mathbb{R}} \frac{dk}{2 \pi} e^{ikx} c_k(t) 
-\end{align*}  
-where the $2\pi$ factor is inserted by convention (as in Fourier transforms).\\
-Recall the orthogonality relation:
-\begin{align*}
-    \int_{\mathbb{R}} \dd{x} \varphi_k(x)^* \varphi_{k'}(x) = \int_{\mathbb{R}} \dd{x} e^{i(k'-k)x} = 2\pi \delta(k-k')
-\end{align*} 
-and also:
-\begin{align*}
-    \int_{\mathbb{R}} \frac{\dd{k}}{2 \pi} \varphi_k(x)^* \varphi_k (x') = \dots = \delta(x-x') 
-\end{align*}
-So, by multiplying both sides by $e^{-ik'x}$ and integrate over $x$ we get:
+We start by rewriting $W(x,t)$ as a (infinite) linear combination of vectors of the Fourier basis: 
+\begin{align}
+    W(x,t) = \int_{\mathbb{R}} \frac{\dd{k}}{2 \pi} e^{ikx} c_k(t) 
+    \label{eqn:fourier-w}
+\end{align}
+where the $2\pi$ factor is just a normalization convention.\\
+Let $\varphi_k(x) = e^{ikx}$. Then, as the Fourier basis is orthonormal, the following holds (recalling the Fourier transform of the $\delta$ function):
+\begin{align}\label{eqn:fourier-ON}
+    \langle \varphi_k, \varphi_{k'} \rangle &= \int_{\mathbb{R}} \dd{x} \varphi_k^*(x) \varphi_{k'}(x) = \int_{\mathbb{R}} \dd{x} e^{i(k'-k)x} = 2\pi \delta(k-k')\\ \nonumber
+    \langle \tilde{\varphi}_x, \tilde{\varphi}_{x'} \rangle &= \int_{\mathbb{R}} \dd{k} \varphi_k^*(x) \varphi_k(x') = 2 \pi\delta(x-x') 
+\end{align} 
+We then apply a Fourier transform to both members of (\ref{eqn:fourier-w}), by multiplying by $e^{-ik'x}$ and integrating over $x$:
 \begin{align*}
     \int_{\mathbb{R}} W(x,t) e^{-ik'x} \dd{x} = \int_{\mathbb{R}} \frac{\dd{k}}{2\pi}  \int_{\mathbb{R}} \dd{x} e^{i(k-k')x} c_k(t)
 \end{align*}  
-and we can apply the orthogonality relation, arriving to:
+If we now apply the ON relation (\ref{eqn:fourier-ON}) we can solve the integral in the right side:
 \begin{align*}
     \int_{\mathbb{R}} W(x,t) e^{-ik'x}\dd{x} = \int_{\mathbb{R}} \dd{k} \delta(k-k') c_k(t) = c_{k'}(t)
 \end{align*}
