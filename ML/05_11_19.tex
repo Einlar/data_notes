@@ -1,0 +1,118 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{VC-Dim of linear functions}
+\lesson{8}{05/11/19}
+Let's now consider a more interesting example - the set of \textit{linear models}, i.e. of \textit{hyperplanes} dividing a certain space $\mathbb{R}^d$ in two halves.\\
+We will now show that, for the \textit{homogeneous halfspaces} in $\mathbb{R}^d$, the VC-dim is $d$.\\
+We start by showing that VC-dim$(\mathcal{H}) \geq d$, i.e. there exists a set of size $d$ that is shattered by $\mathcal{H}$.
+
+Denote with $\{\bm{e}_i\}_{i=1,\dots,d}$ the $d$ vectors of the canonical basis of $\mathbb{R}^d$ ($\bm{e}_i = (0,\dots,0,1,0,\dots,0)^T$, where the $1$ is at the $i$-th position). Shatter a set means that it is possible to realize \textit{every possible labelling} with an appropriate choice for the halfspace. This can be done by simply choosing $\bm{w} = (y_1, \dots, y_d)$, where $(y_1, \dots, y_d)$ is the desired labelling. In fact, this choice leads to:
+\begin{align*}
+    \langle \bm{w}, \bm{e}_i \rangle = 0\cdot y_1 + 0 \cdot y_2 + \dots + 1 \cdot y_i + \dots + 0 \cdot y_d = y_i
+\end{align*}  
+And so it is possible to label all $\bm{e}_i$ in every possible way.
+
+Then, we show that $\operatorname{VC-dim}(\mathcal{H}) < d+1$, i.e. every set of $d+1$ elements can't be shattered. Let's consider $d+1$ vectors in $\mathbb{R}^d$  $\bm{x}_1, \dots, \bm{x}_{d+1}$, which will obviously be \textit{linearly dependent}. So, there exists a choice of coefficients $a_i$, not all equal to zero, that satisfies:
+\begin{align*}
+    \sum_{i=1}^{d+1} a_i \bm{x}_i = 0 \qquad \exists a_i \neq 0
+\end{align*}  
+Then we define $I=\{i\colon a_i > 0\}$, $J = \{j\colon a_j < 0\}$. Because there is at least an $a_k \neq 0$, $I$ and $J$ cannot possibly be both empty at the same time. Also, the following holds:
+\begin{align}
+    \sum_{i=1}^{d+1} a_i \bm{x}_i = 0 \Rightarrow \sum_{i\in I} a_i \bm{x}_i = \sum_{j\in J} |a_j| \bm{x}_j
+    \label{eqn:indices}
+\end{align}
+
+We now proceed by contradiction. Suppose there is a set that can be shattered. Then, there exists a $\bm{w}$ such that $\langle \bm{w},  \bm{x}_i \rangle > 0 \> \forall i \in I$, and $\langle \bm{w}, \bm{x}_j \rangle < 0 \> \forall j \in J$ (*), as this is just one of the possible labellings we can have (label $+1$ the vectors $\bm{x}_i$ with $i \in I$, and $-1$ those $\bm{x}_j$  with $j \in J$). But then:
+\begin{align*}
+    0 < \sum_{i\in I} \underbrace{a_i}_{>0} \underbrace{\langle \bm{x}_i, \bm{w} \rangle}_{>0} = \langle \sum_{i\in I} a_i \bm{x}_i, \bm{w} \rangle \underset{(\ref{eqn:indices})}{=}   \langle \sum_{j\in J} |a_j| \bm{x}_j, \bm{w} \rangle = \sum_{j\in J} \underbrace{|a_j|}_{>0}  \underbrace{\langle \bm{x}_j, \bm{w} \rangle}_{<0 (*)}  < 0
+\end{align*}    
+which is obviously a contradiction. This is the case where both $I$ and $J$ are not empty. If one of them is empty, then one of the $<$ will become a $\leq$. However, as $I$ and $J$ cannot possibly be both empty, $0 \leq \dots \leq 0$ cannot happen - and the contradiction always remains.\\
+
+Again, the VC-dimension here corresponds to the number $d$ of parameters. But this is not always true, as we will see in the next section.\\
+A simple way to see that is also to consider models with \textit{redundant parameters}, such as: $ax^2 + bx + cx$. Obviously, $c$ does not add more flexibility, as it is completely equivalent to $b$. Thus, in this case, adding a parameter \textit{does not increase} the VC-dim.     
+
+\section{The square wave}
+Consider the set of hypotheses: $\mathcal{H}=\{h_\theta\colon \theta \in \mathbb{R}\}$, with $h_\theta\colon \mathcal{X} \to \{0,1\}$, $h_\theta = \lceil 0.5 \sin(\theta x)\rceil$. This is just a square wave between $0$ and $1$   with controllable frequency. It can be showed that $\mathcal{H}$ has a infinite VC-dim, even if it involves a single parameter! 
+
+\section{Fundamental Theorem of Statistical Learning}
+Let $\mathcal{H}$ be a hypothesis class of functions from $\mathcal{X}$ to $\{0,1\}$ and let the loss function be the $0-1$ loss. Then, the following statements are equivalent:
+\begin{enumerate}
+    \item $\mathcal{H}$ has the \textbf{uniform convergence} property
+    \item Any ERM rule is a successful \textbf{agnostic PAC learner} for $\mathcal{H}$
+    \item $\mathcal{H}$ is \textbf{agnostic PAC learnable}
+    \item $\mathcal{H}$ is \textbf{PAC learnable}
+    \item Any ERM rule is a successful \textbf{PAC learner} for $\mathcal{H}$
+    \item $\mathcal{H}$ has \textbf{finite VC dimension}            
+\end{enumerate}
+
+\textbf{Proof}. Note that $1 \Rightarrow 2 \Rightarrow 3$ was already been demonstrated when introducing the concept of \textit{uniform convergence} (V.C. theorem).\\
+For $3 \Rightarrow 4$. $\mathcal{H}$ can be realizable or not. If it is, then recall that the agnostic PAC learner definition states that:
+\begin{align*}
+    L_D(h) < \min_{h' \in \mathcal{H}} L_D(h') + \epsilon
+\end{align*}   
+but the realizability implies that $\min = 0$, and so the expression becomes:
+\begin{align*}
+    L_D(h) < \epsilon
+\end{align*} 
+which is the same requirement for a PAC learner. 
+If realizability does not hold, then PAC does not apply. So it is true, in a logical sense, that agnostic PAC implies PAC.
+
+A similar reasoning proves $2 \Rightarrow 5$. For $4 \Rightarrow 6$, or $5 \Rightarrow 6$, we proceed by contradiction, recalling that $\operatorname{VCdim}(\mathcal{H}) = \infty $ implies \textbf{not} PAC (corollary of the no-free-lunch theorem).
+
+Finally $6 \Rightarrow 1$ is the most difficult proof. We only summarize it in the following:
+\begin{itemize}
+    \item If $\operatorname{VCdim}(\mathcal{H}) = d$, even if $|\mathcal{H}|$ is infinite, we can restrict $\mathcal{H}$ to a finite set $C$, obtaining a $\mathcal{H}_C$ which has a \textit{finite size} $|\mathcal{H}_C| = O(|C|^d)$, with $d$ fixed. So, $|\mathcal{H}_c|$ grows polynomially with $|C|$, and not exponentially (\textbf{Sauer's lemma}).
+    \item Finite hypothesis classes enjoy the uniform convergence property. This can be generalized by showing that uniform convergence holds whenever the hypothesis class has a \q{small effective size} (in particular, classes for which $|\mathcal{H}_C|$ grows polynomially with $|C|$)          
+\end{itemize}
+
+\subsection{Quantitative Form}
+Let $\mathcal{H}$ be a hypothesis class of functions from $\mathcal{X}$ to $\{0,1\}$ and let the loss function be the $0-1$ loss. Assume that $\operatorname{VCdim}(\mathcal{H}) = d < \infty$. Then, there are absolute constants $C_1$ and $C_2$ such that:
+\begin{enumerate}
+    \item $\mathcal{H}$ has the uniform convergence property with sample complexity:
+    \begin{align*}
+        C_1 \frac{d + \log(\delta^{-1})}{\epsilon^2} \leq m_{\mathcal{H}}^{\mathrm{UC}} (\epsilon, \delta) \leq C_2 \frac{d + \log(\delta^{-1})}{\epsilon^2}  
+    \end{align*} 
+    Note that now $m_{\mathcal{H}}$ depends only on the VCdim, which is usually much lower than $|\mathcal{H}|$. So, this bound is much stricter than the one from uniform convergence:
+    \begin{align*}
+        m_{\mathcal{H}}^{\mathrm{UC}} (\epsilon, \delta) \leq \frac{2 \log(2 |\mathcal{H}|/\delta)}{\epsilon^2} = 2 \frac{\log(2 |\mathcal{H}|) + \log(\delta^{-1})}{\epsilon^2}  
+    \end{align*}   
+    \item $\mathcal{H}$ is agnostic PAC learnable with sample complexity:
+    \begin{align*}
+        C_1 \frac{d + \log(\delta^{-1})}{\epsilon^2} \leq m_{\mathcal{H}}(\epsilon, \delta) \leq C_2 \frac{d + \log(\delta^{-1})}{\epsilon^2}      
+    \end{align*} 
+    \item $\mathcal{H}$ is PAC learnable with sample complexity:
+    \begin{align*}
+        C_1 \frac{d + \log(\delta^{-1})}{\epsilon} \leq m_{\mathcal{H}}^{\mathrm{UC}} (\epsilon, \delta) \leq C_2 \frac{d \log (\epsilon^{-1}) + \log(\delta^{-1})}{\epsilon}  
+    \end{align*} 
+\end{enumerate}
+
+Let $\mathcal{H}$ be a hypothesis class. Then the \textbf{growth function} of $\mathcal{H}$, denoted $\tau_{\mathcal{H}} \colon \mathbb{N} \to \mathbb{N}$ is defined as:
+\begin{align*}
+    \tau_{\mathcal{H}}(m) = \max_{C \subset \mathcal{X}\colon |C| = m} |\mathcal{H}_C|
+\end{align*}    
+$\tau_{\mathcal{H}}(m)$ is the number of different functions from a set $C$ of size $m$ to binary labels $\{0,1\}$ that can be obtained by restricting $\mathcal{H} \to C$ (i.e. all the possible functional labellings that can be learned).\\
+\textbf{Sauer's lemma} states that, for a hypothesis class $\mathcal{H}$ with $\operatorname{VCdim}(\mathcal{H}) \leq d < \infty$ the following holds:
+\begin{align*}
+    \tau_{\mathcal{H}} (m) \leq \sum_{i=0}^d {m \choose i} \quad \forall m
+\end{align*} 
+In particular, if $ m > d +1 $ then:
+\begin{align*}
+    \tau_{\mathcal{H}}(m) \leq \left(\frac{e m }{d} \right)^d
+\end{align*}  
+i.e. it grows polynomially (not exponentially!) with $m$.\\
+
+This is useful for the next result. For every distribution $\mathcal{D}$ and every $\delta \in (0,1)$, with probability $\geq 1-\delta$ (over the choice of training sets $S \sim \mathcal{D}^m$), for all hypotheses $h \in \mathcal{H}$ we have:
+\begin{align*}
+    |L_{\mathcal{D}}(h) - L_S(h)| \leq \frac{4 + \sqrt{\log(\tau_{\mathcal{H}}(2m))}}{\delta \sqrt{2m}} 
+\end{align*}     
+
+
+    
+
+
+
+
+\end{document}
