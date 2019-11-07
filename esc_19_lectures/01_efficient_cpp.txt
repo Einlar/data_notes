@@ -1,0 +1,90 @@
+Efficient C++ Programming
+https://baltig.infn.it/giaco/cpp-esc19
+
+//example iterator and ranges
+std::array<int,3> a = {123, 456, 789}; //3 must be a const expr (known at compile time)
+//C++17: std::array a = {123, 456, 789}; //Constructor Type Array Deduction
+auto first = a.begin();     //first iterator moves
+auto const last = a.end();  //last iterator is kept constant
+while (first != last) {
+    doSomething(*first);
+    ++first; //advance iterator
+}
+
+//implementation of find:
+template <class Iterator, class T>
+Iterator
+find (Iterator first, Iterator last, const T& value)
+{
+    for(; first!= last; ++first)
+        if (*first == value)
+            break;
+    return first;
+}
+
+the only things required by find are:
+-iterator has to be comparable (!=)
+-can be advanced (++)
+-can be dereferenced (*)
+-must point at something that is comparable (* ==)
+
+std::forward_list<T>::iterator models a list that is connected by links, where each elements "now" what comes next. This supports random insertion, while maintaining valid pointers to other elements (which does not happen in vector, as element insertion will move other elements, invalidating their pointers).
+
+Sum over std::vector v:
+std::accumulate(std::begin(v), std::end(v), 0) //sum elements in order
+std::reduce(std:begin(v), std::end(v)) //sum elements, not necessarily in their order (can be parallelized)
+
+std::list<int>l;
+std::partial_sum(std::begin(v), std::end(v), std::back_inserter(l));
+//computes partial sums and store them in the list l (back_inserter is like a push_back for a vector)
+
+
+sequential reduce:
+std::reduce(std::execution::seq, std::begin(v), std::end(v), 0)
+//print the result!
+
+parallel reduce:
+std::reduce(std::execution::par, std::begin(v), std::end(v), 0);
+//print the result!
+
+Compile with:
+g++ -Wall -Wextra -Ofast algo_par.cpp -o algo_par -std=c++17 -ltbb
+
+//The explicit keyword
+struct S
+{
+    S(int i) {};
+};
+
+auto f(S) {};
+
+auto g() {
+    f(1);
+}
+
+This works, because f(1) can implicitly convert the integer to a structure instance. To disable this behaviour one should add the explicit keyword:
+
+struct S
+{
+    explicit S(int i) {};
+};
+
+auto f(S) {};
+
+auto g() {
+    f(1);
+}
+//This gives an error
+
+
+class LessThan {
+    int m_;
+    public:
+        explicit LessThan(int m) : m_{m} {}
+        auto operator() (int n) const {
+            return n < m_;
+        }
+};
+
+auto b1 = LessThan{42}(32); //true
+auto b2 = LessThan{24}(32); //false

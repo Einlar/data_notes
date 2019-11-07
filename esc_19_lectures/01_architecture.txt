@@ -1,0 +1,45 @@
+cd esc/hands-on/architecture
+c++ -Wall -O2 branchPredictor.cpp //compile (with optimization order 2), to run on the most general architectures (Intel for last 20 years). So the compiler cannot know how to do optimize the code.
+
+time ./a.out 
+13.696s 
+
+time ./a.out 42
+2.242s
+//if argc > 0, array is sorted before loop. This results in a much faster execution
+
+~/pmu-tools/toplev.py (-l [1-3]) --single-thread ./a.out
+//-v shows all the metrics from one level (see frame 17 of 01.pdf), otherwise it just shows the main categories ("above threshold", like Frontend_>Bound, Bad_Speculation, Backend_Bound). The highest one is highlighted, which - in this case - it is Bad_Speculation (42.82). 
+
+ex.
+~/pmu-tools/toplev.py -l3 --single-thread ./a.out
+Backend_Bound with Bad_Speculation.Branch_Mispredicts
+
+~/pmu-tools/toplev.py -l3 --single-thread ./a.out 42
+Frontend_Bound.Frontend_Bandwidth.DSB
+
+c++ -Wall -O3 -march=native branchPredictor.cpp
+//compile for this specific architecture (use -march=rubbish to see all available architectures)
+//with -O3, the code is compiled as branchless, and the difference disappears (also with -Ofast)
+
+Branchless version:
+sum += (test[c] >= 128) ? test[c] : 0;
+
+
+Compile with -g (debug option):
+c++ -Wall -O2 -march=native -g branchPredictor.cpp
+
+~/pmu-tools/toplev.py -l3 --single-thread --show-sample ./a.out
+then execute the suggested command (after Sampling:)
+show the file with: perf report
+select the interesting line (.main) and press 'a' to see the debug
+
+perf stat -d -d -d ./a.out //show statistics
+
+./doOCPerf 'python randgNP.py' //show more statistics
+
+note that randg.py does more instructions per cycle (2.54), with numpy it uses 1.71, however it takes much less!
+
+Note: you can do everything perfect (without branch misses, backend stalling, frontend stalling...) but slow! So the first take-away is: identify where the program runs for most of the time, and delete that line!
+
+

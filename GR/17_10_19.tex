@@ -1,0 +1,288 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Mathematical Description of Curved Spacetime}
+\lesson{5}{17/10/19}
+We want to extend all the mathematical framework (4-vectors, tensors, coordinate transforms) to a \textit{curved spacetime}.
+
+\subsection{Coordinates \& Coordinate Singularities}
+We know that the \textit{metric} defines spacetime - as it defines how to compute distances between events. However, the explicit specification of a metric depends on the coordinates. This leads to some difficulties: for example, it is not trivial to know if two different expressions represent the same spacetime or not.
+
+\begin{example}[Euclidean plane]
+    In cartesian coordinates $\{x, y\}$, the line-element of a Euclidean plane is:
+    \begin{align*}
+        \dd{s}^2 = \dd{x}^2 + \dd{y}^2
+    \end{align*} 
+    Denoting $x^1 \equiv x$ and $x^2 \equiv y$ we get:
+    \begin{align*}
+        \dd{s}^2 = (\dd{x^1})^2 + (\dd{x^2})^2 = \left(\begin{array}{cc}
+        \dd{x^1} & \dd{x^2}
+        \end{array}\right)
+        \left(\begin{array}{cc}
+        1 & 0 \\ 
+        0 & 1
+        \end{array}\right)
+        \left(\begin{array}{c}
+        \dd{x^1} \\ 
+        \dd{x^2}
+        \end{array}\right) = \dd{x^\mu} g_{\mu \nu} \dd{x^\nu}
+    \end{align*}  
+    Now, consider the change of coordinates $\{x,y\} \to \{r, \theta\}$ with:
+    \begin{align*}
+        \begin{cases}
+            x = r \cos \theta\\
+            y = r \sin \theta
+        \end{cases}
+    \end{align*}
+    Differentiating we get:
+    \begin{align*}
+        \dd{x} &= \dd{r} \cos \theta - r \sin \theta \dd{\theta}\\
+        \dd{y} &= \dd{r} \sin\theta + r \cos\theta \dd{\theta}
+    \end{align*}
+    And then we can compute the line-element:
+    \begin{align*}
+        \dd{s}^2 &= \dd{x}^2 + \dd{y}^2 = (\dd{r}\cos \theta - r \sin \theta \dd{\theta})^2 + (\dd{r} \sin \theta + r \cos \theta \dd{\theta})^2 = \\
+        &= \dd{r}^2 \cos^2 \theta - 2 r \cos \theta \sin \theta \dd{r} \dd{\theta} + r^2 \sin^2 \theta \dd{\theta}^2 +\\
+        &+ \dd{r}^2 \sin^2 \theta + 2r \cos \theta \sin \theta \dd{\theta} \dd{r} + r^2 \cos^2 \theta \dd{\theta}^2 = \\
+        &= \dd{r}^2 + r^2 \dd{\theta}^2 
+    \end{align*}
+    Summarizing:
+    \begin{align*}
+        g_{\mu \nu} &= \left(\begin{array}{cc}
+        1 & 0 \\ 
+        0 & 1
+        \end{array}\right) \text{ in cartesian coordinates}\\
+        g_{\mu \nu} &= \left(\begin{array}{cc}
+        1 & 0 \\ 
+        0 & r^2
+        \end{array}\right) \text{ in polar coordinates}
+    \end{align*}
+    Note how it is not trivial to know that these two expression represent, in fact, the \textit{same metric}.    
+\end{example}
+
+One way to solve this problem is to define and compute \textit{scalar quantities}, that \textit{do not change after a coordinate transform}.\\
+
+Note, however, that coordinate transforms can introduce a bigger problem. Note how $g_{\mu \nu}$ for an Euclidean plane in polar coordinates is singular at $r=0$, as here its inverse $g^{\mu \nu}$ does not exist (at $r= \theta$, all values of $\theta$ collapses to the same point: the origin). Thus, a coordinate transform can add \textit{singularities} to the metric - even when there isn't anything wrong with the space itself (like in the Euclidean plane). This only means that we are using a \textit{bad description of space} at that point.
+
+\begin{example}[Spherical coordinates in $d=3$] 
+    Consider a point $P$ in the Euclidean $3$D space. The position of $P$ in spherical coordinates is given by:
+    \begin{align*}
+        \begin{cases}
+            x = r \sin \theta \cos \varphi\\
+            y = r\sin \theta \sin\varphi\\
+            z = r\cos \theta
+        \end{cases} \qquad \theta \in [0, \pi), \> \varphi \in [0, 2 \pi)
+    \end{align*}  
+    If we compute the line-element we get:
+    \begin{align*}
+        \dd{s}^2 = \dd{r}^2 + r^2 \dd{\theta}^2 + r^2 \sin^2 \theta \dd{\varphi}^2
+    \end{align*}
+    And so the metric becomes:
+    \begin{align*}
+        g_{\mu \nu} &= \left(\begin{array}{ccc}
+        1 & 0 & 0 \\ 
+        0 & 1 & 0 \\ 
+        0 & 0 & 1
+        \end{array}\right) \text{ in cartesian coordinates}\\
+        g_{\mu \nu} &= \left(\begin{array}{ccc}
+        1 & 0 & 0 \\ 
+        0 & r^2 & 0 \\ 
+        0 & 0 & r^2 \sin^2 \theta
+        \end{array}\right) \text{ in spherical coordinates}
+    \end{align*}
+    Notice that the polar metric is singular at $r=0$, and along the $z$-axis ($\theta = 0$).  
+\end{example}
+
+\subsection{General Coordinate Transformations}
+Consider a general transformation from a coordinate system $\{x^\mu\}$ to another coordinate system $\{x'^\mu\}$. We denote the transformation as $x'^\mu (x^\alpha)$ or $x'(x)$.\\
+We want to leave the $4$-distance invariant, that is:
+\begin{align*}
+    \dd{s}^2 = g_{\alpha \beta} \dd{x}^\alpha \dd{x}^\beta = g'_{\mu \nu} \dd{x'}^\mu \dd{x'}^\nu
+\end{align*}     
+Then we can infer a relation for $g'_{\mu \nu}$ after the change of coordinates $x \to x'(x)$:
+\begin{align*}
+    g_{\mu \nu} \to g'_{\mu \nu} = \dv{x^\alpha}{x'^\mu} \pdv{x^\beta}{x'^\nu} g_{\alpha \beta}
+\end{align*} 
+The differential itself changes according to the chain-rule:
+\begin{align*}
+    \dd{x^\mu} \to \dd{x'^\mu} = \pdv{x'^\mu}{x^\alpha} \dd{x^\alpha}
+\end{align*}
+
+We can now generalize the rule for transforming tensors:
+\begin{align*}
+    \dd{x'^\mu} = \Lambda^\mu_{\diamond \alpha}\dd{x}^\alpha \Rightarrow \dd{x'^\mu} = \pdv{x'^\mu}{x^\alpha} \dd{x^\alpha}
+\end{align*}
+where $\dd{x^\mu}$ is a rank $(1,0)$ tensor.
+\begin{align}
+    \eta_{\mu \nu}' = \Lambda_\mu^{\diamond \alpha} \Lambda_\nu^{\diamond \beta} \eta_{\alpha \beta} \Rightarrow g'_{\mu \nu} = \pdv{x^\alpha}{x'^\mu} \pdv{x^\beta}{x'^\nu} g_{\alpha \beta}
+    \label{eqn:metric-change}
+\end{align}  
+where $g_{\mu \nu}$ is a rank $(0,2)$ tensor.\\
+Note how contra-variant tensors transform according to $\partial_x x'$, while co-variant tensors according to $\partial_{x'} x$:
+\begin{align}
+    g^{\mu \nu} \to g'^{\mu \nu} = \pdv{x'^\mu}{x^\alpha} \pdv{x'^\nu}{x^\beta} g^{\alpha \beta}
+    \label{eqn:inverse-metric-change}
+\end{align}  
+where $g^{\mu \nu}$ is a rank $(2,0)$ tensor.\\
+
+\textbf{Proof.} We want to show that:
+\begin{align*}
+    g^{\mu \nu} g_{\nu \lambda} = \delta^\mu_{\diamond \lambda} \Rightarrow g'^{\mu \nu} g'_{\nu \lambda} = \delta^\mu_{\diamond \lambda}
+\end{align*}
+supposing that $g_{\mu \nu}$ transforms according to (\ref{eqn:metric-change}), and $g^{\mu \nu}$ according to (\ref{eqn:inverse-metric-change}):
+\begin{align*}
+    \delta^\mu_{\diamond \nu} \overset{?}{=}  g'^{\mu \nu}g_{\nu \lambda} = \pdv{x'^\mu}{x^\alpha} \hlc{Yellow}{\pdv{x'^\nu}{x^\beta}} g^{\alpha \beta} \hlc{Yellow}{\pdv{x^\sigma}{x'^\nu} }\pdv{x^\tau}{x'^\lambda} g_{\sigma \tau}
+\end{align*}  
+Note that, from the chain rule:
+\begin{align*}
+    \pdv{x^\sigma}{x'^\nu} \pdv{x'^\nu}{x^\beta} = \pdv{x^\sigma}{x^\beta} = \delta^\sigma_{\diamond \beta}
+\end{align*}
+meaning that:
+\begin{align*}
+    \left(\pdv{x^\sigma}{x'^\nu}\right) = \left(\pdv{x'^\nu}{x^\sigma}\right)^{-1}
+\end{align*}
+Substituting in the main equation:
+\begin{align*}
+    = \pdv{x'^\mu}{x^\alpha} \hlc{Yellow}{\delta^\sigma_{\diamond \beta}}g^{\alpha \beta}\pdv{x^\tau}{x'^\lambda} g_{\sigma \tau} \underset{(a)}{=}  \pdv{x'^\mu}{x^\alpha}g^{\alpha \beta} \pdv{x^\tau}{x'^\lambda} g_{\beta \tau} \underset{(b)}{=}  \pdv{x'^\mu}{x^\alpha} \delta^\alpha_{\diamond \tau} \pdv{x^\tau}{x'^\lambda} = \pdv{x'^\mu}{x^\alpha}\pdv{x^\alpha}{x'^\lambda} = \delta^{\mu}_{\diamond \lambda}
+\end{align*}
+In (a) note that $\delta^\sigma_{\diamond \beta} g_{\sigma \tau} = g_{\beta \tau}$ (in a certain sense $\delta^{\sigma}_{\diamond \beta}$ just \textit{changes} an index $\sigma \to \beta$).\\
+Then in (b) we use the premise $g^{\alpha \beta}g_{\beta \tau} =\delta^\alpha_{\diamond \tau}$.
+
+\begin{example}
+    \begin{align*}
+        \begin{cases}
+            x = r\cos \theta\\
+            y = r\sin \theta
+        \end{cases}
+        \qquad 
+        \begin{cases}
+            r = \sqrt{x^2 + y^2}\\
+            \theta = \tan^{-1} \frac{y}{x} 
+        \end{cases}
+    \end{align*}
+    So $x = x(r, \theta) = x(r(x,y), \theta(x, y))$. Then:
+    \begin{align*}
+        0 = \pdv{x}{y} = \pdv{x}{r} \pdv{r}{y} + \pdv{x}{\theta}\pdv{\theta}{y}
+    \end{align*} 
+    In Einstein notation:
+    \begin{align*}
+        \pdv{x^\mu}{x^\nu} = \pdv{x^\mu}{x'^\alpha}\pdv{x'^\alpha}{x^\nu} = \delta^{\mu}_{\diamond \nu}
+    \end{align*}
+\end{example}
+
+\subsection{Length, Area, Volume and $4$-Volume}
+Let's now see how to compute \textit{length}, \textit{area} and \textit{volume} in a generic metric (which we will assume to be diagonal for simplicity):
+\begin{align*}
+    \dd{s}^2 = g_00 (\dd{x^0}) + g_{11}(\dd{x^1})^2 + g_{22}(\dd{x^2})^2 + g_{33} (\dd{x}^3)^2
+\end{align*}    
+Consider the hypersurfaces obtained by fixing some coordinates. For example, the area of the $xy$ surface by a given value $x^0 \equiv \bar{x}^0$ and $x^3 \equiv \bar{x}^3$. This is the plane generated by $x^1$ and $x^2$, with length elements:
+\begin{align*}
+    \dd{l^1} = \sqrt{g_{11}} \dd{x^1} \qquad \dd{l^2} = \sqrt{g_{22}}\dd{x^2}
+\end{align*}
+Then, the infinitesimal area is simply:
+\begin{align*}
+    \dd{A} = \sqrt{g_{11} }\dd{x^1} \sqrt{g_{22} }\dd{x^2}
+\end{align*}
+
+In fact, this comes from:
+\begin{align*}
+    \dd{s}^2 = \cancel{g_{00} (\dd{x^0})^2 }+ \underbrace{g_{11}(\dd{x^1})^2 }_{\dd{l^1}}+\underbrace{ g_{22}(\dd{x^2})^2 }_{\dd{l^2}}+\cancel{ g_{33}(\dd{x^3})^2}
+\end{align*}
+
+Generalizing this, we can get to the $4$-volume infinitesimal element:
+\begin{align*}
+    \dd{v} = \sqrt{-g_{00} g_{11} g_{22} g_{33} }\dd{x^0} \dd{x^1} \dd{x^2} \dd{x^3}
+\end{align*} 
+where the $-$ is introduced because every metric in GR must have a $(-,+,+,+)$ signature, and so this sign is needed to take the absolute value of the determinant.\\
+In general, for a non-diagonal metric:
+\begin{align*}
+    \dd{v} = \sqrt{-g} \dd[4]{x} \qquad g \equiv \operatorname{det} g_{\mu \nu}
+\end{align*}  
+
+\begin{enumerate}
+    \item A metric can always be diagonalized at least \textbf{locally} (around any given point).\\
+    This can be explained intuitively thanks to the equivalence principle: any reference frame in a gravitational field is (locally) equivalent to a free-falling system, in which the metric is that of Minkowski.
+    \item When the metric is diagonal, $\dd{v} = \sqrt{-g} \dd[4]{x}$
+    \item $\sqrt{-g}\dd[4]{v}$ is a \textbf{scalar} (it does not change when doing a coordinate transform)   
+\end{enumerate}
+
+\textbf{Proof of [3]}. We start from the transformation formula for the metric:
+\begin{align*}
+    g'_{\mu \nu} = \pdv{x^\alpha}{x'^\mu} \pdv{x^\beta}{x'^\nu} g_{\alpha \beta}
+\end{align*} 
+By applying Binet's formula ($M = A B C \Rightarrow \operatorname{det}M = \operatorname{det}A \operatorname{det}B \operatorname{det} C$) we get to:
+\begin{align*}
+    g' \equiv \operatorname{det} g'_{\mu \nu} = \left(\operatorname{det} \pdv{x}{x'} \right) \cdot \left(\operatorname{det} \pdv{x}{x'} \right) \cdot g
+\end{align*}
+Denote with $J$ the determinant of the Jacobian for the transformation:
+\begin{align*}
+    J \equiv \left(\operatorname{det} \pdv{x'}{x}\right)
+\end{align*} 
+and so:
+\begin{align*}
+    g' = J^{-2} g \Rightarrow \sqrt{-g'} = J^{-1}\sqrt{-g}
+\end{align*}
+Recall that, after a coordinate transform, the volume element changes according to the Jacobian:
+\begin{align*}
+    \dd[4]{x'} = J\dd[4]{x}
+\end{align*}
+And so:
+\begin{align*}
+    \sqrt{-g'} \dd[4]{x'} = \sqrt{-g} J^{-1} \dd[4]{x} J = \sqrt{-g} \dd[4]{x}
+\end{align*}
+
+\begin{expl}
+    Note how in every integral the volume element contains the square root of the determinant of the metric.
+    \begin{itemize}
+        \item In cartesian coordinates:
+        \begin{align*}
+            \int f(x) \dd{x}\dd{y}\dd{z} \cdot 1
+        \end{align*}
+        as the metric is $\mathbb{I}_3$, and so $g = 1$.
+        \item In polar coordinates:
+        \begin{align*}
+            \int f(\bm{x}) r^2 \sin \theta \dd{r}\dd{\theta}\dd{\varphi}
+        \end{align*}
+        as $g = r^4 \sin^2 \theta$. 
+    \end{itemize}
+\end{expl}
+
+\subsection{Vectors in Curved Spacetime}
+On a curved spacetime, vectors are elements of the tangent space at a point. So, two vectors starting from different points \textit{live in different tangent spaces}.\\
+
+For each point $x$ of the manifold we define a local basis for the tangent space at that point: $\{e^\mu_\alpha(x)\}$ where $\bm{e_\alpha}$ are labels for the basis vector, $\mu$ denotes their coordinates and $x$ is a point of the manifold.\\
+
+Any vector at that point can be decomposed as a:
+\begin{align*}
+    a^\mu (x) = a^\alpha (x) e^\mu_\alpha (x)
+\end{align*}
+where $a^\alpha$ are the vector components in the local basis at point $x$.\\
+This is the same as in Minkowski space, except for the added dependence on $x$.\\
+
+The \textbf{scalar product} follows from the scalar product between matrix elements:
+\begin{align*}
+    \bm{a}(x) \cdot \bm{b}(x) = a^\alpha(x) b^\beta(x) \bm{e_\alpha}(x) \cdot \bm{e_\beta}(x)
+\end{align*}
+
+At each point $x$ we choose an orthonormal basis in the tangent space:
+\begin{align*}
+    \bm{e_\alpha}(x) \cdot \bm{e_\beta}(x) = \eta_{\alpha \beta}
+\end{align*} 
+(as vectors live in a \textit{flat} tangent space).\\
+Note that, as vectors relative to different points live in different spaces, they cannot be summed:
+\begin{align*}
+    v_1(x) + v_2(y) = \text{undefined}
+\end{align*}
+This is problematic, because we want to define \textit{derivatives} for vectors in a curved spacetime, and derivatives involve differences between vectors starting from different points.\\
+So, we will introduce the concept of \textbf{parallel transport} as a mean to \q{translate} a vector that lives in the tangent space at $y$ to a the tangent space at $x$.
+    
+
+
+
+
+
+
+
+\end{document}

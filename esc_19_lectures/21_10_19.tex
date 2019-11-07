@@ -1,0 +1,118 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\lesson{1}{21/10/19}
+
+\chapter{Architectures}
+\section{Von Neumann architecture}
+In the Von Neumann architecture \textit{instructions} and \textit{data} are stored within the same structure, and are processed by a separating unit.\\
+The main interesting metrics are then:
+\begin{itemize}
+    \item Instructions/second (MIPS - million of instructions per second)
+    \item Operations/second (FLOPS)
+\end{itemize}
+Of course, these are not really of practical interested: much more useful are \textbf{latency} (how long it takes to finish a job) and \textbf{throughput} (amount of items per second).\\
+Then, we want to find out how to \textit{speed up} processes, or - more importantly - how to scale them up (do more with less).
+
+\section{Single Core Architecture}
+A typical processor of the modern generation (last ten years) consists of essentially 3 parts:
+\begin{itemize}
+    \item Front-end engine
+    \item Back-end engine
+    \item Memory component
+\end{itemize}
+Almost everything that is happening in a processor can be \textit{measured} by sensors embedded in the silicon, which are called \textbf{performance counters}.\\
+Unfortunately, they are \textit{not standardized}, and every new processors has new counters with new names. There are however tools to somehow abstract away individual differences, and access counters in a standardized way - some of these are also provided by vendors themselves.\\
+For these lectures, we will focus on the Intel Ivy-Bridge and Skylake-X processors.
+
+\subsection{Front-end}
+\textbf{Role}: fetch instructions from memory, decode them and send them to the scheduler. Each instruction is fetched in a L1 Cache, and then follows a pipeline for decoding.\\
+A \textbf{branch predictor} selects the instructions to be fetched \textit{before} they are executed. There is also a cache, accessed by the branch predictors, that can hold decoded instructions when they need to be repeated (e.g. during a loop).\\
+
+The \textbf{out of order scheduler} is a component that enables the processor to store $192$ micro-instructions and then \textit{reorder them}, so that he can adjust their dependencies, and eventually run them in parallel if possible. Then, after rescheduling, instructions are sent to the unified scheduler.\\
+One can measure the number of cycles where the RS (Unified Scheduler) is empty. If this happens, it means that the front-end is busy fetching instruction, or re-scheduling is taking long (e.g. branch misprediction).\\
+
+Modern processors use \q{OOO} (out-of-order) scheduling, which means that the processor can execute instructions \textit{ahead of time}. This is done even for a \textit{branch}. Basically, the \textit{branch predictor} selects the most likely branch to explore and executes it. This is faster than waiting for branch evaluation, halting the processor. If the prediction were wrong, then the processor needs to go back - eventually needing to \textit{flush} the entire pipeline and reload instructions (bad speculation). If, instead, the branch was correctly predicted, the instruction is good and \q{retired} - i.e. \q{it's result will be useful}.\\
+So, a instruction is first executed, and then \q{confirmed}.\\
+
+To avoid the problem of mispredicted branches, the compiler/developer can construct the program in such a way to be \textit{branchless}.\\
+The number of branch-misses is stored in an inspectable counter.\\
+
+\textbf{How to help the frontend} (to be faster)?
+\begin{enumerate}
+    \item Avoid complex branching patterns
+    \item Keep code local (inline - i.e. in the same compilation unit, or declare it \textit{inline})
+    \item Keep loop short - so it fits in the micro-op cache (the decoded cache accessed by the branch predictor). So, code should be inline - but \textit{not too inline}. 
+\end{enumerate}
+ 
+\subsection{Back-end}
+The backend is the unit which actually does computations - and that is heavily parallelized. The Intel's Haswell micro-architecture can execute \textit{four} instructions in parallel (across \textit{eight} ports) in each cycle. Note that two ports contain also branch units, enabling \textit{double} (or \textit{triple}) branching. This means that a loop can be done in a single cycle: one load, one-two vector operations, and the final branch (for the iterator - note that there will always be a mispredicted branch when the branch ends).\\
+
+Two problems:
+\begin{itemize}
+    \item Complex instructions (e.g. divisions) can stall ports
+    \item Or ports are not used, because the front-end is stuck on memory access
+\end{itemize}
+Basically, we want to use the back-end \q{just right} - not overload it, but also not let it unused.\\
+
+\textbf{Latencies}: most operations take only one cycle (add, and, shl, ror). Multiplications take $3$ cycles, but division and square root just take forever.\\
+As the processor is pipelined, at every cycle the processor will fetch, decode, execute and retire. So, if there are no stalled cycles, the throughput will be \textit{one for cycle} (eventually after a slight delay), even if latency is more than one cycle.\\
+However, if there are dependencies between instruction (e.g. the second instruction depends on the result of the first one), some delay needs to be introduced.\\
+The maximum that one can aim for is \textit{four instructions per cycle}. The real number of instructions retired per cycle is the \textit{Instruction Per Cycle} (IPC). An IPC of $1$ means a full normal Von-Neumann architecture, meaning that all the multi-core complexity is only used to aid the latencies of the components. IPC is less than $4$, but in the realistic cases we have $\sim 1.8$.
+
+
+\textbf{How to help the backend}: 
+\begin{enumerate}
+    \item Keep data at hand
+    \item Vectorize operations
+    \item Avoid divisions and square root
+    \item (Avoid dependencies and increase the ILP)
+\end{enumerate}
+
+\subsection{Cache/Memory Hierarchy}
+In a modern processor there are very small caches, closest to the cores, and the further (and shared) caches, which are bigger (and slower). Accessing memory has some latency cost: 4 cycles for the L1l/d caches (closest ones), 11c for the L2 shared, >21c for the L3 and >200c to go further away.\\
+Each kind of memory has a certain read/write throughput (with $1$cycle latency).\\
+
+Note that while loading memory, one does not load bits, nor bytes, but \textit{cache lines}, that is a contiguous section of memory (64 bytes in size).\\
+
+If one needs to modify single elements in a cache line, this should be done in an ordered and regular way (e.g. multidimensional array should be modified with the last index moving faster). Otherwise, many more cache lines needs to be fetched, and cannot be pre-fetched in a efficient manner (leading to \textit{cache thrashing}).\\
+
+\textbf{How to help memory access}:
+\begin{enumerate}
+    \item \textbf{Locality}: use all elements in the cache line, not only one of them (spatial locality) and complete execution while elements are in cache (temporal locality). 
+    \item Help prefetching: use consecutive accesses
+\end{enumerate}
+However, note that programming the memory hierarchy is usually specific to the hardware and the application (and it's kind of an \textit{art}).
+
+\section{Measuring performance}
+Traditional method: \textbf{stall analysis}, \q{look for jams in the traffic}.\\
+\textbf{TopDown approach}: look at each micro-op. Is it issued? (If not: is back-end stalled, or is it a problem in the frontend?) If yes, is it retired, or is it a case of bad speculation.\\ See links in the slides for more insight.\\
+
+Usually, in physics, if core bound it is due to division. 
+
+\chapter{Efficient C++ Programming}
+C++ is a vast, complex programming language. Fortunately, some effort at simplification is being done in later times.\\
+Its most interesting characteristics are:
+\begin{itemize}
+    \item Multi-paradigm: can be programmed in many different styles
+    \item Multi-level: provides access to low-level functions (e.g. pointers), but also to high-level abstractions
+    \item Efficient (\q{you don't pay for what you don't use})
+    \item Standard: the same program will work for many years
+\end{itemize}
+
+\section{Algorithm}
+\textbf{Algorithms} in the standard library are generic (i.e. templated) functions that operate on \textbf{ranges}  of objects, that can be used to access, modify, partition, sort or make numerical operations objects.\\
+A \textbf{range} is defined as a pair of \textit{iterators} [first, last), where the last pointer is referring to one element past the last element in the range (so the last element is \textbf{not} included in the range).\\
+An empty range is so that first == last.\\
+An iterator is a generalization of a pointer, that allows to go through the elements of the associated range (for example advance with ++, dereference with *, etc.).\\
+
+In \textbf{generic programming} algorithms are written in term of \textbf{concepts} (i.e. \q{find this}).  
+
+
+
+
+
+
+\end{document}

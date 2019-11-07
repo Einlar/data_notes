@@ -1,0 +1,71 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\lesson{3}{22/10/19}
+\chapter{Efficient Memory Management}
+Initially, it was faster to access memory than to make computations. However, starting from the 70s, the processing power increased exponentially, reaching and surpassing the speed of memory access.\\
+In modern processors, to \q{hide} the latency from memory one would need to make hundreds of floating point computations - which is really hard to do with only a part of data.\\
+
+The access to memory happens at three distinct levels:
+\begin{itemize}
+    \item Physical hardware
+    \item Operating system kernel
+    \item Run time
+\end{itemize}
+
+\section{Physical memory}
+A modern processor is composed of \textbf{cores}, each with a personal L1 which is closest to it (but not shared with other cores), containing $512$ cache lines (32Kb). Then there are several layers of increasingly shared caches, like L2 (256kB, up to 6MB) shared between some cores, and a large combined L3 cache (4-20MB) shared between all cores on the die.\\
+Note that every hardware optimization will be very specific, and will need to be changed after new hardware becomes available.\\
+Physical memory management is really important on a supercomputer - sometimes making the difference between running or not.\\
+
+Cache lines can be exchanged between internal caches and RAM, or between RAM and Disk (there \textit{pages} are exchanged, i.e. 4kB contiguous chunks of memory).\\
+This is enough to hide latencies when accessing contiguous memory location (thanks to prefetching), but when doing random accesses latencies rise dramatically the further away memory is from the processor, reaching $\sim 100$ cycles for RAM.\\
+Also, in modern computing systems, there are multiple \textit{sockets} (independent computing  units), each accessing different locations of RAM (otherwise it would be difficult to address uniquely every location, especially in supercomputers). So, basically, RAM is not \q{all localized in the same place}, but it is distributed. So, if a socket needs RAM that can be accessed only by another socket, it needs to use some kind of \textit{interconnect} between different sockets.
+
+\subsection{Virtual memory}
+Physical memory is mapped to a linear space called \textit{virtual memory}, which brings together all different devices (RAM, Disk, Optical drives...).\\
+The operating system can \textbf{swap}  less used  data to the hard disk, and then eventually reload it when it is needed again (e.g. for the destructor).\\
+The memory \q{that counts} is the \textit{resident} (RSS) memory.\\
+
+The virtual memory accessed by a program is made of different components:
+\begin{itemize}
+    \item The \textbf{stack}: contains function arguments (in order), pointers to return values and calling functions (e.g. main) and local variables. It grows from \textit{high addresses} to \textit{low ones}. It is faster to create variables in the stack, but it has a limited size (that can eventually be made larger).
+    \item The \textbf{heap} contains all dynamic allocated variables (e.g. with \texttt{new}, or \texttt{malloc}). It is located at the bottom of the virtual memory (low addresses) and grows towards the top (high addresses)
+    \item The \textbf{executable} - containing all the code instructions - lies at the bottom of the memory, lower than the heap.
+\end{itemize}
+
+\subsection{Key Memory Management}
+The most important key points of memory management are:
+\begin{enumerate}
+    \item \textbf{Correctness}: the program should work, at every time! (No memory leaks, no segfaults)
+    \item \textbf{Memory overhead}: do not spend the majority of computing power in the allocator!
+    \item \textbf{Memory locality}: use, whenever possible, the closest (thus fastest) memory. 
+\end{enumerate}
+
+\textbf{Memory overheads} are mainly due to \textbf{fragmentation} (logical structures becoming scattering in virtual/physical memory), \textbf{swapping} (must be avoided at all times), and \textbf{churn} (high CPU utilization for accessing memory - such as in many calls to \texttt{malloc} and \texttt{free}).\\
+To monitor overheads the following tools are available:
+\begin{itemize}
+    \item \texttt{cat /proc/meminfo | grep -i anon} (statistics at node level)
+    \item \texttt{ps -eo pid, command,rss,vsz | grep a.out} (statistics at process level)
+    \item \texttt{pmap -X yourpid} (virtual memory map)
+    \item \texttt{strace (-c/C) -e trace=memory ./a.out} (real time summary for system calls, such as \texttt{brk}, \texttt{sbrk} - the kind of calls to the kernel that can be used to move the heap)
+    \item \url{http://jemalloc.net/jemalloc.3.html} (inspect the memory allocator) (see wrapper in \texttt{memory\_usage.cc})
+    \item \texttt{s::chrono}, \texttt{perf record/report} (check if memory or CPU is the limiting factor in the system)
+\end{itemize}
+
+\subsection{Data oriented programming}
+There are several ways to optimize memory usage from a software perspective.\\
+Traditional Object Oriented Programming deals with \textit{Arrays of Structures} - i.e. various separate interacting objects. However it is much more efficient to implement a \textit{Structure of Arrays}, meaning that similar features are all next to each other. This is because, usually, one wants to make operations with many structures at a time - and in this case SoA favours vectorization.\\
+Also, using a SoA exposes the data layout directly to the compiler, and can eventually be abstracted as a more natural AoS.  
+
+
+    
+
+
+
+
+
+
+\end{document}

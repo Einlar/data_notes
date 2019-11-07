@@ -1,0 +1,112 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{PAC learnability of infinite classes}
+\lesson{7}{30/10/19}
+From the last lessons, we know that finite classes are PAC learnable, and also several infinite classes of hypotheses. So, exactly, which are the hypothesis classes that are PAC learnable?\\
+It is evident that:
+\begin{itemize}
+    \item The sufficient bound for PAC is very weak, and in many cases we can learn effectively from infinite classes (e.g. perceptron)
+    \item The size $|\mathcal{H}|$ is not a very good measure of the \textit{complexity} of a model, which is a much more interesting metric to study learnability  
+\end{itemize}
+
+\begin{dfn}
+    \textbf{Restriction} of $\mathcal{H}$ to a set $\mathcal{C}$.\\
+    Let $\mathcal{H}$ be a class of functions from $\mathcal{X}$ to $\{0,1\}$, and let $\mathcal{C} = \{\bm{c}_1, \dots, \bm{c}_m\} \subset \mathcal{X}$. The restriction $\mathcal{H}_{\mathcal{C}}$ of $\mathcal{H}$ to $\mathcal{C}$ is:
+    \begin{align*}
+        \mathcal{H}_{\mathcal{C}} = \{[h(\bm{c}_1), \dots, h(\bm{c}_m)] \colon h \in \mathcal{H}\}
+    \end{align*}      
+    where we \textit{represent} each function from $\mathcal{C}$ to $\{0,1\}$ as a vector in $\{0,1\}^{|C|}$, containing the results of its evaluation on the elements of $\mathcal{C}$.     
+\end{dfn} 
+
+\begin{dfn} \textbf{Shattering}. Given $\mathcal{C} \subset \mathcal{X}$, $\mathcal{H}$ \textit{shatters} $\mathcal{C}$ if $\mathcal{H}_{\mathcal{C}}$ contains \textbf{all} the $2^{|C|}$ functions from $\mathcal{C}$ to $\{0,1\}$, meaning that there is an element in $\mathcal{H}$ that can produce \textit{any arbitrary combinations} of outputs when applied to the elements of $\mathcal{C}$.             
+\end{dfn}
+
+\textbf{Corollary} (No free lunch). Let $\mathcal{H}$ be a hypothesis class of functions from $\mathcal{X}$ to $\{0,1\}$. Let $m$ be a training set size. Assume that there exist a set $\mathcal{C}\subset \mathcal{X}$ of size $2m$ that is \textbf{shattered} by $\mathcal{H}$. Then, for any learning algorithm $A$, there exists a distribution $\mathcal{D}$ over $\mathcal{X}\times \{0,1\}$ and a predictor $h\in \mathcal{H}$ such that $L_d(h) = 0$ but with probability at least $1/7$ over the choice of $S$ we have that $L_D(A(S)) \geq 1/8$ (i.e. a solution that perfectly fits the training data, without being accurate in the general case).\\
+
+The idea is that, inside $\mathcal{C}$, the hypothesis of \q{having all the possible functions} effectively holds, as $\mathcal{H}$ shatters $\mathcal{C}$ (i.e. even if $\mathcal{H}$ is less than all the functions, for $\mathcal{C}$ the result is still the same!).
+
+\begin{dfn}
+    \textbf{VC}-dimension. The VC-dimension $\operatorname{VCdim}(\mathcal{H})$ of a hypothesis class $\mathcal{H}$ is the maximal size of a set $\mathcal{C}\subset \mathcal{X}$ that can be shattered by $\mathcal{H}$.\\
+    If the dimension $|\mathcal{C}|$ of sets that are shattered by $\mathcal{H}$ is not bounded, we say that $\op{VCdim}(\mathcal{H}) = + \infty$. 
+\end{dfn}
+
+Suppose that $|\mathcal{H}| < \infty$. We already know that this case is PAC learnable - let's compute the VCdim. To shatter $\mathcal{C}$, by definition, we need at least $2^{|C|}$ functions, so that all possible combinations of results can be obtained. So, by inverting this relation, we know that the largest set that can possibly be shattered is $\log_2 |\mathcal{H}|$. The exact number will depend on the specifics of $\mathcal{H}$ and $\mathcal{C}$, and generally:
+\begin{align*}
+    \operatorname{VCdim}(|\mathcal{H}|) \leq \log_(|\mathcal{H}|) 
+\end{align*} 
+On the other hand, if $\operatorname{VCdim}(|\mathcal{H}|) = \infty$, we know that every possible set $\mathcal{C}$ can be shattered, independent on its size. In particular, we can always shatter a set of size $2m$, and thus by applying the corollary of the No Free Lunch theorem we prove that this set $\mathcal{H}$ is not PAC learnable.
+
+\section{Compute the VC dimension}
+To show that $\operatorname{VCdim}(\mathcal{H}) = d$ means:
+\begin{itemize}
+    \item There exists \textbf{a set} $\mathcal{C}$ of size $d$ which is shattered by $\mathcal{H}$ ($\operatorname{VCdim}(\mathcal{H}) \geq d$)
+    \item \textbf{Every set} of size $d+1$ is not shattered by $\mathcal{H}$ ($\operatorname{VCdim}(\mathcal{H}) < (d+1)$)    
+\end{itemize}
+ 
+\begin{example}[VC Dimension for the threshold function]
+Consider the class of \textit{threshold functions}: $\mathcal{H} = \{h_a\colon a \in \mathbb{R}\}$, $h_a \colon \mathbb{R} \to \{0,1\}$ and:
+\begin{align*}
+    h_a(x) = \mathbb{I}[x < a] = \begin{cases}
+        1 & x < a\\
+        0 & x \geq a
+    \end{cases}
+\end{align*}  
+Obviously, $\mathcal{H}$ can shatter any set $\mathcal{C}$ of size $|\mathcal{C}| = 1$. For any $c_1 \in \mathbb{R}$, if we pick $a > c_1$ then $h(c_1) = 1$, otherwise $h(c_1) = 0$. So $\operatorname{VCdim}(\mathcal{H}) \geq 1$.\\
+If $C=\{c_1, c_2\}$, with $c_1 < c_2$, then there are $4$ possible outcomes: $00$, $01$, $10$ and $11$. Can we choose $a$ to produce all of them?
+\begin{itemize}
+    \item To get $00$ we can set $a < c_1$
+    \item To get $11$ simply set $a > c_2$
+    \item For $10$, $c_1 < a$, $c_2 > a$, i.e. $c_1 < a < c_2$
+    \item For $01$, however, we need $c_1 > a$ and $c_2 < a$ to hold at the same time, which is not possible! In fact, note that the final outcome depends only on the relative position of $a$ and the sample points - but with $2$ points there are only $3$ possibilities (to the left, to the right and in between), which is less than $2^2 = 4$.        
+\end{itemize}
+So $|\mathcal{C}| = 2$ \textit{shatters} $\mathcal{H}$. Then:
+\begin{align*}
+    \operatorname{VCdim}(\mathcal{H}) = 1 
+\end{align*}   
+\end{example}
+
+\begin{example}[VC-dimension of the interval function]
+    Let's now consider the set $\mathcal{H}$ defined as:
+    \begin{align*}
+        \mathcal{H}= \{h_{a,b}\colon a,b \in \mathbb{R}, a < b\}
+    \end{align*} 
+    where $h_{a,b} \colon \mathbb{R} \to \{0,1\}$ is the characteristic function of the interval $(a,b)$:
+    \begin{align*}
+        h_{a,b}(x) = \mathbb{I}[x \in (a,b)] = \begin{cases}
+            1 & a < x < b\\
+            0 & \text{otherwise}
+        \end{cases}
+    \end{align*}  
+    Again, obviously, a set $|\mathcal{C}|=1$ is shattered by $\mathcal{H}$. If $|\mathcal{H}|=2$ we have once more $4$ possibilities to cover:
+    \begin{itemize}
+        \item $00$: choose $(a,b)$ to exclude $c_1$ and $c_2$
+        \item $01$ and $10$: choose $(a,b)$ to contain just $c_1$ or $c_2$.
+        \item $11$: choose $(a,b)$ to contain both points.           
+    \end{itemize}
+    If $|\mathcal{C}|=3$, there are now $8$ possibilities. We now note that $101$ can't be reconstructed, as this would require the same interval containing both $c_1$ and $c_3$, but not $c_2$ - which can't be done if $c_1 < c_2 < c_3$. So:
+    \begin{align*}
+        \operatorname{VCdim}(\mathcal{H}) = 2 
+    \end{align*}   
+\end{example}
+
+Note that in these simple examples the VC-dim is equal to the number of free parameters in the model. However, this is not always the case (as we will see)!
+
+\begin{example}[Axis aligned rectangle]
+    Consider now the characteristic function of a 2D rectangle with edges aligned to the xy axes:
+    \begin{align*}
+        \mathcal{H} = \{h_{(a_1, a_2, b_1 , b_2 )}\colon a_1 , a_2 , b_1 , b_2 \in \mathbb{R}, a_1 \leq a_2, b_1 \leq b_2 \}
+    \end{align*}
+    with:
+    \begin{align*}
+        h_{(a_1 , a_2 , b_1 , b_2 )}(x_1 , x_2 ) = \begin{cases}
+            1 & a_1 \leq x_1 < a_2, b_1 \leq x_2 \leq b_2\\
+            0 & \text{otherwise}  
+        \end{cases}
+    \end{align*}
+    This set has $\operatorname{VCdim}(\mathcal{H}) = 4$, as can be showed graphically, by considering a point labelled as $0$ surrounded by $4$ points labelled as $1$.   
+\end{example}
+
+\end{document}

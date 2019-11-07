@@ -1,0 +1,12 @@
+cd esc/hands-on/memory/
+cat /proc/meminfo
+./compile memoryTest.cpp
+
+strace -e trace=memory ./student16_test //trace system calls
+
+on another terminal:
+ps -eo pid,command,rss,vsz | grep ${USER}_test | egrep -v "grep|strace"  
+
+Continue with pressing a key and then enter.
+After the first malloc, mmap is called, increasing the size of the virtual memory (see in the ps command), but not that of the physical memory! Only if we access many elements in the allocated array (with the touch function), physical memory increases - but not much (only the needed pages are loaded)
+After calling free, physical memory decreases a bit, but virtual memory not (memory is still mapped to the user)

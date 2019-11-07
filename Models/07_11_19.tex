@@ -1,0 +1,284 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Summary}
+\lesson{7}{07/11/19}
+\textbf{Summary of the previous lectures}. We considered a more general stochastic process, a \textit{Markov Process}, when the future only depends on the present. We wrote a Master Equation, and taking the continuum limit we get a second order partial differential equation, with two coefficients depending on the first two moments of the transition rate: $f$ and $D$. We would want them to represent the \textit{force} and \textit{diffusion rate}, but we can't find their physical meaning. So we consider the Langenvin equation, reaching the desired physical meaning.\\
+There, the increment depends on a \textit{deterministic term} $f$ and a \textit{noise term}:  
+\begin{align*}
+    \dd{x(t)} = f(x(t), t) \dd{t} + \sqrt{2D (x(t),t)} \dd{B(t)} \qquad f = \frac{F_{\mathrm{ext} }}{\gamma} 
+\end{align*}     
+If we discretize this equation, passing to finite differences, we get:
+\begin{align*}
+    \Delta x(t) = f(x(t),t) \Delta t + \sqrt{2 D (x(t),t)} \Delta B(t) \qquad \Delta B(t) \sim \frac{1}{\sqrt{2 \pi \Delta t}} \exp\left(-\frac{\Delta B^2}{2 \Delta t} \right)
+\end{align*}
+This is needed because $\dd{x(t)}/\dd{t}$ is ill-defined (as we saw in the previous lecture). Note that $\Delta x(t) = x(t+ \Delta t) - x(t)$.\\
+We want to show that this kind equation leads to the same Fokker-Planck equation that we saw previously, and that was derived from the Master Equation. Then we would like to examine how much the stochastic amplitude (coefficient of $\dd{B(t)}$) is related to \textit{temperature}. In fact, we know already that $f$ depends on $F_{\mathrm{ext}}$, with $\bm{F}_{\mathrm{ext} } = -\bm{\nabla} V$. We would like that, at constant temperature, the pdf of the stationary state will tend to the \textit{Maxwell-Boltzmann distribution}: 
+\begin{align*}
+    \mathbb{P}(x,t)  \xrightarrow[t \to \infty]{}  \frac{1}{z} \exp\left(-\frac{V(x)}{k_B T} \right) 
+\end{align*}
+
+\section{Stochastic integral}
+Now the main problem is that the Langenvin equation is a \textbf{stochastic equation}, and we do not (yet) know how to integrate a stochastic term:
+\begin{align*}
+    x(t) = x(0) + \int_0^t f(x(\tau), \tau) \dd{\tau} + \int_0^t \sqrt{2D(x(\tau), \tau)} \dd{B(\tau)} 
+\end{align*} 
+Note that we cannot \q{multiply} by $\dd{\tau}/\dd{\tau}$ to change variables, as this would require the \textit{existence of the first derivative}!\\
+So, let's consider a stochastic integral:
+\begin{align*}
+    S = \int_0^t G(\tau) \dd{B}(\tau)
+\end{align*}  
+This is a \textbf{random variable}. To compute it, we first discretize it:
+\begin{align*}
+    S_n = \sum_{i=0}^{n} G(\tau_i) [B(t_i) - B(t_{i-1})]
+\end{align*}
+where $t_{i-1} \leq \tau_i \leq t_i$. If $B(t)$ is well-behaving (has a first derivative), then how we choose $\tau_i$ inside $[t_{i-1},t_i]$ does not matter, as the limit will be always the same. However, this is not the case in this expression.\\
+First, we ask what does it mean to take the limit $n \to \infty$. Suppose $S_n$ is a generic random variable, and we consider $S_n  \xrightarrow[n \to \infty]{} S$. We can consider the following definitions:
+\begin{enumerate}
+    \item \textbf{Standard (stochastic) limit}: $S_n  \xrightarrow[n \to \infty]{\mathrm{a.s.}}  S$, i.e. $S_n$ tends to $S$ \textit{almost surely}. More precisely:
+    \begin{align*}
+        \forall \epsilon > 0\quad \exists N \colon n \geq N \> |S_n - S| < \epsilon    
+    \end{align*}     
+    In other words, the fractions of sequences $S_n$ that \textit{do not come $\epsilon$-close to $S$} tends to $0$ as the number $N$ of considered sequences goes to infinity.
+    \item $S_n  \xrightarrow[n \to \infty]{P} S$, meaning that:
+    \begin{align*}
+        \lim_{n \to \infty} \mathbb{P}(|S-S_n| > \epsilon) = 0 \quad \forall \epsilon > 0
+    \end{align*}
+    This definition is closely related to (1), but here we focus on the \textit{probability} of getting a \q{bad sequence}, and not on the occurrences when this does indeed happen.
+    \item \textbf{Convergence in Distribution sense}. $S_n  \xrightarrow[n \to \infty]{P}  S$, that is:
+    \begin{align*}
+        \mathbb{P}(S_n \in A) \to \mathbb{P}(S \in A)    
+    \end{align*}  
+    \item $S_n  \xrightarrow[n \to \infty]{L^q} S$, where:
+    \begin{align*}
+        \langle |S_n - S |^q \rangle  \xrightarrow[n \to \infty]{}  0
+    \end{align*}       
+\end{enumerate}
+One can show that $(1) \Rightarrow (2) \Rightarrow (3)$, and $(4) \Rightarrow (2)$. This last implication can be easily derived. First, we note that the probability of a sequence $S_n$ not $\epsilon$-close to $S$ is just the expected value of the chracteristic function of the set where an inequality holds:
+\begin{align*}
+    \langle \mathbb{I}_{|S-S_n| > \epsilon} \rangle = \mathbb{P}(|S-S_n| > \epsilon) \leq \langle \underbrace{\mathbb{I}_{|S-S_n|>\epsilon}}_{\leq 1}  \cdot \underbrace{\left|\frac{S-S_n}{\epsilon}  \right|^q}_{\leq 1}  \rangle \leq \langle |S-S_n|^q \rangle \frac{1}{\epsilon^q}  \xrightarrow[n \to \infty]{} 0   
+\end{align*}     
+
+In our case, we consider the $L^2$ convergence definition. So we say that $S_n \to S$ as $n \to \infty$ iff:
+\begin{align*}
+    \lim_{n \to \infty} \langle (S_n - S)^2 \rangle = 0
+\end{align*}   
+This implies the \textit{standard convergence} of the expected value:
+\begin{align*}
+    \langle S_n \rangle \to \langle S \rangle
+\end{align*} 
+In fact:
+\begin{align*}
+    |\langle S_n \rangle - \langle S \rangle| = |\langle S_n - S \rangle| \leq \langle |S_n - S| \rangle
+\end{align*}
+
+Also, the H\"older inequality holds:
+\begin{align*}
+    |\langle fg \rangle| \leq \langle |fg| \rangle \leq \langle f^2 \rangle^{1/2} \langle g^2 \rangle^{1/2}
+\end{align*}
+that, for this particular instance, is also called the \textit{Schwartz inequality}.\\
+
+If we apply it to the previous expression:
+\begin{align*}
+    \langle |S_n - S| \rangle \leq \langle (S_n - S)^2 \rangle^{1/2} \langle 1^2 \rangle^{1/2} = \langle (S_n - S)^2 \rangle^{1/2}
+\end{align*}
+which implies our thesis: $\lim_{n \to \infty} \langle S_n \rangle = \langle S \rangle$. In the case of q=2, the convergence is called "mean square" (m.s.)\\
+
+Reference: Chapter 3 of book by Gardiner, \textit{Handbook of Stochastic Processes}.  
+
+\begin{example}[a]
+    Suppose $G(\tau) = B(\tau)$, and consider the following integral:
+    \begin{align*}
+        S = \int_0^t B(\tau) \dd{B(\tau)}
+    \end{align*} 
+    If $B(\tau)$ where differentiable, then we could simply change variables and solve:
+    \begin{align*}
+        S = \int_0^t B(\tau) \dv{B(\tau)}{\tau} \dd{\tau} = \frac{1}{2} B^2(\tau) \Big|_0^t = \frac{B^2(t) - B^2(0)}{2} \quad \text{if } \exists \dv{B}{\tau}  
+    \end{align*} 
+    But $\dv{\beta}{\tau}$ does not exist!\\
+    So, we first discretize:
+    \begin{align}
+        S_n = \sum_{i=1}^n B(\tau_i) [B(t_i) - B(t_{i-1})] \qquad t_0 = 0; t_n = t
+        \label{eqn:Sn1}
+    \end{align} 
+    Then:
+    \begin{align*}
+        \langle S_n \rangle = \sum_{i=1}^{n} \langle B(\tau_i) (B(t_i) - B(t_{i-1})) \rangle
+    \end{align*}
+    Recall that:
+    \begin{align}
+        \langle B(t) B(t') \rangle = \min(t,t')
+        \label{eqn:correlator}
+    \end{align}
+    And so, as $t_{i-1} \leq \tau_i \leq t_i$: 
+    \begin{align*}
+        (\ref{eqn:Sn1}) = \langle S_n \rangle = \sum_{i=1}^n [\langle B(\tau_i) B(t_i) \rangle - \langle B(\tau_i) B(t_{i-1}) \rangle] \underset{(\ref{eqn:correlator})}{=}  \sum_{i=1}^n (\tau_i - t_{i-1}) 
+    \end{align*}
+    Then suppose $\tau_i$ lies in \q{the same place} at every interval $[t_{i-1},t_i]$, so that the following holds:  
+    \begin{align*}
+        \tau_i = \lambda t_i + (1- \lambda) t_{i-1}
+    \end{align*}
+    Substituting in the previous expression:
+    \begin{align*}
+        \langle S_n \rangle = \lambda \sum_{i=1}^n (t_i - t_{i-1}) = \lambda t
+    \end{align*}
+    And finally:
+    \begin{align*}
+        \lim_{n \to \infty} \langle S_n \rangle = \lambda t
+    \end{align*}
+    So the limit \textit{depends} on how we choose the $\tau_i$ inside the intervals $[t_{i-1}, t_i]$ - which is \textbf{not} true in ordinary calculus (where the result is independent on this choice).\\
+    There are many possibilities for $\lambda$:
+    \begin{align*}
+        \lambda = \begin{cases}
+            0 & \text{Ito's prescription}\\
+            \frac{1}{2} & \text{Stratonovich's prescription (or middle-point prescr.)} 
+        \end{cases}
+    \end{align*} 
+    Leading to:
+    \begin{align*}
+        S_n  \xrightarrow[n \to \infty]{\mathrm{m.s.}} S = \begin{cases}
+            \frac{B^2(t) - B^2(0)}{2} & \lambda=1/2\\
+            \frac{B^2(t) - B^2(0)}{2} -\frac{t}{2} & \lambda = 0  
+        \end{cases}  
+    \end{align*} 
+    The Stratonovich prescription gives exactly the same result as ordinary calculus. However, note that it involves a dependence \textit{on the future}, i.e. the next step of a path depends on the point that is a \textit{half-step} later. This has no a real physical meaning (in a certain sense, it \q{violates causality}). That's why many physicists prefer the Ito's prescription.\\
+
+    So, we want now to prove that result:
+    \begin{align*}
+        \sum_{i=1}^n B(t_{i-1}) (B(t_i) - B(t_{i-1}))  \xrightarrow[n \to \infty]{\mathrm{m.s.}} \frac{B^2(t)- B(0)}{2} - \frac{t}{2}    
+    \end{align*}
+    Denote:
+    \begin{align*}
+        B(t_i) = B_i; \qquad \Delta B_i = B_{i} - B_{i-1}
+    \end{align*}
+    and so:
+    \begin{align*}
+        S_n &= \sum_{i=1}^{n} B_{i-1} \Delta B_i = \frac{1}{2} \sum_{i=1}^{n} \left[(B_{i-1} + \Delta B_i)^2 - B_{i-1}^2 - (\Delta B_i)^2\right] = \\
+        &= \frac{1}{2} \sum_{i=1}^{n} \left[\hlc{Yellow}{B_i^2 - B_{i-1}^2 }- (\Delta B_i)^2\right] = \frac{1}{2} (\hlc{Yellow}{B_n^2 - B_0^2}) - \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2  
+    \end{align*}
+    Then we want to show:
+    \begin{align*}
+        \frac{B^2(t) - B^2(0)}{2} - \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2  \xrightarrow[n \to \infty]{\mathrm{m.s.} } \frac{B^2(t)-B(0)}{2} - \frac{t}{2} \qquad t_n = t; \> t_0 = 0
+    \end{align*}
+    So we take their difference in modulus squared and take the limit of the average:
+    \begin{align*}
+       \langle \left| \cancel{\frac{B^2(t) - B^2(0)}{2} }- \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2 - \left[\cancel{\frac{B^2(t)-B(0)}{2}} - \frac{t}{2}  \right]   \right|^2 \rangle  \xrightarrow[n \to \infty]{?}  0
+    \end{align*}
+    Expanding:
+    \begin{align*}
+        \frac{1}{4} \langle \left[\sum_{i=1}^n (\Delta B_i)^2 + t \right]^2 \rangle = \frac{1}{4} \langle \left[t - \sum_{i=1}^n (\Delta B_i)^2 \right]^2 \rangle = \frac{1}{4} \langle \left[\sum_{i=1}^n (\Delta t_i - \Delta B_i^2)\right]^2 \rangle   
+    \end{align*}
+    Note that $t = \sum_{i=1}^n \Delta t_i $. Then, by expanding the square of the sum:
+    \begin{align*}
+        = \frac{1}{4} \langle \sum_{i=1}^n (\Delta t_i - (\Delta B_i)^2) \rangle \sum_j (\Delta t_j - (\Delta B_j)^2 ) 
+    \end{align*} 
+    as $\left( \sum_i a_i \right)^2 = \sum_{ij} a_i a_j$. In this summation we isolate the contribution with $i = j$ and $i \neq j$, and use the linearity of the average (as these are finite sums):
+    \begin{align*}
+        &= \frac{1}{4} \left[ \sum_{i=1}^n \langle (\Delta t_i - (\Delta B_i)^2)^2 \rangle + \sum_{i\neq j}^n \langle (\Delta t_i - (\Delta B_i)^2) (\Delta t_j - (\Delta B_j)^2) \rangle\right]
+    \end{align*}    
+    The only random variable is now the $\Delta B_i$. Recall that:
+    \begin{align*}
+        \langle A \rangle = \int \dd{\Delta B_i} \dots \dd{\Delta B_n} A \prod_{i=1}^n \frac{1}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\frac{(\Delta B_i)^2}{2 \Delta t_i} \right) 
+    \end{align*} 
+    The $\Delta B_i$ are gaussian and \textbf{independent}, and so the average of the product is just the product of the averages:
+    \begin{align*}
+        \langle (\Delta t_i - (\Delta B_i)^2) (\Delta t_j - (\Delta B_j)^2) \rangle = \langle (\Delta t_i - (\Delta B_i)^2) \rangle \langle  (\Delta t_j - (\Delta B_j)^2) \rangle
+    \end{align*}  
+    Then, recall that:
+    \begin{align*}
+        \langle (\Delta B_i)^2 \rangle = \int \frac{\dd{\Delta B_i}}{\sqrt{2 \pi \Delta t_i}} \Delta B_i^2 \exp\left(-\frac{\Delta B_i^2}{2 \Delta t_i} \right) = \Delta t_i
+    \end{align*}
+    and so:
+    \begin{align*}
+        \langle (\Delta t_i - (\Delta B_i)^2) \rangle = 0
+    \end{align*}
+    The only term left is:
+    \begin{align*}
+        = \frac{1}{4} \sum_{i=1}^n \langle ( \Delta t_i - (\Delta B_i)^2)^2 \rangle  = \frac{1}{4} \sum_{i=1}^n \left[
+        \Delta t_i^2 - 2 \Delta t_i \underbrace{\langle (\Delta B_i)^2 \rangle}_{\Delta t_i}  + \langle  \Delta B_i^4 \rangle    
+        \right]  
+    \end{align*}
+    Recall that:
+    \begin{align*}
+        \langle x^{2n} \rangle = \sigma^{2n} \frac{(2n)!}{2^n n!} = \begin{cases}
+            \sigma^2 & n=1\\
+            \sigma^4 \frac{4!}{4 \cdot 2!} = 3 \sigma ^4 & n=2 
+        \end{cases}
+    \end{align*}
+    if $x$ is sampled by a Gaussian with $0$ average. So:
+    \begin{align*}
+        = \frac{1}{2} \sum_{i=1}^n \Delta t_i^2 
+    \end{align*}  
+    When taking the limit of the mesh ($n \to \infty$), the time intervals vanish, meaning that:
+    \begin{align*}
+        \max_{i} \Delta t_i  \xrightarrow[n \to \infty]{}  0
+    \end{align*}
+    So:
+    \begin{align*}
+        \frac{1}{2} \sum_{i=1}^n \Delta t_i^2 \leq \frac{1}{2} \left(\max_j \Delta t_j\right) \sum_i \Delta t_i  
+    \end{align*}
+    as $\Delta t_i \leq \max_j \Delta t_j$. Then $\sum_i \Delta t_i = t$: 
+    \begin{align*}
+        = \frac{t}{2} \max_{j} \Delta t_j  \xrightarrow[n \to \infty]{}  0
+    \end{align*} 
+
+
+    To prove the result with the S prescription, we then must show:
+    \begin{align*}
+        S_n = \sum_{i=1}^n B\left(\frac{t_i + t_{i-1}}{2} \right)[B(t_i) - B(t_{i-1})]  \xrightarrow[n \to \infty]{\mathrm{m.s.} } \frac{B^2(t) - B^2(0)}{2}   
+    \end{align*}
+    Note that now we need a set of \textit{middle points} in the mesh, which leads to some complications.\\
+    One trick is to simply \textit{double} the discretization, and choose the \textit{middle points} to be the \textit{odd} indices. We then define:
+    \begin{align*}
+        S'_{2n}  = \sum_{i=1}^{2n} B_{2i -1} (B_{2i} - B_{2(i-1)}) 
+    \end{align*}  
+    with $t_{2i - 1} \equiv (t_{2i} + t_{2(i-1)})/2$, while the $t_{2i}$ may be distributed arbitrarily.\\
+    
+    A shorter way to compute that, but not as rigorous, is by stating that:
+    \begin{align*}
+        S_n = \sum_{i=1}^n \frac{B(t_i) + B(t_{i-1})}{2} (B(t_i)-B(t_{i-1})) 
+    \end{align*}
+    However it is not obvious, because $B(t_i)$ are all random variables. The two expressions \textit{have the same distribution}, but they \textit{are not the same}! In any way, if we do this, the thesis immediately follows:
+    \begin{align*}
+        = \frac{1}{2} \sum_{i=1}^n (B^2(t_i) - B^2(t_{i-1})) 
+    \end{align*}   
+\end{example}
+
+
+In our calculations, we will be usually concerned with the following kinds of stochastic integrals $G(t)$:
+\begin{enumerate}
+    \item $\displaystyle \int_0^t F(B(\tau)) \dd{B(\tau)}$
+    \item $\displaystyle \int_0^t g(\tau) \dd{B(\tau)}$
+    \item $\displaystyle \int_0^t g(\tau) \dd{\tau}$ (usual integrals)
+\end{enumerate}
+These integrals $G(t)$ are called \textit{non-anticipating functions}, because they are independent of $B(t') - B(t)$ for $t' > t$, meaning that they do not dependent on what happens in the Brownian motion at times later than $t$ (the future). So, by using Ito's prescription:
+\begin{align*}
+    \int F(B(\tau)) \dd{B(\tau)} \underset{\mathrm{m.s.\>I-p} }{=} \sum_{i=1}^n F(B_{i-1}) \Delta B_i 
+\end{align*}     
+Note how $F(B_{i-1})$ and $\Delta B_i$ are independent of each other, simplifying the calculations. (Note that the Stratonovich prescription here causes \textit{troubles} during evaluation, as it introduces some interdependence between different terms).\\
+
+The goal of the next lecture will be to derive the Langenvin equation from the Fokker-Planck equation, and also to show that integrals of the kind:
+\begin{align*}
+    \int_0^t H(B(\tau), \tau) (\dd{B(\tau)})^k &\underset{m.s.}{=} \sum_{i=1}^n H(B_{i-1}, \tau_{i-1}) (\Delta B_i)^k =\\
+    &= \begin{cases}
+        \int_0^t H(B, \tau) \dd{B(\tau)} & k=1\\
+        \int_0^t H(B(\tau), \tau) \dd{\tau} & k=2\\
+        0 & k > 2
+    \end{cases}
+\end{align*}
+leading to Ito's rules:
+\begin{align*}
+    (\dd{B})^k = \begin{cases}
+        \dd{B} & k=1\\
+        \dd{\tau} & k=2\\
+        0 & k>2
+    \end{cases}
+\end{align*}
+
+
+
+
+
+\end{document}
