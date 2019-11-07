@@ -1,0 +1,141 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\lesson{4b}{21/10/19}
+\section{Wiener's integral}
+From the previously derived results we know how to compute the probability for a Brownian particle, starting in $x_0 $ at $t_0$, to be inside an interval $[A,B]$ at a certain time $t$:
+\begin{align*}
+    \mathbb{P}\{x(t) \in [A,B]\} = \int_A^B \dd{x} W(x,t|x_0, t_0)
+\end{align*}
+We are now interested in computing the expected value of \textit{functionals} of the trajectories, i.e. of quantities that depend on several (or all) points of the trajectory $x(\tau)$ of a Brownian particle. The simplest example is the \textit{correlation function}, which involves only the position at two different times $t_1 < t_2$:
+\begin{align*}
+    f(t_1, t_2) = x(t_1) x(t_2) \quad t_1 < t_2
+\end{align*} 
+A more general (and difficult) case is given by a function of the \textit{entire} trajectory, such as:
+\begin{align*}
+    F(\{x(\tau)\colon 0 < \tau \leq \tau\}) = f\left(\int_0^t x(\tau) a(\tau) \dd{\tau}\right)\qquad a,f\colon \mathbb{R} \to \mathbb{R}
+\end{align*}
+How to compute $\langle F \rangle$?\\
+
+As always, we start from the simplest case, and then work our way up to the most complex one. So, let's start with the two points case: $f(x(t_1), x(t_2))$. For the average $\langle f \rangle$ we need to \textit{weight} every possible value of $f$ with the probability that $f$ assumes that value, which will depend on the likelihood of the inputs $x(t_1)$ and $x(t_2)$. Thus, this becomes a problem of computing \textit{probabilities of compound events} - that is, of the particle passing through a specific sets of points at certain times. As $x(\tau) \in \mathbb{R}$, any kind of $\mathbb{P}\{x(t_1) = x_1, x(t_2) \in x_2\}$ for certain $t_1, t_2$ and $x_1, x_2$ will be $0$. We need, in general, to consider instead a \textit{range} of possibilities, i.e. that the particle passes through a set of \textbf{gates}, so that $x(t_1) \in [A_1, B_1]$ and $x(t_2) \in [A_2, B_2]$.\\
+
+In general, if we consider $N$ gates $[A_i, B_i]_{i=1, \dots, N}$ the probability of a particle passing through all of them will be:
+\begin{align*}
+    \mathbb{P}\{x(t_1) \in [A_1, B_1], x(t_2) \in [A_2, B_2], \dots, x(t_N) \in [A_N, B_N]\} = \span\\
+    &=\int_{A_1}^{B_1} \dd{x_1} W(x_1, t_1 | x_0, t_0) \int_{A_2}^{B_2} \dd{x_2} W(x_2, t_2|x_1,t_1) \cdots \int_{A_N}^{B_N} \dd{x_N} W(x_N, t_N|x_{N-1}, t_{N-1}) = \\
+    &= \int_{A_1}^{B_1} \frac{\dd{x_1}}{\sqrt{4 \pi D (t_1-t_0)}} \exp\left(-\frac{(x_1 - x_0)^2}{4 D (t_1 -t_0)} \right) \cdots \int_{A_N}^{B_N} \frac{\dd{x_N}}{\sqrt{4 \pi D (t_N - t_{N-1})}} \exp\left(-\frac{(x_N - x_{N-1})^2}{4 D (t_N - t_{N-1})} \right)  
+\end{align*}
+This is because the events of passing through two different gates are always \textit{independent}: the transition probability between two gates depends only on their distance, and not on the \textit{history} of the particle\footnote{For example, the fact that a particle has travelled to the right for $0<t<t_1$ tells nothing on the motion after $t_1$.}.\\
+However, for computing expected values of functions we are interested in \textit{tiny gates}, so that the value of $f$ at a gate is well defined (otherwise we would not know which value of $f$ we are \textit{weighting} with the trajectories probability). So, we diminish the size of gates, and instead of integrating the transition probabilities over sets $[A_i, B_i]$, we consider just their differentials:
+\begin{align*}
+    W(x_t, t| x_0, t_0) \dd{x_t} \equiv \mathbb{P}\{x(t) \in [x_t, x_t + \dd{x_t}, x(t_0) = x_0]\}
+\end{align*}
+So, we can now compute the (infinitesimal) probability that a Brownian particle will be very close to $x_1$ at $t=t_1$, and to $x_2$ at $t= t_2$:
+\begin{align*}
+    \mathbb{P}\{x(t_1) \in [x_1, x_1+\dd{x_1}], x(t_2) \in [x_2, x_2 + \dd{x_2}]\} = \span \\
+    &= W(x_2, t_2|x_1, t_1)W(x_1, t_1|x_0, t_0)  \dd{x_1}\dd{x_2} \\
+    &\equiv dP_{t_2, t_1} (x_2, x_1 | x_0, t_0)
+\end{align*}    
+And then we can compute the expected value of $f$:
+\begin{align*}
+   \langle f(x(t_1), x(t_2)) \rangle = \iint_{\mathbb{R}^2} x_1 x_2 f(x_1, x_2) dP_{t_2, t_1}(x_2,x_1|x_0, t_0)
+\end{align*}
+
+\begin{align*}
+    \langle x(t_1) x(t_2) \rangle &= \iint_{\mathbb{R}^2} x_1 x_2 dP_{t_2,t_1}(x_2,x_1|x_0,t_0) =\\
+    &= \int_{\mathcal{C}\{x_0,t_0;t\}} x(t_1) x(t_2 )\dd{_Wx(\tau)} =\\
+    &= \iint_{\mathbb{R}^2} \dd{x_1} \dd{x_2} x_1 x_2 \int_{\mathcal{C}\{x_0,t_0;x_1,t_1\}} \dd{_Wx(\tau)} \int_{\mathcal{C}\{x_1,t_1;x_2,t_2\}} \dd{_Wx(\tau)} \int_{\mathcal{C}\{x_2,t_2;t\}} \dd{_Wx(\tau)}
+\end{align*}
+In a certain (probabilistic) sense, $dP_{t_2,t_1}$ measures the \textit{volume} of all trajectories passing \q{really close} to $x_1$ at $t_1$ and $x_2$ at $t_2$. The power of this idea becomes clear when we extend the number of gates $N$ to infinity, while decreasing the interval $\Delta t_i = t_i - t_{i-1}$ between them:
+\begin{align*}
+    \lim_{\substack{\Delta t_i \to 0\\ N \to \infty}} \mathbb{P}\{x(t_1) \in \dd{x_1}, \dots, x(t_N) \in \dd{x_N}\} &=\lim_{\substack{\Delta t_i \to 0\\ N \to \infty}} \exp\left(-\sum_{i=1}^N \frac{(x_i - x_{i-1})^2}{4 D (t_i - t_{i-1})} \right) \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{4 \pi D (t_i - t_{i-1})}} =\\
+    &= \lim_{\substack{\Delta t_i \to 0 \\ N \to \infty}} \exp\left(-\frac{1}{4 D} \sum_{i=1}^{N} \frac{(x_i - x_{i-1})^2}{(t_i - t_{i-1})^{\textcolor{Red}{2}}} \textcolor{Red}{\Delta t_i} \right) \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} = \\
+    &\underset{(a)}{=}  \exp\left(-\frac{1}{4D} \int_0^t \dd{\tau} \dot{x}^2 (\tau)\right) \prod_{\tau=0}^t \frac{\dd{x}(\tau)}{\sqrt{4 \pi D \dd{\tau}}}  
+\end{align*}      
+where in (a) we replaced the infinite \q{dense} sum with a formal integral (Riemann sum) of $(\dd{x}/\dd{t})^2 = \dot{x}^2(\tau)$. 
+
+
+
+\section{Notes 1}
+Recall that $W(x,t)\dd{x}$ is the probability of finding the Brownian particle in the interval $[x,x+\dd{x}]$ at time $t$.\\
+Then, letting the initial condition be $W(x,t_0 | x_0, t_0) = \delta(x- x_0)$ (particle located in $x_0$ at $t_0$), the following holds (prove it explicitly as exercise):
+\begin{align*}
+    \int \dd{x'} W(x,t|x',t') W(x',t'|x_0, t_0) = W(x,t|x_0, t_0) = \span \\
+    &= \frac{1}{\sqrt{4 \pi D(t-t_0 ) }} \exp\left(-\frac{(x-x_0 )^2}{4D(t-t_0 )} \right) 
+\end{align*}
+Define:
+\begin{align*}
+    dP_{t,t'}(x,x'|x_0,t_0) = W(x,t|x',t') W(x',t'|x_0,t_0) \dd{x}\dd{x'}    
+\end{align*}
+with $t_0 < t' < t$ as the probability of finding a particle in $[x,x+\dd{x}]$ at time $t$, and then in $[x', x'+\dd{x'}]$ at time $t'$. Then:
+\begin{align*}
+    \langle x'(t) x(t) \rangle = \int dP_{t,t'}(x,x'|x_0, t_0) x_0 x'
+\end{align*}    
+
+Consider a function $g$ of $n$ points of the trajectory, sampled at times $t_1, t_2, \dots, t_n$:
+\begin{align*}
+    g(x(t_1 ), x(t_2 ), \dots, x(t_n))
+\end{align*}   
+To compute $\langle g \rangle$, we need to extend the joint pdf:
+\begin{align}
+    dP_{t_n, t_{n-1}, \dots, t_1} (x_n,\dots, x_1, x_0, t_0) \equiv W(x_n, t_n |x_{n-1}t_{n-1}) \cdots W(x_1, t_1|x_0, t_0) \prod_{i=1}^n \dd{x_i}
+    \label{eqn:dptn}
+\end{align} 
+leading to:
+\begin{align*}
+    \langle g(x(t_1 ), x(t_2), \dots, x(t_n)) \rangle = \int dP_{t_n, t_{n-1}, \dots, t_2, t_1} (x_n, \dots, x_1|x_0, t_0) g(x_1, \dots, x_n)
+\end{align*}
+Expanding (\ref{eqn:dptn}):
+\begin{align*}
+    dP_{t_n, t_{n-1}, \dots, t_2, t_1} = \int \prod_{i=1}^n \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) 
+\end{align*}
+Consider now a function of the \textit{whole} trajectory:
+\begin{align*}
+    F(\{x(\tau) \colon 0 < \tau \leq t \})
+\end{align*} 
+For example:
+\begin{align*}
+    F = f\left(\int_0^t x(\tau) a(\tau) \dd{\tau}\right)
+\end{align*}
+with a given function $a(\tau)$, such as $a(\tau) = 1$ or $a(\tau) = e^{-\tau/\tau_0}$. To compute the average of $F$ we introduce the Wiener measure $d_W x$, i.e. a generalization of (\ref{eqn:dptn}) to the continuum, so that:
+\begin{align*}
+    \langle F \rangle = \int d_W x F(\{x(\tau)\colon 0 < \tau \leq \tau\})
+\end{align*}
+and the integral is over a \textit{space of trajectories} $x\colon T \to R$, with $R \subseteq \mathbb{R}$, denoted with $\mathbb{R}^T$ (generalizing the common notation). For example: $T = [0, \infty]$.\\
+
+We have to define a sigma algebra in this space $\mathbb{R}^T$ in order to define a measure $d_W x$, i.e. a domain of measurable sets for which a probability measure makes sense.\\ %insert properties
+
+We start by defining a set of intervals $H_i \subset \mathbb{R}$ (for example $H_i = (x_i, x_i + \Delta x_i)$). We then consider the set of functions having values inside these $H_i$: $\mathbb{R}^T\colon \{x(t_i) \in H_i\}_{i=1, \dots, n}$. In other words, this is the set of trajectories that pass through each $H_i$ at instant $t_i$. Then we define the measure:
+\begin{align*}
+    \mu_W(\{x(t_1) \in H_1, x(t_2) \in H_2, \dots, x(t_n) \in H_n\}) = \\
+    = \int dP_{t_n, \dots, t_1}(x_n, \dots, x_1|x_0, t_0) \bb{I}_{H_1}(x_1) \cdots \mathbb{I}_{H_n}(x_n)\span 
+\end{align*} 
+where $\mathbb{I}_{H_i}$ are \textit{characteristic sets}:
+\begin{align*}
+    \mathbb{I}_{H_i} (x) = \begin{cases}
+        1 & x \in H_i\\
+        0 & x \not\in H_i
+    \end{cases}
+\end{align*}  
+Thanks to the \textbf{Kolomogorov theorem} we can \textit{extend} this measure, defined in the \q{tube that passes through all gates} $\{x(t_i) \in H_i\}$ to the entire $\mathbb{R}^T$.\\
+Knowing that this measure exists in the \textit{continuous case}, we can give meaning to a \textit{continuum limit} of the \textit{discrete case}. More precisely, in order to compute a function of the entire trajectory:
+\begin{align*}
+    F(\{x(\tau)\colon 0 < \tau < t \})
+\end{align*}    
+we start with a discretization $t_1 < t_2 < \dots < t_N < t \equiv t_{N+1}$, evaluate a \textit{discretized} function $F_N(x(t_1), \dots, x(t_N))$ and then consider the limit $N \to \infty$:
+\begin{align*}
+    \lim_{N \to \infty} \langle F_N(x(t_1), \dots, x(t_N)) \rangle
+\end{align*}     
+meaning that $\Delta t_i \to 0$, where $\Delta t_i = t_i - t_{i-1}$. We know how to compute the average of a function that depends on a \textit{finite} set of trajectory points: 
+\begin{align*}
+    \lim_{N \to \infty} \int \prod_{i=1}^{N+1} \frac{\dd{x_i}}{\sqrt{4\pi D \Delta t_i}} \exp\left(-\sum_{i=1}^{N+1} \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) F_N(x_1, \dots, x_N) 
+\end{align*}  
+The normalization condition:
+\begin{align*}
+    1 &= \int dP_{t_1, \dots, t_N} (x_1, \dots, x_N| x_0, t_0) = \\
+&= \int \prod_{i=1}^{N+1} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\sum_{i=1}^{N} \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) = \\
+&= \int \frac{\dd{x_N}}{(4 \pi D \Delta t_N )} \exp\left(-\frac{(x_N - x_{N-1})^2}{4 D \Delta t_N} \right)  
+\end{align*}
+\end{document}

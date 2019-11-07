@@ -84,12 +84,13 @@ As $W(x,t)$ is a pdf, the following conditions must hold:
     W(x,t) \geq 0 \quad \forall (x,t) \qquad \int_{\mathbb{R}} W(x,t) = 1
 \end{align*}   
 From the normalization, it follows that $W(x,t)$ - and its spatial derivative $W'(x,t)$ - must vanish as $|x| \to \infty$, so that the integral does not diverge:
-\begin{align*}
+\begin{align}
     \lim_{|x| \to \infty} W(x,t) = 0 \qquad \lim_{|x| \to \infty} W'(x,t) = 0
-\end{align*}   
+    \label{eqn:boundary-conditions}
+\end{align}   
 However, it is not obvious that $W(x,t) \geq 0$ will always hold, assuming we choose an initial condition $W(x,t_0) \geq 0$. This will be obvious \textit{a posteriori} - and in fact can justified by the peculiar properties of this differential equation.\\
 
-To solve (\ref{eqn:diffusion-equation}), as the spatial domain is all $\mathbb{R}$, one standard technique is that of Fourier integral transform, which allows to \q{remove} derivatives: $\partial_x \psi \to ik\psi$, $\partial_{xx} \to -k^2 \psi$. Thus, if we can \q{remove} the second-order space derivative, we will be left with a much more simpler first order differential equation in the time variable.
+To solve (\ref{eqn:diffusion-equation}), as the spatial domain is all $\mathbb{R}$, one standard technique is that of the Fourier integral transform, which allows us to \q{remove} derivatives by replacing $\partial_x \psi \to ik\psi$, $\partial_{xx} \to -k^2 \psi$. Thus, if we can \q{remove} the second-order space derivative, we will be left with a much more simpler first order differential equation in the time variable.
 
 \begin{expl}
     \textbf{Translational invariance}. This approach is suggested by the translational invariance of solutions of (\ref{eqn:diffusion-equation}). In fact, if $W(x,t)$ is a solution, then also $\tilde{W}(x,t) = W(x-a,t)$ is a solution.\\
@@ -114,65 +115,99 @@ Let $\varphi_k(x) = e^{ikx}$. Then, as the Fourier basis is orthonormal, the fol
 \end{align} 
 We then apply a Fourier transform to both members of (\ref{eqn:fourier-w}), by multiplying by $e^{-ik'x}$ and integrating over $x$:
 \begin{align*}
-    \int_{\mathbb{R}} W(x,t) e^{-ik'x} \dd{x} = \int_{\mathbb{R}} \frac{\dd{k}}{2\pi}  \int_{\mathbb{R}} \dd{x} e^{i(k-k')x} c_k(t)
-\end{align*}  
-If we now apply the ON relation (\ref{eqn:fourier-ON}) we can solve the integral in the right side:
-\begin{align*}
-    \int_{\mathbb{R}} W(x,t) e^{-ik'x}\dd{x} = \int_{\mathbb{R}} \dd{k} \delta(k-k') c_k(t) = c_{k'}(t)
+    \int_{\mathbb{R}} W(x,t) e^{-ik'x} \dd{x} &= \int_{\mathbb{R}} \frac{\dd{k}}{2\pi}  \int_{\mathbb{R}} \dd{x} e^{i(k-k')x} c_k(t)
+\intertext{If we now apply the ON relation (\ref{eqn:fourier-ON}) we can solve the integral in the right side:}
+    \int_{\mathbb{R}} W(x,t) e^{-ik'x}\dd{x} &= \int_{\mathbb{R}} \dd{k} \delta(k-k') c_k(t) = c_{k'}(t)
 \end{align*}
-and so:
-\begin{align*}
+And substituting $k' \to k$ we arrive at an expression for $c_k(t)$:  
+\begin{align}
     c_k(t) = \int_{\mathbb{R}} \dd{x} e^{-ikx} W(x,t)
-\end{align*}
-Differentiating wrt $t$:
+    \label{eqn:ckt}
+\end{align}
+Starting from (\ref{eqn:diffusion-equation}) we can write a corresponding differential equation for the coefficients $c_k(t)$ in the Fourier basis, and then solve it. 
+
+\begin{expl}
+    \textbf{Braket notation}. Let the solution be $\ket{W(t)}$, so that $\braket{x}{W(t)} = W(x,t)$. Then in (\ref{eqn:fourier-w}) we just did a change of basis (by using Dirac completeness):
+    \begin{align*}
+        \ket{W(t)} = \bb{I} \ket{W(t)} = \int_k \ket{k}\underbrace{\braket{k}{W(t)}}_{c_k(t)} 
+    \end{align*}
+    where $\ket{k}$ are elements of the Fourier basis ($\braket{x}{k} = e^{ikx}$) and so:
+    \begin{align*}
+        c_k(t) = \braket{k}{W(t)} = \int_x \braket{k}{x} \braket{x}{W(t)} = \int_{\mathbb{R}} \dd{x} e^{-ikx} W(x,t)
+    \end{align*}
+    So the initial differential equation (\ref{eqn:diffusion-equation}) is expressed in the position basis, while the following equation involving $c_k(t)$ is expressed in the Fourier basis. 
+\end{expl}
+So, we start by differentiating (\ref{eqn:ckt}) with respect to $t$:
 \begin{align*}
-    \dot{c}_k(t) &= \int_{\mathbb{R}} \dd{x} e^{-ikx} \dot{W}(x,t) = D \int_{-\infty}^{\infty} e^{-ikx} W''(x,t) \dd{x} =  \\
-    &= D W'(x,t) e^{-ikx}\big|_{-\infty}^{\infty} - D \int_{-\infty}^{\infty} \partial_x (e^{-ikx}) W'(x,t) \dd{x} = \\
-    &= -D\underbrace{(\partial_x e^{-ikx})}_{-ik e^{-ikx}} W(x,t) \big|_{-\infty}^{\infty} + D\int_{\mathbb{R}} \underbrace{\partial_x^2 (e^{-ikx})}_{-k^2 e^{-ikx}} W(x,t) \dd{x} \\
+    \dot{c}_k(t) &= \int_{\mathbb{R}} \dd{x} e^{-ikx} \dot{W}(x,t) \underset{(a)}{=}  D \int_{-\infty}^{\infty} e^{-ikx} W''(x,t) \dd{x} =  \\
+    &\underset{(b)}{=}  \cancel{D W'(x,t) e^{-ikx}}\big|_{-\infty}^{\infty} - D \int_{-\infty}^{\infty} \partial_x (e^{-ikx}) W'(x,t) \dd{x} = \\
+    &\underset{(c)}{=}  -D\underbrace{(\partial_x e^{-ikx})}_{-ik e^{-ikx}} \cancel{W(x,t) }\big|_{-\infty}^{\infty} + D\int_{\mathbb{R}} \underbrace{\partial_x^2 (e^{-ikx})}_{-k^2 e^{-ikx}} W(x,t) \dd{x} =\\
+    &= -Dk^2 \underbrace{\int_{-\infty}^{+\infty} \dd{x} e^{-ikx} W(x,t)}_{c_k(t)} = -Dk^2 c_k(t)  \\
 \end{align*} 
-And so:
+where in (a) we substituted (\ref{eqn:diffusion-equation}), and in (b) and (c) we performed two integrations by parts. Note that the $W(x,t)$ and $W'(x,t)$ terms vanish because of the boundary conditions (\ref{eqn:boundary-conditions}).  
+
+Summarizing:
 \begin{align*}
     \dot{c}_k(t) = \int_{\mathbb{R}} \dd{x} e^{-ikx} \dot{W}(x,t) = - D k^2 c_k(t)
 \end{align*}
-and by integrating we arrive at the solution:
+This is a first-order ordinary differential equation, which can be solved by separation of variables:
 \begin{align*}
-    c_k(t) = e^{-D k^2 t} c_{k_-}(0) = e^{-D k^2 t} \int \dd{x_0} e^{-ikx} W(x_0,0)
+    \dv{t} c_k(t) = -Dk^2 c_k(t) \Rightarrow \int \frac{\dd{c_k(t)}}{c_k(t)} = \int -Dk^2 \dd{t}  \Rightarrow \ln c_k(t) = - Dk^2 t + C
 \end{align*}
-and finally:
+And rearranging:
+\begin{align}
+    c_k(t) = A e^{-Dk^2 t}
+    \label{eqn:gen-int1}
+\end{align}
+To find the integration constant $A$ we impose the initial conditions, i.e. that $c_k(t)$ be equal to a known $c_k(t_0)$ at time $t_0$:
+\begin{align}
+    c_k(t_0) \overset{!}{=} A e^{-Dk^2 t_0} \Rightarrow A = c_k(t_0 ) e^{Dk^2 t_0} 
+    \label{eqn:A-const}
+\end{align}     
+And substituting (\ref{eqn:A-const}) back in (\ref{eqn:gen-int1}) we arrive at the general integral:
+\begin{align}
+    c_k(t) = c_k(t_0 ) e^{-Dk^2(t-t_0)}
+    \label{eqn:ckt2}
+\end{align}
+We can now go back to $W(x,t)$ by plugging (\ref{eqn:ckt2}) into (\ref{eqn:fourier-w}):
+\begin{align} \nonumber
+    W(x,t) &= \int_{\mathbb{R}} \frac{\dd{k}}{2 \pi} e^{ikx} c_k(t) = \int_{\mathbb{R}} \frac{\dd{k}}{2 \pi} e^{ikx - Dk^2(t-t_0 )} c_k(t_0) =\\ \nonumber
+    &\underset{(\ref{eqn:ckt})}{=} \int_{\mathbb{R}} \frac{\dd{k}}{2 \pi} e^{ikx - Dk^2 (t-t_0 )} \int_{\mathbb{R}} \dd{y} e^{-iky} W(y,t_0) = \\
+    &= \int_{\mathbb{R}} \dd{y} W(y,t_0 ) \int_{\mathbb{R}} \frac{\dd{k}}{2 \pi} \exp\left(-Dk^2(t-t_0 ) + ik(x-y)\right) 
+    \label{eqn:wxt1}
+\end{align}
+Recall (CFR 17/10 lecture) that:
 \begin{align*}
-    W(x,t) &= \int \frac{\dd{k}}{2 \pi} e^{ikx - Dk^2 t} \int \dd{x_0} e^{-ik x_0} W(x_0, 0) =\\
-    &= \int \dd{x_0} \left[\int_{-\infty}^{\infty}  \frac{\dd{k}}{2 \pi}  e^{-D k^2 t + i(k(x-x_0))}\right] W(x_0, 0)
+    \int_{-\infty}^{+\infty} \frac{\dd{k}}{2 \pi} e^{-iak^2 - ibk} = \frac{1}{\sqrt{4 \pi a i}} \exp\left(\frac{i b^2}{4 a} \right)  
 \end{align*}
-This integral can be computed with the Cauchy residual theorem, by shifting the integral path by $ik(x-x_0)$ on the complex plane. We then arrive to:
+and so with $ia = D(t-t_0 )$ and $b=-(x-y)$ we arrive at:
 \begin{align*}
-    \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{(x-x_0)^2}{4 D t} \right) 
+    \int_{\mathbb{R}} \frac{\dd{k}}{2\pi} \exp(-Dk^2(t-t_0) + ik(x-y)) = \frac{1}{\sqrt{4 \pi D(t-t_0 ) }} \exp\left(-\frac{(x-y)^2}{4 D (t - t_0 )} \right) 
 \end{align*} 
-and the general solution is:
-\begin{align*}
-    W(x,t) = \int \dd{x_0} \frac{\exp \left(-\frac{(x-x_0)^2}{4 D t} \right)}{\sqrt{4 \pi D t}} W(x_0, 0) 
-\end{align*}
-If we choose an infinite density for the initial condition:
-\begin{align*}
-    W(x_0, 0) = \delta(x_0)
-\end{align*}
-then the solution (given that the particle was at $x_0$ at $t=0$) will be:
-\begin{align*}
-    W(x,t | x_0, 0) = \frac{1}{\sqrt{4 \pi D t}} \exp \left(-\frac{(x-x_0)^2}{4 D t} \right) 
-\end{align*}
-More generally:
-\begin{align*}
-    W(x,t | x_0, t_0 ) = \frac{1}{\sqrt{4 \pi D (t-t_0 )}} \exp \left(-\frac{(x-x_0 )^2}{4 D (t-t_0)} \right) \qquad W(x,t|x_0, t_0 ) = \delta(x- x_0)
-\end{align*}
-We will refer to this as a \textbf{propagator}.\\
-Note that we can rewrite it as:
-\begin{align*}
-    W(x,t|x_0, t_0 ) = \int \dd{x_0 } W(x,t|x_0, t_0) W(x_0, t_0)
-\end{align*} 
+Substituting back in (\ref{eqn:wxt1}):
+\begin{align}
+    W(x,t) = \frac{1}{\sqrt{4 \pi D (t-t_0 ) }} \int_{\mathbb{R}} \dd{y} W(y,t_0 ) \exp\left(-\frac{(x-y)^2}{4 D (t-t_0 )} \right)
+    \label{eqn:wxt2}
+\end{align}
 
-Let $x_0 = 0 = t_0$, leading to:
+\subsection{Propagators}
+Suppose we know with certainty that the particle is in $y = x_0 $ at time $t = t_0$, that is:
 \begin{align*}
-    W(x,t | 0, 0) = (4 \pi D t )^{-1/2} \exp\left(-\frac{x^2}{4 D t} \right)
-\end{align*} 
+    W(y, t_0) = \delta(y - x_0)
+\end{align*}
+Then, substituting in (\ref{eqn:wxt2}) leads to:
+\begin{align}
+    W(x,t | x_0, t_0) \equiv \frac{1}{\sqrt{4 \pi D (t-t_0 )}} \exp \left(-\frac{(x-x_0)^2}{4 D (t-t_0 )} \right) 
+    \label{eqn:prop}
+\end{align}
+where with $W(x,t|x_0, t_0)$ we denote the probability that the particle will be \textit{around}  position $x$ at time $t$, \textbf{given} it was certainly in $x_0 $ at time $t_0$. $W(x,t|x_0, t_0)$ is also called \textbf{propagator}, as it \q{propagates} the particle from $(x_0 , t_0 )$ to $(x,t)$ as a sort of \textit{continuous transition probability}. This is much more evident if we rewrite (\ref{eqn:wxt2}) as follows (with $y \to x_0$ for simplicity):
+\begin{align}
+    W(x,t) = \int \dd{x_0 } W(x,t|x_0, t_0) W(x_0, t_0)
+    \label{eqn:propagator}
+\end{align} 
+
+\begin{comment}
+\subsection{Scale invariance} %Sistemare
 We will now talk about the concept of \textbf{scale invariance}.\\
 We start from:
 \begin{align*}
@@ -231,74 +266,66 @@ However, by translational invariance, we can simply translate time and space:
 \begin{align*}
     W(x-x_0, t-t_0 | 0,0)
 \end{align*}
+\end{comment}
 
-Now, we start again from:
-\begin{align*}
-    W(x,t) &= \int \dd{x_0} \frac{1}{\sqrt{4 \pi D (t-t_0 )}} \exp\left(-\frac{(x-x_0 )^2}{4 D (t-t_0)} \right)  W(x_0, t_0) =\\
-    &= \int d\dd{x_0} W(x,t|x_0, t_0) W(x_0, t_0)
+\subsection{Properties}
+Let's explorer some properties of (\ref{eqn:propagator}).\\
+
+\begin{enumerate}
+    \item \textbf{ESCK property}. Let's propagate a particle from a starting point $(x_0, t_0 )$ to two different end points $(x_1 , t_1 )$ and $(x_2 , t_2 )$:
+    \begin{align}
+        \label{eqn:wx1}
+        W(x_1, t_1) &= \int \dd{x_0} W(x_1, t_1|x_0, t_0) W(x_0, t_0) \\
+        W(x_2, t_2) &= \int \dd{x_0} W(x_2, t_2|x_0, t_0) W(x_0, t_0) \label{eqn:wx2}
+    \end{align}
+    We can also propagate to $(x_2, t_2 )$ starting from $(x_1, t_1)$:
+    \begin{align}
+        W(x_2, t_2) = \int \dd{x_1} W(x_2, t_2 | x_1, t_1) W(x_1, t_1)
+        \label{eqn:wx12}
+    \end{align}  
+    Now, if we substitute (\ref{eqn:wx1}) in (\ref{eqn:wx12}) we get:
+    \begin{align*}
+        W(x_2, t_2) = \iint \dd{x_1} \dd{x_0} W(x_2, t_2 | x_1, t_1) W(x_1, t_1 | x_0, t_0) W(x_0, t_0)
+    \end{align*} 
+    By comparing this expression with (\ref{eqn:wx2}), we find that:
+    \begin{align*}
+        W(x_2, t_2 | x_0, t_0) = \int \dd{x_1} W(x_2, t_2 | x_1, t_1) W(x_1, t_1 | x_0, t_0)
+    \end{align*}
+    That is, the propagator between two \textit{points} $A$ and $B$ can be obtained by multiplying the propagators between $A \to C$ and $C \to B$ and summing over \textit{all possible choices} of $C$. This property is the Einstein-Smoluchowski-Kolmogorov-Chapman relation (\textbf{ESCK}).
+    \item \textbf{Moments}. Consider two instants $t_1 \neq t_2$, and suppose we want to compute $\langle x(t_2) x(t_1) \rangle$, supposing that the particle started in $x=0$ at $t=0$. Applying the definition of an expected value:
+    \begin{align*}
+        \langle x(t_2) x(t_1) \rangle = \iint \dd{x_1} \dd{x_2} \mathbb{P}(x_2, t_2; x_1, t_1|0,0) x_2 x_1
+    \end{align*}
+    where $\mathbb{P}(x_2, t_2; x_1,t_1|0,0)$ is the \textit{joint pdf} of a particle being around $x_1 $ at $t_1 $ and around $x_2 $ at $t_2 $, given the \textit{initial position} in $x=0$ at $t=0$.\\
+    Recall from probability theory that:
+    \begin{align*}
+        &\mathbb{P}(x_2, t_2; x_1, t_1;0,0) &=& \quad \mathbb{P}(x_2,t_2;x_1,t_1|0,0) \mathbb{P}(0,0)  \\
+        \Rightarrow\> &\mathbb{P}(x_2, t_2; x_1, t_1|0,0) &=& \quad \frac{\mathbb{P}(x_2, t_2; x_1, t_1; 0,0)}{\mathbb{P}(0,0)} = \frac{W(x_2, t_2|x_1, t_1)W(x_1,t_1|0,0)\cancel{W(0,0)}}{\cancel{W(0,0)}}\\
+        \span  &=& \quad W(x_2, t_2 | x_1,t_1) W(x_1, t_1 | 0,0)
+    \end{align*}
+    Recalling the result in (\ref{eqn:prop}) we can now compute:
+    \begin{align*}
+    \langle x(t_2) x(t_1) \rangle &= \iint_{\mathbb{R}^2} \dd{x_1} \dd{x_2} x_1 x_2 \frac{\exp\left(-\frac{(x_2 - x_1)^2}{4D(t_2 -t_1)} \right) }{\sqrt{4 \pi D (t_2 -t_1)}} \frac{\exp\left(-\frac{x_1^2}{4 D t_1} \right)}{\sqrt{4 \pi D t_1}} 
+\intertext{By changing variables ($x_1 = y_1$, $x_2 - x_1 = y_2$) we arrive at:}
+    &= \frac{1}{\sqrt{4 \pi D (t_2-t_1) }}  \frac{1}{\sqrt{4 \pi D t_1}} \iint_{\mathbb{R}^2} \dd{y_1} \dd{y_2} y_1 (y_1 + y_2)\exp\left(-\frac{y_2^2}{4D(t_2 -t_1)} - \frac{y_1^2}{4D t_1} \right) =\\
+    &\underset{(a)}{=}  \frac{1}{\sqrt{4 \pi D(t_2-t_1)}} \frac{1}{\sqrt{4 \pi D t_1}} \int \dd{y_1} y_1^2 \exp\left(-\frac{y_1^2}{4 D t_1} \right)  \cdot \int \dd{y_2} \exp\left(-\frac{y_2^2}{4  D (t_2-t_1) } \right) =\\
+    &\underset{(b)}{=}  
+    \frac{1}{\sqrt{\bcancel{4 \pi D(t_2 -t_1)}}} \frac{1}{\sqrt{\cancel{4 \pi D t_1}}} \left(2 D t_1\cancel{ \sqrt{4 \pi D t_1 }}\right) \left(\sqrt{\bcancel{4 \pi D (t_2 - t_1)}}\right)=  
+    2D t_1
 \end{align*}
-and ask what is the probability that a particle will be at position $x_2$ at $t=t_2$, given that the initial condition was $x_1$ at $t_1$.\\
-We now that:
+In (a) we note that by expanding $y_1(y_1+y_2)$, the term with $y_1 y_2$ is an odd function integrated over a symmetric domain, that results in $0$. So, only the term with $y_1^2$ remains, allowing the integral's factorization. Then, in (b), we compute the Gaussian integrals, \textit{supposing} $t_1 < t_2$ (so that $t_2 - t_1 > 0$) and recalling:
 \begin{align*}
-    \mathbb{P}(x,t|x_0, t_0) \equiv W(x,t|x_0, t_0)
-\end{align*}
-But can we derive the same result by using the propagator?
-\begin{align*}
-    W(x_2, t_2) &= \int \dd{x_0} W(x_2, t_2|x_0, t_0) W(x_0, t_0)\\
-    W(x_1, t_1) &= \int \dd{x_0} W(x_1, t_1|x_0, t_0) W(x_0, t_0) 
-\end{align*}
-In principle, we can also write what happens at $t_2$ in terms of what happens at $t_1$:
-\begin{align*}
-    W(x_2, t_2) = \int \dd{x_1} W(x_2, t_2 | x_1, t_1) W(x_1, t_1)
+    \int_{-\infty}^{+\infty} \exp\left(-\frac{1}{2} a x^2 \right) \dd{x} &= \sqrt{\frac{2 \pi}{a} }\\ \int_{-\infty}^{+\infty} x^2 \exp\left(-\frac{1}{2} a x^2 \right) &= -2 \dv{a} \int_{-\infty}^{+\infty} \exp \left(-\frac{1}{2} a x^2 \right)\dd{x} = \sqrt{\frac{2 \pi}{a}} \frac{1}{a} 
 \end{align*}  
-If we substitute $W(x_1, t_1)$ in there:
+The case when $t_1 > t_2$ leads to a similar result, with $t_1 \leftrightarrow t_2$. Thus, in general:   
 \begin{align*}
-    W(x_2, t_2) = \iint \dd{x_1} \dd{x_0} W(x_2, t_2 | x_1, t_1) W(x_1, t_1 | x_0, t_0) W(x_0, t_0)
+    \langle x(t_1) x(t_2) \rangle = 2D \min(t_1, t_2)
 \end{align*} 
-By comparing with the previous integrals, we find that:
-\begin{align*}
-    W(x_2, t_2 | x_0, t_0) = \int \dd{x_1} W(x_2, t_2 | x_1, t_1) W(x_1, t_1 | x_0, t_0)
-\end{align*}
-This is the \textbf{ESCK} property of the propagator.\\
-Then, using gaussian integration:
-\begin{align*}
-    W(x,t|x_0, t_0) = \frac{1}{\sqrt{4 \pi D (t-t_0) }} \exp\left(-\frac{(x-x_0)^2}{4 D (t-t_0)} \right) 
-\end{align*} 
-(verify it as exercise).\\
+\end{enumerate}
 
-Returning to the integral we found:
-\begin{align*}
-    \mathbb{P}(x_2, t_2; x_1, t_1; x_0, t_0) = W(x_2, t_2|x_1, t_1) W(x_1, t_1 | x_0, t_0) W(x_0, t_0)
-\end{align*}
-This is the joint probability that the particle arrives at $x_1$ at $t_1$ and then at $x_2$ at $t_2$, given that it started in $x_0$ at $t_0$.\\
-We can then compute:
-\begin{align*}
-    \langle x(t_2) x(t_1) \rangle = \iint \dd{x_1} \dd{x_2} \mathbb{P}(x_2, t_2; x_1, t_1) x_2 x_1
-\end{align*}
 
-Let's do an example. Consider:
-\begin{align*}
-    \mathbb{P}(x_2, t_2; x_1, t_1 | 0, 0) = \mathbb{P}(x_2, t_2; x_1, t_1; 0,0)\frac{1}{W(0,0)} = W(x_2, t_2 | x_1, t_1) W(x_1, t_1 | 0,0)
-\end{align*}
-we want to compute $\langle x(t_2) x(t_1) \rangle$:
-\begin{align*}
-    \langle x(t_2) x(t_1) \rangle = \iint \dd{x_1} \dd{x_2} x_1 x_2 \frac{\exp\left(-\frac{(x_2 - x_1)^2}{4D(t_2 -t_1)} \right) }{\sqrt{4 \pi D (t_2 -t_1)}} \frac{\exp\left(-\frac{x_1^2}{4 D t_1} \right)}{\sqrt{4 \pi D t_1}} 
-\end{align*}
-Changing variables ($x_1 = y_1$, $x_2 - x_1 = y_2$) we get:
-\begin{align*}
-    = \frac{1}{\sqrt{4 \pi D (t_2-t_1) }}  \frac{1}{\sqrt{4 \pi D t_1}} \iint \dd{y_1} \dd{y_2} y_1 (y_1 + y_2)\exp\left(-\frac{y_2^2}{4D(t_2 -t_1)} - \frac{y_1^2}{4D t_1} \right) 
-\end{align*}
-Notice that the exponential is an even function, and $y_1 y_2$ is odd, so only the term with $y_1^2$ remains. We arrive at:
-\begin{align*}
-    \langle x(t_2) x(t_1) \rangle &= \frac{1}{\sqrt{4 \pi D(t_2-t_1)}} \frac{1}{\sqrt{4 \pi D t_1}} \int \dd{y_1} y_1^2 \exp\left(-\frac{y_1^2}{4 D t_1} \right)  \cdot \int \dd{y_2} \exp\left(-\frac{y_2^2}{4 \pi D (t_2-t_1) } \right) =\\
-    &= 2D t_1
-\end{align*}
-Here we supposed $t_1 < t_2$. In the general case, we would have:
-\begin{align*}
-    \langle x(t) x(t') \rangle = 2D \min(t, t')
-\end{align*} 
 
-Generalizing:
+Generalizing: %Sistemare
 \begin{align*}
     \mathbb{P}(x_i, t_i; i=0, \dots, n) &= \mathbb{P}(x_n, t_n; x_{n-1}, t_{n-1}; \dots; x_1, t_1; x_0, t_0) =\\
     &= \prod_{i=1}^n W(x_i, t_i | x_{i-1}, t_{i-1}) W(x_0, t_0)
@@ -312,7 +339,7 @@ we need to use the joint probability:
 \begin{align*}
     = \int \prod_{i=0}^n W(x_i, t_i; i=0, \dots, n) \cdot f(x_n, x_{n-1}, \dots, x_0)
 \end{align*}
-In the next lecture we will try to see how to generalize this kind of calculation to a function that also depends on the \textit{inbetween points}, that is on a \textit{infinite set of values of the trajectory}. For example:
+In the next lecture we will try to see how to generalize this kind of calculation to a function that also depends on the \textit{in between points}, that is on a \textit{infinite set of values of the trajectory}. For example:
 \begin{align*}
     \langle \exp \left(-\int_0^t a(\tau) x(\tau) \dd{\tau}\right) \rangle
 \end{align*}  
