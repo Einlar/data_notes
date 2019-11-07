@@ -1,0 +1,239 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Einstein's equations}
+\lesson{7}{07/11/19}
+We were trying to fix the second coefficient ($c_2$) in the Einstein's equations:
+\begin{align*}
+    R_{\mu \nu} - \frac{R}{2} g_{\mu \nu} = c_2 T_{\mu \nu} 
+\end{align*}
+Recall that $c_1$ was fixed by the \textit{conservation of energy-momentum}.\\
+To fix $c_2$ we look at the low energy regime, so that $\rho \gg p$ and $u^\alpha = (1, \bm{0})$. Then we computed:
+\begin{align*}
+    R_00 \approx c_2 \frac{\rho}{2} 
+\end{align*}     
+We now consider a \textit{stationary metric}, meaning that it is only a function of space, not time ($g_{\mu \nu}(\bm{x})$). To simplify computations we choose a LIF, recalling that:
+\begin{align*}
+    R_{\gamma \sigma \mu \nu} = \frac{1}{2} \left(g_{\gamma \nu, \sigma \mu} - g_{\sigma \nu, \gamma \mu} - g_{\gamma \mu , \sigma \nu} + g_{\sigma \mu, \gamma \nu}\right) 
+\end{align*}  
+Recall also that, in a LIF, the following conditions holds:
+\begin{align*}
+    g_{\mu \nu}(\bm{x}) = \eta_{\mu \nu}; \qquad \partial_\alpha g_{\mu \nu}(\bm{x}) = 0
+\end{align*}
+We then compute the Ricci tensor by rising an index:
+\begin{align*}
+    R^\alpha_{\sigma \mu \nu} = \frac{1}{2} \eta^{\alpha \gamma} \left[g_{\gamma \nu, \sigma \mu} - g_{\sigma \nu, \gamma \mu} - g_{\gamma \mu, \sigma \nu} + g_{\sigma \mu, \gamma \nu}\right] 
+\end{align*}
+Then we contract:
+\begin{align*}
+    R_{\sigma \nu} = R^\alpha_{\sigma \alpha \nu} = \frac{1}{2} \eta^{\alpha \gamma} \left[g_{\gamma \nu, \sigma \alpha} - g_{\sigma \nu, \gamma \alpha}- g_{\gamma \alpha, \sigma \nu} + g_{\sigma \alpha, \gamma \nu}\right] 
+\end{align*}
+With $\sigma, \nu = 0$:
+\begin{align*}
+    R_{00} = \frac{1}{2} \eta^{\alpha \gamma}\left[\cancel{g_{\gamma 0, 0 \alpha}} - g_{00, \gamma \alpha} - \cancel{g_{\gamma \alpha,00} }+ \cancel{g_{0 \alpha, \gamma 0}}\right] 
+\end{align*} 
+As the metric is stationary, all derivatives wrt time ($0$-th coordinate) vanish. For the same reason, all terms with $\gamma, \alpha \neq 0$ vanish, and so the only ones left are:
+\begin{align*}
+    R_{00} \approx -\frac{1}{2} \left[g_{00,11} + g_{00,22} + g_{00,33}\right]  = -\frac{1}{2}\left[\pdv[2]{x}g_{00} + \pdv[2]{y} g_{00} + \pdv[2]{z} g_{00} \right] = - \frac{1}{2} \laplacian g_{00} 
+\end{align*}
+Putting all together:
+\begin{align*}
+    R_{00} \approx c_2 \frac{\rho}{2} \approx -\frac{1}{2} \laplacian g_{00} \Rightarrow \laplacian g_{00} \approx - c_2 \rho  
+\end{align*}
+What is the meaning of $g_{00} $ in the low energy regime?\\
+We want to relate $g_{00} $ to a gravitational potential (as, at the end, we want to recover Newton's law of gravitation). Recall that, when we examined the \textit{gravitational redshift effect}, we found that:
+\begin{align*}
+    \Delta \tau_B &\approx \Delta \tau_A (1- \Phi_A + \Phi_B) 
+\intertext{Where $\Delta \tau_B$ is an interval measured \textit{closer} to the gravitational source, and $\Delta \tau_A$ further away, so that $\Phi_A > \Phi_B$, and $\Delta \tau_B < \Delta \tau_A$ (time runs more slowly for B). In this first-order approximation, we can write:}
+    &\approx \Delta \tau_A (1- \Phi_A) (1+ \Phi_B)\\
+    &\underset{(a)}{\approx}  \frac{\Delta \tau_A}{1+ \Phi_A} (1+ \Phi_B) 
+\end{align*}     
+where in (a) we used $(1+ \epsilon)^{-1} = 1 - \epsilon + O(\epsilon^2)$. Then, by rearranging:
+\begin{align*}
+    \frac{\Delta \tau_B}{1 + \Phi_B} \approx \frac{\Delta \tau_A}{1+ \Phi_A}  
+\end{align*}
+$\Delta \tau_A$ and $\Delta \tau_B$ are proper times measured by observers $A$, $B$ at rest. Recall that the proper time is defined as:
+\begin{align*}
+    \dd{\tau}^2 = \dd{s}^2 = g_{\mu \nu} \dd{x}^\mu \dd{x}^\nu
+ = g_{00} (\dd{t})^2 + \cancel{2 g_{0i} \dd{t} \dd{x}^i} + \cancel{g_{ij} \dd{x}^i
+\dd{x}^j}
+\end{align*}    
+so that for observers \textbf{at rest}:
+\begin{align*}
+    \dd{\tau} = \sqrt{-g_{00}} \dd{t}
+\end{align*} 
+where $\dd{\tau}$ is the proper time measured by the observer at rest and $ \dd{t}$ is the time coordinate.\\
+In a spacetime diagram, Alice (A) and Bob (B) have \textit{vertical} worldlines (because they are relatively at rest). Suppose $A$ sends two light signals to $B$. Each signal takes the \textit{same} time to travel that distance ($\Delta t_A = \Delta t_B \equiv \Delta t$), as the metric \textit{does not depend} on time. Note that this is \textit{coordinate time}, not \textit{local (proper) time} as measured by $A$ or $B$. So:
+\begin{align*}
+    \Delta \tau_A = \sqrt{-g_{00} (A)} \Delta t; \qquad \Delta \tau_B = \sqrt{-g_{00} (B)} \Delta t 
+\end{align*}    
+and then:
+\begin{align*}
+    \frac{\Delta \tau_A}{\sqrt{-g_{00} (A)}} = \frac{\Delta \tau_B}{\sqrt{-g_{00} (B)}}  
+\end{align*}
+Note that this is the same relation we obtained by studying the gravitational redshift in the weak field approximation! So we have learned the \textit{physical meaning} of $g_{00}$ (in this regime):
+\begin{align*}
+    \sqrt{-g_{00}} \approx 1 + \Phi \Rightarrow g_{00} = - (1 + \Phi)^2 \approx -(1+ 2 \Phi)
+\end{align*}  
+So the \textit{presence of gravity} modifies $g_{00}$. 
+
+Finally, we are ready to return to the Einste's equations, and putting all together:
+\begin{align*}
+    \laplacian g_{00} \approx -c_2 \rho; \qquad g_{00} \approx -(1+ 2 \Phi) \Rightarrow \laplacian \Phi \approx \frac{c_2}{2} \rho 
+\end{align*}
+We will now show that this \textit{reduces to Newton's law} if we correctly choose $c_2$. 
+
+To do this, we will borrow some concepts from electrostatics. Recall Coulomb's Law in $d=1$:
+\begin{align*}
+    F = \frac{1}{4 \pi \epsilon_0} \frac{Q q}{r^2}  
+\end{align*} 
+This becomes Newton's Law by simply substituting $Q \leftrightarrow M$, $(4 \pi \epsilon_0)^{-1} = - G$:
+\begin{align*}
+    F = - G \frac{M m}{r^2} 
+\end{align*}
+Recall Gauss' Law:
+\begin{align*}
+    \int_{\partial V} \dd{\bm{a}} \cdot \bm{E} = \frac{Q_{\mathrm{in} }}{\epsilon_0}  =\frac{1}{\epsilon_0}   \int_V \dd[3]{x} \rho \underset{(a)}{=}  \int_V \dd[3]{x} \vnabla \cdot \bm{E}
+\end{align*}
+where $\rho$ is the charge density inside a volume $V$, and in (a) we applied the divergence theorem. So the \textit{flux} of the \textit{electric field} through the boundary $\partial V$ of $V$ is proportional to the charge $Q_{\mathrm{in} }$ inside $V$. Note that this law holds \textit{for every $V$}. 
+
+This implies that the \textit{integrals themselves} must be equal to each other:
+\begin{align*}
+    \vnabla \cdot \bm{E} = \frac{\rho}{\epsilon_0} 
+\end{align*}
+Expanding:
+\begin{align*}
+    \vnabla \cdot \bm{E} = \pdv{E_x}{x} + \pdv{E_y}{y} + \pdv{E_z}{z} = \frac{\rho}{\epsilon_0} 
+\end{align*}
+Recall that $\bm{E} = -\vnabla V$, where $V$, for a point charge is:
+\begin{align*}
+    V = \frac{1}{4 \pi \epsilon_0} \frac{Q}{r}  
+\end{align*}  
+So that:
+\begin{align*}
+    E_x = -\pdv{V}{x}; E_y=-\pdv{V}{y}; E_z = -\pdv{V}{z}
+\end{align*}
+Substituting in the previous expression:
+\begin{align*}
+    \vnabla \cdot \bm{E} = \pdv{x}\left(-\pdv{V}{x}\right)  + \pdv{y}\left(-\pdv{V}{y}\right) + \pdv{z}\left(-\pdv{V}{z}\right) = -\laplacian V
+\end{align*}
+This leads to \textit{Poisson's equation} for electrostatics:
+\begin{align*}
+    \laplacian V = - \frac{\rho}{\epsilon_0} 
+\end{align*} 
+which is merely a reformulation of \textit{Coulomb's Law}.\\
+Now, compare this with the previous result:
+\begin{align*}
+    \Delta \Phi \approx \frac{c_2}{2} \rho 
+\end{align*} 
+We are really close! Let's start to use \textit{substitutions} to convert electrostatics laws to gravitational ones. $V \to \Phi$, $Q \to M$, meaning that $\rho \to \rho$. Also:
+\begin{align*}
+    \frac{1}{4 \pi \epsilon} = -G \Rightarrow -\frac{1}{\epsilon_0} = 4 \pi G  
+\end{align*}
+and so:
+\begin{align*}
+    \laplacian \Phi = 4 \pi G \rho
+\end{align*}    
+This leads to $c_2 = 8 \pi G$, with $G = \SI{6.67e-11}{\N \m\squared \per \kilo\g\squared}$.\\
+So, the full Einstein's equations are:
+\begin{align*}
+    \underbrace{R_{\mu \nu} - \frac{R}{2} g_{\mu \nu}}_{G_{\mu \nu}}  = 8 \pi G T_{\mu \nu} 
+\end{align*} 
+$G_{\mu \nu}$ is also called \textit{Einstein tensor}. These are:
+\begin{enumerate}
+    \item Covariant
+    \item Mathematically consistent
+    \item Lead to Newton's Law at small energies
+\end{enumerate}
+These are all necessary conditions for such an equation to be a law of nature. However, these do not guarantee that it will be the real law of gravity - this is something that only experiments can decide.\\
+For example, there could be higher order terms - e.g. derivatives of $T_{ab}$ - that become important in high curvature regime, but For now these have not been measured. 
+  
+
+\section{Geodesics equation}
+Recall that in flat spacetime a free particle satisfies:
+\begin{align*}
+    \dv[2]{x^\mu}{\tau} = 0
+\end{align*}
+and follows trajectories that \textit{minimize} the proper time $\tau_{AB}$ between the two end-points $A$ and $B$:
+\begin{align*}
+    \tau_{AB} = \int_A^B \dd{\tau} = \int \sqrt{- \eta_{\alpha \beta} \dd{x^\alpha} \dd{x^\beta}} \text{ is minimum}
+\end{align*}    
+We now want to use the same principle in General Relativity.\\
+
+For a generic spacetime we state that a free particle travels along \textit{geodesics}, i.e. trajectories that minimize the proper time:
+\begin{align*}
+    \tau_{A B} = \int_A^B \dd{\tau} = \int \sqrt{-g_{\alpha \beta} \dd{x^\alpha}\dd{x^\beta}}
+\end{align*} 
+This is a \textit{principle}, a kind of \q{definition how what we mean with free particle}, that needs to be experimentally tested. However, what is now the equation of motion in this (more general) case? We expect to get something different than:
+\begin{align*}
+    \dv[2]{x^\mu}{\tau} = 0
+\end{align*} 
+but still of similar form.\\
+Recall that, if $\tau_{AB}$ is minimum, then a small deformation $x^\mu + \delta x^\mu $ (with $\delta x^\mu (A) = \delta x^\mu (B) = 0 $ )  of the trajectory $x^\mu$  does not modify (at first order) the proper time of traversal $\tau_{AB}$, that is $\delta \tau_{AB} = 0$ if $x^\mu$ is a real path.\\
+We parametrize the curve defining $\sigma(A) = 0$ and $\sigma(B) = 1$. Then:
+\begin{align*}
+    \delta \tau = \delta \left(\int_A^B \dd{\tau}\right) = \delta \left(\int_0^1 \dd{\sigma} \sqrt{-g_{\alpha \beta} \dv{x^\alpha}{\sigma} \dv{x^\beta}{\sigma}}\right) = 0
+\end{align*}   
+Perturbing the integrand ($\delta(AB) = B \delta A + A \delta B$, and also the chain-rule works):
+\begin{align*}
+    0 &= \delta \tau_{AB}  = \int_0^1 \dd{\sigma} \left[
+    -\frac{\delta g_{\alpha \beta} \dv{x^\alpha}{\sigma} \dv{x^\beta}{\sigma}}{2 \sqrt{\cdots}} + \frac{-g_{\alpha \beta} \dv{\delta x^\alpha}{\sigma} \dv{x^\beta}{\sigma}}{2\hlc{Yellow}{ \sqrt{\cdots}}} + \frac{-g_{\alpha \beta} \dv{x^\alpha}{\sigma} \dv{\delta x^\beta}{\sigma}}{2\hlc{Yellow}{ \sqrt{\cdots}}}       
+    \right]
+\end{align*}
+Note that $\dd{\tau} = \dd{\sigma} \sqrt{\cdots} $ and so:
+\begin{align*}
+    \frac{1}{\sqrt{\cdots}} \dv{\sigma} = \dv{\tau} 
+\end{align*} 
+and so we can \textit{remove} the square roots by changing the variable of the derivative, simplifying the notation. Also the last two square roots (highlighted in yellow) are the same, because the metric is symmetric. This leads to:
+\begin{align*}
+    0 = \delta \tau_{A B} = - \frac{1}{2} \int_0^1 \dd{\sigma \left[ \delta g_{\alpha \beta} \dv{x^\alpha}{\sigma} \dv{x^\beta}{\tau} \right] + \hlc{Yellow}{2} g_{\alpha \beta} \dv{x^\alpha}{\tau}\dv{\delta x^\beta }{\sigma}} 
+\end{align*}
+\textit{Variating} the metric simply means computing the metric at a \textit{displaced} position:
+\begin{align*}
+    \delta g_{\alpha \beta} = \partial_\gamma g_{\alpha \beta} \delta x^\gamma 
+\end{align*}  
+Inserting in the previous expression and integrating by parts, to move the derivative from the deformed trajectory:
+\begin{align*}
+    0 = -\frac{1}{2} \int_0^1 \dd{\sigma} \left[\partial_\gamma g_{\alpha \beta} \delta x^\gamma \dv{x^\alpha}{\sigma} \dv{x^\beta}{\tau} - 2 \dv{\sigma} \left[g_{\alpha \beta } \dv{x^\alpha}{\tau}\right] \delta x^\beta\right] 
+\end{align*}
+where the boundary term (from the integration by parts) vanishes because $\delta x^\mu(A) = \delta x^\mu (B) = \bm{0}$. Then we change variables $\sigma \to \tau $ 
+\begin{align*}
+    0 &= \int \hlc{SkyBlue}{\dd{\tau}} \left[-\frac{1}{2} \partial_\gamma g_{\alpha \beta} \delta x^\gamma \dv{x^\alpha}{\tau}\dv{x^\beta}{\tau} + \hlc{SkyBlue}{\dv{\tau}} \left[g_{\alpha \beta} \dv{x^\alpha}{\tau}\right] \delta x^\beta \right] =\\
+    &= \int \dd{\tau} \left[-\frac{1}{2} \partial_\gamma g_{\alpha \beta } \dv{x^\alpha}{\tau} \dv{x^\beta}{\tau} + \dv{\tau}\left(g_{\alpha \gamma} \dv{x^\alpha}{\tau}\right)\right] \delta x^\gamma
+\end{align*}
+where we relabelled $\beta \to \gamma$ to collect the $\delta x^\gamma$.\\
+This equation must hold for \textit{every} perturbation. So the integrand itself should be $0$. Then, expanding the derivative with Leibniz rule:
+\begin{align*}
+    0 =\hlc{SkyBlue}{ -\frac{1}{2} \partial_\gamma g_{\alpha \beta} \dv{x^\alpha}{\tau} \dv{x^\beta}{\tau}} + \hlc{ForestGreen}{\partial_\beta g_{\alpha \gamma} \dv{x^\beta}{\tau} \dv{x^\alpha}{\tau}} + \hlc{Yellow}{g_{\alpha \gamma} \dv[2]{x^\alpha}{\tau} }  
+\end{align*}
+Note that:
+\begin{align*}
+    \partial_\tau g_{\alpha \gamma} = \partial_\beta g_{\alpha \gamma } \dv{x^\beta}{\tau}
+\end{align*}
+Because \textit{modifying the metric} means computing it in a different point. Then:
+\begin{align*}
+    0 = \hlc{Yellow}{g_{\alpha \gamma} \dv[2]{x^\alpha}{\tau} +} \hlc{ForestGreen}{\left(\frac{1}{2} \partial_\beta g_{\alpha \gamma} + \frac{1}{2}  \partial_\alpha g_{\beta \gamma}  \right) \dv{x^\alpha}{\tau} \dv{x^\beta}{\tau}} \hlc{SkyBlue}{- \frac{1}{2}\partial_\gamma g_{\alpha \beta}  \dv{x^\alpha}{\tau}\dv{x^\beta}{\tau}}
+\end{align*} 
+There we noted that, for a symmetric tensor $A_{\alpha \beta}$: 
+\begin{align*}
+    A_{\alpha \beta} \pdv{x^\alpha}{\tau}\pdv{x^\beta}{\tau} &= \frac{1}{2} A_{\alpha \beta} \pdv{x^\alpha}{\tau} \pdv{x^\beta}{\tau} + \frac{1}{2} \hlc{Yellow}{A_{\alpha \beta}}  \pdv{x^\alpha}{\tau}  \pdv{x^\beta}{\tau} =\\
+    &= \frac{1}{2} A_{\alpha \beta}\pdv{x^\alpha}{\tau} \pdv{x^\beta}{\tau} + \frac{1}{2} \hlc{Yellow}{A_{\beta \alpha}} \pdv{x^\beta}{\tau} \pdv{x^\alpha}{\tau} = \frac{1}{2} (A_{\alpha \beta} + A_{\beta \alpha}) \pdv{x^\alpha}{\tau} \pdv{x^\beta}{\tau}   
+\end{align*}
+Then:
+\begin{align*}
+    &= g_{\alpha \gamma} \dv[2]{x^\alpha}{\tau} + \frac{1}{2}\left(g_{\alpha \gamma, \beta} + g_{\beta \gamma, \alpha} - g_{\alpha \beta, \gamma}\right)\dv{x^\alpha}{\tau} \dv{x^\beta}{\tau} = 0\\
+\end{align*}
+Multiplying by $g^{\mu \gamma}$:
+\begin{align*}
+    \underbrace{g^{\mu \gamma} g_{\alpha \gamma}}_{\delta^\mu_\alpha} \dv[2]{x^\alpha}{\tau} + \underbrace{\frac{1}{2} g^{\mu \gamma} \left(g_{\alpha \gamma, \beta} + g_{\beta \gamma, \alpha} - g_{\alpha \beta, \gamma}\right)}_{\Gamma^\mu_{\alpha \beta}}\dv{x^\alpha}{\tau}\dv{x^\beta}{\tau} = 0 
+\end{align*} 
+And finally:
+\begin{align*}
+    \dv[2]{x^\mu}{\tau} + \Gamma^{\mu}_{\alpha \beta }\dv{x^\alpha}{\tau} \dv{x^\beta}{\tau} = 0
+\end{align*}
+which is the \textbf{geodesic equation}.\\
+
+So, generalizing from special relativity, we conjecture that even in curved spacetime, a free body moves along a trajectory that minimizes proper time. Then, we proved that such a trajectory is a solution of the geodesics equation of motion.
+\end{document}
