@@ -1,0 +1,276 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Stochastic Differential Calculus}
+\lesson{8}{11/11/19}
+
+We want now to generalize the ordinary calculus rules to the stochastic case.\\
+We obtained a stochastic differential equation from the Master Equation. Then, to understand the underlying physics, we introduced the \textit{Langenvin equation} (in the Overdamped limit):
+\begin{align*}
+    \dd{x(t)} = f(x(t),t) \dd{t} + \sqrt{2D(x(t),t)} \dd{B(t)}
+\end{align*} 
+with $f = F_{\mathrm{ext} }/\gamma$.
+
+The meaning of $\dd{B(t)}$ is clear only passing to \textit{finite differences}, where $\dd{B} \to \Delta B$ is distributed according to: 
+\begin{align*}
+    \Delta B \frac{1}{\sqrt{2 \pi \Delta t}} \sim \exp\left(-\frac{(\Delta B)^2}{2 \Delta t} \right)
+\end{align*}  
+If we consider a \textit{stochastic integral}:
+\begin{align*}
+    \int g \dd{B}
+\end{align*} 
+we need to discretize it and take the continuum limit (in the mean square convergence).
+
+In the more general case, we want to integrate wrt $(\dd{B})^n$. We will now show that:
+\begin{align*}
+    (\dd{B})^n = \begin{cases}
+        \dd{B} & n=1\\
+        \dd{t} & n=2\\
+        0 & n>2
+    \end{cases}
+\end{align*} 
+
+\begin{example}[Integral in $\dd{B}^2$]
+    Consider a \textit{non-anticipating} function $G(\tau)$, and the following integral:
+    \begin{align*}
+        I = \int G(\tau) (\dd{B}(\tau))^2
+    \end{align*}   
+    With \textit{non-anticipating} we mean that $G(\tau)$ does not depend on $B(s) - B(\tau) \> \forall s > \tau$, i.e. it does not depend on the \textit{future}. Discretizing:
+    \begin{align*}
+        I = \mathrm{ms-lim} \sum_{i=1}^n G(t_{i-1}) \Delta B_i^2 
+    \end{align*}    
+    For simplicity, we will denote $G_{i-1} \equiv G(t_{i-1})$,  $\Delta B_i \equiv B_i - B_{i-1} \equiv B(t_i) - B(t_{i-1})$ and $t_i - t_{i-1} = \Delta t_i$.\\
+    We want to prove that:
+    \begin{align*}
+        \int_0^t G(\tau) (\dd{B(\tau)})^2 \overset{?}{=}  \int_0^t G(\tau) \dd{\tau} = \lim_{n \to \infty} \sum_i G(t_{i-1}) \Delta t_i
+    \end{align*}  
+    So we take their average difference squared and compute the limit:
+    \begin{align*}
+        \langle \left(\sum_{i=1}^n G_{i-1} \Delta B_i^2 - \sum_{i=1}^n G_{i-1} \Delta t_i\right)^2 \rangle  \xrightarrow[n \to \infty]{?}  0 
+    \end{align*} 
+    Then, proceeding similarly to last lecture:
+    \begin{align*}
+        &= \langle \left[\sum_{i=1}^n G_{i-1} ((\Delta B_i)^2 - \Delta t_i)\right]^2 \rangle = \langle \sum_{i=1}^{n} G_{i-1}((\Delta B_i)^2 - \Delta t_i) \sum_{j=1}^n G_{j-1} ((\Delta B_j)^2 - \Delta t_j) \rangle =\\
+        &= \sum_{i=1}^n \langle G_{i-1}^2 ((\Delta B_i)^2 - \Delta t_i)^2 \rangle + 2\sum_{i<j}^n \langle\hlc{Yellow}{ G_{i-1} ((\Delta B_i)^2 - \Delta t_i) G_{j-1} }\hlc{SkyBlue}{((\Delta B_j)^2 - \Delta t_j)} \rangle
+    \end{align*}
+    Note that the yellow term \textit{does not depend} on $\Delta B_j = B_j - B_{j-1} = B(t_j) - B(t_{j-1})$ (recall that $G$ is \textit{non-anticipating}). Thus, the yellow and blue terms are \textit{independent} of each other, and so we can factorize the average:
+    \begin{align*}
+        = \sum_{i=1}^{\infty} \langle G_{i-1}^2 ((\Delta B_i)^2 - \Delta t_i)^2 \rangle + 2 \sum_{i<j}^n \langle G_{i-1}((\Delta B_i)^2 - \Delta t_i) G_{j-1} \rangle \langle (\Delta B_j)^2 - \Delta t_j \rangle
+    \end{align*} 
+    However, recall that:
+    \begin{align*}
+        \langle (\Delta B_j)^2 - \Delta t_j \rangle = \langle (\Delta B_j)^2 \rangle - \Delta t_j = 0
+    \end{align*}
+    and so only the first term remains. Again, we can separate two independent terms:
+    \begin{align*}
+        = \langle \sum_{i=1}^n G_{i-1}^2 ((\Delta B_i)^2 - \Delta t_i)^2 \rangle = \sum_{i=1}^n \langle G_{i-1}^2 \rangle \langle ((\Delta B_i)^2 - \Delta t_i^2) \rangle
+    \end{align*}
+    Then, focus on a single term:
+    \begin{align*}
+        \langle ((\Delta B_i)^2 - \Delta t_i)^2 \rangle = \langle  \Delta B_i^4 - 2 \Delta t_i (\Delta B_i)^2 \rangle + \Delta t_i^2 = \\
+        = \underbrace{\langle (\Delta B_i)^4 \rangle}_{3(\Delta t_i)^2}  - 2 \Delta t_i \underbrace{\langle (\Delta B_i)^2 \rangle}_{\Delta t_i}  + \Delta t_i^2 = 2 \Delta t_i^2 
+    \end{align*}
+    Substituting back into the sum:
+    \begin{align*}
+        = \langle \left[\sum_{i=1}^n G_{i-1} ((\Delta B_i)^2 - \Delta t_i)\right]^2 \rangle = 2 \sum_{i=1}^n G_{i-1}^2 \Delta t_i^2 \\
+        \leq 2 \left(\max_{i\leq j \leq n} \Delta t_j\right) \sum_{i=1}^n G_{i-1}^2 \Delta t_i  \xrightarrow[n \to \infty]{}  2 \cdot 0 \cdot \int_0^t G^2 \dd{\tau} = 0
+    \end{align*}
+    This proves that $(\dd{B})^2 = \dd{t}$. 
+\end{example}
+
+\begin{example}[The case with $n > 2$]
+    We want now to show that:
+    \begin{align*}
+        \int_0^t G(\tau) (\dd{B}(\tau))^n &= \mathrm{ms-lim} \sum_{i=1}^n G(t_{i-1}) \Delta B_i^n = 0  
+    \end{align*}
+    Again, we discretize and consider the average distance squared:
+    \begin{align*}
+        \langle \left(\sum_{i=1}^n G_{i-1} (\Delta B_i)^n\right)^2  \rangle = \sum_{i=1}^n G_{i-1}^2 (\Delta B_i)^{2n} + 2 \sum_{i< j} \langle G_{i-1} G_{j-1} (\Delta B_i)^n (\Delta B_j)^n \rangle
+    \end{align*}
+    Suppose, for simplicity, that $G$ is bounded, i.e. $|G| < K$. Then, as $G$ is non-anticipating, we can factorize the averages (as we did before). If $n$ is \textbf{odd} , the second term vanishes: 
+    \begin{align*}
+        = \sum_i \langle G_{i-1}^2 \rangle (\Delta t_i)^n \frac{(2n)!}{2^n n!} \leq \frac{K^2(2n)!}{2^n n!} \sum_{i=1}^n (\Delta t_i)^n  \leq \frac{K^2 (2n)!}{2^n n!} \max_{i \leq j \leq n} (\Delta t)^{n-1} \underbrace{\sum_{i=1}^n \Delta t_i}_{t}  \xrightarrow[n \to \infty]{}  0
+    \end{align*}  
+    Otherwise, if $n$ is even, the following holds instead:
+    \begin{align*}
+        \leq 2K^2 \left(\frac{n!}{2^{n/2}(n/2)!} \right)^2 \sum_{i< j} \Delta t_i^{n/2} \Delta t_j^{n/2} \leq 2K^2 \left(\frac{n!}{2^{n/2} (n/2)!} \right)^2 \left(\max_{i \leq l \leq n} \Delta t_l\right)^{2(n/2-1)} \sum_{i< j} \underbrace{\Delta t_i \Delta t_j}_{\leq t^2} 
+    \end{align*}
+    and by taking the limit $n \to \infty$ it goes to $0$, proving the thesis.  
+\end{example}
+
+\begin{example}[Other cases]
+    Consider now:
+    \begin{align*}
+        \int G(\tau) \dd{B(\tau)} \dd{\tau} = 0
+    \end{align*}
+    In fact, as $(\dd{B})^2 = \dd{\tau}$, $\dd{B}\dd{u} = 0$ because $(\dd{B})^n = 0$ $\forall n > 2$.  
+\end{example}
+
+Consider now:
+\begin{align*}
+    \dd{(B(t))^n} &= (B(t) + \dd{B(t)})^n - (B(t))^n =\\
+    &= \sum_{k=1}^n {n\choose k} (\dd{B}(t))^k B(t)^{n-k}
+\end{align*}
+We consider the non-trivial case, i.e when $n\geq 2$:
+\begin{align*}
+    &= n \dd{B}(t) B^{n-1}(t)  + \frac{n(n-1)}{2} \underbrace{(\dd{B}(t))^2}_{\dd{t}} B^{n-2}(t) + 0  
+\end{align*} 
+If we set $n-1 = m$ we arrive at:
+\begin{align*}
+    (m+1)B^m(t) \dd{B}(t) = \dd{B(t)}^{m+1} - \frac{m(m+1)}{2} B^{m-1}(t) \dd{t} 
+\end{align*} 
+Then:
+\begin{align*}
+    \int_0^\tau B^m(t) \dd{B}(t) = \frac{1}{m+1}\int_0^\tau \dd{(B(t))^{m+1}} - \frac{m}{2} \int_0^\tau B^{m-1}(t) \dd{t}  
+\end{align*}
+Note that, if $m = 1$:
+\begin{align*}
+    \int_0^\tau B(\tau) \dd{B}(t) = \frac{1}{2} \int_0^\tau \dd{(B(t))^2} - \frac{1}{2} \int_0^\tau \dd{t}  
+\end{align*}
+and so we arrive again at a formula we already seen:
+\begin{align*}
+    \int_0^\tau B(t) \dd{t} = \frac{1}{2}(B^2(\tau) - B^2(0)) - \frac{\tau}{2}  
+\end{align*}
+In the general case, for $m > 0$:
+\begin{align*}
+    \int_0^\tau B^m(t) \dd{B}(t) &= \frac{1}{m+1} \int_0^\tau \dd{(B(t))^{m+1}} - \frac{m}{2} \int_0^\tau B^{m-1}(t) \dd{t} =\\
+    &= \frac{B^{m+1}(\tau) - B^{m+1}(0)}{m+1} - \frac{m}{2} \int_0^\tau B^{m-1} (t) \dd{t}    
+\end{align*} 
+
+Note that we can generalize this to a generic function $f$ of $B(t)$:
+\begin{align*}
+    \dd{f(B(t))} &= f(B(t) + \dd{B}(t)) - f(B(t)) =\\
+    &= f'(B(t)) \dd{B}(t) +\frac{1}{2} f''(B(t))(\dd{B(t)})^2 + 0
+\end{align*}  
+and so:
+\begin{align*}
+    \dd{f} = f' \dd{B} + \frac{1}{2} f'' \dd{t} + O(\dd{t}^{3/2}) 
+\end{align*}
+
+\section{Derivation of the Fokker-Planck equation}
+Starting from the Master Equation and taking the continuum limit we arrived at the Fokker-Planck equation:
+\begin{align*}
+    \dot{\mathbb{P}}(x,t) = -\pdv{x}\left[f(x,t) \mathbb{P}(x,t) - \pdv{x}\mathbb{P}(x,t) D(x,t)\right]
+\end{align*}
+($\mathbb{P}(x,t) \equiv W(x,t)$).\\
+We want to derive from that the Langenvin equation:
+\begin{align*}
+    \dd{x(t)} = f(x(t),t) + \sqrt{2D(x(t),t)} \dd{B(t)}
+\end{align*}
+Note that in the Langenvin eq. $x(t)$ appears because we are talking about a \textit{single trajectory}, while in $\mathbb{P}(x,t)$ $x$ and $t$ are independent variables, and $\dd{x} \mathbb{P}(x,t)$ is the \textit{density} of trajectories passing in $[x,x+\dd{x}]$ at time $t$. So, to compute $\mathbb{P}(x,t)$, we need to \textit{generate many trajectories} with the Langenvin equation, and count the ones satisfying the appropriate conditions (crossing $[x,x+\dd{x}]$ at time $t$). We can do this by writing:
+\begin{align*}
+    \mathbb{P}(x,t) = \langle \delta(x(t) -x) \rangle
+\end{align*}     
+In fact, if we integrate in $[x,x+ \Delta x]$:
+\begin{align*}
+    \int_x^{x+ \Delta x} \mathbb{P}(x', t)\dd{x'} = \langle \int_x^{x+\Delta x} \delta(x(t) - x')\dd{x'} \rangle
+\end{align*} 
+Now, all trajectories that pass through $[x,x+\Delta x]$ at time $t$ (i.e. such that $x(t) \in (x, x+ \Delta x)$) \textit{contribute} to that integral, and the others do not. So, if we take the average over the set of \textit{all trajectories}, we find the \textit{density} of trajectories passing through that \textit{gate}, which is exactly $\mathbb{P}(x,t)$.\\
+Consider now a generic function $h$. Its average over the trajectory is defined as:
+\begin{align*}
+    \langle h(x(t)) \rangle = \int \dd{x} \mathbb{P}(x,t) h(x)
+\end{align*}
+Differentiating:
+\begin{align*}
+    \dd{\langle h(x(t)) \rangle} = \langle h(x(t+ \dd{t})) - h(x(t)) \rangle = \dd{t} \int \dd{x} \dot{\mathbb{P}}(x,t) h(x)
+\end{align*}
+We have now all the results we need to derive the Fokker-Planck equation. Start with:
+\begin{align*}
+    \dd{h} &= h(x(t) + \dd{x}(t)) - h(x(t)) =    \\   
+    &= h'((t)) \dd{x}(t) + \frac{1}{2} h''(x(t))(\dd{x}(t))^2 + O((\dd{x})^3) 
+\end{align*}
+Using Langenvin:
+\begin{align*}
+    (\dd{x}(t))^2 &= \dd{t}^2 f^2 + 2D \overbrace{(\dd{B})^2}_{\dd{t}} +\cancel{ f\sqrt{2D} \dd{B} \dd{t}}\\
+    (\dd{x}(t))^3 &= O((\dd{t})^2)
+\end{align*}
+Substituting back:
+\begin{align*}
+    \dd{h} &= h'(f \dd{t} + \sqrt{2D}\dd{B}) + \frac{1}{2} h'' 2 D \dd{t} + O(\dd{t}^2) = \\
+    &= \dd{t} [h' f + h'' D] + h' \sqrt{2D} \dd{B}
+\end{align*}
+
+\begin{align*}
+    \langle \dd{t} (h' f + h'' D) \rangle + \langle h' \sqrt{2D} \dd{B} \rangle
+\end{align*}
+Focus on the last term. Factorizing the average (ad $D$ is non-anticipating...)
+\begin{align*}
+    2 \langle h' (x(t)) D(x(t),t) \dd{B(t)} \rangle = 2 \langle h' D \rangle \underbrace{\langle \dd{B} \rangle}_{=0} 
+\end{align*}
+Thus:
+\begin{align*}
+    \dv{t} \langle h(x(t)) \rangle &= \langle h'(x(t)) f(x(t),t) + h''(x(t)) D(x(t),t) \rangle =\\
+    &= \int \dd{x} \mathbb{P}(x,t) \left[h'(x) f(x,t) + h''(x) D(x,t)\right]
+\end{align*}
+Now:
+\begin{align*}
+    \dv{t} \langle h(x(t)) \rangle = \int \dd{x} \dot{\mathbb{P}}(x,t) h(x)
+\end{align*}
+We want to compare the two different expressions to get an expression for $\dot{\mathbb{P}}(x,t)$. Integrating by parts:
+\begin{align*}
+    \int \dd{x} \dot{\mathbb{P}}(x,t) h(x,t) = \hlc{Yellow}{\mathbb{P} h f \Big|_{-\infty}^{+\infty}}- \int \dd{x} h(x) \pdv{x} \left(\mathbb{P}(x,t) f(x,t)\right) +\hlc{Yellow}{ D\mathbb{P}h'\Big|_{-\infty}^{+\infty}}- \int h' \pdv{x}(\mathbb{P} D) \dd{x}
+\end{align*} 
+Integrating by parts again:
+\begin{align*}
+    -\int h' \pdv{x} (\mathbb{P} D) \dd{x} = \hlc{Yellow}{- h \pdv{x} (\mathbb{P} D) \Big|_{-\infty}^{+\infty}} + \int h \pdv[2]{x} (\mathbb{P} D) \dd{x}
+\end{align*}
+$h(x,t)$ can be chosen arbitrarily, as a \textit{test function}. We can then choose $h$ to have a narrow peak centered on a certain $x$, so that all highlighted terms vanish. Then:
+\begin{align*}
+    \dv{t} \langle h(x(t)) \rangle &= \int \dd{x} \dot{\mathbb{P}}(x,t) h(x) =\\
+    &= \int \dd{x} h(x) \left[-\pdv{x} (\mathbb{P} f) + \pdv[2]{x} (\mathbb{P} D)\right]
+\end{align*}
+This proves that the Langenvin equation is \textit{equivalent} to the Fokker-Planck equation:
+\begin{align*}
+    \text{F-P} && \dot{\mathbb{P}}(x,t) &= -\pdv{x}\left[f(x,t) \mathbb{P}(x,t) - \pdv{x}(\mathbb{P}(x,t) D(x,t))\right]\\
+    \text{L} && \dd{x}(t) &= \dd{t} f(x(t),t) + \sqrt{2D(x(t),t)} \dd{B(t)}
+\end{align*} 
+
+\section{The role of temperature}
+Recall the definition of $f(x,t)$:
+\begin{align*}
+    f(x,t) = \frac{F_{\mathrm{ext} }}{\gamma}; \qquad \gamma = 6 \pi a \eta; \qquad F_{\mathrm{ext} }(x) = -\pdv{V}{x} (x) 
+\end{align*} 
+Assuming $D$ independent of $x$:
+\begin{align*}
+    \dot{\mathbb{P}}(x,t) = \pdv{x}\left[\frac{1}{\gamma} \pdv{V}{x} \cdot \mathbb{P} + D \pdv{\mathbb{P}}{x} \right]
+\end{align*}  
+We expect that a particle will reach, after some time, an equilibrium described by the Maxwell-Boltzmann distribution:
+\begin{align*}
+    \mathbb{P}(x,t)  \xrightarrow[t \to \infty]{}  P_{\mathrm{eq} }(x) = \frac{e^{- \beta V(x)}}{z} \qquad z = \int \dd{x} e^{- \beta V(x)}; \qquad \beta = \frac{1}{k_B T} 
+\end{align*}
+At equilibrium, $\dot{\mathbb{P}} = 0$ (stationary solution):
+\begin{align*}
+    \pdv{x}\left[\frac{1}{\gamma} \mathbb{P}^* + D \pdv{x} \mathbb{P}^* \right] = 0
+\end{align*}
+We would like that $\mathbb{P}^* = \mathbb{P}_{\mathrm{eq}}$. We then ask: how many stationary solution are there? If there is only one, does it coincide always with $\mathbb{P}_{\mathrm{eq} }$?\\
+
+Note that the terms in the parenthesis must be constant:
+\begin{align*}
+    \Rightarrow [\dots] = \text{constant}
+\end{align*}
+We assume that $\mathbb{P}^*$ vanishes at infinity  (as it is normalized), and also its first derivative:
+\begin{align*}
+    \mathbb{P}^*, \pdv{x} \mathbb{P}^*  \xrightarrow[x \to \infty]{}  0
+\end{align*}
+Then $[\dots]$ must be $0$:
+\begin{align*}
+    \pdv{x} \mathbb{P}^* = - \frac{1}{\gamma D} \pdv{V}{x} \mathbb{P}^* 
+\end{align*}  
+Dividing both sides by $\mathbb{P}^*$  and integrating:
+\begin{align*}
+    \pdv{x}\ln \mathbb{P}^*(x) = -\frac{1}{\gamma D} \pdv{V}{x} \Rightarrow \ln \mathbb{P}^*(x) = -\frac{1}{\gamma D} V(x) + \text{const}  
+\end{align*}
+Exponentiating:
+\begin{align*}
+    \mathbb{P}^*(x) = \exp\left(-\frac{1}{\gamma D} V(x) \right) \cdot K
+\end{align*}
+Comparing to the Maxwell-Boltzmann distribution:
+\begin{align*}
+    \frac{1}{\gamma D} = \beta \Rightarrow \gamma D = k_B T \Rightarrow D = \frac{k_B T}{6 \pi \eta a }  
+\end{align*}
+This is the Einstein relation (\textit{fluctuation-dissipation relationship}), found in 1905. As $D(x,t) \propto T$, the amplitude of stochastic oscillations in the Langenvin eq. is proportional to $\sqrt{T}$.\\
+
+However, are we sure that this is true \textit{for every initial condition}? 
+\end{document}
