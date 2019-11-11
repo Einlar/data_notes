@@ -138,4 +138,179 @@ The normalization condition:
 &= \int \prod_{i=1}^{N+1} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\sum_{i=1}^{N} \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) = \\
 &= \int \frac{\dd{x_N}}{(4 \pi D \Delta t_N )} \exp\left(-\frac{(x_N - x_{N-1})^2}{4 D \Delta t_N} \right)  
 \end{align*}
+
+\begin{example}[Correlator function]
+    \begin{align*}
+        \langle x(t_1')x(t_2') \rangle &= \int \dd{x'_1} \dd{x'_2} W(x_2', t_2'|x_1',t_1')W(x_1',t_1'|0,0)x_1' x_2'
+    \end{align*}
+    The same result can be obtained by using Wiener's measure:
+    \begin{align*}
+        \langle x(t_1') x(t_2') \rangle&= \int \dd{_Wx} x_1(t_1')x_2(t_2') = \int d\mathbb{P}_{t_1,\dots, t_N} (x_1, \dots, x_N|0,0) x(t_k)x(t_n) =\\
+        &= \int \dd{x_1}\dots \dd{x_N} W(x_N,t_N|x_{N-1},t_{N-1}) \dots W(x_1, t_1|0,0) x_k x_n =\\
+        &= \int \dd{x_k} \dd{x_n} W(x_n,t_n|x_k|t_k) W(x_k,t_k|0,0) x_k x_n
+    \end{align*}
+\end{example}
+Note that:
+\begin{align*}
+    W(x,t|0,0) = \frac{1}{\sqrt{4\pi D t}} \exp\left(-\frac{x^2}{4 D t} \right) = \int \dd{_W x} \delta(x(t)-x)
+\end{align*}
+
+\section{Change of random variables}
+Consider a random variable $X \sim q(x)$, with $q(x)$ being a generic distribution (e.g. $q(x) = \mu e^{-\mu x}$). Now consider a function $y(x)$, e.g. $y(x) = x^2$. $Y$ is then a new random variable, with a certain distribution $p(y)$. We now want to compute $p(y)$ starting from $q(x)$ and $y(x)$.\\
+Suppose that $y(x)$ is invertible. Then, if we extract a value from $X$, it will be inside $[x,x+\dd{x}]$ with a probability $q(x) \dd{x}$. Knowing $X$, we can use $y(x)$ to uniquely determine $Y$, that will be in $[y,y+\dd{y}]$ with the same probability. So, the following holds:
+\begin{align}
+    q(x) \dd{x} = p(y) \dd{y}
+    \label{eqn:p-cons}
+\end{align}        
+We can compute $\dd{y}$ by \textit{nudging} $y(x)$, and expanding in Taylor series:  
+\begin{align*}
+    y(x+\dd{x}) \equiv y + \dd{y} + O(\dd{y}^2) = y(x) + \underbrace{\dd{x} y'(x)}_{\dd{y}} + O(\dd{x}^2) 
+\end{align*} 
+and so $\dd{y} = \dd{x} y'(x)$. Substituting in (\ref{eqn:p-cons}) we get:
+\begin{align*}
+    q(x) \dd{x} = p(y)\dd{y} = p(y(x)) y'(x) \dd{x} \Rightarrow p(y) = q(x(y)) \dv{x}{y} (x(y))
+\end{align*}  
+
+For a more general $y(x)$, $x \sim q(x)$ and $y=y(x)$, the expected value of a function $f$ is:
+\begin{align*}
+    \langle f(y) \rangle &= \int \dd{x} f(y(x)) q(x) = \int \dd{y} f(y) p(y) = \\
+    &= \int \dd{x} f(y(x)) q(x) \underbrace{\int \dd{z} \delta(z-y(x))}_{=1} = \\
+    &= \int \dd{z} f(z) \underbrace{\int \dd{x} q(x) \delta(z-y(x))}_{\langle \delta(z-y(x)) \rangle}  
+\end{align*}    
+and so:
+\begin{align*}
+    p(z) = \int \dd{x} q(x) \delta(z- y(x)) = \langle \delta (z-y(x)) \rangle
+\end{align*}
+which, in general, is not:
+\begin{align*}
+    p(z) \neq q(x(z)) \dv{x(z)}{z}
+\end{align*}
+However, if $y(x)$ is invertible, i.e. $\mathrm{sgn} y'(x) = \text{constant}$ ($y'(x) \neq 0$ always), then:
+\begin{align*}
+    \delta(z-y(x)) = \frac{\delta(x-x(z))}{|y'(x)|} 
+\end{align*} 
+leading to:
+\begin{align*}
+    p(z) = \langle \frac{\delta(x-x(z))}{|y'(x)|}  \rangle_q = \int \dd{x} q(x) \frac{\delta(x-x(z))}{|y'(x)|} = q(x(z)) |y'(x(z))|^{-1} = q(x(z)) \dv{x}{y}  
+\end{align*}
+and we recover the previous formula.
+
+\section{The 1st integral}
+So we can now write:
+\begin{align*}
+    W(x,t|0,0) &= \int \dd{_W x} \delta(x(t)-x) =\\
+    &= "\lim_{N \to \infty}"
+    \int \prod_{i=1}^{N+1} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\sum_{i=1}^N \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) \delta(x_{N+1} - x)
+\end{align*}
+where $t_n = t$, $x(t_n) = x_{N+1}$.\\
+
+Recall that:
+\begin{align*}
+    W(x_t,t|0,0) = \frac{1}{\sqrt{4 \pi D t}} \exp \left(-\frac{x_t^2}{4 D t} \right)
+\end{align*}
+If we set $x_t = 0$ (for simplicity), we get:
+\begin{align}
+    W(0, t | 0,0) = \frac{1}{\sqrt{4 \pi D t}} 
+    \label{eqn:I1res}
+\end{align} 
+As an exercise to get some familiarity with Wiener integrals, we want now to \textit{re-derive} this result, by instead solving a \textit{path integral}:
+\begin{align*}
+    W(0,t|0,0) = \int_{\mathcal{C}\{0,0;0,t\}} \dd{_Wx(\tau)} = \langle \delta(0 - x) \rangle = \langle \delta(x) \rangle \equiv I_1 ???
+\end{align*}  
+Here we are computing the \textit{fraction} of Brownian paths that start in $x=0$ at $t=0$ and return in $x=0$ after a fixed interval $t$.
+
+The standard way to compute a Wiener integral is to \textit{discretize} it, and then take a \textit{continuum} limit. So, consider a uniform time discretization $\{t_i\}_{i=1,\dots, N+1}$, $\epsilon$ apart from each other, so that: 
+\begin{align*}
+    t_i - t_{i-1} = \epsilon = \frac{t}{N+1} \quad \forall i = 1, \dots, N+1 
+\end{align*}
+Note that the end-points are $x_0 = x_{N+1} = 0$.\\
+Then:
+\begin{align} 
+    I_1 &\equiv \lim_{\substack{\epsilon \to 0 \\ N \to \infty}} I_1^{(N)}
+    \label{eqn:I1limit}\\
+    I_1^{(N)} &\equiv \frac{1}{(\sqrt{4 \pi D \epsilon})^{N+1}} \int_{-\infty}^{+\infty}  \dd{x_1} \int_{-\infty}^{+\infty} \dd{x_2} \cdots \int_{-\infty}^{+\infty} \dd{x_N} \exp\left(-\frac{1}{4 D \epsilon} \sum_{i=0}^N (x_{i+1}-x_i)^2\right)
+    \label{eqn:I11}
+\end{align}
+Let's focus on the summation in the exponential:
+\begin{align*}
+    \sum_{i=0}^N (x_{i+1}-x_i)^2 &= x_1^2 +\cancel{ x_0}^2 - 2x_0 x_1 + x_2^2 + x_1^2 - 2x_1 x_2 + \dots + \cancel{x_{N+1}}^2 + x_N^2 - 2x_N x_{N+1} =\\
+    &= 2(x_1^2 + \dots + x_N^2) - 2(x_1 x_2 + x_2 x_3 + \dots + x_{N-1} x_N) =\\
+    &= 2\left(\sum_{i=1}^N x_i^2 \right) - 2\left(\sum_{i=1}^{N-1} x_i x_{i+1}\right)
+\intertext{
+This is a \textit{quadratic form}, i.e. a polynomial with all terms of order $2$. So, it can be written in \textit{matrix form}:
+}
+    &= \sum_{k,l=1}^N x_k A_{kl} x_l = \bm{x}^T A_N \bm{x}
+\end{align*}  
+for an appropriate choice of entries $A_{kl}$ of the $N\times N$ matrix $A_N$:
+\begin{align*}
+    A_{kk} = 2; \> A_{kl} = -(\delta k,l+1 + \delta_{k+1,l}) \Rightarrow A_N = \left(\begin{array}{ccccc}
+    2 & -1 & 0 & \cdots & 0 \\ 
+    -1 & 2 & -1 & \ddots & \vdots \\ 
+    0 & \ddots & \ddots & \ddots & 0 \\ 
+    \vdots & \ddots & -1 & 2 & -1 \\ 
+    0 & \cdots & 0 & -1 & 2
+    \end{array}\right)
+\end{align*}  
+Substituting back in (\ref{eqn:I11}):
+\begin{align*}
+    I_1^{(N)} = \frac{1}{(\sqrt{4 \pi D \epsilon})^{N+1}} \int_{-\infty}^{+\infty} \dd{x_1} \cdots \int_{-\infty}^{+\infty} \dd{x_N} \exp\left(-\frac{\bm{x}^T A_N \bm{x}}{4 D \epsilon}  \right)  
+\end{align*}
+Recall the multivariate Gaussian integral:
+\begin{align*}
+    \int_{-\infty}^{+\infty} \dd{x_1} \cdots \dd{x_N} \exp\left(-\sum_{ij}^N B_{ij} x_i x_j\right) = \frac{(\sqrt{\pi})^N}{\sqrt{\operatorname{det}B }} 
+\end{align*}
+leading to:
+\begin{align}
+    I_1^{(N)} = \frac{1}{(\sqrt{4 \pi D \epsilon})^{N+1}} \sqrt{\frac{\pi^N}{\operatorname{det}\left(A_N \left[\frac{1}{4 D \epsilon} \right]^N\right) } }  \underset{(a)}{=}  \frac{1}{(\sqrt{4 \pi D \epsilon})^{N+1}} \frac{\sqrt{4 \pi D \epsilon}^N}{\sqrt{\operatorname{det} A_N }} = \frac{1}{\sqrt{4 \pi D \epsilon}} \frac{1}{\sqrt{\operatorname{det} A_N}}    
+    \label{eqn:I1n}
+\end{align}
+where in (a) we used the property of the determinant $\operatorname{det}(cA) = c^n \operatorname{det}(A) \> \forall c \in \mathbb{R}$.
+
+Now, all that's left is to compute the determinant of $A_N$. Fortunately, as $A_N$ is a \textit{tri-diagonal} matrix, there is a recurrence relation in terms of the leading principal minors of $A_N$, which turns out to be multiples of the determinants of $A_{N-1}$ and $A_{N-2}$.
+
+Explicitly, consider $A_N$:
+\begin{align*}
+    \operatorname{det}A_N \equiv \left|\begin{array}{ccccc}
+    2 & -1 & 0 & \cdots & 0 \\ 
+    -1 & 2 & -1 & \ddots & \vdots \\ 
+    0 & \ddots & \ddots & \ddots & 0 \\ 
+    \vdots & \ddots & -1 & 2 & \textcolor{Purple}{-1} \\ 
+    0 & \cdots & 0 & -1 & \textcolor{Red}{2}
+    \end{array}\right|_{N\times N}
+\end{align*} 
+and start computing the determinant following the last column. The only non-zero contributions are:
+\begin{align}\nonumber
+    \operatorname{det} A_N &= \underbrace{\textcolor{Blue}{(-1)^{(N-1) + N}} \textcolor{Purple}{(-1)}}_{+1} \left|\begin{array}{ccccc}
+    2 & -1 & 0 & \cdots & 0 \\ 
+    -1 & 2 & -1 & \ddots & \vdots \\ 
+    0 & \ddots & \ddots & \ddots & 0 \\ 
+    \vdots & \ddots & -1 & 2 & -1 \\ 
+    0 & \cdots & 0 & 0 & \textcolor{Magenta}{-1}
+    \end{array}\right|_{(N-1)\times (N-1)} + \textcolor{Blue}{(-1)^{2N}} \textcolor{Red}{(2)} \operatorname{det} A_{N-1} =\\
+    &= \textcolor{Blue}{(-1)^{2(N-1)}} \textcolor{Magenta}{(-1)} \operatorname{det} A_{N-2}  + 2 \operatorname{det}A_{N-1} = 2 \operatorname{det}A_{N-1} - \operatorname{det} A_{N-2}   
+    \label{eqn:recurrence}
+\end{align}
+where the terms in blue are just the alternating signs from the determinant expansion, and the other colours identify the matrix entries that are being used.
+
+Then, it is just a matter of computing the first two terms of the succession ($|A_N| = \operatorname{det}A_N$ for brevity):
+\begin{align*}
+    |A_1| = 2 \qquad |A_2| = \left|\begin{array}{cc}
+    2 & -1 \\ 
+    -1 & 2
+    \end{array}\right| = 4-1=3
+\end{align*}
+And now we can use (\ref{eqn:recurrence}) to iteratively compute all $|A_N|$, e.g. $|A_3| = 2 \cdot 3 - 2 = 4$. To find $|A_N|$ for a \textit{generic} $N$, we need to make an hypothesis, and then verify that it is compatible with (\ref{eqn:recurrence}). In this case, note that $|A_N| = N+1$ $(*)$ for all the examples we explicitly computed. Then, by induction:
+\begin{align*}
+    |A_{N+1}| \underset{(\ref{eqn:recurrence})}{=} 2 \cdot |A_N| - |A_{N-1}| \underset{(*)}{=} 2\cdot (N+1) - (N-1+1) = 2 N + 2 -N = (N+1) +1   
+\end{align*}    
+which is indeed compatible with $(*)$. So, substituting back in (\ref{eqn:I1n}) we get:
+\begin{align*}
+    I_1^{(N)} = \frac{1}{\sqrt{4 \pi D \epsilon}} \frac{1}{\sqrt{N+1}} \underset{(a)}{=}  \frac{1}{\sqrt{4 \pi D t}} 
+\end{align*}
+where in (a) we used $\epsilon = t/(N+1) \Rightarrow N+1 = t/\epsilon $ from the discretization. Note that this result is \textit{constant} with respect to $\epsilon$ or $N$ (recall that $t$ is fixed beforehand) and so taking the \textit{continuum} limit leads immediately to $I_1$ (\ref{eqn:I1limit}):
+\begin{align*}
+    I_1 \equiv \lim_{\substack{\epsilon \to 0\\ N \to \infty}} \frac{1}{\sqrt{4 \pi D t}} = \frac{1}{\sqrt{4 \pi D t}}  
+\end{align*}     
+which is coherent with the result we previously computed (\ref{eqn:I1res}).
+
 \end{document}

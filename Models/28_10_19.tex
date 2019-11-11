@@ -3,8 +3,18 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\section{The 3rd integral}
+\section{Integral n.3}
 \lesson{6}{28/10/19}
+Consider a Brownian trajectory $x(\tau)$, and a functional that \textit{weights} every traversed point $x(\tau)$ with a function $a\colon \mathbb{R} \to \mathbb{R}$, and then applies another function $F\colon \mathbb{R} \to \mathbb{R}$ to the total integral:
+\begin{align*}
+    F[x(\tau)] = F\left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right)
+\end{align*}    
+We now want to compute its expected value:
+\begin{align*}
+    I_3 \equiv \langle F[x(\tau)] \rangle = \int_{\mathcal{C}\{0,0;t\}} \dd{_Wx(\tau)} F[x(\tau)]
+\end{align*}
+
+
 We considered the following integral:
 \begin{align*}
     \langle F\left(\int_{0}^{t} a(\tau) x(\tau) \dd{\tau}\right) \rangle
