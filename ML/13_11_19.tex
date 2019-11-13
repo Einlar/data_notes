@@ -1,0 +1,154 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Regularization and Stability}
+\lesson{10}{13/11/19}
+To avoid overfitting, one possible way is to \textit{constrain} the complexity of the model. This is done by adding a \textbf{regularization term} $R(\bm{w})$, proportional to the complexity, to the loss function, so that both $L_S(\bm{w})$ and $R(\bm{w})$ are minimized during training:
+\begin{align*}
+    \arg\min_{\bm{w}} (L_S(\bm{w}) + R(\bm{w}))
+\end{align*} 
+One possible choice for $R$ is given by \textbf{Tikhonov Regularization}:
+\begin{align*}
+    R(\bm{w}) = \lambda \norm{\bm{w}}^2 = \lambda \sum_{i=1}^d w_i^2
+\end{align*} 
+The learning rule becomes, in this case:
+\begin{align*}
+    A(S) = \arg\min_{\bm{w}}( L_S(\bm{w}) + \lambda\norm{\bm{w}}^2)
+\end{align*}
+
+\subsection{Ridge Regression}
+If we apply Tikhonov Regularization to the problem of linear regression we obtain \textbf{Ridge Regression}:
+\begin{align*}
+    \bm{w} = \arg\min_{\bm{w}} \left(\underbrace{\lambda \norm{\bm{w}}^2}_{\mathrm{Regularization}}  + \underbrace{\frac{1}{m} \sum_{i=1}^m \frac{1}{2} \left( \langle \bm{w}, \bm{x}_i \rangle - y_i \right)^2 }_{\text{RSS}} \right)
+\end{align*} 
+To solve the problem, we simply compute the gradient wrt $\bm{w}$ and set it to $0$:
+\begin{align*}
+    2 \lambda \norm{\bm{w}} + \frac{1}{m} \sum_{i=1}^m \left(\langle \bm{w}, \bm{x}_i \rangle - y_i \right)\bm{x}_i = 0 \Rightarrow \bm{w} = (2 \lambda m \bb{I} + A )^{-1} \bm{b} \qquad A=\left(\sum_{i=1}^m \bm{x}_i \bm{x}_i^T \right); \quad \bm{b} = \sum_{i=1}^m y_i \bm{x}_i
+\end{align*}  
+Tikhonov regularization makes the algorithm more stable, in the sense that \textit{small perturbations} of the training data leads to a \textit{small change} of the output hypothesis. Let's formalize that.
+
+We start by considering the \textit{smallest possible perturbation} of $S$, that is simply replacing just \textbf{one sample}:
+\begin{align*}
+    S=(z_1, \dots, z_m) \to S^{(i)} = (z_1, \dots, z_{i-1}, \textcolor{Red}{z'}, z_{i+1}, \dots, z_m )
+\end{align*}   
+with an additional sample $z' = (\bm{x'}, y')$.
+
+Then we define \q{stability on small changes} as \textit{On-Average-Replace-One-Stable} (OAROS). More precisely: let $\epsilon \colon \mathbb{N} \to \mathbb{R}$ be a monotonically decreasing function. We say that a learning algorithm $A$ is \textit{on-average-replace-one-stable} OAROS with rate $\epsilon(m)$ (obviously, changing one sample out of $4$ will have a much bigger impact than changing one sample out of $4000$) if, for every distribution $\mathcal{D}$, the following holds:     
+\begin{align*}
+    \mathbb{E}_{(S,z') \sim \mathcal{D}^{m+1}, i \sim U(m)} \left[\ell(A(S^{(i)}), z_i) - \ell(A(S), z_i)\right] \leq \epsilon (m)
+\end{align*}
+In other words, for a \textit{stable algorithm} (in the OAROS sense), the expected value of the \textit{difference} between the loss \textit{with that sample $i$} and the loss without is bounded by a little number $\epsilon(m)$.
+
+Note that, generally, $\ell(A(S^{(i)}), z_i)$ will be bigger than $\ell(A(S), z_i)$, because here $z_i \not\in S^{(i)}$, as it has been replaced by $z'$.     
+
+\subsection{Stability and Overfitting}
+If an algorithm $A$ is OAROS with  rate $\epsilon(m)$ then:
+\begin{align*}
+    \mathbb{E}_{S \sim \mathcal{D}^m} \left[L_{\mathcal{D}}(A(S)) - L_S(A(S))\right] \leq \epsilon(m)
+\end{align*} 
+that is, it does not \textbf{overfit}.
+
+\textbf{Proof}. From the OAROS definition we know that:
+\begin{align}
+    \mathbb{E}_{\substack{S,z' \sim \mathcal{D}^{m+1}\\ i \sim U(m)}}\left[\ell(A(S^{(i)}), z_i) - \ell(A(S), z_i)\right] \leq \epsilon(m)
+    \label{eqn:oaros}
+\end{align} 
+The idea is to recognize in the two losses that appear above the estimators for, respectively, the \textit{generalization} and \textit{training} error.
+
+In fact, for every $i$, the expected generalization error is:
+\begin{align*}
+    \mathbb{E}_S[L_{\mathcal{D}}(A(S))] = \mathbb{E}_{S,z'} [\ell(A(S), z')] = \mathbb{E}_{S,z'}[\ell(A(S^{(i)}), z_i)]
+\end{align*} 
+as all $z'$ are i.i.d.
+
+Then:
+\begin{align*}
+    \mathbb{E}_S[L_S(A_S)] = \mathbb{E}_{S,i}[\ell(A(S), z_i)]
+\end{align*}
+Now, if we consider the expected value of their difference:
+\begin{align*}
+    \mathbb{E}_S[L_{\mathcal{D}}(A(S)) - L_S(A(S)))] = \mathbb{E}_{S, z', i}[\ell(A(S^{(i)}), z_i) - \ell(A(S), z_i)] \underset{(\ref{eqn:oaros})}{\leq}  \epsilon(m)
+\end{align*}
+
+\subsection{Stability of Tikhonov Regularization}
+We are now interested in discovering which \textit{losses}, with \textit{which regularizations} are \textbf{stable}.\\   
+We start with some definitions.
+
+
+A function $f$ is $\lambda$-strongly convex if, for all $\bm{w}$, $\bm{u}$ and $\alpha \in (0,1)$ we have:
+\begin{align*}
+    f(\alpha \bm{w} + (1-\alpha)\bm{u}) \leq \alpha f(\bm{w}) + (1-\alpha)f(\bm{u}) - \frac{\lambda}{2} \alpha(1-\alpha) \norm{\bm{w}- \bm{u}}^2 
+\end{align*}     
+
+\textbf{Lemma}.
+The following statements hold:
+\begin{enumerate}
+    \item The function $f(\bm{w}) = \lambda \norm{\bm{w}}^2$ is $2 \lambda$-strongly convex.
+    \item If $f$ is $\lambda$-strongly convex and $g$ is convex, then $f+g$ is $\lambda$-strongly convex.
+    \item If $f$ is $\lambda$-strongly convex and $\bm{u}$ is a minimizer of $f$, then, for any $\bm{w}$:
+    \begin{align*}
+        f(\bm{w}) - f(\bm{u}) \geq \frac{\lambda}{2} \norm{\bm{w} - \bm{u}}^2 
+    \end{align*}           
+\end{enumerate} 
+
+\textbf{Definition} (Lipschitzness):  
+Let $C \subset \mathbb{R}^d$. A function $f\colon \mathbb{R}^d \to \mathbb{R}^k$ is $\rho$-Lipschitz over $C$ if $\forall \bm{w}_1, \bm{w}_2 \in C$ we have that:
+\begin{align*}
+    \norm{f(\bm{w}_1) - f(\bm{w}_2)} \leq \rho\norm{\bm{w}_1 - \bm{w}_2}
+\end{align*}   
+The idea is that such a function \q{can't change too fast}, meaning that (if it's differentiable) it's derivative is bounded (i.e. derivative bounded by $\rho$ $\Rightarrow$ $\rho$-Lipschitz).
+
+Now we can tackle an useful \textbf{theorem}.
+
+Assume that the loss function is \textbf{convex} and $\rho$-\textbf{Lipschtiz} continuous. Then, the Regularized Loss Minimization (RLM) rule with Tikhonov Regularizer $\lambda\norm{\bm{w}}^2$ is OAROS with rate $2 \rho^2/(\lambda m )$, meaning that:
+\begin{align*}
+    \mathbb{E}_{S \sim \mathcal{D}^m} \left[L_{\mathcal{D}}(A(S)) - L_S(A(S))\right] \leq \frac{2 \rho^2}{\lambda m} 
+\end{align*}
+
+\textbf{Proof}. Recall the RLM:
+\begin{align*}
+    \arg\min_{\bm{w}} \left[L_S(\bm{w}) + \lambda \norm{\bm{w}}^2\right] = A(S)
+\end{align*}
+We define:
+\begin{align*}
+    f_S(\bm{w}) = L_S(\bm{w}) + \lambda \norm{\bm{w}}^2
+\end{align*} 
+where $L_S$ is convex and $\norm{\bm{w}}^2$ is $2 \lambda$ strongly convex (Lemma 1). So (Lemma 2) $f_S(\bm{w})$ is $2\lambda$-strongly convex. Then, denote with:
+\begin{align*}
+    A(S) = \min f_S(\bm{w})
+\end{align*}  
+Applying (Lemma 3):
+\begin{align*}
+    \forall \bm{v}\colon f_S(\bm{v}) - f_S(A(S)) \geq \lambda \norm{\bm{v} - A(S)}^2
+\end{align*}
+Then:
+\begin{align*}
+    \forall \bm{v}, \bm{u}, \forall i f_S(\bm{v}) - f_S(\bm{u}) &= L_S(\bm{v}) + \lambda \norm{\bm{v}}^2 - (L_S(\bm{u}) + \lambda\norm{\bm{w}}^2 ) =\\
+    &= \hlc{Yellow}{L_{S^{(i)}}(\bm{v}) + \lambda \norm{\bm{w}}^2 - (L_{S^{(i)}}(\bm{u}) + \lambda \norm{\bm{w}}^2 )} + \hlc{SkyBlue}{\frac{1}{m}\left(\ell(\bm{v}, z_i) - \ell(\bm{u}, z_i)\right) +}\\ 
+    &\quad + \hlc{SkyBlue}{\frac{1}{m} \left(\ell(\bm{u}, z') - \ell(\bm{v}, z')\right)} 
+\end{align*}
+\marginpar{Warning: this part needs some revision!}
+Note that, in the last passage, to move from the loss of $S^{(i)}$ to that over $S$ we can just remove the \textit{added sample} $z'$ and add the one that got replaced $z_i$. Then we divide by $m$ because the weight of a single sample over $S$ is $1/m$.\\
+From RLM follows that the yellow term ($\equiv A$ from now on) must be $\leq 0$, leading to:
+\begin{align*}
+    \lambda \norm{A(S^{(i)})- A(S)}^2 \leq \mathrm{Blue\ term ($\equiv$B)}
+\end{align*}       
+As the loss is $\rho$-Lipschitz, setting $\bm{v} = A(S^{(i)})$ and $\bm{u} = A(S)$:
+\begin{align*}
+    \ell(A(S^{(i)}, z_i)) - \ell(A(S), z_i) &\leq \rho \norm{A(S^{(i)})- A(S)}\\
+    \ell(A(S), z') - \ell(A(S), z') &\leq \rho\norm{A(S^{(i)}, A(S))} 
+\end{align*}  
+Then:
+\begin{align*}
+    \lambda \norm{A(S^{(i)})-A(S)}^2 \leq \frac{2 \rho \norm{A(S^{(i)}) - A(S)}}{m} \Rightarrow \norm{A(S^{(i)}) - A(S)} \leq \frac{2 \rho}{\lambda m}  
+\end{align*}
+And now we consider:
+\begin{align*}
+    \ell (A(S^{(i)}), z_i) - \ell(A(S), z_i) \leq \rho \frac{2 \rho}{\lambda m} = \frac{2 \rho^2}{2 m} = \epsilon(m)  
+\end{align*}
+which is the theorem's thesis.
+
+[Insert last slides here]
+\end{document}
