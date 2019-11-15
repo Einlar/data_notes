@@ -1,0 +1,255 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Gravitational Redshift}
+\lesson{?}{15/11/19}
+
+Recall the Schwarzschild Geometry:
+\begin{align*}
+    \dd{s}^2 = - \left(1-\frac{2GM}{r} \right) \dd{t}^2 + \left(1-\frac{2GM}{r} \right)^{-1} \dd{r}^2 + r^2 \dd{\Omega_2} \quad \dd{\Omega_2} = \dd{\theta^2} + \sin^2 \theta \dd{\varphi}^2
+\end{align*}
+Suppose that $r > 2GM$, so that we are away from the \textit{singularity}. Note that $2 G M_{\odot} \approx \si{\kilo\m}$, so that if we examine the metric outside the Sun (i.e. where it applies, as $T_{\mu \nu} = 0$) we are fine.
+
+We want now to use this metric to derive an \textit{exact} result for the gravitational redshift effect.
+
+Consider two observers, $A$ and $B$, situated at distances $r_A$ and $r_B$ from the centre of an object of mass $M$ (suppose $r_A$ and $r_B$ are both greater than the object's radius). Suppose that $A$ sends a signal at frequency $f_A$ towards $B$ (which does not need to be \textit{radially away} from $A$ with respect to $M$), and $B$ measures that signals as having a frequency $f_B$. We want to find a relation between $f_B$ and $f_A$.
+
+Note that the Schwarzschild metric is time independent, and so $\xi^\alpha = (1, \bm{0})$ is a Killing vector, meaning that:
+\begin{align*}
+    \bm{\xi} \cdot \bm{p}_{\mathrm{light} } = \text{Constant}
+\end{align*} 
+Then, recall that for light:
+\begin{align*}
+    f_A = \frac{\mathcal{E}_{\text{measured on A}}}{h} = \frac{-\bm{p}_{\mathrm{light} }\cdot \bm{u}_A}{h}  
+\end{align*}
+Note that $A$ is stationary, so that $\bm{u}_A = (a, \bm{0})$, with $a$ a constant that can be computed from the norm:
+\begin{align*}
+    u_\alpha u^\alpha \overset{!}{=} -1 \Rightarrow u_A^\alpha u_A^\beta g_{\alpha \beta} = a^2 (-1) \left(1-\frac{2 GM}{r_A} \right) \Rightarrow a = \left(1-\frac{2GM}{r_A} \right)^{-1/2}
+\end{align*}   
+Then, recalling the expression for $\xi^\alpha$: 
+\begin{align*}
+    u_A^\alpha = \left(1-\frac{2GM}{r_a} \right)^{-1/2} (1, \bm{0}) = \left(1-\frac{2GM}{r_A} \right)^{-1/2} \xi^\alpha
+\end{align*}
+The same reasoning can be done for $B$:
+\begin{align*}
+    u_B^\alpha = \left(1-\frac{2GM}{r_B} \right)^{-1/2} \xi^\alpha
+\end{align*} 
+Substituting in the frequency:
+\begin{align*}
+    f_A &= -\left(1-\frac{2GM}{r_A} \right)^{-1/2} \frac{\bm{p}_{\mathrm{light} }\cdot \bm{\xi}}{h} \\
+    f_B &= -\left(1-\frac{2GM}{r_B} \right)^{-1/2} \frac{\bm{p}_{\mathrm{light} }\cdot \bm{\xi}}{h} 
+\end{align*}
+Note that $\bm{p}_{\mathrm{light} }\cdot \bm{\xi}$ are the same in both $f_A$ and $f_B$. So, if we consider the ratio:
+\begin{align*}
+    \frac{f_B}{f_A} = \frac{\left(1-\frac{2GM}{r_B} \right)^{-1/2}}{\left(1-\frac{2GM}{r_A} \right)^{-1/2}}  
+\end{align*}   
+We can rewrite this highlighting the \textit{roles} of the two observers:
+\begin{align*}
+    f_{\mathrm{observed} } = f_{\mathrm{emitted} } \frac{\displaystyle\sqrt{1-\frac{2GM}{r_{\mathrm{emit} }} }}{\displaystyle \sqrt{1-\frac{2GM}{r_{\mathrm{obs} }} }} 
+\end{align*} 
+
+Let's now make sure that this formula agrees with the result we found some time ago, in the limit of a \textit{weak gravitational field}. So, consider $A$ and $B$ at different \textit{heights} of a building, so that $r_B = R$ and $r_A = R + h$, with $h \ll R$.
+
+For $2GM \ll r$ we can use Taylor expansion:
+\begin{align*}
+    f_{\mathrm{obs} } &\approx f_{\mathrm{emit} } \left(1 - \frac{1}{2} \frac{2 GM}{r_{\mathrm{emit} }}  \right) \left(1 - \left(-\frac{1}{2} \frac{2 GM}{r_{\mathrm{obs} }} \right)\right) =\\
+    &= f_{\mathrm{emit} } \left(1-\frac{GM}{r_{\mathrm{emit} }} \right)\left(1 + \frac{GM}{r_{\mathrm{obs} }} \right) \approx f_{\mathrm{emit} } \left(1 - \frac{GM}{r_{\mathrm{emit} }} + \frac{GM}{r_{\mathrm{obs} }} - \cancel{\frac{(GM)^2}{r_{\mathrm{emit} }r_{\mathrm{obs} }}}   \right) =\\
+    &= f_{\mathrm{emit} }\left(1-\frac{GM}{R(1+h/R)}  + \frac{GM}{R} \right) = f_{\mathrm{emit} } \left(1-\frac{GM}{R} \left(\cancel{1}-\frac{h}{R} \right) + \cancel{\frac{GM}{R}} 
+\right) = \\
+&= f_{\mathrm{emit} } \left(1 + \underbrace{\frac{GM}{R^2}}_{g}  h \right) 
+\end{align*}
+and so we return to:
+\begin{align*}
+    f_{\mathrm{obs} } \approx f_{\mathrm{emit} } \left(1 + g h\right)
+\end{align*}
+
+\section{Orbit Precessions}
+Consider a planet in a \textit{circular orbit} around a star. Suppose $m = 1$. The gravitational acceleration experienced by the planet is:
+\begin{align*}
+    a_{\mathrm{g} } = \frac{GM}{r^2} 
+\end{align*} 
+The planet experiences a centripetal acceleration equal to $v^2/r$. In terms of the angular momentum $l= vr$ this can be written as:
+\begin{align*}
+    \frac{v^2}{r} = \frac{l^2}{r^3}  
+\end{align*}  
+Equating this to the gravitational acceleration leads to:
+\begin{align*}
+    r = \frac{l^2}{GM} 
+\end{align*}
+
+Now consider a generic \textit{elliptical orbit}. From conservation of energy we have:
+\begin{align*}
+    \frac{1}{2} v^2 - \frac{GM}{r} = \mathcal{E}  
+\end{align*} 
+We can write the planet's velocity as:
+\begin{align*}
+    \bm{v} = v_x \bm{\hat{i}} + v_y \bm{\hat{j}} = v_r \bm{\hat{r}} + v_\theta \bm{\hat{\theta}} \qquad v_r = \dv{r}{t}, \> v_\theta = r \dv{\theta}{t}
+\end{align*}
+The squared norm is then:
+\begin{align*}
+    v^2 = \left(\dv{r}{t}\right)^2 + r^2 \left(\dv{\theta}{t}\right)^2
+\end{align*}
+In this general motion, the angular momentum is:
+\begin{align*}
+    \bm{L} = \bm{r} \times \bm{v}
+\end{align*}
+and its modulus is equal to:
+\begin{align*}
+    l = |\bm{L}| = r v_\theta
+ = r^2 \dv{\theta}{r}
+\end{align*}
+Solving for $\dv{\theta}{t}$:
+\begin{align*}
+    \dv{\theta}{t} = \frac{l}{r^2} 
+\end{align*}
+and substituting in the expression for $v^2$ leads to:
+\begin{align*}
+    v^2 = \left(\dv{r}{t}\right)^2 ì \frac{l^2}{r^2} 
+\end{align*} 
+Substituting back in the energy conservation equation:
+\begin{align*}
+    \frac{1}{2}\left(\dv{r}{t}\right)^2 \underbrace{-\frac{GM}{r} + \frac{l^2}{2 r^2}}_{-V_{\mathrm{eff} }(r)}   = \mathcal{E} 
+\end{align*}
+Note that $V_{\mathrm{eff} }(r)$ diverges at $r \to 0$, i.e. if $l \neq 0$ the particle can't ever reach $r=0$.
+
+Plotting $V_{\mathrm{eff} }(r)$ shows the existence of \textit{stable orbits} with $r \in [r_{\mathrm{min} }, r_{\mathrm{max} }]$. If a particle starts at \textit{exactly} the $V_{\mathrm{eff} }$ minimum, then it moves by circular motion:
+\begin{align*}
+    0 \overset{!}{=}  \dv{V_{\mathrm{eff} }}{r} \Rightarrow r = \frac{l^2}{GM} 
+\end{align*} 
+
+Note that an \textit{undisturbed} planet will move in an elliptical orbit with fixed \textit{perihelion} and \textit{aphelion}. This is obviously not the real case: and in fact it is observed that Mercury orbit \textit{precesses}.
+
+This can be explained in Newtonian mechanics by considering the fact that the Sun is not spherical, and that there are several planets interacting in the solar system. Newton's laws lead to a prediction of $532''$ every $100$ years (about $1$ degree every $680$ years). However, observations confirmed an higher value, with a discrepancy of about $43''$ / $100$ years.
+
+One big success of GR is exactly accounting for this difference. 
+
+\subsection{Motion of a planet in GR}
+Consider a planet moving in the $xy$ plane, with origin on the \textit{star}, so that - in spherical coordinates - $\theta(t) \equiv \pi/2$. The planet's 4-velocity is:
+\begin{align*}
+    u^\alpha = \left(\dv{t}{\tau}, \dv{r}{\tau}, 0, \dv{\varphi}{\tau}\right)
+\end{align*} 
+The Schwarzschild metric is time independent, so we have one Killing vector:
+\begin{align*}
+    \xi^\alpha = (1,0,0,0)
+\end{align*} 
+And also $\varphi$-independent, so we have a second Killing vector:
+\begin{align*}
+    \xi^\alpha = (0,0,0,1)
+\end{align*}  
+We then have two constants of motion (first integrals):
+\begin{align*}
+    e &= - \bm{\xi} \cdot \bm{u} = - (-1) \left(1-\frac{2GM}{r} \right) \dv{t}{\tau} \Rightarrow \left(1-\frac{2GM}{r} \right)\dv{t}{\tau} \equiv e = \text{Const}\\
+    l &= \bm{\xi} \cdot \bm{u} = r^2 \sin^2 \theta \dv{\varphi}{\tau} \Big|_{\substack{\theta = \pi/2\\ \sin \theta = 1}}\Rightarrow r^2 \dv{\varphi}{\tau} \equiv l = \text{Constant}
+\end{align*}
+Then:
+\begin{align*}
+    -1 = \bm{u} \cdot \bm{u} = -\left(1-\frac{2GM}{r} \right) \left(\dv{t}{\tau}\right)^2 + \left(1-\frac{2GM}{r} \right)^{-1} \left(\dv{r}{\tau}\right)^2 + r^2 \sin^2 \theta \left(\dv{\varphi}{\tau}\right)^2
+\end{align*}
+Substituting inside the first integrals:
+\begin{align*}
+    &= -\left(1-\frac{2GM}{r} \right)\left[\frac{e}{1-(2GM)/r} \right]^2 + \left(1-\frac{2GM}{r} \right)^{-1}\left(\dv{r}{\tau}\right)^2 + r^2\left(\frac{l}{r^2} \right)^2 = -1 =\\
+    &= -e^2 + \left(\dv{r}{\tau}\right)^2 + \left(\frac{l^2}{r^2} + 1 \right) \left(1-\frac{2GM}{r} \right) = 0
+\end{align*}
+Rearranging:
+\begin{align*}
+    \left(\dv{r}{\tau}\right)^{2} + \left(\frac{l^2}{r^2} + 1 \right)\left(1-\frac{2GM}{r} \right) - 1 = l^2 -1
+\end{align*}
+Dividing by $2$:
+\begin{align*}
+    \frac{1}{2}\left(\dv{r}{\tau}\right)^2 + \underbrace{\frac{1}{2} \left[\left(\frac{l^2}{r^2} + 1 \right)\left(1-\frac{2GM}{r} \right) - 1\right]}_{V_{\mathrm{eff} }(r)}  = \underbrace{\frac{e^2 - 1}{2}}_{\mathcal{E}}   
+\end{align*} 
+We have now reduced the problem to the motion of a particle in a central (effective) potential. Looking at $V_{\mathrm{eff} }$:
+\begin{align*}
+    V_{\mathrm{eff} } &= \frac{l^2}{2r^2} - \frac{GM l^2}{r^3} + \bcancel{\frac{1}{2}} - \frac{GM}{r} - \bcancel{\frac{1}{2}} = \\
+    &= -\frac{GM}{r} + \frac{l^2}{2r^2} - \frac{GM l^2}{r^3}        
+\end{align*}
+Note that the first two terms are the same of the Newtonian case, and so all the relativistic effects are contained in the third term, that we will treat as a perturbation. Note that now the potential diverges towards $-\infty$  at $r \to 0$. 
+
+Let's study first the \textit{relative equilibria}, i.e. the critical points of $V_{\mathrm{eff} }(r)$. In general, they will be two: one \textit{stable} (the circular \q{classical} orbit) and one unstable. 
+\begin{align*}
+    \dv{V_{\mathrm{eff} }}{r} = \frac{GM}{r^2} - \frac{l^2}{r^3} + \frac{3 GM l^2}{r^4} = 0 \Rightarrow GM r^2 - l^2 r + 3 GM l^2 = 0   
+\end{align*}   
+The \textit{stable} solution will be:
+\begin{align*}
+    r_{\mathrm{circular} } = \frac{l^2 \textcolor{Red}{+} \sqrt{l^4 - 12 G^2 M^2 l^2}}{2 GM} =
+    \frac{l^2}{2 GM}\left[1 + \sqrt{1-12 \left(\frac{GM}{l} \right)^2 }\right] 
+\end{align*}  
+In the Newtonian limit ($GM/r \ll 1$), performing a Taylor expansion leads to:
+\begin{align*}
+    r_{\mathrm{circular}} \approx \frac{l^2}{2 GM}\left[1 +1 - 6\left(\frac{GM}{l} \right)^2\right] = \underbrace{\frac{l^2}{GM}}_{r_c}  - 3GM 
+\end{align*} 
+So the first relativistic correction amounts to $-3GM$.
+
+If the \textit{limit case}, if $GM$ is big enough, there will be only \textit{one critical point} of $V_{\mathrm{eff}}$, i.e. the square root in the $r_{\mathrm{circular}}$ expression vanishes:
+\begin{align*}
+    \sqrt{\cdots } = 0 \Rightarrow 1= 12 \frac{G^2 M^2}{l^2} \Rightarrow l= \sqrt{12} GM  
+\end{align*}     
+In particular, solutions exists only if $l \geq \sqrt{12} GM$. If we choose the minimum ($l = \sqrt{12} GM$) then we get:
+\begin{align*}
+    r= \frac{l_{\mathrm{min} }}{2 GM} = \frac{12 G^2 M^2}{2 GM} = 6 GM  
+\end{align*} 
+This is the InnerMost Stable Circular Orbit ($r_{\mathrm{isco} }$), which is exactly $3$ times the \textit{horizon diameter} ($2GM$, as we will see later on).  
+
+
+Let's now tackle the more general case of elliptical orbits. We want to compute the angular change in the perihelion's position:
+\begin{align*}
+    \delta \varphi_{\mathrm{precession}} = \Delta \varphi_{\mathrm{orbit} } - 2 \pi
+\end{align*}
+where $\Delta \varphi_{\mathrm{orbit} }$ is the angle necessary to complete \textbf{one orbit}, i.e. going from a perihelion to the next one. If the ellipsis is closed, then $\Delta \varphi_{\mathrm{orbit} } = 2 \pi$ (i.e. the perihelion is always at the same place). If it is not, it will be different. We call \textit{precession angle} $\delta \varphi_\mathrm{precession} $ that difference between $\Delta \varphi_{\mathrm{orbit} }$ and $2 \pi$.
+
+Recall the two first integrals:
+\begin{align*}
+    l &= r^2 \dv{\varphi}{\tau}\\
+    \mathcal{E}&=\frac{1}{2} \left(\dv{r}{\tau}\right) ^2 - \frac{GM}{r} + \frac{l^2}{2r^2} - \frac{GMl^2}{r^3}
+\end{align*}
+Note that:
+\begin{align*}
+    \dv{\tau} = \frac{l}{r^2} \dv{\varphi} 
+\end{align*}
+We are interested in the \textit{trajectory}, i.e. a relation between $r$ and $\varphi$. So:
+\begin{align*}
+    \frac{l^2}{2 r^4} \left(\dv{r}{\varphi}\right) ^2 - \frac{GM}{r} + \frac{l^2}{2r^2} - \frac{GMl^2}{r^3} = \mathcal{E}   
+\end{align*}   
+We then do a change of variables to simplify the equation:
+\begin{align*}
+    r \equiv \frac{1}{u} \Rightarrow \dv{r}{\varphi} = -\frac{1}{u^2} \dv{u}{\varphi}   
+\end{align*}
+leading to:
+\begin{align*}
+    \frac{l^2}{2} u^4 \frac{1}{u^4} \left(\dv{u}{\varphi}\right)  ^2 - GM u + \frac{l^2 u^2}{2} - GMl^2 u^3 = \mathcal{E} 
+\end{align*}
+Rearranging:
+\begin{align*}
+   \frac{1}{2}  \left(\dv{u}{\varphi}\right)^2 - \frac{GM}{l^2} u + \frac{u^2}{2}-  GMu^3 = \frac{\mathcal{E}}{l^2}  
+\end{align*}
+Then we differentiate to get rid of the $\mathcal{E}$ term:
+\begin{align*}
+    \dv{u}{\varphi} \dv[2]{u}{\varphi} - \frac{GM}{l^2} \dv{u}{\varphi} + u \dv{u}{\varphi} - 3 GM u^2 \dv{u}{\varphi} = 0 
+\end{align*}
+The motion will be monotonic, and so the $\dd{u}\dd{\varphi}$ will never vanish. Then we can divide by it:
+\begin{align*}
+    \dv[2]{u}{\varphi} + u = \frac{GM}{l^2} + \hlc{Yellow}{3 GM u^2}  \qquad u\equiv \frac{1}{r} 
+\end{align*}
+
+In principle this equation can be exactly solved. However, we will consider the simplified case of a \textit{nearly circular orbit}, that is:
+\begin{align*}
+    u = u_c [1 + w(\varphi)] \qquad w \ll 1
+\end{align*} 
+At $0$-th order $O(w^0)$:
+\begin{align*}
+    u_c = \frac{GM}{l^2} + 3GM u_c^2
+\end{align*} 
+At $1$st order $O(w^1)$:
+\begin{align*}
+    u_c = \dv[2]{w}{\varphi} + u_c + u_c w = \frac{GM}{l^2} + 3 GM u_c^2 (1+ 2 w + \cancel{w^2}) 
+\end{align*}  
+Then:
+\begin{align*}
+    \dv[2]{w}{\varphi} + w = 6GM u_c w
+\end{align*}
+
+
+       
+\end{document}
