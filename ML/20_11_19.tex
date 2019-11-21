@@ -1,0 +1,106 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Support Vector Machines}
+\lesson{12}{20/11/19}
+Given a separating hyperplane defined by $L = \{\bm{v}\colon \langle \bm{v}, \bm{w} \rangle + b = 0\}$ and given a sample $\bm{x}$, the distance of $\bm{x}$ to $L$ is defined as:
+\begin{align*}
+    d(\bm{x}, L ) = \min \{\norm{\bm{x}- \bm{v}} \colon \bm{v} \in L\}
+\end{align*}    
+
+\textbf{Theorem}. If $\norm{\bm{w}} = 1$ then $d(\bm{x}, L) = |\langle \bm{w, \bm{x}}  \rangle + b|$. So, given a set of points $\{\bm{x}_i\}$ the \q{margin's dimension} is given by:
+\begin{align*}
+    \min_i |\langle \bm{w}, \bm{x}_i \rangle + b_i|
+\end{align*}
+The \textit{closest} samples $\bm{x}_i$ are called \textbf{support vectors}.
+
+\textbf{Dim}.
+\begin{enumerate}
+    \item First, we define:
+    \begin{align*}
+        \bm{v} = \bm{x} - (\langle \bm{w}, \bm{x} \rangle + b) \bm{w}
+    \end{align*}
+    This vector \textit{lies} on $L$. In fact:
+    \begin{align*}
+        \langle \bm{w}, \bm{v} \rangle + b = \langle \bm{w}, \bm{x} \rangle - (\langle \bm{w}, \bm{x} \rangle + b) \norm{\bm{b}}^2 + b
+    \end{align*}  
+    As $\norm{\bm{w}} = 1$ by hypothesis:
+    \begin{align*}
+        = \langle \bm{w}, \bm{x} \rangle - \langle \bm{w}, \bm{x} \rangle + b - b = 0
+    \end{align*}
+    Then the \textit{distance} between $\bm{x}$ and $\bm{v}$ is:   
+    \begin{align*}
+        \norm{\bm{x}- \bm{v}} = \norm{\bm{x} - \bm{x} + (\langle \bm{w}, \bm{x} \rangle + b)\bm{w}} = |\langle \bm{w}, \bm{x} \rangle+b| \norm{\bm{w}}
+    \end{align*}
+    \item We want now to show that $\norm{\bm{x}-\bm{v}}$ is the minimum distance over any choice for $\bm{v} \in L$ - and so is the distance between $\bm{x}$ and $L$ (as per our previous definition).\\
+    So, let's pick another $\bm{u} \in L$. Note that, for every $\bm{u}$, we have $\langle \bm{w}, \bm{v} \rangle + b = 0 \Rightarrow \langle \bm{w}, \bm{w} \rangle = -b$. Then: 
+    \begin{align*}
+        \norm{\bm{x} - \bm{u}}^2 = \norm{(\bm{x} - \bm{v}) + (\bm{v} - \bm{u})}^2  &= \norm{\bm{x} - \bm{v}}^2 + \norm{\bm{v} - \bm{u}}^2 + 2 \langle \bm{x} - \bm{v}, \bm{v} - \bm{u} \rangle =\\
+        & \geq \norm{\bm{x} - \bm{v}}^2 + 2 \langle \bm{x} - \bm{x} + (\langle \bm{w}, \bm{x} + b\rangle)\bm{w}, \bm{v}-\bm{u}  \rangle =\\
+        &= \norm{x-v}^2 + 2(\langle \bm{w}, \bm{x} \rangle + b) \underbrace{\langle \bm{w}, \bm{v} - \bm{u} \rangle}_{0}  = \norm{\bm{x}- \bm{v}}^2
+    \end{align*}
+    In fact:
+    \begin{align*}
+        \langle \bm{w}, \bm{v} - \bm{u} \rangle &= \langle \bm{w}, \bm{v} \rangle - \langle \bm{w}, \bm{u} \rangle = \\
+        &= \langle \bm{w}, \bm{x} \rangle - \left(\langle \bm{w}, \bm{x} \rangle + b\right) \underbrace{\norm{\bm{w}}^2}_{=1}  - b) = 0
+    \end{align*}
+    So $\norm{\bm{x} - \bm{v}}^2 \leq \norm{\bm{x} - \bm{u}}^2$, and so it's the \textit{minimum distance} we were searching.   
+\end{enumerate}
+
+\section{Hard-SVM}
+Consider a set of \textit{linearly separable} points. We want to find the separating hyperplane with the \textit{largest margin}.
+\begin{align*}
+   (\bm{w}^*, b^*) =  \arg \max_{(\bm{w}, b) \colon \norm{\bm{w}} = 1} \min_i |\langle \bm{w}, \bm{x}_i \rangle + b| \qquad \forall i \colon y_i \langle \bm{w}, \bm{x}_i \rangle + b > 0
+   \label{eqn:first-approach}
+\end{align*}
+So we are searching, between all the vectors $\bm{w}$ that define perfectly separating hyperplanes, the one that also \textit{maximizes} the distance between all the samples (maximum margin).
+
+This problem is equivalent (for separable data) to finding:
+\begin{align*}
+    \arg\max_{(\bm{w}, b) \colon \norm{\bm{w}} = 1} \min_i y_i(\langle \bm{w}, \bm{x}_i \rangle + b)
+\end{align*}
+ 
+This can also be reframed to a quadratically solvable problem:
+\begin{align*}
+    (\bm{w}_0, b_0) = \arg\min_{(\bm{w}, b)} \norm{\bm{w}}^2 \qquad \forall i \colon y_i (\langle \bm{w}, \bm{x}_i \rangle + b ) \geq 1
+    \label{eqn:second-approach}
+\end{align*}
+and the output is to be normalized: $\hat{\bm{w}} = \bm{w}_0/\norm{\bm{w}_0}$, $\hat{b} = b_0/\norm{\bm{w}_0}$.
+
+Let's see explicitly this equivalence. Start by defining with $\gamma^*$ the margin achieved by the first formulation, that is:
+\begin{align*}
+    \gamma ^* = \min_i y_i (\langle \bm{w}^*, \bm{x}_i \rangle + b^*)
+\end{align*} 
+Then:
+\begin{align*}
+    \forall i \colon y_i ( \langle \bm{w}^*, \bm{x}_i \rangle + b^*) \geq \gamma^* \Rightarrow \forall i\colon y_i \left(\langle \frac{\bm{w}^*}{\gamma^*}, \bm{x}_i  \rangle + \frac{b}{\gamma^*} \right) \geq 1
+\end{align*}
+and so the pair $(\bm{w}^*/\gamma^*, b^*/\gamma^*)$ satisfies the constraint of the second definition. As this is a solution, and $\bm{w}_0$ is the solution with minimum norm, we have:
+\begin{align*}
+    \norm{w}_0 \leq \norm{\frac{\bm{w}^*}{\gamma^*} } = \norm{\frac{1}{\gamma^*} }
+\end{align*}  
+Recall now that the solution ($(\bm{w}_0, b_0)$) of (\ref{eqn:second-approach}) must be normalized, leading to $(\hat{\bm{w}}, \hat{b})$, such that:
+\begin{align*}
+    y_i(\langle \hat{\bm{w}}, x_i \rangle + \hat{b}) = \frac{1}{\norm{\bm{w}_0}} \underbrace{y_i (\langle \bm{w}_0, \bm{x}_i \rangle + b_0)}_{\geq 1}  \geq \frac{1}{\norm{\bm{w}_0}} \geq \gamma^*  
+\end{align*} 
+Now, we have seen that $\hat{\bm{w}}$ has norm $1$ and has margin $\geq \gamma^*$. So, a solution of (\ref{eqn:second-approach}) is also a solution of (\ref{eqn:first-approach}).   
+
+
+We can also rewrite the problem in \textit{homogeneous coordinates}, adding a first component equal to $1$ to all vectors $\bm{x} \in \mathcal{X}$. Then the algorithm becomes:
+\begin{align*}
+    \bm{w}_0 = \arg\min_{\bm{w}} \norm{\bm{w}}^2 \mathrm{subject\ to } \forall i\colon y_i \langle \bm{w}, \bm{x}_i \rangle \geq 1
+\end{align*}    
+Note that this \textit{minimizes} also $b$, as it is now part of the vector, thus contributing to $\norm{\bm{w}}^2$. In practice, however, this is not a big difference. 
+
+We define the \textbf{support vectors} as the vectors at minimum distance from $\bm{w}_0$. Intuitively, they are the only training vectors that really matter for defining $\bm{w}_0$. 
+
+The idea is that it is possible to express $\bm{w}_0$ with a linear combination of the sample vectors:
+\begin{align*}
+    \bm{w}_0 = \sum_{i \in I} \alpha_i \bm{x}_i \qquad \alpha_1, \dots, \alpha_m \in \mathbb{R}
+\end{align*} 
+and solving Hard-SVM is equivalent to find $\alpha_i$ for the support vectors ($\alpha_i \neq 0$ only for support vectors). 
+
+...
+\end{document}
