@@ -1,0 +1,281 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Title}
+\lesson{?}{25/11/19}
+
+We were dealing with a particle subject to a potential with a local minimum at $x=c$, a local maximum at $x=d$ and going to $\infty$ at $x \to -\infty$ and to $0$ for $x \to +\infty$. We wrote the Langevin equation:
+\begin{align*}
+    \dot{x} = -\frac{\partial_x U}{\gamma}  + \sqrt{2D} \xi
+\end{align*}      
+and we expect the equilibrium distribuion to be:
+\begin{align*}
+    \mathbb{P}_{\mathrm{eq} }(x) = \frac{e^{-\beta U(x)}}{z} 
+\end{align*}
+The Fokker-Planck equation is then:
+\begin{align*}
+    \dot{\mathbb{P}}(x',t|x,0) = \partial_x [-A(x') \mathbb{P}(x',t|x,0) + \partial_x (D(x') \mathbb{P}(x',t|x,0))] \qquad A(x) = \partial_x U(x) \quad D(x) = D
+\end{align*}
+Before solving this problem, however, it is convenient to consider the \textit{simpler} situation of a particle confined to an interval $[a,b]$, with \textit{reflective} boundary conditions at $x=a$, and \textit{absorbing} bc at $x=b$. We already found that:
+\begin{align}
+    \int_a^b \mathbb{P}(x',t|x, 0) \dd{x'} = G(x,t) = \mathbb{P}(T_b > t|x)
+    \label{eqn:Gt}
+\end{align}    
+where $T_b$ is the \textit{survival time} of the particle, given it started in $x$ at time $0$.      
+
+We then wrote the \textit{backward} F-P equation by differentiating F-P wrt $t_0$:
+\begin{align*}
+    \partial_{t_0} P(x',t|x,t_0) = -A(x) \partial_x P(x',t|x,t_0) - D(x)\partial_x^2 P(x',t|x,t_0)
+\end{align*}  
+Note that, because $A(x)$ and $D(x)$ \textbf{do not} depend on time, transitional probabilities depend only on \textit{temporal differences}:    
+\begin{align*}
+    P(x',t|x,t_0) = P(x',t-t_0|x,0)
+\end{align*}
+So we can make a change of variables and substitute $\partial_{t_0}$ with $-\partial_t$.   
+
+Then, the \textit{absorbing} bc is expressed in terms of probability:
+\begin{align*}
+    P(x',t|x,0)\Big|_{x'=b} = 0
+\end{align*}
+and the reflective bc in terms of \textit{flux}:
+\begin{align*}
+    J(x',t) = A(x')P(x',t|x,0) - \partial_{x'} (D(x')P(x',t|x_0,0)) \Big|_{x_0 = a} =0
+\end{align*} 
+We want now to express this relation using the survival probability $G(x,t)$. Note that, if we differentiate (\ref{eqn:Gt}) wrt $t$:
+\begin{align*}
+    \partial_t G(x,t) = A(x) \partial_x G(x,t) + D(x) \partial_x^2 G(x,t)
+\end{align*}   
+Recall the ESCK relation:
+\begin{align*}
+    \int_a^b P(x',t|y,\tau) P(y, \tau|x,0) \dd{y} = P(x',t|x,0)
+\end{align*}
+As the right side is independent of $\tau$, the derivative wrt $\tau$  will be $0$:
+\begin{align*}
+    0 &= \partial_\tau \int_a^b \underbrace{P(x',t|y,\tau)}_{\bar{P}} \underbrace{P(y,\tau|x,0)}_{P} \dd{y} =\\
+    &= \int_a^b [(\partial_\tau \bar{P})P + \bar{P} \partial_\tau P]\dd{y} =
+\end{align*} 
+Substituting in the Backward and Forward F-P:
+\begin{align*}
+    = \int_a^b [(-A(y) \partial_y \bar{P} - D(y) \partial_y^2 \bar{P})P + \bar{P} \partial_y (-A(y) P + \partial_y(D(y)P))]
+\end{align*}
+By performing multiple \textit{integrations by parts}, several terms cancel out, and only boundary terms remain, leading to:
+\begin{align*}
+    0 = \bar{P} (-A(y) P + \partial_y (D(y)P))\Big|_a^b - (\partial_y \bar{P})\cdot (D(y)P)\Big|_a^b 
+\end{align*} 
+Recall that:
+\begin{align*}
+    \bar{P} = P(x',t|y,0)
+\end{align*}
+As the flux vanishes at $y=a$, and $\bar{P}$ vanishes at $y=b$, the first term is $0$, leading to:
+\begin{align*}
+    -(\partial_y \bar{P})D(y)P(y,\tau|x,0)\Big|_{y=a}^{y=b} = 0
+\end{align*}    
+which is again $0$ at $y=b$, so the only remaining expression is:
+\begin{align*}
+    \partial_y P(x',t|y,\tau)\Big|_{y = a} = 0 \> \forall \tau \quad \lor \quad \partial_y \bar{P}\Big|_{y=a} = 0 
+\end{align*}  
+This leads to the final expression for the boundary conditions:
+\begin{align*}
+    G(x,t)\Big|_{x=b} = 0 \qquad \partial_x G(x,t) \Big|_{x=a} = 0
+\end{align*} 
+Recall that we defined $G(x,t)$ to be the probability that a particle has survived for at least $t$:
+\begin{align*}
+    G(x,t) = \mathbb{P}(T_b > t) = \int_t^{\infty} \mathbb{P}_{\mathrm{fvt}}(T_b) \dd{T_b}
+\end{align*}   
+where we introduce:
+\begin{align*}
+    \mathbb{P}_{\mathrm{fvt} } (T_b) \dd{T_b}
+\end{align*}
+being he probability that the particle arrived at $x=b$ (for the first time, as it then disappears) in the time interval $(T_b, T_b + \dd{T_b})$ (fvt stands for \q{first time visit}).
+
+Differentiating wrt $t$:
+\begin{align}
+    \partial_t G(x,t) = - \mathbb{P}_{\mathrm{fvt} } (t)
+    \label{eqn:Gtt}
+\end{align} 
+
+If we consider now the \textit{average survival time}:
+\begin{align*}
+    T_b(x) &= \langle T_b \rangle = \int_0^\infty t \mathbb{P}_{\mathrm{fvt} }(t) \dd{t} = \\
+    &= -\int_0^\infty t \partial_t G(x,t) \dd{t} = -t G(x,t)\Big|_0^\infty + \underbrace{\int_0^\infty G(x,t) \dd{t}}_{\langle G(x) \rangle} 
+\end{align*} 
+$tG(x,t) = 0$ obviously at $t=0$. We know that $G(x,t) = 0$ for $t \to \infty$ (the particle will certainly visit $x=b$ given \textit{infinite time} to do so), however it is not clear if $G(x,t) \to 0$ as $t \to \infty$ \q{fast enough} so that $t G(x,t) \to 0$. For now, we will assume that it does, as it is quite reasonable.
+
+So we found:
+\begin{align*}
+    \langle T_b \rangle = T_b(x) = \int_0^\infty G(x,t) \dd{t}
+\end{align*}
+Expanding (\ref{eqn:Gtt}):
+\begin{align*}
+    \partial_t G(x,t) &= A(x) \partial_x G + D(x) \partial_x^2 G 
+\end{align*}
+If we then \textit{integrate}:
+\begin{align*}
+    \int_0^\infty \dd{t} \partial_t G(x,t) = A(x) \partial_x T_b(x) + D(x) \partial_x^2 T_b(x)
+\end{align*} 
+and so:
+\begin{align*}
+    G(x,t)\Big|_{t=0}^{t=\infty} = - G(x,0) = -1
+\end{align*}
+as the particle starts at a position \textit{different} from $b$ ($x < b$). Then:
+\begin{align*}
+    A(x) \partial_x T_b(x) + D(x) \partial_x^2 T_b(x) = -1
+\end{align*}  
+with the following boundary conditions:
+\begin{align*}
+    T_b(x) \Big|_{x=b} = 0 \qquad \partial_x T_b(x) \Big|_{x=a} = 0
+\end{align*}
+Denote $\partial_x T \equiv f$. The second order ODE becomes:
+\begin{align*}
+    Af + D f'' = -1
+\end{align*} 
+The homogeneous equation (with $0$ instead of $-1$) would have solution:
+\begin{align*}
+    f(x) = \exp\left(-\int_a^x \frac{A(y)}{D(y)}\dd{y} \right) c 
+\end{align*}
+To solve the \textit{inhomogeneous} case, we consider $c$ being a function: $c(x)$. Substituting back $f(x)$ leads to an explicit expression for $c(x)$, allowing to write the general solution:
+\begin{align*}
+    T_b(x) = \int_x^b \dd{y} \int_a^y \dd{z} \frac{1}{D(z)} \exp\left(-\int_z^y \frac{A(v)}{D(v)} \dd{v} \right) 
+\end{align*}     
+Where we imposed $f(a) = 0 \Rightarrow c(a) = 0$. 
+
+Substituting the definitions of $A(x) = -\partial_x U(x)/\gamma$ and $D(x) = D = (\gamma \beta)^{-1}$ ($\beta= 1/(k_B T)$) for our specific case, and setting $a = -\infty$ and $b = d$ (positions of \textit{reflective} and \textit{absorbing}boundaries for the particle in the potential well $U(x)$), we get:
+\begin{align*}
+    T_d(c) = \gamma \beta \int_c^d \dd{y} e^{\beta U(y)} \underbrace{\int_{-\infty}^y e^{-\beta U(z)}\dd{z}}_{e^{F(y)}} 
+\end{align*}
+This integral cannot be evaluated in general. However, if $\beta$ is sufficiently large, meaning that the temperature $T \to 0$, we can use the \textit{saddle point approximation} and compute it.
+
+So, we assume $\beta U(d) \gg 1$ and $\beta U(c) \gg 1$.  Note that:
+\begin{align*}
+    \frac{\displaystyle\int_{-\infty}^y e^{-\beta U(z)} \dd{z}}
+    {\displaystyle \int_{-\infty}^{+\infty} e^{- \beta U(z)} \dd{z}} = \mathbb{P}(x < y)
+\end{align*}
+as $e^{-\beta U(z)}\dd{z}$ is the probability that the article is in $(z,z+\dd{z})$ at equilibrium.
+
+Then:
+\begin{align*}
+    T_d (c) = \gamma \beta \int_c^d e^{\beta U(y) + F(y)}
+\end{align*}
+Expanding the potential around the local maximum at $y=d$:
+\begin{align*}
+    U(y) = U(d) + \frac{(y-d)^2}{2} \underbrace{U''(d)}_{< 0} + \dots  
+\end{align*}
+we can simplify the integral as:
+\begin{align*}
+    T_d(c) = \gamma \beta e^{\beta U(d)} \int_c^d \dd{y} \exp\left({-\frac{\beta |U''(d)|}{2}  (y-d)^2 + \dots + F(y)}\right)
+\end{align*}
+The integral is \textit{dominated} by \textit{small values }:
+\begin{align*}
+    \beta |U''(d)| (y-d)^2 \mathrel{\raisebox{1pt}{\stackunder{$<$}{\rotatebox{-27}{\resizebox{7pt}{2pt}{$\sim$}}}}} 1
+\end{align*}   
+And so we write:
+\begin{align*}
+    T_d(x) = \gamma \beta e^{\beta U(d) + F(d)} \int_c^d \dd{y} \exp\left(-\frac{|U''(d)|(y-d)^2 \beta}{2} + \dots\right)
+\end{align*}
+Substituting $-d + y = z$:
+\begin{align*}
+    T_d(c) = \gamma \beta e^{\beta U(d) + F(d)} \int_{-d + c}^0 \exp \left({-z^2 |U''(d)|}\frac{\beta }{2} \right) \dd{z} \approx \int_{-\infty}^0 \exp\left(-z^2 |U''(d)| \frac{\beta}{2} \right) \dd{z} = \frac{1}{2} \sqrt{2 \pi} \frac{1}{\sqrt{ \beta U''(d) }}  
+\end{align*} 
+Then only the following is left to evaluate:
+\begin{align*}
+    e^{F(d)} = \int_{-\infty}^d e^{-\beta U(z) } \dd{z}
+\end{align*}
+which is dominated by values around the \textit{minimum} of $U(x)$:
+\begin{align*}
+    U(z) = U(c) + \frac{(z-c)^2}{2} U''(c) + \dots 
+\end{align*}  
+and by substituting $z-c = v$:
+\begin{align*}
+    e^{F(d)} \approx e^{-\beta U(c)} \int_{-\infty}^{+\infty} \dd{v} \exp(-\frac{\beta U''(c)}{2} v^2 ) = e^{- \beta U(c)} \sqrt{\frac{2\pi}{\beta U''(c)} }
+\end{align*}
+Substituting everything back leads to:
+\begin{align*}
+    T_d(c) = \frac{\beta \gamma}{2} \frac{2\pi}{\sqrt{ \beta |U''(d)| \beta U''(c)}} e^{-\beta (U(d)- U(c))} 
+\end{align*}
+Note that the particle is more likely to overcome the \textit{barrier} and escape the potential well if the temperature is high and the barrier height is low. The \textit{escape} transition rate is the reciprocal:
+\begin{align*}
+    \frac{1}{T_d(c)} 
+\end{align*} 
+
+\section{Quantum Mechanics}
+Recall the Sch\"odinger equation:
+\begin{align*}
+    i \hbar \pdv{t} \psi(x,t) &= - \frac{\hbar^2}{2 m} \pdv[2]{x} \psi(x,t) + V(x) \psi(x,t) =\\
+    &= H(x, \partial_x) \psi
+\end{align*}
+where $H$ is the \textit{Hamiltonian} operator:
+\begin{align*}
+    H \equiv -\frac{\hbar^2}{2m} \partial_x^2 + V(x,t) 
+\end{align*}  
+If we consider a free particle ($V= 0$), the Schr\"odinger equation becomes:
+\begin{align*}
+    \partial_t \psi = i \frac{\hbar}{2m} \partial_x^2 \psi  \qquad \psi(x,0) = \delta(x-x_0) 
+\end{align*}
+which is very similar to the diffusion equation:
+\begin{align*}
+    \partial_t P(x,t) = D\partial_x P(x,t) \qquad P(x,t|x_0,0) \Big|_{t=0} = \delta(x-x_0)
+\end{align*}
+In fact, we can define $D_{QM} = i \hbar/(2m)$.
+
+Recall that the diffusion solution is:
+\begin{align*}
+    P(x,t!|x_0,t_0) = \frac{1}{\sqrt{4 \pi D (t-t_0)}} \exp\left(-\frac{(x - x_0)^2}{4 D (t-t_0)} \right) 
+\end{align*}
+So by substituting $D = D_{QM}$ everywhere:
+\begin{align*}
+    \psi(x,t) = \sqrt{\frac{2m}{4 \pi (t-t_0)i \hbar} } \exp\left(i \frac{m}{2\hbar} \frac{(x-x_0)^2}{t-t_0}  \right) 
+\end{align*} 
+We can ask: if $t \to t_0$, does $\psi(x,t) \to \psi(x,0) = \delta(x- x_0)$ (as it happens in the diffusion solution)? In fact, now we have an \textit{imaginary} exponential, meaning that for $t \to t_0$ the wavefunction oscillates \textit{very fast}. The idea is then that, in this case, it is almost everywhere $0$. This can be proved by using the \textit{stationary phase} technique, which shows that the integral of $\psi(x,t)$ is dominated by the values with a really small phase.
+
+
+We can now use what we learned with path integrals:
+\begin{align*}
+    \psi(x,t) &= \int \prod_{\tau = 0^+}^t \frac{\dd{x}(\tau)}{\sqrt{4 \pi D_
+    QM} \dd{\tau}} \exp\left(-\frac{1}{4 D_{QM}} \int_0^t \left(\dv{x(\tau)}{\tau}\right)^2 \dd{\tau} \right) \delta(x(t)-x) =\\
+&= \int \prod_{\tau = 0^+}^t \frac{\dd{x}(\tau)}{\sqrt{4 \pi D_{QM} \dd{t}}} \exp\left(\frac{\textcolor{Red}{i}}{\hbar} \frac{1}{2}m \int_0^t \left[\dv{x(\tau)}{\tau}\right]^2 \dd{\tau} \right) \delta(x(t)-x)
+\end{align*}
+Note that now \textit{trajectories} are weighted by a \textit{complex number}. So we are \textbf{not} dealing with a probability measure, and thus we cannot directly use the Kolmogorov extension theorem (which would require non-negative real \q{weights}).
+
+With $\hbar \to 0$, the integral can be approximated with the saddle-point method, which returns the \textit{classical trajectory} - the one where the \textit{phases oscillate slowly}.
+
+In fact, it can be proven that \textit{QM} cannot be derived by statistical mechanics alone: quantum \q{noise} is very much different from thermal \q{noise}!
+
+Consider now the more general case of non-zero potential:
+\begin{align*}
+    \pdv{t} \psi(x,t) = i \frac{\hbar}{2m} \partial_x^2 \psi(x,t) - \frac{iV(x)}{\hbar} \psi(x,t)   
+\end{align*}
+which is just the quantum evaluated version of the F-P equation:
+\begin{align*}
+    \partial_t P = D \partial_x^2 P - VP
+\end{align*}
+We found that, in this case:
+\begin{align*}
+    P(x,t|x_0,t_0) &= \langle \exp\left(-\int_0^t V(x(\tau))\dd{\tau}\right) \delta(x(t)-x)\rangle_W = \\
+    &= \int \prod_{\tau = 0^+}^t \frac{\dd{x(\tau)}}{\sqrt{4 D \pi} \dd{\tau}} \exp\left(-\frac{1}{4D} \int_0^t \dot{x}^2(\tau) \dd{\tau} - \int_0^t V(x(\tau))\dd{\tau} \right) \delta(x(t)-x)
+\end{align*}
+Leading to the substitutions:
+\begin{align*}
+    D \to D_{QM} &= \frac{i \hbar}{2m}\\
+    V \to \frac{i}{\hbar}V  
+\end{align*}
+And so we can write the solution in the quantum case:
+\begin{align*}
+    \psi(x,t) = \int \prod_{\tau = 0^+}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D_{QM}}\dd{\tau}}\exp\Big(\frac{i}{\hbar} \int_0^t \dd{\tau} \underbrace{\left[\frac{\dot{x}^2(\tau)}{2} - V(x(\tau)) \right]}_{L(\dot{x},x)}  \Big)  \delta(x(t)-x)
+\end{align*}
+Recalling the definition of the action $S$:
+\begin{align*}
+    S \equiv \int_0^t \dd{\tau} L(\dot{x}(\tau), x(\tau))
+\end{align*} 
+The Feynman path integral \textit{weights} every trajectory with the following quantity:
+\begin{align*}
+    \exp\left(\frac{i}{\hbar} S\left(\{x(\tau)\}_0^t\right) \right)
+\end{align*} 
+So that the \textit{most contributing trajectory} is the one that \textit{stationarizes} $S$: $\delta S = 0$, implying:
+\begin{align*}
+    x_c \colon 
+    \pdv{L}{x} - \dv{t} \pdv{L}{\dot{x}} \Big|_{x_c} = 0
+\end{align*}     
+
+\end{document}
