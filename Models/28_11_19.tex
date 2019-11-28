@@ -1,0 +1,179 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Disordered Systems}
+\lesson{?}{28/11/19}
+A \textit{disordered system} is a set of particles that interact in a non-regular way, leading to a \textit{very complex} \q{potential landscape}, with no clear recognizable shape.
+
+For example, consider a set of interacting fermions, e.g. atoms in a ferromagnetic material. If the \textit{strength} of interactions is the same for every couple of particles, then we have a \textbf{ordered system}. In this case, for example, the Hamiltonian will be:
+\begin{align*}
+    H = -J \sum_{i,j} S_i S_j
+\end{align*}   
+with $J < 0$ for a ferromagnetic material. Here the \q{setup} is regular, and so the behaviour of the system is relatively easy: one can show that, for sufficiently low temperatures, all spins will \textit{align} in the same direction (spontaneous magnetization).
+
+However, if we choose the \textit{strength} of each coupling $J_{ij}$ \textit{at random}, we get a \textbf{disordered system}:
+\begin{align*}
+    H=-\sum_{ij} J_{ij} S_i S_j
+\end{align*}  
+If $J_{ij}$ are randomly chosen at the \textit{start}, i.e. they are part of the system's \q{setup} and \textbf{do not evolve with time}, the disorder is denoted as \textbf{quenched}. Otherwise, if the random $J_{ij}$ depend also on time, we talk about \textbf{annealed disorder}.
+
+It is clear that in the \textit{disordered} case the system's behaviour is much more difficult to predict. In fact, there is \textit{no clear behaviour} at small temperatures. This is due to the presence of \textit{many local minima} of the potential, which are very similar to each other. If a system exhibits many equivalent stationary states with equal (minimum) energy, we call it \textbf{frustrated}.
+
+If the random parameters contributing to the system's setup are of \textit{very different scale} from each other, we talk about \textbf{structural disorder}. From an energy point of view, this leads to local minima separated by \textit{high local maxima}, which are very difficult to surpass. So the system will be effectively \textit{locked} in some configuration, unable to explore the \textit{potential landscape} in a reasonable time. This phenomenon is referred as \textbf{ergodicity breaking} - meaning that it is difficult to compute a significant \textit{time average} of the state of the system, as the behaviour of the system on a small timeframe will be highly dependent on the initial state, and not representative of the \textit{average over a sufficient sized set of states in phase-space} (as they are not explored in that timeframe, because of \q{locking}).\\
+
+Some examples of disordered systems are:
+\begin{enumerate}
+    \item A net of \textit{resistors} with random resistance
+    \item Anderson localization in condensed matter (waves over a lattice with impurities)
+    \item Protein folding 
+\end{enumerate}
+
+\section{Review of Statistical Mechanics}
+Consider a system in equilibrium at temperature $T$. Denoting:
+\begin{align*}
+    \beta = \frac{1}{k_B T} 
+\end{align*} 
+the \textit{average value} of some quantity of interest is given by the canonical ensemble's formula:
+\begin{align*}
+    \langle X \rangle = \frac{\displaystyle \sum_S X[S] e^{-\beta H[S]}}{\displaystyle \sum_S e^{-\beta H[S]}} 
+\end{align*} 
+where $S$ represents a specific \textit{configuration} of the system, i.e. a choice of \textit{all} its microscopical parameters (e.g. all the spins $S_i$ in a spin lattice). The quantity $X$ is evaluated for every state $S$, and the result is weighted by the \textit{Boltzmann weight}:
+\begin{align*}
+    e^{-\beta H[S]}
+\end{align*}   
+The overall sum is then \textit{normalized} by the \textbf{Partition function} $Z$:
+\begin{align*}
+    Z = \sum_S e^{- \beta H[S]}
+\end{align*}   
+We note that $\log Z$ plays the role of a generating function, meaning that we can extract from it the \textit{moments} of $X$. If we define:
+\begin{align*}
+    H' \equiv H + \alpha X
+\end{align*}    
+then:
+\begin{align*}
+    \langle X \rangle = -\frac{1}{\beta} \pdv{\alpha} \ln Z \Big|_{\alpha = 0} = - \frac{1}{\beta} \frac{1}{Z} \pdv{\alpha} Z\Big|_{\alpha = 0}   
+\end{align*}
+And the \textbf{free energy} is:
+\begin{align*}
+    F = -\frac{1}{\beta} \ln Z = -k_B T \ln Z 
+\end{align*} 
+so that:
+\begin{align*}
+    \langle X \rangle = \pdv{\alpha} F \Big|_{\alpha = 0}
+\end{align*}
+
+\section{Mean field Ising Model}
+Consider now a \textit{lattice} of spin-interacting particles subjected to an external magnetic field $h$. If we suppose that the the system is ordered, meaning that the coupling strength for each particle is $J/N$ (where $N$ is the number of particles), the Hamiltonian will be:
+\begin{align*}
+    H = - \frac{J}{N} \sum_{i\neq j} S_i S_j - h \sum_i S_i \qquad S_j = \pm 1 
+\end{align*}   
+In the large system limit ($N \to \infty$), a certain particle $j$ will \q{see} only the \textit{average magnetization} of the system:
+\begin{align*}
+    m = \frac{1}{N} \sum_i S_i 
+\end{align*}  
+So the energy of $j$ will be:
+\begin{align*}
+    H_j = S_j \left[\frac{2 J}{N} \sum_i S_i + h \right] \underset{N \to \infty}{\approx } S_i \left[\frac{2J}{N} \sum_i \langle S_i \rangle + h\right] \approx S_j h_m \qquad h_m \equiv 2 Jm + h
+\end{align*} 
+As $S_j = \pm 1$, we can compute the \textit{probability} of measuring one case or the other:
+\begin{align*}
+    \mathbb{P}(S_j) = \frac{e^{-\beta H_j}}{Z_j} = \frac{e^{\beta h_m S_j}}{e^{\beta h_m S_j} + e^{-\beta h_m S_j}}  
+\end{align*}   
+so that the \textit{most probable} value of $S_j$ is the one \textit{aligned} with all the other spins.
+
+The particle $j$ must contribute to the total magnetization with the \textit{same average magnetization}, meaning that:
+\begin{align*}
+    m = \sum_{S_j = \pm 1} \mathbb{P}(S_j) S_j = \frac{e^{\beta h_m} - e^{-\beta h_m}}{e^{\beta h_m} + e^{-\beta h_m}} = \tanh(\beta h_m) = \tanh \left(\beta 2Jm + \beta h \right)
+\end{align*} 
+Note that $m$ appears on both sides of the equation (\textit{self consistent}), and it is not possible to find an analytical situation.
+
+So, let's simplify the situation and consider, at first, the \textit{case with no external magnetic field}, i.e. with $h = 0$. We have:
+\begin{align*}
+    m = \tanh (2 \beta J m)
+\end{align*}
+The solution will be the intersection between the diagonal $y=m$ and the curve $y=\tanh(2 \beta J m)$. Depending on $\beta$ we can find three \textit{interesting cases} to study. The separating one is when the $\tanh$ function is tangent  to $y=m$ at the origin:
+\begin{align*}
+    \pdv{m} \tanh(2 \beta J m) \Big|_{m = 0} = 1 \Rightarrow 2 \beta J = 1
+\end{align*}   
+$\beta^* = 1/(2J)$ defines the \textit{critical temperature} $T^* = 1/\beta^*$ . For high temperatures $\beta < \beta^*$ ($T > T^*$) we will have only one solution $m^* = 0$, meaning that the system has no overall magnetization. For $\beta = \beta^*$ there are \textit{three} coincident solutions at $m^* = 0$, and in the small temperature limit ($\beta \to \infty$), we will have $2 \beta J > 1$, leading to other two solutions $\pm m^*$ with $|m^*| \neq 0$, meaning that the system will \textit{spontaneously magnetize}.   
+
+\section{Random Field Ising Model (RFIM)}
+We now \textit{randomize} the field $h_i$ experienced by every particle:
+\begin{align*}
+    H = - \frac{J}{N} \sum_{ij} S_i S_j - \sum_i h_i S_i 
+\end{align*}
+Intuitively, the random fluctuations of $h$ from a particle to another will have an effect \textit{similar} to thermal noise. So we expect that, even at $0$ temperature, the system may not exhibit a ferromagnetic phase if the $h_i$ are sufficiently strong.
+
+Explicitly, let's set the distribution of $h_i$ to be gaussian with $0$ mean and $\delta^2$ variance (so that then we can evaluate \textit{gaussian integrals}): 
+\begin{align*}
+    \mathbb{P}(h_i) = \frac{1}{\sqrt{2 \pi \delta^2}} \exp\left(-\frac{h_i^2}{2 \delta^2} \right)
+\end{align*}
+($\sigma \to \delta$ everywhere) 
+
+
+We consider the scale ratios $2J/\delta$ (ferromagnetic coupling to disorder) and $T/\delta$ (temperature to disorder), and plot the \textit{phase diagram} with respect to these axes.
+[Missing figure TBI]
+
+The \textit{ferromagnetic} phase starts at $T=0$ for a sufficiently high $2J/\delta$, and the boundary tends to the diagonal as $2J/\delta$ and $T/\delta$ both increase (as in the ordered Ising model). So, even at $T=0$, if $J$ is low enough, the system will be \textit{paramagnetic} (not magnetized). 
+
+To see this, we start by writing the partiition function:
+\begin{align*}
+    Z_h = \sum_S e^{- \beta H_h}
+\end{align*}
+where the sum is over all possible configurations $S \in \{S_i\}$, and the energy $H$ is computed over a choice of random fields $h = \{h_i | i=1,\dots,N\}$, with $N$ being the number of spins.
+
+To compute the \textit{free energy}, we can first compute the partition function $Z$ and average it, or \textit{average the free energy itself}. 
+The \textit{physical solution} is the second one, i.e. to average the free energy, as this is a \textit{physical measurable quantity} (and not a mathematical construct like $Z$). We denote the \q{average over disorder} as $\bar{X}$, leading to:
+\begin{align*}
+    \bar{X} = \int \prod_i \dd{h_i} \mathbb{P}(h_i) X_h \qquad h= \{h_i\} = \{h_1, \dots, h_N\}
+\end{align*}   
+And so, for the free energy:
+\begin{align*}
+    \bar{F}_h = - k_B T \overline{\ln Z_h}
+\end{align*}
+Dropping the $h$:
+\begin{align*}
+    \bar{F} = -k_B T \overline{\ln Z}
+\end{align*} 
+However, practically it is easier to deal with $\overline{Z^n}$, $n \in \mathbb{N}$  than $\overline{\ln Z}$. So we compute $\bar{F}$ with the \q{replica trick}.
+
+The idea is to consider $n$ replicas of the system, all with the \textit{same} quenched disorder (same choice of $\{h_i\}$). Then:
+\begin{align*}
+    \overline{\ln Z} = \lim_{n \to 0} \frac{\overline{Z^n}-1}{n} = \lim_{n \to 0} \frac{1}{n} \ln \overline{Z^n} = \pdv{n} \overline{Z^n}\Big|_{n = 0} \qquad n \in \mathbb{R}
+\end{align*}   
+Intuitively, letting the number of replicas $n$ to be $0$ \textit{does not make sense}. However this is usually mathematically, as we now see.    
+
+
+We define an index $a = 1, \dots, n$. Then:
+\begin{align*}
+    \overline{Z^n} &= \overline{\sum_{S^a} \exp\left(\frac{\beta J}{N} \sum_a \sum_{ij} S_i^a S_j^a\right) \exp \left(\beta \sum_i \sum_a S_i^a h_i\right)} =\\
+    &\underset{(a)}{=}  \sum_{S^a} \exp\left(\frac{\beta J}{N} \sum_a \sum_{ij} S_i^a S_j^a\right) \overline{\exp \left(\beta \sum_i \sum_a S_i^a h_i\right)} = \\
+    &= \sum_{S^a} \exp\left(\frac{\beta J}{N} \sum_a \sum_{ij} S_i^a S_j^a \right) \overline{\exp\left(\sum_i h_i \lambda_i \right)} \qquad \lambda_i = \beta \sum_a S_i^a
+\end{align*} 
+where the sum is over all the possible configurations of $a$ replicas of the system, and $S_i^a$ is the spin of the $i$-th particle in the $a$-th replica. 
+
+In (a) we note that the disorder is only present in the $h_i$, and so we can restrict the average. Every term summed inside the last exponential can be evaluated using gaussian integrals:
+\begin{align*}
+    \overline{\exp\left(\lambda_i h_i\right)} = \int \dd{h_i} \mathbb{P}(h_i) e^{\lambda_i h_i} = \exp\left(\frac{\delta^2 \lambda_i^2}{2} \right)
+\end{align*}
+Substituting back:
+\begin{align*}
+    \overline{Z^n} = \sum_{S^a} \exp\left(\frac{\beta J }{N} \sum_a \left(\sum_i S_i^a\right)^2 \right) \exp\Big(\frac{\delta^2 \beta^2}{2} \underbrace{\sum_i \left(\sum_a S_i^a\right)^2}_{\sum_i \lambda_i^2}  \Big)
+\end{align*}
+where we used:
+\begin{align*}
+    \sum_{ij} S_i^a S_j^a = \left(\sum_i S_i^a\right)\left(\sum_j S_j^a\right) = \left(\sum_i S_i^a\right)^2
+\end{align*}
+Note that now the disorder apparently \q{disappears} (is only contained in the variance $\delta$), and the separate replicas \textit{interact} from each other.  
+
+To remove the squares we use the \textbf{Hubbard-Stratonovich transformation} (just another kind of gaussian integral):
+\begin{align*}
+    \exp\left(\pm \frac{b}{2} z^2 \right) = \frac{1}{\sqrt{2 \pi b}} \int_{-\infty}^{+\infty} \exp\left(-\frac{x^2}{2b} - \sqrt{\pm 1} z x \right) \dd{x}
+\end{align*} 
+where the \textit{self-interaction} $z^2$ disappears, and we have instead $z x$, where $x$, in a certain sense, can be seen as a \q{mediating field} with Gaussian distribution. Physically, the idea is to convert interactions between particles to interactions of each particle with a common field. 
+
+
+
+\end{document}
