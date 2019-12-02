@@ -145,6 +145,42 @@ The idea is to consider $n$ replicas of the system, all with the \textit{same} q
 \end{align*}   
 Intuitively, letting the number of replicas $n$ to be $0$ \textit{does not make sense}. However this is usually mathematically, as we now see.    
 
+\begin{expl}
+    The previous identity is derived by Taylor expansion of the exponential:
+    \begin{align*}
+        \lim_{n \to 0} \frac{Z^n -1}{n} = \lim_{n \to 0} \frac{e^{n \ln Z} - 1}{n} = \lim_{n \to 0} \frac{n \ln Z + \frac{1}{2!} (n \ln Z)^2 + \dots }{n} = \ln Z 
+    \end{align*}
+    Rearranging:
+    \begin{align*}
+        Z^n \approx 1+ n \ln Z
+    \end{align*}
+    Taking the average, thanks to linearity we can write:
+    \begin{align}
+        \overline{Z^n} \approx 1+n\overline{\ln Z} 
+        \label{eqn:Zapprox}
+    \end{align}
+    Now consider the second expression:
+    \begin{align}
+        A = \lim_{n \to 0}\frac{1}{n} \log(\overline{Z^n}) 
+        \label{eqn:second-expr}
+    \end{align}
+    Substituting (\ref{eqn:Zapprox}) in (\ref{eqn:second-expr}) we get:
+    \begin{align*}
+        A = \lim_{n \to 0} \frac{1}{n} \ln (1+ n \overline{\ln Z}) 
+    \end{align*}
+    As $n \to 0$, we can use $\ln(1+x) \approx x + O(x^2)$ ($x \to 0$ ), leading to:
+    \begin{align*}
+     A = \overline{\ln Z}   
+    \end{align*}   
+    So we proved that:
+    \begin{align*}
+        \overline{\ln Z} = \lim_{n \to 0} \frac{\overline{Z^n} -1}{n} = \lim_{n \to  0} \frac{1}{n} \ln \overline{Z^n}  
+    \end{align*}
+    The third expression evaluates (again, thanks to linearity) to:
+    \begin{align*}
+        \pdv{n} \overline{Z^n} \Big|_{n = 0} = \pdv{n} \exp\left(n \overline{\log Z}\right)\Big|_{n = 0} = Z^n \overline{\log Z} \Big|_{n = 0} = \overline{\log Z}
+    \end{align*}
+\end{expl}
 
 We define an index $a = 1, \dots, n$. Then:
 \begin{align*}

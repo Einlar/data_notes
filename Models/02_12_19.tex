@@ -1,0 +1,105 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{RFIM - Part 2}
+\lesson{?}{02/12/19}
+We were trying to compute the \textit{mean free energy} $\bar{F}$ of a Random Field Ising Model (RFIM). We noted that $\bar{F}$ depends on $\overline{\ln Z}$, which can be computed more easily by first evaluating $\overline{Z^m}$, for which we found the following expression:
+\begin{align}
+    \overline{Z^n} = \sum_{\{S^a\}} \exp\left[\frac{\beta J}{N} \sum_a \left(\sum_i S_i^a\right)^2 + \frac{\beta^2 \delta^2}{2} \sum_i \left(\sum_a S_i^a\right)^2 \right]
+    \label{eqn:Znbar}
+\end{align}   
+where we are using the \textit{replica trick}, averaging over $n$ replicas of a system with $N$ spins. The notation $\{S^a\}$ denotes a sum over every spin of every replica. 
+
+To remove the squares, we use the Hubbard-Stratonovich transformation. Let $b > 0$: 
+\begin{align*}
+    \exp\left(\frac{b}{2} z^2 \right) = \frac{1}{\sqrt{2 \pi b}} \int \dd{x} \exp\left(-\frac{x^2}{2b} \pm zx \right) 
+\end{align*}
+Otherwise, if the exponential argument is negative:
+\begin{align*}
+    -\exp\left(-\frac{b}{2}z^2 \right) = \frac{1}{\sqrt{2 \pi b}} \int \dd{x} \exp\left(-\frac{x^2}{2b} \pm i z x\right) 
+\end{align*} 
+These are just kinds of multivariate Gaussian integrals.
+
+\medskip
+In our case, we choose:
+\begin{align*}
+    z_a = \sqrt{2 J \beta} \sum_i S_i^a
+\end{align*}
+(the $2$ factor is necessary to have a $b/2$ in the exponential) and $b = 1/N$, leading to:
+\begin{align*}
+    \exp\left(\frac{b}{2} z_a^2 \right) = \frac{1}{\sqrt{2 \pi b}} \int \dd{x_a} \exp\left(-\frac{x_a^2}{2b} + z_a x_a \right)  \qquad \forall a
+\end{align*} 
+Substituting back in (\ref{eqn:Znbar}) we get:
+\begin{align*}
+    \overline{Z^n} = \left(\frac{N}{2 \pi} \right)^{n/2} \sum_{\{S^a\}} \int \prod_a \dd{x_a} \exp\left[-\frac{N}{2} \sum_a x^2_a + \sqrt{2J \beta} \sum_i \sum_a S_i^a x_a + \frac{\beta^2 \delta^2}{2} \sum_i \left(\sum_a S_i^a \right)^2 \right]
+\end{align*}
+Note that now $S_i^a$ appear \textit{by itself} (there are no $j$ (?)).
+
+\begin{align*}
+    \overline{Z^n} &= \left(\frac{N}{2\pi} \right)^{n/2} \prod_a \dd{x_a} \exp \left[N\left(-\frac{1}{2} \sum_a x_a^2 + \log Z_1 \right)\right]\\
+    Z_1(x_a) &= \sum_{\{S^a = \pm 1\}} \exp\left[\sqrt{2 \beta J} \sum_a x_a S^a + \frac{\beta^2 \delta^2}{2} \left(\sum_a S^a\right)^2 \right]
+\end{align*}
+We now use compute the integrals with the \textit{saddle point approximation} for $N \to \infty$. Also, we assume that $x_a = x \quad \forall a = 1, \dots, n$, which works for this specific system. This means that we can simplify sums:
+\begin{align*}
+    \sum_a x_a^2 = n x^2
+\end{align*} 
+So, we proceed to find the exponential maximum by differentiating:
+\begin{align*}
+    \pdv{x} \left[-\frac{1}{2} n x^2 + \log Z_1 (x) \right] \overset{!}{=}  0 \Rightarrow nx = \pdv{x} \log Z_1(x)
+\end{align*}
+Denote the solution as $x_m$. Then we have:
+\begin{align*}
+    n x_m = \frac{\displaystyle \sqrt{2 \beta J}\sum_{S^a = \pm 1} \left(\sum_a S^a\right) e^{A[S, x_m]}}{\displaystyle \sum_{S^a = \pm 1} e^{A[S, x_m]}}
+\end{align*} 
+where:
+\begin{align*}
+    A[S,x] = \sqrt{2 \beta J} x \sum_a S^a + \frac{\beta^2 \delta^2}{2} \left(\sum_a S^a\right)^2 
+\end{align*}
+Note that $n x_m$ looks like the \textit{average} over a certain ensemble:
+\begin{align*}
+    \langle y \rangle = \frac{\displaystyle \sum_S y e^{- \beta H}}{ \displaystyle \sum_S e^{- \beta H}} 
+\end{align*}  
+Rearranging:
+\begin{align*}
+    \frac{x_m}{\sqrt{2 \beta J}} = \frac{\displaystyle \sum_{\{S^a = \pm 1\}} \frac{1}{n} \sum_a S^a e^A }{\displaystyle \sum_{\{S^a = \pm 1\}} e^A} \equiv \langle S \rangle_A = m
+\end{align*}
+where $m$ is the \textbf{magnetization} of the system.   
+
+Note that:
+\begin{align*}
+    A = - \beta \tilde{H} = - \beta\left(\frac{1}{\sqrt{\beta}} (\dots) + \beta(\dots) \right)
+\end{align*}
+so generally only one of the two terms will be dominant at a given temperature.
+
+Recalling that $x_m = \sqrt{2 \beta J}m$ we have, in summary:
+\begin{align*}
+    \overline{Z^n} &\approx \exp\left(N [-n \beta J m^2 + \log Z_1(m)]\right)\\
+    Z(m) &= \sum_{\{S^a = \pm 1\}} e^{A[S,m]}\\
+    A[S,m] &= 2 \beta J m \sum_a S^a + \frac{\beta^2 \delta^2}{2} \left(\sum_a S^a\right)^2 \\
+    m &= \frac{1}{Z_1(m)} \sum_{S^a = \pm 1} \left(\frac{1}{n} \sum_a S^a \right) e^{A[S,m]}  
+\end{align*} 
+We now need to get rid of the remaining $(\sum_a S^a)^2$ by applying a second Hubbard-Stratonovich transformation. So we start from:
+\begin{align*}
+    e^A = \exp\left(2 \beta Jm \sum_a S_a\right) \exp\left(\frac{\beta^2 \delta^2}{2} \left[\sum_a S^a\right]^2 \right)
+\end{align*}
+Applying H-S with $b=1$, $z = \beta \delta \sum_a S^a$ and $x = \nu$ we get:
+\begin{align*}
+    \exp\left(\frac{\beta^2 \delta^2}{2} \left[\sum_a S^a\right]^2 \right) = \int \frac{\dd{\nu}}{2 \pi} \exp\left(-\frac{1}{2} \nu^2 + \nu \left[\beta \delta \sum_a S_a\right] \right)
+\end{align*}   
+And so:
+\begin{align*}
+    e^{A[S,m]} &= \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 + \underbrace{(2 \beta J m + \beta \delta \nu)}_{\eta} \sum_a S^a  \right)\\
+    Z_1(m) &= \sum_{\{S^a = \pm 1\}} e^{A[S,m]} = \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right) \prod_a \sum_{S^a = \pm 1} e^{\mu S^a} =\\
+    &= \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right) [2 \cosh \mu]^n = \\
+    &= \int \frac{\dd{\nu}}{\sqrt{2\pi}} \exp\left(-\frac{1}{2} \nu^2 + n \log [2 \cosh \mu] \right) 
+\end{align*} 
+and so $Z_1 (m)  \xrightarrow[n \to 0]{}  1$. 
+
+
+
+
+
+
+\end{document}
