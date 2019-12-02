@@ -1,0 +1,89 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\chapter{MoTP Exercises 2019/20}
+\section{Stochastic Processes and Path Integrals}
+
+\begin{exo}[Stirling's approximation]
+    Use the $\Gamma$ function definition:
+    \begin{align*}
+        \Gamma(n) \equiv \int_0^\infty x^{n-1} e^{-x} \dd{x} \quad n > 0\qquad \Gamma(n+1) = n!
+    \end{align*}
+    together with the saddle point approximation to derive the result used in chapter $2$ of Lecture Notes:
+    \begin{align*}
+        \ln n! = n\ln n - n + \frac{1}{2} \ln(2 \pi n) + O\left(\frac{1}{n} \right) 
+    \end{align*} 
+\end{exo}
+
+\begin{exo}[Random walk tends to a Gaussian]
+    Implement a numerical simulation to explicitly show how the solution of the ME for a 1-dimensional random walk with $p_\pm = 1/2$ tends to the Gaussian. 
+\end{exo}
+
+\begin{exo}[Non symmetrical motion]
+    Write the analogous of:
+    \begin{align*}
+        W(x,t+\epsilon) = \frac{1}{2}[W(x-l, t) + W(x+l,t)] 
+    \end{align*}
+    in the LN for the case with $p_+ = 1-p_- \neq p_-$ and determine:
+    \begin{enumerate}
+        \item how they depend on $l$ and $\epsilon$ in order to have a meaningful continuum limit
+        \item the resulting continuum equation and how to map it in the diffusion equation:
+        \begin{align*}
+            \partial_t W(x,t) = D \partial_x^2 W(x,t)
+        \end{align*}  
+    \end{enumerate} 
+\end{exo}
+
+\begin{exo}[Multiple steps at once]
+    Write the analogous of:
+    \begin{align*}
+        W(x,t+\epsilon) = \frac{1}{2}[W(x-l),t + W(x+l,t)] 
+    \end{align*}
+    for the case where the probability to make a step of length $sl \in \{\pm nl \colon n \in \mathbb{Z} \land n > 0\}$ is:
+    \begin{align*}
+        p(s) = \frac{1}{Z} \exp\left(-|s| \alpha\right) 
+    \end{align*}
+    where $\alpha$ is some fixed constant. Determine:
+    \begin{enumerate}
+        \item the normalization constant $Z$
+        \item what is the condition to have a meaningful continuum limit, discussing why the neglected terms do not contribute to such limit
+        \item which equation you get in the continuum limit 
+    \end{enumerate}
+    
+\end{exo}
+
+\begin{exo}[Expected values]
+    Use equation:
+    \begin{align*}
+        W(x,t) \equiv W(x,t|x_0, t_0) = \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{(x-x_0)^2}{4 D (t-t_0)} \right) \qquad t\geq t_0  
+    \end{align*}
+    to determine $\langle x \rangle_t$, $\langle x^2 \rangle_t$ and $\operatorname{Var}_t(x)$.   
+\end{exo}
+
+\begin{exo}[Diffusion with boundaries]
+    Consider the diffusion equation:
+    \begin{align*}
+        \partial_t W(x,t) = D \partial_x^2 W(x,t)
+    \end{align*}
+    in the domain $[0,\infty)$ instead of $(-\infty,\infty)$. To do that one needs the \textit{boundary condition} (bc) that $W(x,t)$ has to satisfy at $0$. Determine the bc for the following two cases and for each of them solve the diffusion equation with the initial condition $W(x,t=0) = \delta(x-x_0 )$ with $x_0 > 0$.
+    \begin{enumerate}
+        \item \textit{Case of reflecting bc}: when the particle arrives at the origin it bounces back and remains in the domain. How is the flux of particles at $0$?
+        \item \textit{Case of absorbing bc}: when the particle arrives at the origin it is removed from the system (captured by a trap acting like a filter!) What is $W(x=0, t)$ at all time $t$? Notice that in this case we do not expect that the probability is conserved, i.e. we have instead a \textit{Survival Probability}:
+        \begin{align*}
+            \mathcal{P}(t) \equiv \int_0^\infty W(x,t) \dd{x}    
+        \end{align*}      
+        that decreases with $t$. Calculate it and determine its behavior in the two regimes $t \ll x_0^2/D$ and $t \gg x_0^2/D$. Why $x_0^2/D$ is a relevant time scale?\\
+        (Hint: use the fact that $e^{\pm ikx}$ are eigenfunctions of $\partial_x^2$ corresponding to the same eigenvalue and choose an appropriate linear combination of them so to satisfy the bc for the two cases. Be aware to ensure that the eigenfunctions so determined are orthonormal. Use also the fact that $\int_{\mathbb{R}} e^{iqx} \dd{x} = \delta(q)$  )
+    \end{enumerate}
+           
+\end{exo}
+
+\begin{exo}[]
+    
+\end{exo}
+\listoftheorems
+
+
+\end{document}
