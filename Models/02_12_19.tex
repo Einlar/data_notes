@@ -91,13 +91,70 @@ Applying H-S with $b=1$, $z = \beta \delta \sum_a S^a$ and $x = \nu$ we get:
 And so:
 \begin{align*}
     e^{A[S,m]} &= \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 + \underbrace{(2 \beta J m + \beta \delta \nu)}_{\eta} \sum_a S^a  \right)\\
-    Z_1(m) &= \sum_{\{S^a = \pm 1\}} e^{A[S,m]} = \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right) \prod_a \sum_{S^a = \pm 1} e^{\mu S^a} =\\
-    &= \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right) [2 \cosh \mu]^n = \\
-    &= \int \frac{\dd{\nu}}{\sqrt{2\pi}} \exp\left(-\frac{1}{2} \nu^2 + n \log [2 \cosh \mu] \right) 
+    Z_1(m) &= \sum_{\{S^a = \pm 1\}} e^{A[S,m]} = \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right) \prod_a \sum_{S^a = \pm 1} e^{\nu S^a} =\\
+    &= \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right) [2 \cosh \nu]^n = \\
+    &= \int \frac{\dd{\nu}}{\sqrt{2\pi}} \exp\left(-\frac{1}{2} \nu^2 + n \log [2 \cosh \nu] \right) 
 \end{align*} 
 and so $Z_1 (m)  \xrightarrow[n \to 0]{}  1$. 
 
+\begin{exo}[Magnetization]
+    Prove that:
+    \begin{align*}
+        m = \frac{1}{Z_1(m)} \int \frac{\dd{\nu}}{\sqrt{2\pi}} \exp\left(-\frac{1}{2} \nu^2 + n \log [2 \cosh (2 \beta J m + \beta \delta \nu)] \right)  \tanh [2 \beta J m + \beta \delta \nu]
+    \end{align*}
+    
+\end{exo}
 
+Note that as $n \to 0$ the magnetization becomes:
+\begin{align*}
+    m = \int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2}\nu^2 \right) \tanh (2 \beta J m + \beta \delta \nu) 
+\end{align*}
+We can finally go back, recalling that $h = \delta \nu$ (gaussian noise), and so:
+\begin{align*}
+    m = \int \underbrace{\frac{\dd{h}}{\sqrt{2\pi \delta^2}} \exp\left(-\frac{h^2}{2 \delta^2} \right)}_{p(h)}   \tanh( \beta (2 J m + h)) = \overline{\tanh(\beta(2 J m + h))}
+\end{align*} 
+If $\beta \to \infty$ ($T \to 0$), the tangent becomes like a \textit{periodic step function}, which is averaged with gaussian weights. 
+
+To find the \textit{critical line} separating the \textit{paramagnetic} and \textit{ferromagnetic} behaviours, we need to evaluate:
+\begin{align}
+    \pdv{m} m_{\mathrm{sc} }(m) \Big|_{m=0} = 1
+    \label{eqn:cl}
+\end{align}   
+
+\begin{exo}[Critical line]
+    Prove that the critical line satisfies the condition:
+    \begin{align*}
+        2 \beta J \int \dd{h} p(h) \frac{1}{[\cosh (\beta h)]^2} = 1  
+    \end{align*}
+    (just differentiate (\ref{eqn:cl}))
+\end{exo}
+
+This can be written in a different manner. First, let:
+\begin{align*}
+    J' = \frac{J}{\delta} \qquad \beta' = \beta \delta \qquad \tilde{h} = \beta h 
+\end{align*}
+so that:
+\begin{align*}
+    2 \beta' J' \int \frac{\dd{\tilde{h}}}{\sqrt{2 \pi}} \exp(-\frac{\tilde{h}^2}{2 {\beta'}^2} ) \frac{1}{(\cosh \tilde{h})^2} = 1 
+\end{align*}
+
+\begin{exo}[Critical ratio at $T = 0$]
+    Show that the \textit{para-ferro} transition at $T=0$ takes place when:
+    \begin{align*}
+        \frac{2J}{\delta} = \sqrt{\frac{\pi}{2}}  
+    \end{align*}  
+\end{exo}
+
+Finally, we can compute the \textbf{free energy} (let $k_B = 1$):
+\begin{align*}
+    \bar{F} &= -T \overline{\ln Z} = -T \pdv{n} \overline{Z^n} \Big|_{n=0} =\\
+    &\underset{\substack{\text{Saddle}\\\text{point}}}{\approx}  -T \pdv{n} \left[\exp\left(N (-n \beta J n^2 + \log Z_1)\right)\right]_{n=0} = \\
+    &= -T N \left[- \beta J m^2 + \pdv{n} \ln Z_1\right]_{n=0} =\\ 
+     &= N \left[J m^2 - \frac{T}{Z_1} \pdv{n} Z_1 \right] = \\
+     &\underset{Z_1 \to 1}{=}  N\left[J m^2 - T\int \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right) \ln(2 \cosh (2 \beta J m + \beta \delta \nu)) \right] = \\
+     &= N\left[J m^2 - T \int \frac{\dd{h}}{\sqrt{2 \pi \delta^2 }} \exp\left(-\frac{h^2}{2 \nu^2} \right) \log \left[2 \cosh \left(\beta (2 Jm+ h)\right)\right] \right]
+\end{align*} 
+which is the \textit{free energy} averaged over the disorder. Note that the magnetization and the energy are interdependent.  
 
 
 
