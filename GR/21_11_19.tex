@@ -1,0 +1,238 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Orbits in GR}
+\lesson{?}{21/11/19}
+During last lecture, we derived:
+\begin{align*}
+    \frac{1}{2}\left(\dv{r}{\tau}\right)^2 + V_{\mathrm{eff}}(r) = \underbrace{\mathcal{E}}_{(e^2-1)/2} \qquad V_{\mathrm{eff} }(r) = -\frac{GM}{r} + \frac{l^2}{2r^2} - \frac{GMl^2}{r^3}    
+\end{align*}
+With two constants of motion:
+\begin{align*}
+    \xi^\mu = (1,0,0,0) \Rightarrow e &= \left(1-\frac{2GM}{r} \right) \dv{t}{\tau} = \text{Constant}\\
+    \xi^\mu = (0,0,0,1) \Rightarrow l &= r^2 \dv{\varphi}{\tau} = \text{Constant}
+\end{align*}
+This describes the motion of a planet constrained to a plane ($\theta = \pi/2$) in the Schwarzschild metric.
+
+In the case of \textit{circular orbits} we have:
+\begin{align*}
+    \begin{cases}
+        -\frac{GM}{r} + \frac{l^2}{2r^2} - \frac{GM l^2}{r^3} = \frac{e^2 -1}{2} \qquad (V = e)\\
+        \frac{GM}{r^2} - \frac{l^2}{r^3} + \frac{3GM l^2}{r^4} = 0 \qquad (\pdv{v}{r} = 0)      
+    \end{cases}
+\end{align*}
+From the second equation we can arrive to:
+\begin{align*}
+    r = \frac{L^2}{2 GM} \left[1+ \sqrt{1- 12 \left(\frac{GM}{l} \right)^2}\right] 
+\end{align*} 
+Now, we consider the following:
+\begin{align}
+    (\mathrm{Eq.1}) + r\left(1-\frac{r}{2GM} \right) (\mathrm
+    Eq.2) \Rightarrow \frac{l}{e} = \sqrt{GM r} \left(1-\frac{2 GM}{r} \right)^{-1} \label{eqn:le}
+\end{align}
+We are interested in computing the \textbf{angular velocity} $\Omega$, defined with respect to \textit{coordinate time}:
+\begin{align*}
+    \Omega \equiv \dv{\varphi}{t}
+\end{align*}   
+This leads to an interesting relation:
+\begin{align*}
+    \Omega = \frac{\displaystyle \dv{\varphi}{\tau}}{\displaystyle \dv{t}{\tau}} = \frac{l/r^2}{\displaystyle e\left(1- \frac{2GM}{r} \right)^{-1}}  \underset{(\ref{eqn:le})}{=} \frac{\displaystyle \sqrt{GMr}\cancel{\left(1-\frac{2GM}{r} \right)^{-1}}\frac{1}{r^2} }{\displaystyle \cancel{\left(1-\frac{2GM}{r} \right)^{-1}}} \Rightarrow \Omega^2 = \frac{GM r}{r^4} = \frac{GM}{r^3}  
+\end{align*}
+which is exactly the same relation that holds in Newtonian mechanics (due to sheer coincidence).
+
+\subsection{A general orbit}
+Let's go back to the general equation:
+\begin{align*}
+    \frac{1}{2}\left(\dv{r}{t}\right)^2 + V_{\mathrm{eff} }(r) = \mathcal{E} = \frac{e^2-1}{2} 
+\end{align*}
+Following the same steps we did in Newtonian mechanics, we simplified the problem introducing $u \equiv r^{-1}$, leading to:
+\begin{align*}
+    \dv[2]{u}{\varphi} + u = \frac{GM}{l^2} + 3GM u^2 
+\end{align*} 
+We know already one solution: the circular orbit, with $u \equiv u_c$. We can then consider a \textit{perturbation}:
+\begin{align*}
+    u(\varphi) = u_c[1+ w(\varphi)] \equiv w \ll 1
+\end{align*}  
+and then derive the equation (neglecting the $O(w^2)$ terms):
+\begin{align*}
+    \dv[2]{w}{\varphi} + (1- 6GM u_c) w \approx 0
+\end{align*}
+which is just the harmonic oscillator equation. One solution is:
+\begin{align*}
+    w = A \cos(\sqrt{1- 6GM u_c}\>\varphi) \qquad A \ll 1
+\end{align*}
+Going back to $r$:
+\begin{align*}
+    r(\varphi) = \frac{r_c}{1+ A \cos(\sqrt{1- 6GM/r_c}\> \varphi)} \qquad r_c = \frac{1}{u_c}  
+\end{align*} 
+If $A > 0$ (and $A \ll 1$), when the argument of cosine is $0$ then:
+\begin{align*}
+    r = \frac{r_c}{1+A} 
+\end{align*}  
+This is the \textit{perihelion}, as $r$ is smallest when the denominator is greatest. On the other hand, if the argument is $\pi$, then we have the aphelion:
+\begin{align*}
+    r = \frac{r_c}{1-A} 
+\end{align*} 
+With $2\pi$ we are back to $r_c/(1+A)$ - the next perihelion. Note that one orbit happens whenever the \textit{argument} of the cosine changes by $2\pi$. This is equal to a change of $2\pi$ of the coordinate $\varphi$ only if we neglect the term $6GM/r_c$ which comes from GR. So, in Newtonian mechanics, one orbit equals a $2\pi$ rotation in $\varphi$, but not in GR - here, to have a $2\pi$ change of the argument of the cosine, $\varphi$ must change a bit more: $2\pi + \delta \varphi_{\mathrm{precession}}$. Then:
+\begin{align*}
+    \Delta \varphi_{\mathrm{1\ orbit}} = \frac{2 \pi}{\displaystyle \sqrt{1 - \frac{6GM}{r_c} }} \approx 2 \pi \left(1+\frac{3 GM}{r_c} \right)
+\end{align*}   
+and so:
+\begin{align*}
+    \delta \varphi_{\mathrm{precession} } = \Delta \varphi_{\mathrm{1 orbit}} - 2 \pi = 6 \pi \frac{GM}{r_c} 
+\end{align*}        
+Plugging in the Newtonian result for $r_c = l^2/(GM)$ (as the eventual corrections would lead to terms of higher order), we arrive finally at:
+\begin{align*}
+    \delta \varphi_{\mathrm{precession} } = 6 \pi \left(\frac{GM}{l} \right)^2
+\end{align*} 
+We can know evaluate this quantity with the real case of the planet Mercury. First, we need to put back the powers of $c$. We can do this by \textit{dimensional analysis}. 
+
+From $F = G Mm/r^2$, we note that $[G] = \si{\newton \m\squared \per \kilo\gram\squared} = \si{\kilo\gram \m \per \second\squared \m \squared \per \kilo\gram \squared} = \si{\m\cubed \per \kilo\gram \per \s\squared}$. $[M] = \si{\kilo\g}$, $[l] = [r v] = \si{\m\squared\per\s}$ and so:
+\begin{align*}
+    \left[\frac{GM}{l} \right] = \frac{\si{\m\cubed \per \kilo\g \per \s\squared \kilo\g}}{\si{\m\squared \per \s}} = \si{\m\per\s} 
+\end{align*}  
+But $\delta\varphi_{\mathrm{precession}}$ must be a pure number, and so we have to divide by $c^2$:
+\begin{align*}
+    \delta \varphi_{\mathrm{precession} } = 6 \pi \left(\frac{GM}{c l} \right)^2
+\end{align*}  
+Then, inserting all the numbers (with at least $3$ significant digits each):
+\begin{align*}
+    G &= \SI{6.67e-11}{\newton\m\squared\per \kilo\gram\squared}\\
+    M &= \SI{1.99e30}{\kilo\g}\\
+    l &= r v \Big|_{\mathrm{perihelion\ Mercury}} = \SI{4.60e7}{\kilo\m} \cdot \SI{590}{\kilo\m\per\s}\\
+    c &= \SI{3.00e8}{\m\per\s}
+\end{align*}
+(note that $r$ and $v$ must be measured at the same \textit{point}, e.g. the perihelion)
+leads to:
+\begin{align*}
+    \delta\varphi_{\mathrm{precession}} = \SI{5.02 e-7}{rad}
+\end{align*}
+This is the precession that \textit{accumulates} at \textit{every} orbit. To compute the total drift in a year, we need the orbital period of Mercury, which is $T = \SI{88.0}{days} = \num{2.41e-3} \cdot \SI{100}{years}$. We then find:
+\begin{align*}
+   \frac{\delta \varphi_{\mathrm{precession} }}{T} = \frac{43''}{\SI{100}{years}} 
+\end{align*}
+Which is exactly compatible to the measured result!   
+
+
+\section{Radial orbit - Dive into Black Hole}
+Consider an object with all the mass concentrated at the origin (black hole), and we study the motion with $l=0$, that \textit{falls straight} to the origin. Suppose we start at rest at infinity. 
+
+Recalling the previous equation:
+\begin{align*}
+    \frac{1}{2}\left(\dv{r}{\tau}\right)^2 - \frac{GM}{r} = \frac{e^2-1}{2}  
+\end{align*}
+and:
+\begin{align*}
+    e = \left(1-\frac{2GM}{r} \right)\dv{t}{\tau} = 1
+\end{align*}
+In fact, as $e$ is a constant of motion, we can evaluate it at infinity, where $GM/r$ is negligible, and as the object is at rest we have $\dd{t} = \dd{\tau}$.  
+Then the $4$-velocity components are: 
+\begin{align*}
+    u^0 \equiv u^t = \dv{t}{\tau} = \frac{1}{1- 2GM/r}; \quad u^r = \dv{r}{\tau} = -\sqrt{\frac{2GM}{r} }; \quad \dv{\theta}{\tau} = 0; \quad \dv{\varphi}{\tau} = 0
+\end{align*}
+and so:
+\begin{align*}
+    u^\alpha = \left(\left(1-\frac{2GM}{r} \right)^{-1}, -\sqrt{\frac{2GM}{r} }, 0, 0\right)
+\end{align*}
+Let's check if the norm is equal to $-1$:
+\begin{align*}
+    \bm{u}\cdot \bm{u} &= g_{00} u^0 u^0 + g_{11} u^1 u^1 = -\left(1-\frac{2GM}{r} \right)(1-\frac{2GM}{r} )^{-2} + \left(1-\frac{2GM}{r} \right)^{-1} \frac{2GM}{r} =\\
+    &= \frac{-1 + 2GM/r}{1-2GM/r} = -1 
+\end{align*}
+Then rearranging the conservation of energy:
+\begin{align*}
+    \dv{t}{\tau} = \frac{1}{1- 2GM/r} 
+\end{align*}
+We now rearrange the differential equation:
+\begin{align*}
+    \dv{r}{\tau} = - \sqrt{\frac{2GM}{r} }
+\end{align*}
+(the - sign comes from the fact that we are \textit{approaching} the black hole). Integrating:
+\begin{align*}
+    \int_0^r r^{1/2} \dd{r} = -\sqrt{2GM} \int_0^\tau \dd{\tau}
+\end{align*}
+so that $\tau = 0$ at $r=0$ at the end of the motion, so that $r(\tau)$ occurs for negative $\tau$. This leads to:
+\begin{align*}
+    \frac{2}{3}r^{3/2} = \sqrt{2GM} (- \tau) \Rightarrow r(\tau) = \left(\frac{3}{2} \right)^{2/3} (2GM)^{1/3} (-\tau)^{1/3}
+\end{align*}   
+Recall that $\tau$ is the time measured by the infalling particle. The Schwarzschild metric is:
+\begin{align*}
+    \dd{s}^2 = -\left(1-\frac{2GM}{r} \right)\dd{t}^2 + \left(1-\frac{2GM}{r} \right)^{-1} \dd{r}^2 + r^2 \dd{\theta}^2 + r^2 \sin^2 \theta \dd{\varphi}^2
+\end{align*} 
+We would suspect that something bad happens at $r=2GM$. However, from the point of view of the particle, the solution $r(\tau)$ has no singularity at $r = 2GM$. In fact, the particle crosses this \textit{horizon} in a finite time (as locally measured). However, at $r=2GM$, a finite $\Delta \tau$ corresponds to an \textit{infinite} $\Delta t$ ($\dd{t}/\dd{\tau}$ diverges at $r=2GM$). So it takes an infinite coordinate time for the particle to cross the horizon. 
+
+This likely means that the coordinates $\{t,r\}$ are a bad choice at the horizon. 
+
+\subsection{Escape velocity}
+We can now reverse our reasoning to compute the \textit{escape velocity}. In practice, we just reverse the sign of the velocity:
+\begin{align*}
+    u^\alpha = \left(\left(1- \frac{2GM}{r} \right)^{-1}, + \sqrt{\frac{2GM}{r} },0,0\right)
+\end{align*}
+which is a radial motion with $e=1$ that reaches $r=\infty$ at rest. 
+
+Consider an observer at rest at distance $r$ from the black hole, who launches radially a projectile. What is the $\bm{v}_{\mathrm{escape}}$ needed for that object to \textit{escape} the gravitational pull of the black hole?  
+
+Note that:
+\begin{align*}
+    u^\alpha_{\mathrm{observer} } = \left(\frac{1}{\sqrt{-g_{00}}}, \bm{0} \right) = \left(\left(1-\frac{2GM}{r} \right)^{-1}, \bm{0}\right) \Rightarrow \bm{u}_{\mathrm{obs} }\cdot \bm{u}_{\mathrm{obs} } = -1
+\end{align*}
+The energy of the projectile as measured by the observer is:
+\begin{align*}
+    \mathcal{E} = -\bm{u}_{\mathrm{obs} } \cdot \bm{p}_{escape}
+\end{align*}
+where $\bm{p}_{\mathrm{escale} } = m \bm{u}_{\mathrm{escape}}$. Expanding:
+\begin{align*}
+    \mathcal{E} = -g_{00} (\bm{u}_{\mathrm{obs} })^0 (\bm{p}_{\mathrm{esc} })^0 = \left(1-\frac{2GM}{r} \right)\left(1-\frac{2GM}{r} \right)^{-1/2} m \left(1-\frac{2GM}{r} \right)^{-1} = \frac{m}{\displaystyle \sqrt{1-\frac{2GM}{r} }}  
+\end{align*}
+Recall that:
+\begin{align*}
+    \mathcal{E}= \frac{m}{\sqrt{1-v^2}} 
+\end{align*} 
+so that:
+\begin{align*}
+    |\bm{v}_{\mathrm{escape} }| = \sqrt{\frac{2GM}{r} } 
+\end{align*}
+Again, by coincidence, this is the same result obtained in Newtonian mechanics. 
+
+So, for an observer \textit{on the horizon}, the escape velocity is $c$, and \textit{inside the horizon}, it exceeds $c$ (it is not possible to escape anymore). 
+
+\section{Motion of light}
+Light must experience gravity - this can be seen by using the \textit{equivalence principle}. Mathematically, light follows \textit{geodesics}, and so we can study it by solving the \textit{geodesics equation}.
+
+$\xi^\mu = (1,0,0,0)$ is a Killing vector, meaning that $e\equiv -\bm{\xi}\cdot \bm{u} = (1- 2GM/r) \dd{t}/\dd{\lambda}$ is a conserved quantity. Also $\xi^\mu = (0,0,0,1)$ is a Killing vector, and then $l \equiv \bm{\xi} \cdot \bm{u} = r^2 \dd{\varphi}/\dd{\lambda}$ is constant (here we consider the $\theta = \pi/2$ plane). For light:
+\begin{align*}
+    u^\alpha = \dv{x^\alpha}{\lambda} \qquad \bm{u}\cdot \bm{u} = 0 \Rightarrow 0 = g_{00} u^0 u^0 + g_{11} u^1 u^1 + g_{33} u^3 u^3
+\end{align*}   
+(the $g_{22} $ term vanishes, as $u^2 = \dd{\theta}/\dd{\lambda} = 0$). Checking the normalization:
+\begin{align*}
+    0 = -\left(1-\frac{2GM}{r} \right)\left(\frac{e}{1-2GM/r} \right)^2 + \left(1-\frac{2GM}{r} \right)^{-1} \left(\dv{r}{\lambda}\right)^2 + r^2 \left(\frac{l}{r^2} \right)^2
+\end{align*}
+Multiplying everything by $1-2GM/r$ and dividing by $l^2$  leads to:
+\begin{align*}
+    0 = -\frac{e^2}{r^2} + \frac{1}{l^2} \left(\dv{r}{\lambda}\right)^2 + \frac{1}{r^2} \left(1-\frac{2GM}{r} \right)   
+\end{align*} 
+Rearranging:
+\begin{align*}
+    \frac{1}{l^2} \left(\dv{r}{\lambda}\right)^2 + W_{\mathrm{eff} }(r) = \frac{1}{b^2}  
+\end{align*}
+where we introduce:
+\begin{align*}
+    b^2 = \frac{l^2}{e^2} \qquad W_{\mathrm{eff} }(r) = \frac{1}{r^2}\left(1-\frac{2GM}{r} \right)  
+\end{align*}
+Note that $\lambda$ is just a parameter introduced \q{by convenience} to characterize motion. If we reparametrize $\lambda \to k \lambda$ nothing should change in the motion. This leads to $e \to e/k$ and $l \to l/k$, so that $b^2 = l^2/e^2 \to b^2 $ and also $\frac{1}{l^2} (\dv{\lambda})^2$ stays the same. So the equation we found is \textit{invariant} under the reparameterization $\lambda \to k \lambda$. This means that a physical parameter must only involve \textit{ratios} of $l$ and $e$.
+
+Note also that the equation is \textit{even} in $l$. This means that motion does not depend on the \textit{orientation} of the viewer (the sign of $\dd{\varphi}/\dd{\lambda}$ depends on the observer's position). So we can assume $l>0$ without loss of generality.
+
+One last thing to do before solving the equation is to \textit{plot} $W_{\mathrm{eff} }(r)$, or better, $G^2M^2 W_{\mathrm{eff} }$ over $r/GM$ (dimensionless). For $r \to 0$ the potential diverges to $-\infty$, and then goes to $0$ (in the first quadrant) as $r \to \infty$. This means that $W_{\mathrm{eff} }$ has a maximum, which is effectively found at $r= 3GM$, where $W_{\mathrm{eff} } = 1/(27 G^2 M^2)$ (by taking the derivative and setting it to $0$).
+
+So, mathematically there are \textit{circular orbits} (with $r=3GM$), but they are not stable - and so physically they don't happen (a photon \textit{cannot} orbit a black hole forever).
+
+Also, a photon with \q{energy} (in the sense of effective potential $W_{\mathrm{eff} }$ plot) less than $\max W_{\mathrm{eff} }$, coming from infinity, \q{bounces back}, i.e. escapes away after a certain amount of time. This happens when:
+\begin{align*}
+    \frac{1}{b^2} < W_{\mathrm{eff}, max } = \frac{1}{27 G^2 M^2}  \Rightarrow l^2 > 27 G^2 M^2 e^2 \Rightarrow l > \sqrt{27} GM e
+\end{align*} 
+meaning that the photon has \textit{enough angular momentum}.  
+
+\end{document}

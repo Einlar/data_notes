@@ -1,0 +1,169 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Shapiro Time delay of light}
+\lesson{?}{28/11/19}
+
+Consider two planets $A$ and $B$ that exchange light signals. The time that a signal takes to go from $A$ to $B$ depends on the distance $AB$, i.e. on the length of the line connecting $A$ to $B$  . In the presence of a \textit{massive star} close to that trajectory (with minimum distance $d$ to the trajectory), light \textit{bends}, and so the time interval will be higher. This was experimentally verified in 1976 during a near alignment of Earth-Sun-Mars. 
+
+We will not do the entire computation, but only give an initial derivation. Recall that, when we studied the orbits of planets in GR or the deflection of light, we started by writing two constants of motion in the Schwarzschild metric:
+\begin{align*}
+    e &= -\bm{u} \cdot (1,0,0,0) = \left(1-\frac{2GM}{r}\right)\dv{t}{\lambda}\\
+    l &= \bm{u} \cdot (0,0,0,1) = r^2 \dv{\varphi}{\lambda}
+\end{align*}
+Then, from $\bm{u}\cdot \bm{u} = 0$ we can derive a relation for the desired quantity $\dd{r}/\dd{\lambda}$.
+
+Then, if we want to compute the time, we change variables:
+\begin{align*}
+    \dv{t}{r} = \frac{\dd{t}/\dd{\lambda}}{\dd{r}/\dd{\lambda}} 
+\end{align*}
+and the integrate over the roundtrip:
+\begin{align*}
+    t_{A \to B \to  A} = \left(\int_{r_A}^d \dv{t}{r} \dd{r} + \int_d^{r_b} \dv{t}{r} \dd{r}\right) \cdot 2
+\end{align*}
+and then expand to linear order in $M$:
+\begin{align*}
+    t = 2 |\bm{x}_A - \bm{x}_B| + O(M)
+\end{align*} 
+and finally do another expansion for $d \ll r_A, r_B$ (effect accumulated when closest to the sun). The final result will be:
+\begin{align*}
+    \Delta t= 4 GM \ln \left(\frac{4 r_A r_B}{d^2} \right)
+\end{align*}
+
+\section{Schwarzschild Horizon}
+Recall the line-element:
+\begin{align*}
+    \dd{s}^2 = -\left(1-\frac{2GM}{r} \right)\dd{t}^2 + \left(1-\frac{2GM}{r} \right)^{-1} \dd{r}^2 + r^2 (\dd{\theta}^2 + \sin^2\theta \dd{\varphi}^2 )
+\end{align*}
+This is a vacuum solution ($R_{\mu \nu} = 0$), and it's singular at $r=2GM$, meaning that it takes infinite coordinate time ($t$) to cross the horizon ($r = 2GM$). However, we saw that an observer can cross the horizon in a finite \textit{proper time}. 
+
+A similar phenomenon happens in Minkowski spacetime seen by a constantly accelerated observer. There, with the change of coordinates:
+\begin{align*}
+    \begin{cases}
+        t = \rho \sinh \eta\\
+        x = \rho \cosh \eta
+    \end{cases}
+\end{align*}
+an observer at constant space coordinates $\rho_*$ feels a constant acceleration $1/\rho_*$ and measures a proper time $\tau = \rho_* \eta$. Here a stationary observer reaches the diagonal in a \textit{finite amount of time}, while the accelerated one takes an \textit{infinite time} to do so.
+
+The line element in Rindler space is:
+\begin{align*}
+    \dd{s}^2 = -\dd{t}^2 + \dd{x}^2 = -\rho^2 \dd{\eta}^2 + \dd{\rho}^2
+\end{align*}
+We now show that this metric corresponds to the Schwarzschild metric \textit{close to the horizon} $r = 2GM$. So, we start from the Schwarzschild line element, and make a change of variables \textit{centered} on the horizon:
+\begin{align*}
+    \{t,r\} \to \{t, \tilde{r}\} \qquad r= 2GM + \tilde{r}
+\end{align*}   
+so that:
+\begin{align*}
+    \dd{s}^2 = -\left(1-\frac{2GM}{2GM + \tilde{r}} \right) \dd{t}^2 + \left(1-\frac{2GM}{2GM + \tilde{r}} \right)^{-1} \dd{\tilde{r}}^2 + \text{Angular}
+\end{align*}
+We now compute the metric's elements \textit{close to the horizon}:
+\begin{align*}
+    g_{00} = -\left(1-\frac{2GM}{2GM + \tilde{r}} \right) = -\left(1-\frac{1}{1+ \frac{\tilde{r}}{2GM} } \right) \approx -\left(1-\left(1-\frac{\tilde{r}}{2 GM} \right)\right) = -\frac{\tilde{r}}{2GM} 
+\end{align*} 
+where we used $(1+\epsilon)^n \approx 1+ n \epsilon$, with $\epsilon = \tilde{r}/2GM$ and $n=-1$. Substituting back:
+\begin{align*}
+    \dd{s}^2 \approx -\frac{\tilde{r}}{2GM} \dd{t}^2 + \hlc{Yellow}{\frac{2GM}{\tilde{r}} \dd{\tilde{r}}^2} + \text{Angular} 
+\end{align*}   
+We now make another change of variables:
+\begin{align*}
+    \{t,\tilde{r}\} \to \{t, \rho\} \qquad \rho = \sqrt{8GM \tilde{r}}
+\end{align*}
+This leads to:
+\begin{align*}
+    \dd{\rho} = \sqrt{8 MG} \dd{\sqrt{\tilde{r}}} = \sqrt{8 MG} \frac{\dd{\tilde{r}}}{2\sqrt{\tilde{r}}}  = \sqrt{\frac{2MG}{\tilde{r}} } \dd{\tilde{r}}
+\end{align*}
+so that the highlighted term is just $\dd{\rho}^2$:
+\begin{align*}
+    \dd{s}^2 = -\frac{1}{2GM} \frac{\rho^2}{8 GM} \dd{t}^2 +\hlc{Yellow}{ \dd{\rho}^2 }+ \text{Angular}  
+\end{align*} 
+Finally, if we let:
+\begin{align*}
+    \frac{t}{4GM} = \eta \Rightarrow \dd{\eta}^2 = \frac{\dd{t}^2}{16 G^2M^2}  
+\end{align*}
+we arrive at:
+\begin{align*}
+    \dd{s}^2 = -\rho^2 \dd{\eta}^2 + \dd{\rho}^2
+\end{align*}
+So the metric \textit{near the Schwarzschild horizon} is the same as the Rindler metric of an accelerating observer. This means that the $\{t,r,\theta,\varphi\}$ coordinates are \textit{adapted} to a constantly accelerated observer, as the $\{\eta, \rho\}$ coordinates where \textit{adapted} to a constantly accelerated observer \textit{in Minkowski spacetime}. So it is \textit{that choice of coordinates} that, in a certain sense, \q{creates} the horizon. The idea is that a \textit{stationary observer} in the Schwarzschild metric \textit{feels} a \textit{constant acceleration} (in fact, it is \textit{not} following a geodesic - i.e. a human on Earth).
+
+Now, note that in Rindler space we can change coordinates $\{\eta, \rho\} \to \{x,y\}$ and \textit{remove} the horizon. In fact the same thing can be done for the Schwarzschild metric - but it's not obvious how to do so (and in fact it's very difficult). So we will just state the right solution, which results in the \textbf{Kruskal-Szekeres coordinates}:
+\begin{align*}
+    \{t,r\} \to \{u,v\}
+\end{align*}   
+The change of coordinates had a \textit{different} functional form outside \& inside the horizon, however it's continuous across the horizon:
+\begin{itemize}
+    \item For $r > 2GM$:
+    \begin{align*}
+        \begin{cases}
+            U = \cosh\left(\frac{t}{4GM} \right) \left[\frac{r}{2GM} -1\right]^{1/2} \exp\left(\frac{r}{4 GM} \right)\\
+            V = \sinh\left(\frac{t}{4GM} \right)\left[\frac{r}{2GM} -1 \right]^{1/2} \exp\left(\frac{r}{4 GM} \right)
+        \end{cases}    
+    \end{align*} 
+    \item For $r < 2GM$:
+    \begin{align*}
+    \begin{cases}
+     U = \sinh\left(\frac{t}{4GM} \right)   \left[1-\frac{r}{2GM} \right]^{1/2} \exp\left(\frac{r}{4 GM} \right)\\
+     V = \cosh\left(\frac{t}{4GM} \right) \left[1-\frac{r}{2GM} \right]^{1/2} \exp\left(\frac{r}{4 GM} \right)
+    \end{cases}
+    \end{align*} 
+\end{itemize}
+Note that:
+\begin{align*}
+    U^2 - V^2 = \left[\frac{r}{2GM} -1 \right]\exp\left(\frac{r}{2GM} \right)
+\end{align*}
+is continuous and monotonically increasing (it's $-1$ at $r = 0$, $0$ at $r= 2GM$ and $ \to \infty$ for $r \to \infty$). So we can invert it, obtaining $r$ as a function of $U$ and $V$: $r(U,V)$. This is \textit{well defined} both inside and outside the horizon.
+
+
+The line element in $(U,V)$ coordinates becomes:
+\begin{align*}
+    \dd{s}^2 = \frac{32 G^3 M^3}{r} \exp\left(-\frac{r}{2GM} \right) (-\dd{V}^2 + \dd{U}^2) + r^2 \dd{\Omega}^2 \qquad r\equiv r(U,V)
+\end{align*}
+(we will not derive it).
+
+Note that this metric is regular everywhere \textit{apart from the singularity} at $r = 0$. 
+
+\subsection{Kruskal Diagram}
+The spacetime description in $\{U,V\}$ coordinates is called \textbf{Kruskal Diagram}. From the line element, we note that $\dd{s}^2 = (\dots) (-\dd{V^2} + \dd{U}^2) + \dots$. Light moves at $\dd{s} = 0$, meaning that for a light ray $\dd{V}^2 = \dd{U^2}$, and so:
+\begin{align*}
+    \dv{V}{U} = \pm 1
+\end{align*}
+meaning that light rays move along the \textit{diagonals} (lines at $45^\circ$). Recall now:
+\begin{align*}
+    U^2 - V^2 = \left(\frac{r}{2GM} - 1 \right)\exp\left(\frac{r}{2GM} \right)
+\end{align*} 
+Outside the horizon ($r > 2GM$) we have:
+\begin{align*}
+    \begin{cases}
+        U > 0 \\
+        U^2 - V^2 > 0
+    \end{cases}
+\end{align*}
+that means $U > |V|$ and so the region (that we'll call \textbf{region 1}) corresponds to a \textit{rotated quadrant} with $U > 0$.   
+The region \textit{inside} the horizon ($r < 2GM$) satisfies:
+\begin{align*}
+    V > 0\\
+    V^2 - U^2 > 0
+\end{align*} 
+and so now $V > |U|$ (\textbf{region 2}). 
+
+For $r = 0$, we have that $U^2-V^2 = -1$:
+\begin{align*}
+    U^2 - V^2 = -1 \Rightarrow V^2 = U^2 + 1 \Rightarrow V = \pm \sqrt{1+ U^2}
+\end{align*}  
+which is similar to a \textit{parabola}.   
+
+[Insert drawing]
+
+Note that the metric is symmetric for the sign change of $U$ or $V$, so all that we derived can be used to explain the other two regions (\textbf{3} and \textbf{4}).
+
+We can note that \textbf{1} and \textbf{4} are \textit{mathematically connected} but \textit{physically disconnected}, meaning that only \textit{space-like} trajectories can go from \textbf{1} to \textbf{4}. \\
+
+Consider now the spacetime at a fixed coordinate $V$ (as a \textit{time}), and imagine to observe it (mathematically). If $V = A < 0$, the universe is made of \textit{two} disconnected regions, separated by the \textit{white hole}. We now restore the coordinate $\theta$, fix $V = A < 0$ and draw space in $\{U,\theta\}$ coordinates.
+
+[Insert drawing]
+
+\end{document}

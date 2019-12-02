@@ -1,0 +1,282 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Schwarzschild Black Hole}
+\lesson{?}{29/11/19}
+\textbf{The 3D Plot}. Starting from the $\{U,V\}$ plot, consider the universe as seen at a constant time $V = A < 0$ (obviously this is only a \textit{mathematical} view, as no physical observer can ever see an extended region at \textit{the same exact instant}). Here we can use $V$ as a \textit{time coordinate}, as in the metric $\dd{V}^2$ has a \textit{minus} sign, just like $\dd{t}^2$. Now, $V=A$ is a horizontal line, that intercepts two separate region of spacetime (one with $U>0$ and $U<0$). If we add another coordinate $\theta$, these two regions becomes separate \textit{planes} (they are geometrically \textit{different spaces}, as they are \textit{not connected}). We can plot them by embedding in a fictitious 3D space. Also, to aid visualization, we can \textit{deform} the two planes inside their horizons, so that the two points at $r=0$ lie \textit{closer} together (in the abstract 3D space) than all the other points. Then, if we consider other pictures at different $V=A$, with $A$ closer and closer to $0$, we can see a \textit{bridge} forming between the two spaces, which however exists for not enough time to be physically traversable.
+
+\section{Complement on geodesics}
+(see additional material at the end of the lecture notes on geodesics).
+
+
+We already noted that an observer experiencing geodesic motion does not \textit{feel} any acceleration at all. We defined the $4$-acceleration as:
+\begin{align*}
+    a^\mu = \dv{u^\mu}{\tau} + \Gamma_{\alpha \beta}^\mu u^\alpha u^\beta = u^\nu \nabla_\nu u^\mu = \frac{D}{\dd{\tau}} u^\mu
+\end{align*}  
+But what is the acceleration $|\bm{a}|$ \textit{felt} by the observer?
+
+We start from:
+\begin{align*}
+    0 = u^\nu \nabla_\nu (-1) = u^\nu \nabla_\nu (u^\mu u_\mu)
+\end{align*}
+Applying Leibniz rule:
+\begin{align*}
+    = u^\mu u^\nu \nabla_\nu u_\mu + u_\mu u^\nu \nabla_\nu u^\mu
+\end{align*}
+These two terms are actually the same, as the metric is \textit{covariantly constant}:
+\begin{align*}
+    &= u^\mu u^\nu \nabla_\nu u_\mu+ u_\alpha g^{\alpha \mu} u^\nu \nabla_\nu g_{\mu \beta}u^\beta = u^\mu u^\nu \nabla_\nu u_\mu + u_\alpha \underbrace{g^{\alpha \mu} g_{\mu \beta}}_{\delta^\alpha_\beta}  u^\nu \nabla_\nu u^\beta = \\
+    &= 2 u_\mu u^\nu \nabla_\nu u^\mu = 2 \bm{u}\cdot \bm{a}
+\end{align*} 
+and so:
+\begin{align*}
+    \bm{u}\cdot \bm{a} = 0
+\end{align*}
+Now, the acceleration \textit{felt} by an observer $A$ is the same acceleration of $A$ with respect to an observer $B$ who is in a LIF (free fall) and who has the same velocity of $A$ at the instant of the measurement.
+
+[Insert figure (1)]
+
+So, let's compute the acceleration of $A$ in the frame of $B$: 
+\begin{align*}
+    a^\mu = u^\nu \nabla_\nu u^\mu = \underbrace{\dv{u^\mu}{\tau}}_{\dd{\tau} = \dd{t} \text{ in LIF}} + \underbrace{\Gamma_{\alpha \beta}^\mu u^\alpha u^\beta}_{=0 \text{ in LIF}} = \dv{u^\mu}{t}
+\end{align*}
+At that instant $A$ is \textit{at rest} in this frame, meaning that $u^\mu = (1,\bm{0})$. Also, as $\bm{a} \cdot \bm{u} = 0$ and $g_{\mu \nu} = \eta_{\mu \nu}$ in a LIF, we have:
+\begin{align*}
+    a^\mu = (0, \bm{a})
+\end{align*}    
+Then:
+\begin{align*}
+    a^\mu a_\mu = |\bm{a}|^2 \qquad \sqrt{\bm{a} \cdot \bm{a}} = |\bm{a}_{\mathrm{felt} }|
+\end{align*}
+Summarizing:
+\begin{enumerate}
+    \item Go in any frame
+    \item Compute $A^\mu = u^\nu \nabla_\nu u^\mu = \dv{u^\mu}{\tau} + \Gamma^\mu_{\alpha \beta} u^\alpha u^\beta$ in that frame
+    \item Compute $\sqrt{\bm{a} \cdot \bm{a}}$ (the scalar product will be the same in every frame)
+\end{enumerate}
+
+\begin{example}[Uniformly accelerated observer in Minkowski Spacetime]
+    Consider an uniformly accelerated observer in flat spacetime:
+    \begin{align*}
+        x(t) = \frac{\sqrt{1+k^2 t^2}}{k} 
+    \end{align*}
+    Recall that, using the proper time $\tau$ as the parameterization variable, we get:
+    \begin{align*}
+        \begin{cases}
+            t = \frac{1}{k} \sinh(k \tau)\\
+            x = \frac{1}{k} \cosh (k \tau)  
+        \end{cases} 
+    \end{align*}
+    We already now that this observer \textit{feels} a constant acceleration $k$. We want now to check that:
+    \begin{enumerate}
+        \item $\bm{u} \cdot \bm{a} = 0$
+        \item $\sqrt{\bm{a} \cdot \bm{a}} = k$  
+    \end{enumerate}  
+    The $4$-position is:
+    \begin{align*}
+        x^\mu = \left(\frac{1}{k} \sinh(k \tau), \frac{1}{k}\cosh(k \tau), 0,0  \right)
+    \end{align*} 
+    We can immediately compute the $4$-velocity:
+    \begin{align*}
+        u^\mu = \dv{x^\mu}{\tau} = \left(\cosh(k \tau), \sinh(k \tau), 0,0\right)
+    \end{align*}
+    Then:
+    \begin{align*}
+        \bm{u} \cdot \bm{u} = u^\mu \eta_{\mu \nu} u^\nu = -(u^0)^2 + (u^1)^2 = -\cosh^2 (k \tau) + \sinh^2 (k \tau) = -1
+    \end{align*} 
+    The $4$-acceleration:
+    \begin{align*}
+        a^\mu = \dv{u^\mu}{\tau} + \Gamma^\mu_{\alpha \beta} u^\alpha u^\beta
+    \end{align*} 
+    but in Minkowski spacetime all the Christoffel symbols are $0$ (flat spacetime). So:
+    \begin{align*}
+        a^\mu = \left(k \sinh(k \tau), k\cosh(k \tau), 0,0\right)
+    \end{align*} 
+    And we can finally check:
+    \begin{align*}
+        \bm{a} \cdot \bm{u} &= -a^0 u^0 + a^1 u^1 = -\cosh (k \tau) k \sinh(k \tau) + \sinh(k \tau) k\cosh(k \tau) = 0
+    \end{align*}
+    And also:
+    \begin{align*}
+        \sqrt{\bm{a} \cdot \bm{a}} = \sqrt{-a_0^2 + a_1^2} = \sqrt{-k^2 \sinh^2(k \tau) + k^2 \cosh^2 (k \tau)} = k
+    \end{align*}
+\end{example}
+
+\begin{example}[Observer at rest in Schwarzschild]
+    For an observer at rest:
+    \begin{align*}
+        x^\mu = (t(\tau), r, \theta, \varphi) 
+    \end{align*}
+    with $r, \theta, \varphi$ are all \textbf{constants}. So:
+    \begin{align*}
+        u^\mu = \left( \dv{t}{\tau}, 0, 0, 0\right)
+    \end{align*}  
+    We can find the missing component by using the normalization:
+    \begin{align*}
+        -1 = \bm{u} \cdot \bm{u} = u^\mu g_{\mu \nu} u^\nu = g_{00} (u^0)^2 = -\left(1-\frac{2GM}{r} \right) (u^0)^2 
+    \end{align*}
+    leading to:
+    \begin{align*}
+        u^0 = \frac{1}{\sqrt{-g_{00}}}  = \left(1-\frac{2GM}{r} \right)^{-1/2}
+    \end{align*}
+    Substituting back:
+    \begin{align*}
+        u^\mu = \left(\left(1-\frac{2GM}{r} \right)^{-1/2}, 0, 0, 0\right)
+    \end{align*}
+    The $4$-acceleration:
+    \begin{align*}
+        a^\mu = \cancel{\dv{u^\mu}{\tau}} + \Gamma^\mu_{\alpha \beta} u^\alpha u^\beta = \Gamma^\mu_{00} (u^0)^2
+    \end{align*} 
+    as only $u^0 \neq 0$, and $u^\mu$ is constant. Then:
+    \begin{align*}
+        G^\mu_{00} = \frac{1}{2}g^{\mu \lambda} (\cancel{g_{\lambda 0,0} }+ \cancel{g_{\lambda 0,0}} - g_{00, \lambda}) 
+    \end{align*}  
+    and so the only non-zero symbol is:
+    \begin{align*}
+        \Gamma_{00}^1 = \frac{1}{2} \left(1-\frac{2GM}{r} \right) - \pdv{r} \left(-1 + \frac{2GM}{r} \right) = \frac{1}{2}\left(1-\frac{2GM}{r} \right)  \frac{2GM}{r^2} 
+    \end{align*}
+    Substituting back:
+    \begin{align*}
+        a^1 = \left(1-\frac{2GM}{r} \right) \frac{GM}{r^2} \left(1-\frac{2GM}{r} \right)^{-1} = \frac{GM}{r^2} 
+    \end{align*}
+    and so:
+    \begin{align*}
+        a^\mu = \left(0, \frac{GM}{r^2}, 0,0 \right)
+    \end{align*}
+    Then:
+    \begin{align*}
+        |\bm{a}_{\mathrm{felt} }| = \sqrt{a_\mu a^\mu} = \sqrt{g_{11} a^1 a^1} = \frac{GM}{r^2} \left(1-\frac{2GM}{r} \right)  ^{-1/2} 
+    \end{align*}
+    Note that when $r \gg 2GM$:
+    \begin{align*}
+        |\bm{a}_{\mathrm{felt} }| = \frac{GM}{r^2} 
+    \end{align*} 
+    which is just the Newtonian gravitational acceleration.
+
+    Otherwise, when $r \to 2GM$, $|\bm{a}_{\mathrm{felt} }| \to \infty$, meaning that it is not possible to remain stationary at the Schwarzschild horizon. Note that this result is \textit{physical}, and not due to a bad choice of coordinates.   
+
+\end{example}
+
+
+\section{Spin}
+In geodetic motion:
+\begin{align*}
+    a^\mu = \dv{u^\mu}{\tau} + \Gamma^\mu_{\alpha \beta} u^\alpha u^\beta = u^\nu \nabla_\nu u^\mu = \frac{D}{\dd{\tau}} u^\mu 
+\end{align*}
+where the capital $D$ denotes a \textit{total derivative}.
+
+We define a \textbf{gyroscope} to be an object with \textit{angular momentum}. In the rest frame of the object we define it to be:
+\begin{align*}
+    S^\mu = (0, \bm{S})
+\end{align*}  
+Immediately, in the rest frame:
+\begin{align*}
+    \bm{u}\cdot \bm{S} = 0
+\end{align*}
+As the result is a scalar, this relation will be true in all frames.
+
+A free object in Minkowski spacetime in his own rest frame has a constant $\bm{S}$:
+\begin{align*}
+    \dv{S^\mu}{t} = 0
+\end{align*} 
+In a LIF, for a moving object, we expect:
+\begin{align*}
+    \dv{S^\mu}{\tau} = u^\nu \pdv{S^\mu}{x^\nu} = 0
+\end{align*}
+Generically:
+\begin{align*}
+    u^\nu\nabla_\nu S^\mu = 0 
+\end{align*}
+This is the same relation we had for $a^\mu$, meaning that $S^\mu$ is \textit{constant} along the trajectory:
+\begin{align*}
+    \frac{\mathrm{D} S^\mu}{\dd{\tau}}  = 0
+\end{align*}   
+Also:
+\begin{align*}
+    u^\nu \nabla_\nu (S^\mu S_\mu) = 2S_\mu u^\nu \nabla_\nu S^\mu = 0
+\end{align*}
+meaning that $\bm{S} \cdot \bm{S}$ is conserved during motion. By the same argument, also the \textit{product} of two different spins is conserved: $\bm{S}_1 \cdot \bm{S}_2 = \text{Constant}$.
+
+\begin{example}[Geodetic Precession]
+    We consider a gyroscope going around a Schwarzschild geometry (non-rotating mass). We will see that a different observer will see the gyroscope \textit{precess} during that motion.
+    
+    The $4$-velocity of the gyroscope is:
+    \begin{align*}
+        u^\mu = \left(\dv{t}{\tau}, 0, 0, \dv{\varphi}{\tau}\right)
+    \end{align*} 
+    as $r \equiv R$ and $\theta = \pi/2$ are both constants. Then $u^\varphi = u^t \Omega$ as:
+    \begin{align*}
+        u^\mu =\underbrace{ \dv{t}{\tau}}_{u^t}  \left(1,0,0,\dv{\varphi}{t}\right)
+    \end{align*}   
+    So:
+    \begin{align*}
+        \left(\dv{\varphi}{t}\right)^2 = \Omega^2 = \frac{GM}{R^3} 
+    \end{align*}
+    If we now use the normalization:
+    \begin{align*}
+        -1 = u^\mu u_\mu &= g_{00} (u^t)^2 + g_{33} (u^\varphi)^2 = \\
+        &= -(u^t)^2 \left(1-\frac{2GM}{r} - \frac{GM}{r}  \right)
+    \end{align*}
+
+    \begin{align*}
+        u^t = \frac{1}{\sqrt{1-\frac{3GM}{R} }}
+    \end{align*}
+
+    If we now write the spin:
+    \begin{align*}
+        S^\mu = (S^t, S^r, S^\theta, S^\varphi)
+    \end{align*}
+    $S^\theta = 0$ at the start, and will remain $0$ for all motion due to the system's symmetry (there is no reason for such a rotation). Then:
+    \begin{align*}
+        0 &= \bm{S} \cdot \bm{u} = g_{\mu \nu} S^\mu u^\nu = g_{00} S^t u^t + g_{33} S^\varphi u^\varphi  =\\
+        &= -\left(1-\frac{2GM}{R} \right) S^t \cancel{u}^t + R^2 S^\varphi \cancel{u^t }\Omega = \\
+        &= \left(1-\frac{2GM}{R} \right)^{-1} R^2 \Omega S^\varphi
+    \end{align*}  
+    We now only need to compute the evolution of $S^r$ and $S^\varphi$, and then we can compute $S^t$ with the relation just found. From the equation of the spin, we now that $S^\mu$ is constant along the geodesic:
+    \begin{align*}
+        \dv{S^\alpha}{\tau} + \Gamma^\alpha_{\beta \gamma} u^\beta S^\gamma = 0
+    \end{align*} 
+    We start with:
+    \begin{align*}
+        \dv{S^1}{\tau} + \Gamma^1_{\beta \gamma} u^\beta S^\gamma = 0
+    \end{align*}
+    What are the non-zero components? We see that $\beta = 0,3$ and $\gamma = 0,1,3$. All possible symbols are then:
+    \begin{align*}
+        \Gamma^1_{00}, \Gamma^1_{01}, \Gamma^1_{03}, \Gamma^1_{30}, \Gamma^1_{31}, \Gamma_{33}^1
+    \end{align*}  
+    Recall the definition of $\Gamma^\alpha_{\beta \gamma}$:
+    \begin{align*}
+        \Gamma^\alpha_{\beta \gamma} = \frac{1}{2}g^{\alpha \lambda} (g_{\lambda \gamma, \beta} + g_{\beta \lambda, \gamma} - g_{\beta \gamma , \lambda}) 
+    \end{align*}  
+    If the metric is diagonal (as in this case), then $\lambda = \alpha$, and we get:
+    \begin{align*}
+        \Gamma^\alpha_{\beta \gamma} = \frac{1}{2} g^{\alpha \alpha} (g_{\alpha \gamma, \beta} + g_{\beta \alpha, \gamma}- g_{\beta \gamma, \alpha}) 
+    \end{align*} 
+    and to get a non-zero result, at least two indices (between $\alpha, \beta, \gamma$) must be the same. So:
+    \begin{align*}
+        \Gamma^1_{00}, \Gamma^1_{01}, \cancel{\Gamma^1_{03}},\cancel{\Gamma^1_{30}}, \Gamma^1_{31}, \Gamma_{33}^1
+    \end{align*}
+    When two indices are the same, the third one denotes the \textit{derivative} (look at the expression). As the metric is stationary (time derivatives are null) and does not depend on $\varphi$, also $\Gamma^1_{01}, \Gamma^1_{31} = 0$. So only $\Gamma^1_{00}$ and $\Gamma^1_{33}$ are left to compute.
+    
+    \begin{align*}
+        \Gamma_{00}^1 &= \frac{1}{2} g^{11} (-1)\pdv{r} g_{00} = \left(1- \frac{2GM}{R} \right)  \frac{GM}{R^2}    \\
+        \Gamma^1_{33} &= \frac{1}{2} g^{11} (-1)\pdv{r} g_{33} = -\left(1-\frac{2GM}{R} \right) R
+    \end{align*}
+    We can now write the equations:
+    \begin{align*}
+        \dv{S^1}{\tau} + \Gamma^1_{00} \underbrace{\dv{t}{\tau}}_{u^t}  S^t + \Gamma^1_{33} \underbrace{\dv{t}{\tau} \Omega}_{u^3} S^\varphi = 0 
+    \end{align*}
+    leading to:
+    \begin{align*}
+        \dv{S^1}{t} + \Gamma_{00}^1 S^t + \Gamma^1_{33} \Omega S^\varphi = 0
+    \end{align*}
+    where we used $\dv{S^1}{\tau} = u^t \dv{S^1}{t}$ to simplify away the $u^t$. Inserting the Christoffel symbols we arrive at:
+    \begin{align*}
+        \dv{S^r}{t} + (3GM -R) \Omega S^\varphi = 0
+    \end{align*}  
+
+\end{example}
+
+\end{document}

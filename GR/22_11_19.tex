@@ -1,0 +1,233 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Previous lecture summary}
+\lesson{?}{22/11/19}
+We arrived at an equation for the motion of light:
+\begin{align*}
+    \frac{1}{l^2}\left(\dv{r}{\lambda}\right)^2 + W_{\mathrm{eff} }(r) = \frac{1}{b^2}; \quad W_{\mathrm{eff} }(r) = \frac{1}{r^2} \left(1-\frac{2GM}{r} \right); \quad b^2 = \frac{l^2}{e^2}    
+\end{align*}
+If:
+\begin{align*}
+    \frac{e^2}{l^2} = \frac{1}{b^2} < \frac{1}{27 G^2M^2}   
+\end{align*} 
+the photon has enough angular momentum ($\sqrt{27} e GM$) to \q{bounce back}: it reaches a minimum distance from the black hole, and then escapes to infinity.
+
+\begin{expl}
+    \textbf{Note}: the geodesic followed by a photon \textit{does not depend} on its energy (nor on its wavelength).  
+\end{expl}
+
+\section{Scattering}
+Consider a $\hat{x}\hat{y}$ plane, with a photon travelling from $x=+\infty$ and $y=d$ (\textbf{impact parameter} ) directed as $-\hat{x}$. At the origin there is a point mass $M$. We study the photon's motion in polar coordinates $(r, \varphi)$. 
+
+When it's very far away, the metric is that of Minkowski, and so:
+\begin{align*}
+    d \approx r \varphi
+\end{align*} 
+Then:
+\begin{align*}
+    \dv{\varphi}{t} = \dv{r}{t} \dv{\varphi}{r} = -1 \cdot \frac{-d}{r^2} = \frac{d}{r^2}  
+\end{align*}
+because the photon is far away, $r \approx x$, and so the photon moves \textit{radially}. Then we note that:
+\begin{align*}
+    b = \frac{l}{e} =  \frac{r^2 \dd{\varphi}/\dd{\lambda}}{\dd{t} / \dd{\lambda}} = r^2 \dv{\varphi}{t} = d  
+\end{align*}
+And so $b$ is the impact parameter $d$. After approaching $M$, the photon will be scattered at an angle $\Delta \varphi$, maintaining the same impact parameter $b$ relative to a \textit{tilted} axis. We define the angle of deflection as $\delta\varphi_{\mathrm{defl} } = \Delta \varphi - \pi$, so that if the motion is \textit{perfectly straight} we have $\varphi_{\mathrm{in} } = 0$, $\varphi_\mathrm{out} = \pi$ and $\delta\varphi = 0$. We want to know the trajectory $r(\varphi)$, and so we change variables:
+\begin{align*}
+    l = r^2 \dv{\varphi}{\lambda} \Rightarrow \dv{\lambda} = \frac{l}{r^2} \dv{\varphi} 
+\end{align*}        
+We assume that $M$ is small, and search an explicit expression for $\delta\varphi_{\mathrm{defl} }$. 
+
+Substituting in the geodesics equation for light:
+\begin{align*}
+    \frac{1}{l^2} \frac{l^2}{r^5} \left(\dv{r}{\varphi}\right)^2 + \frac{1}{r^2} \left(1-\frac{2GM}{r} \right) = \frac{1}{b^2}    
+\end{align*}
+To simplify the problem we introduce $u \equiv 1/r$, so that:
+\begin{align*}
+    \dv{r}{\varphi} = -\frac{1}{u^2} \dv{u}{\varphi} 
+\end{align*}  
+Substituting back:
+\begin{align*}
+    \cancel{u^4} \frac{1}{\cancel{u^4}}\left( \dv{u}{\varphi}\right)^2 + u^2 (1-2GMu) = \frac{1}{b^2}  
+\end{align*}
+As we did before, we differentiate wrt $u$, leading to:
+\begin{align*}
+    2 \dv{u}{\varphi} \dv [2]{u}{\varphi} + 2u \dv{u}{\varphi} - 6GMu^2 \dv{u}{\varphi} = 0
+\end{align*}
+and then divide by $2\dd{u}/\dd{\varphi}$, arriving at:
+\begin{align*}
+    \dv[2]{u}{\varphi} + u = 3GMu^2
+\end{align*}
+Note that $\dd{u}/\dd{\varphi}$ will be $=0$ at only \textit{one point}, so we can work around it by solving the equation in the two sides and matching the two solutions.
+
+We will solve this in a \textit{perturbative} way, assuming that $GM$ is small. Here, the solution will be almost a straight line, parametrized by $b = r\sin\varphi$ (ignoring the $u^2$ term leads to the \textit{harmonic oscillator} differential equation, and the only solution that satisfies the boundary conditions is the one with the $\sin$), so that:
+\begin{align*}
+    b = \frac{\sin\varphi}{u} \Rightarrow u=\frac{1}{b} \sin\varphi  
+\end{align*}   
+We add a small perturbation to it:
+\begin{align*}
+    u(\varphi) = \frac{1}{b}\left[\sin\varphi + W(\varphi)\right] \qquad w \ll 1 
+\end{align*}
+Substituting in the equation:
+\begin{align*}
+    -\cancel{\frac{1}{b} \sin\varphi} + \frac{1}{b} \dv[2]{w}{\varphi} + \cancel{\frac{1}{b} \sin\varphi} + \frac{1}{b} w \approx 3GM \frac{\sin^2 \varphi}{b^2}     
+\end{align*}
+As the $u^2$ term is already small, we can substitute in it only the \textit{unperturbed} solution (straight line), as adding the perturbation will only lead to higher order terms. So, we arrive at:
+\begin{align*}
+    \dv[2]{w}{\varphi} + w \approx \frac{3GM}{b} \sin^2 \varphi 
+\end{align*}
+To solve this, we make an \textit{ansatz}:
+\begin{align*}
+    w = A + B \sin^2 \varphi
+\end{align*} 
+with $A$ and $B$ constants. This is because $w''$ will produce something of the form of what appears in the equation.
+
+So, computing the two derivatives:
+\begin{align*}
+    \dv{w}{\varphi} &= 2B\sin\varphi\cos\varphi\\
+    \dv[2]{w}{\varphi} &= 2B [\cos^2 \varphi - \sin^2 \varphi] \underset{(a)}{=} 2B -4B\sin^2 \varphi  
+\end{align*}
+where in (a) we used $\cos^2 \varphi = 1-\sin^2 \varphi$. Substituting in the equation:
+\begin{align*}
+    (2B-4B\sin^2\varphi) + (A + B \sin^2 \varphi) = \frac{3GM}{b} \sin^2 \varphi 
+\end{align*} 
+Equating the left and right sides leads to the following conditions:
+\begin{align*}
+    \begin{cases}
+        2B + A = 0\\
+        -3B = \frac{3GM}{b} 
+    \end{cases}
+\Rightarrow \begin{cases}
+    A = \frac{2GM}{b}\\
+    B = -\frac{GM}{b}  
+\end{cases}
+\end{align*}
+and so the final solution is:
+\begin{align*}
+    w = \frac{2GM}{b}\left[1-\frac{\sin^2 \varphi}{2} \right] \qquad \left(\frac{GM}{b} \right) \ll 1
+\end{align*}
+What is the physical meaning of this solution? First we substitute back to compute $u(\varphi)$:
+\begin{align*}
+    u(\varphi) = \frac{1}{b} \left[\sin\varphi + \frac{2GM}{b} \left(1- \frac{\sin^2 \varphi}{2} \right) \right] 
+\end{align*} 
+We are interested in the behaviour in the infinite past/future, i.e. its asymptotic behaviour, where $r= \infty \Rightarrow u = 0$. We already now that $\varphi = 0$ will be approximately a solution (as we are working perturbatively). So we know that:
+\begin{align*}
+    \varphi_{\mathrm{in} } = \epsilon_\mathrm{in} \qquad \varphi_{\mathrm{out} } = \pi + \epsilon_{\mathrm{out} } 
+\end{align*}  
+with $\epsilon_{\mathrm{in} }, \epsilon_{\mathrm{out} } \ll 1$. Ignoring higher order terms:
+\begin{align*}
+    0 = \left[\sin \epsilon_{\mathrm{in} } + \frac{2GM}{b} \right] \approx \epsilon_{\mathrm{in} } + \frac{2GM}{b} \Rightarrow \epsilon_{\mathrm{in} } \approx -\frac{2GM}{b} 
+\end{align*}
+where we used $\sin(x) \approx x$ for $x \approx 0$. The other solution will be:
+\begin{align*}
+    0 = \sin(\pi + \epsilon_{\mathrm{out} } + \frac{2GM}{b} ) \approx -\epsilon_{\mathrm{out} } + \frac{2GM}{b} \Rightarrow \epsilon_{\mathrm{out} }  \approx \frac{2GM}{b} 
+\end{align*}  
+and so:
+\begin{align*}
+    \varphi_{\mathrm{in} } \approx -\frac{2GM}{b}; \qquad \varphi_{\mathrm{out} } \approx \pi + \frac{2GM}{b}  
+\end{align*}
+So the path of light is slightly \textit{bent} by the presence of the central mass $M$, with a deflection:
+\begin{align*}
+    \delta\varphi_{\mathrm{defl} } \approx \frac{4GM}{b} 
+\end{align*}
+
+This result was used in the first proof of GR. In 1919, sir Arthur Eddington observed a deviation in the position of a star when the Sun passed close to its line of sight (the observation was made during a total solar eclipse, otherwise it would've been impossible to see). However, this is a really tiny effect:
+\begin{align*}
+    \delta \varphi_{\mathrm{defl} } \approx 1.7''
+\end{align*}
+
+\section{Schwarzschild Horizon}
+Recall the Schwarzschild line element:
+\begin{align*}
+    \dd{s}^2 = -\left(1-\frac{2GM}{r} \right) \dd{t}^2 + \left(1-\frac{2GM}{r} \right)^{-1}\dd{r}^2 + r^2 \dd{\Omega_2}
+\end{align*}
+To study the \textit{structure} of a geometry is very useful to plot \textit{light cones}. Let's ignore angular motion and consider only the radial one. So $\dd{s}^2 = 0$ when:
+\begin{align*}
+    0 &= -\left(1-\frac{2GM}{r} \right) \dd{t}^2 + \left(1-\frac{2GM}{r} \right)^{-1} \dd{r}^2 \Rightarrow \dv{t}{r} = \pm \left(1-\frac{2GM}{r} \right)^{-1}
+\end{align*}   
+When $r = \infty$ (huge distance from the central mass) $\dd{t} = \dd{r}$, and so the light cones are the same as the ones from Minkowski's spacetime. Approaching $r=2GM$, the light cones (plotted on a $t$ over $r$ plane) become \q{thinner}, meaning that photons appear to cover less and less $\dd{s}$ for a given $\dd{t}$ as their source approaches the horizon (and massimve particles move even less). Explicitly, we can integrate the $\dd{t}$ and $\dd{r}$ relation:
+\begin{align*}
+    \int_0^t \dd{t} = \int_{r_*}^{r(t)} \frac{\dd{r}}{1-2GM/r} \qquad r_* > 2GM 
+\end{align*}    
+This integral evaluates to:
+\begin{align*}
+    t = \int_{r(t)}^{r_*} \dd{r} \frac{r}{r-2GM} = \int_{r(t)}^{r_*} \dd{r} + 2GM \int_{r(t)}^{r_*} \dd{r} \frac{1}{r- 2GM}  
+\end{align*}
+and so:
+\begin{align*}
+    t = \hlc{Yellow}{r_* - r(t) + 2GM \ln(r_* - 2GM)} \hlc{SkyBlue}{- 2GM \ln(r(t)-2GM)}
+\end{align*}
+the yellow term is always finite, but the blue ones diverges as $r(t) \to 2GM$, meaning that an object can never reach the horizon.
+
+However, $t$ for now is just a coordinate: what does it physically mean?
+
+Consider a far away observer ($g_{\mu \nu }= \eta_{\mu \nu}$) that it's looking towards a particle falling toward $M$, and which is at rest wrt $M$ (so that $\tau = t$). So $t$ is the \textit{proper time} of such an observer, meaning that from the point of view of this person no object can reach the horizon in a finite time. However, as we computed during last lecture, the \textit{falling observer} will reach and traverse the horizon in a finite time.       
+
+We also note that the \textit{far away} observer will see the falling object as \textit{increasingly red}. In fact, if we computed the gravitational redshift effect (neglecting the one due to motion) we find that:
+\begin{align*}
+    f_{\mathrm{obs} } = f_{\mathrm{emit} } \sqrt{\frac{-g_{00}(\mathrm{emit} )}{-g_{00}(\mathrm{obs} )} }
+\end{align*}  
+as the observer is at rest in a Minkowski's space, we have $g_{00} (\mathrm{obs} ) = -1$ and so:
+\begin{align*}
+    f_{\mathrm{obs} } = f_{\mathrm{emit} } \sqrt{1-\frac{2GM}{r} }
+\end{align*}
+and as $r \to 2GM $ we have $f_{\mathrm{obs} } \to 0$, meaning that, at some points, the received information \textit{stops}. This is to be expected: the falling observer can send only a finite amount of information, as he reaches the horizon in a finite time, while the observer sees this phenomenon as \textit{stretched} to an infinite time - so he cannot receive an \textit{infinite} information. 
+
+This phenomenon suggests that the Schwarzschild horizon is just a by-product of coordinates.
+
+\section{Rindler Spacetime \& Rindler Horizon}
+What is a Minkowski Spacetime seen by an accelerated observer?
+
+Recall the homework from week 2, where we considered a trajectory:
+\begin{align*}
+    x(t) = \frac{c}{k} \left[\sqrt{1+ k^2 t^2} - 1\right] 
+\end{align*}
+which is the trajectory of an observer experiencing constant acceleration $a=c k$. Now let's consider $c=1$, and ignore the constant $-1$ in the square parentheses, leading to:
+\begin{align*}
+    x(t) = \frac{\sqrt{1+ k^2 t^2}}{k} 
+\end{align*}    
+For $t=-\infty$, $x=+\infty$; $t=0 \Rightarrow x=1/k$ and $t=+\infty \Rightarrow x=+\infty$.
+The proper time of such observer is given by:
+\begin{align*}
+    \dd{s}^2 = -\dd{\tau}^2 = -\dd{t}^2 + \dd{x}^2 \Big|_{\mathrm{trajectory}} = - \dd{t}^2 \left[1- \left(\dv{x}{t}\right)^2\right] 
+\end{align*}
+Rearranging:
+\begin{align*}
+    \dd{\tau} = \dd{t} \sqrt{1-\left(\dv{x}{t}\right)^2} = \dd{t} \left[1-\frac{k^2t^2}{1 + k^2t^2} \right]^{1/2} = \frac{\dd{t}}{\sqrt{1+ k^2 t^2}} 
+\end{align*}
+Integrating:
+\begin{align*}
+    \int_0^\tau \dd{\tau} = \int_0^t \frac{\dd{t}}{\sqrt{1+ k^2 t^2}} \Rightarrow \tau = \frac{1}{k} \operatorname{arcsinh} (kt)  
+\end{align*}
+So we can parametrize the trajectory using the proper time:
+\begin{align*}
+    t &= \frac{1}{k} \sinh(k \tau)\\
+    x &= \frac{1}{k} \cosh(k \tau)  
+\end{align*}
+We want now to construct a coordinate system where the observer is at a fixed spatial position and where time is equal to the proper time measured by the observer (up to a constant). We choose:
+\begin{align*}
+    \begin{cases}
+        t = \rho \sinh \eta\\
+        x = \rho \cosh \eta
+    \end{cases}
+\end{align*}
+Now the observer is at a fixed space coordinate $\rho_* = 1/k$ and measures a proper time $\tau = \eta/k = \eta \rho_*$. 
+
+We now consider a \textit{family of observers} at different spatial locations $\rho$, each with his own constant accelerations. The lines of \textit{constant $\rho$ } are just their trajectories on the $xt$ plane, while the lines of constant $\eta$ are the ones that satisfy:
+\begin{align*}
+    \frac{t}{x} = \tanh \eta \Rightarrow \eta= \tanh^{-1}\frac{t}{x}  
+\end{align*}    
+So constant $\eta$ means constant $t/x$, thus a line of \textit{constant slope}. So the $x$ axis corresponds to $\eta = 0$, and the two $45^\circ$ degree boundaries of the light correspond to $\eta = \pm \infty$. Plotting these lines is useful to \textit{see} the action of the change of variables.     
+The coordinates so defined, named \textbf{Rindler Coordinates}, cover \textit{one quadrant} of the Minkowski spacetime. 
+
+We can now compute the \textit{line element} on this coordinate set:
+\begin{align*}
+    \dd{s}^2 &= -\dd{t}^2 + \dd{x}^2 = - (\dd{\rho} \sinh \eta + \rho\cosh \eta \dd{\eta} )^2 + (\dd{\rho} \cosh \eta + \rho \sinh \eta \dd{\eta})^2 =\\
+    &= -\rho^2 \dd{\eta}^2 + \dd{\rho}^2
+\end{align*} 
+This is the \textbf{Rindler Spacetime}, describing one quarter of Minkowski spacetime and adapted to an \textit{accelerating} observer.
+
+Consider now the worldline of an observer at rest (a vertical line in the $xt$ plane) lying at $x=x_0$, and two events $A$ and $B$ with $\Delta t = t_B - t_A = x_0$. For a Rindler observer, however, the first event $A$ is seen at $\eta_A = 0$ (more precisely, it can be \textit{reconstructed} from a light signal arriving some time later), and the second at $\eta_B = \infty$. Note that, due to acceleration, at some point the emitted light from the resting observer cannot be seen by the accelerated one. So, an \textit{accelerating observer} generates an horizon - similar to the one of a blackhole.  
+\end{document}

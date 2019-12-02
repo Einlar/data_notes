@@ -1,0 +1,240 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Einstein's equations}
+\lesson{8}{08/11/19}
+We arrived at the Einstein's equation:
+\begin{align*}
+    G_{\mu \nu } = R_{\mu \nu} - \frac{R}{2} g_{\mu \nu} = 8 \pi G T_{\mu \nu} 
+\end{align*}
+These:
+\begin{enumerate}
+    \item Reproduces Netown's Law at small curvature/non-relativistic source
+    \item Are covariant
+    \item Mathematically consistent:
+    \begin{align*}
+        \nabla_\mu T^{\mu \nu} = \nabla_\mu G^{\mu \nu} = 0
+    \end{align*}
+\end{enumerate}
+
+Recall that a free particle in flat spacetime satisfies:
+\begin{align*}
+    \dv[2]{x^\mu}{\tau} = 0 \Leftrightarrow \int_A^B \dd{\tau} = \int_A^B \sqrt{- \eta_{\alpha \beta} \dd{x^\alpha} \dd{x^\beta}} \text{ is minimum}
+\end{align*}
+We supposed that a free particle in \textit{curved spacetime} also minimizes the proper time, thus satisfying the following, more complex, equation of motion:
+\begin{align*}
+    \dv[2]{x^\mu}{\tau} + \Gamma^\mu_{\alpha \beta} \dv{x^\alpha}{\tau} \dv{x^\beta}{\tau} = 0 \Leftrightarrow \int_A^B \dd{\tau} = \int\sqrt{-g_{\alpha \beta} \dd{x^\alpha} \dd{x^\beta}} \text{ is minimunm}
+\end{align*}
+We can rewrite this expression in terms of the $4$-velocity. Recall that:
+\begin{align*}
+    u^\alpha \equiv \dv{x^\alpha}{\tau}
+\end{align*}  
+Thus:
+\begin{align*}
+    \dv{u^\mu}{\tau} + \Gamma^\mu_{\alpha \beta} u^\alpha u^\beta = 0
+\end{align*}
+Also:
+\begin{align*}
+    \dv{u^\mu}{x^\alpha} \underbrace{\dv{x^\alpha}{\tau}}_{u^\alpha} + \Gamma^\mu_{\alpha \beta} u^\alpha u^\beta = 0 \Rightarrow u^\alpha \left[ \dv{u^\mu}{x^\alpha} + \Gamma^\mu_{\alpha \beta} u^\beta\right] = 0 \Rightarrow A^\mu \equiv u^\alpha \nabla_\alpha u^\mu 
+\end{align*}
+where $A^\mu$ represents the \textit{acceleration felt by the moving particle}. So, a free particle, moving along a geodesic, feels \textit{no acceleration} $A^\mu = 0$.
+
+So, while a circular motion \textit{caused by a centripetal force} (e.g. a rope) leads to a \q{feeling of acceleration}, the same motion, only caused by gravity, does not lead to any feeling of acceleration, because it is a geodesic motion (if the speed is the right one for that trajectory).
+
+\subsection{Timelike geodesics}
+We call \textit{timelike geodesics} the free motion of massive particles, following trajectories that \textit{minimize the proper time}:
+\begin{align*}
+    \dd{\tau} = \sqrt{-\dd{s}^2} \qquad (\dd{s^2} < 0 \Rightarrow \text{time-like})
+\end{align*}  
+As we demonstrated:
+\begin{align*}
+    \int_A^B \dd{\tau} \text{ is minimized} \Rightarrow \dv[2]{x^\alpha}{\tau} + \Gamma^\alpha_{\beta \gamma} \dv{x^\beta}{\tau}\dv{x^\gamma}{\tau} = 0
+\end{align*}
+
+\subsection{Spacelike geodesics}
+Equivalently, we can consider the \textit{shortest spatial paths}, that is the ones that minimize \textit{spatial distance}:
+\begin{align*}
+    \int_A^B \dd{s} \text{ is minimum}
+\end{align*}  
+Of course, these trajectories are not followed by free particles (they are space-like). If we repeat the same calculations we made for the timelike geodesics, we arrive at the following differential equation:
+\begin{align*}
+    \dv[2]{x^\alpha}{s} + \Gamma^\alpha_{\beta \gamma} \dv{x^\beta}{s} \dv{x^\gamma}{s} = 0
+\end{align*}
+
+\subsection{Null geodesics}
+Massless particles, like photons, move along different trajectories, that satisfy:
+\begin{align*}
+    \dv[2]{x^\alpha}{\lambda} + \Gamma^\alpha_{\beta \gamma}  \dv{x^\beta}{\lambda} \dv{x^\gamma}{\lambda} = 0
+\end{align*}
+(This also needs to be experimentally verified).
+
+\section{Solution of the Geodesic Equation}
+\begin{example}[Geodesics on 2D Euclidean Plane]
+    Obviously, the geodesics on the 2D plane are just \textit{straight lines}. We will prove it in a more complex (and instructive) manner, that is by using \textit{polar coordinates} (why not?).\\
+
+    Recall that a \textit{spacelike geodesic} is the trajectory that \textit{minimizes} the \textit{length} to go from a point $A$ to a point $B$.\\
+    In polar coordinate $x^\mu = (r, \theta)$ the Euclidean metric is:
+    \begin{align*}
+        \dd{s^2} = \dd{r^2} + r^2 \dd{\theta^2} \Rightarrow g_{\mu \nu} = \left(\begin{array}{cc}
+        1 & 0 \\ 
+        0 & r^2
+        \end{array}\right) \qquad g^{\mu \nu} = \left(\begin{array}{cc}
+        1 & 0 \\ 
+        0 & r^{-2}
+        \end{array}\right)
+    \end{align*}     
+    The Christoffel symbol is defined as:
+    \begin{align*}
+        \Gamma^\alpha_{\beta \gamma} = \frac{1}{2} g^{\alpha \lambda}(g_{\lambda \gamma, \beta} + g_{\beta \lambda, \gamma} - g_{\beta \gamma, \lambda}) 
+    \end{align*}
+    For the $r$-coordinate:
+    \begin{align*}
+        \Gamma_{\beta \gamma}^r &= \frac{1}{2}(\cancel{g_{r \gamma, \beta} }+ \cancel{g_{\beta r, \gamma}} - g_{\beta \gamma, r})  = \frac{1}{2}(-2r) = -r\\
+        \Gamma_{\beta \gamma}^\theta &= \frac{1}{2}(g_{\theta \gamma, \beta} + g_{\beta \theta, \gamma} - g_{\beta \gamma, \theta}) = \frac{1}{r}  
+    \end{align*} 
+    The only non-zero symbols are:
+    \begin{align*}
+        \Gamma^r_{\theta \theta} = -r \qquad \Gamma^\theta_{r \theta} = \Gamma^\theta_{\theta r} = \frac{1}{r} 
+    \end{align*}
+    Inserting in the geodesics equation:
+    \begin{align*}
+        \dv[2]{x^\alpha}{s} + \Gamma^\alpha_{\beta \gamma} \dv{x^\beta}{s } \dv{x^\gamma}{s} = 0
+    \end{align*}
+    leads to:
+    \begin{align*}
+        \dv[2]{r}{s} - r \left(\dv{\theta}{s}\right)^2 &= 0\\
+        \dv[2]{\theta}{s} + \frac{2}{r} \dv{r}{s} \dv{\theta}{s} &= 0 
+    \end{align*}
+    To know the solution I need to know the coordinates $x^1, x^2, x^3 \dots$ of all points in the curve, as functions of the distance $s$ from $A$: $x^1(s), x^2(s), \dots$. So we need to know $N$ functions (one per dimension). Also $2N$ initial conditions are needed (this is a second order differential equation).\\
+    
+    When solving a differential equation it is useful to find \textit{first integrals}, that is quantities that are constant along the geodesic. First, note that we can rewrite the second equation as:
+    \begin{align*}
+        \frac{1}{r^2} \dv{s} \left(r^2 \dv{\theta}{s}\right) = 0 \Rightarrow \frac{1}{r^2}\left(2r \dv{r}{s} \dv{\theta}{s} + r^2 \dv[2]{\theta}{s}\right)  = \frac{2}{r}\dv{r}{s}\dv{\theta}{s} + \dv[2]{\theta}{s} = 0
+    \end{align*} 
+    (In the general case, try with $r^\alpha$ for a generic constant $\alpha$).\\
+
+    Then, we can solve this as a \textit{first order differential equation} (much simpler):
+    \begin{align*}
+        r^2 \dv{\theta}{s} = A = \text{constant} \Rightarrow \dv{\theta}{s} = \frac{A}{r^2} 
+    \end{align*} 
+    By using the definition of $\dd{s}$:
+    \begin{align*}
+        \dd{s}^2 + \dd{r^2} + r^2 \dd{\theta}^2
+    \end{align*} 
+    we can derive another relation:
+    \begin{align*}
+        \dd{s^2} = \dd{r}^2 + r^2 \frac{A^2}{r^4} \dd{s^2} \Rightarrow \dd{s^2} \left(1-\frac{A^2}{r^2} \right)  = \dd{r}^2 \Rightarrow \dv{r}{s} = \sqrt{1-\frac{A}{r^2}} 
+    \end{align*}
+    where we omitted the $\pm$ as they will lead the same result at the end in this case. So, we obtained another \textit{first order differential equation}.\\
+    We are interested in the trajectory, not in a parametrization, so we search $r(\theta)$ or $\theta(r)$:
+    \begin{align*}
+        \dv{\theta}{r} = \frac{\dd{\theta}/\dd{s}}{\dd{r}/\dd{s}} = \frac{A/r^2}{\sqrt{1-A^2 r^{-2}}} \Rightarrow \dd{\theta} = \frac{A}{r^2}\left(1-\frac{A^2}{r^2} \right)^{-1/2}\dd{r}
+    \end{align*} 
+    Then we integrate:
+    \begin{align*}
+        \theta - \theta_0 = \int_{\theta_0}^\theta \dd{\theta} \int_{r_0}^r \frac{A}{r^2} \left(1-\frac{A^2}{r^2} \right) ^{-1/2} \dd{r}
+    \end{align*}
+    With the change of variables $\xi = A/r$, $-A r^{-2} \dd{r = \dd{\xi}}$ we arrive at:
+    \begin{align*}
+        \theta - \theta_0 = - \int \frac{\dd{\xi}}{\sqrt{1-\xi^2}}  = \arccos (\xi) = \arccos \left(\frac{A}{r} \right)
+    \end{align*} 
+    To see that these are indeed straight lines, we write:
+    \begin{align*}
+        r\cos(\theta - \theta_0) = A \Rightarrow r\cos \theta \cos \theta_0 + r\sin \theta \sin\theta_0 = A \Rightarrow x \cos \theta_0 + y \sin \theta_0 = A
+    \end{align*}
+    and by solving it:
+    \begin{align*}
+        y = -\underbrace{\frac{\cos \theta_0}{\sin \theta_0} }_{\alpha}x + \underbrace{\frac{A}{\sin\theta_0}}_{\beta} = \alpha x + \beta  
+    \end{align*}
+\end{example}
+
+\section{Euler-Lagrange Equations}
+If we compute the proper time interval between two points:
+\begin{align*}
+    \tau_{AB} = \int_A^B \dd{\tau} = \int \sqrt{-g_{\alpha \beta} \dd{x^\alpha}\dd{x^\beta}} = \int \dd{\sigma} \sqrt{-g_{\alpha \beta}(x) \dv{x^\alpha}{\sigma} \dv{x^\beta}{\sigma}} \equiv \int \dd{\sigma} L\left[x^\alpha, \dv{x^\alpha}{\sigma} \right]
+\end{align*}
+where $L$ is called a \textbf{Lagrangian}.\\
+
+Now, we minimize $\tau_{AB}$:
+\begin{align*}
+    0 = \delta \tau &= \int \dd{\sigma} \left[\pdv{L}{x^\alpha} \delta x^\alpha + \pdv{L}{\left(\dv{x^\alpha}{\sigma}\right)} \dv{\delta x^\alpha}{\sigma}\right] =\\
+    &= \int \dd{\sigma} \left[\pdv{L}{x^\alpha} - \dv{\sigma}\left(\pdv{L}{\left(\dv{x^\alpha}{\sigma}\right)}\right)\right] \delta x^\alpha (\sigma) = 0
+\end{align*} 
+This holds for \textit{every possible variation}, meaning that also the integrand must vanish:
+\begin{align*}
+    \pdv{L}{x^\alpha} - \dv{\sigma}\left(\pdv{L}{\left(\dv{x^\alpha}{\sigma}\right)}\right) = 0
+\end{align*} 
+These are the \textbf{Euler-Lagrange equations}, with:
+\begin{align*}
+    L\left[x^\alpha, \dv{x^\alpha}{\sigma}\right] \equiv \sqrt{-g_{\alpha \beta}(x) \dv{x^\alpha}{\sigma} \dv{x^\beta}{\sigma}}
+\end{align*} 
+
+\section{Killing vectors}
+For every \textit{symmetry of the metric} (i.e. the metric does not depend on a certain coordinate) there is a \textit{conserved quantity} (a constant of motion). We will now show why.\\
+
+First, if a metric is $x$-independent, we define the Killing vector $\xi^\alpha = (0,1,0,0)$, i.e. a vector that goes in the direction where the metric does not change:
+\begin{align*}
+    \pdv{g_{\alpha \beta}}{x^1} = 0
+\end{align*}  
+Therefore, also $L$ does not depend on that coordinate:
+\begin{align*}
+    \pdv{L}{x^1} = 0
+\end{align*}  
+And so, substituting in the Euler-Lagrange equations:
+\begin{align*}
+    \cancel{\pdv{L}{x^1}} - \dv{\sigma} \left(\pdv{L}{\left(\pdv{x^1}{\sigma}\right)}\right) = 0
+\end{align*}
+and so:
+\begin{align*}
+    \pdv{L}{\left(\pdv{x^1}{\sigma}\right)} = \text{constant}
+\end{align*}
+Explicitly:
+\begin{align*}
+    \text{constant} &= \pdv{L}{\left(\dv{x^1}{\sigma}\right)} = 
+    \frac{1}{2 \sqrt{\cdots}} \left[-g_{\mu \nu} \underbrace{\pdv{\left(\dv{x^\mu}{\sigma}\right)}{\left(\dv{x^\alpha}{\sigma}\right)}}_{\delta^{\mu}_\alpha}\dv{x^\nu}{\sigma} - g_{\mu \nu} \dv{x^\mu}{\sigma}\underbrace{\pdv{\left(\dv{x^\nu}{\sigma}\right)}{\left(\dv{x^\alpha}{\sigma}\right)}}_{\delta^{\nu}_\alpha}\right] \Big|_{\alpha = 1}= \\
+    &= \frac{1}{2L}\left[-g_{\alpha \nu} \dv{x^\nu}{\sigma} - g_{\mu \alpha} \dv{x^\mu}{\sigma}\right] \Big|_{\alpha =1} \underset{(a)}{=} 
+    \frac{-2 g_{\alpha \beta} \dv{x^\beta}{\sigma}}{2 L} \Big|_{\alpha = 1} = \frac{-2 g_{1 \beta} \dv{x^\beta}{\sigma}}{2 L} 
+\end{align*}
+where $L$ comes from the derivative of the square root, and in (a) we renamed $\nu \to \mu$ and then used the symmetry $g_{\alpha \mu} = g_{\mu \alpha}$ to collect the metric. Recall that:
+\begin{align*}
+    \frac{1}{L} \dv{\sigma} = \dv{\tau} 
+\end{align*}
+and so:
+\begin{align*}
+    = -g_{1\beta} \underbrace{\dv{x^\beta}{\tau}}_{u^\beta} = -\overbrace{\xi^\alpha}^{(0,1,0,0)} g_{\alpha \beta} u^\beta = -\bm{\xi} \cdot \bm{u}
+\end{align*}
+So, if $g_{\mu \nu}$ does not epend on the direction $\xi^\alpha$, the quantity:
+\begin{align*}
+    \bm{\xi} \cdot \bm{u} = \text{constant}
+\end{align*}  
+that is, $\bm{\xi} \cdot \bm{p} = \text{constnat}$, where $p^\mu = m u^\mu$ is the $4$-momentum.
+
+\begin{example}[Conserved quantity in polar coordinates]
+    Consider the Euclidean 2D metric in polar coordinates:
+    \begin{align*}
+        g_{\mu \nu} = \left(\begin{array}{cc}
+        1 & 0 \\ 
+        0 & r^2
+        \end{array}\right)
+    \end{align*}
+    Note that this metric \textit{does not depend} on $\theta$, so $\xi = (0,1)$ is a Killing vector (choosing the $(r,\theta)$ basis). Then:
+    \begin{align*}
+        \bm{u} = \left(\dv{r}{s}, \dv{\theta}{s}\right)
+    \end{align*}    
+    and, as demonstrated, $\bm{\xi} \cdot \bm{u}$ is constant, that is:
+    \begin{align*}
+        \xi^\alpha g_{\alpha \beta} u^\beta = \xi^\theta g_{\theta \beta} u^ \beta = g_{\theta \theta} u^ \theta = r^2 \dv{\theta}{s}
+    \end{align*} 
+    which is the same result implied by the second geodesic equation:
+    \begin{align*}
+        \dv[2]{\theta}{s} + \frac{2}{r} \dv{r}{s} \dv{\theta}{s} = 0 \Rightarrow 
+        r^2 \dv{\theta}{s} = \text{constant}
+    \end{align*}
+    Note that the choice of coordinates for writing the metric will make some Killing vector easier to see. In fact, the independence of the metric on a coordinate is just a sufficient condition to find a Killing vector (a necessary one involves Lie derivatives, and we will not examine it in this course)
+\end{example}
+
+
+
+\end{document}

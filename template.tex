@@ -15,7 +15,7 @@
 \usepackage{lmodern}
 
 %---Math---%
-\usepackage{amsmath,amsthm,amstext,amsbsy,amsfonts,amssymb}
+\usepackage{amsmath,amsthm,amstext,amsbsy,amsfonts,amssymb,stackengine}
 \usepackage{mathrsfs}
 \usepackage{cancel}
 \usepackage{bm}
@@ -26,6 +26,8 @@
 \usepackage{yhmath}
 \usepackage{gensymb}
 
+\newcommand\myop{\ensuremath\mathrel{\raisebox{1pt}{\stackunder{$<$}{\rotatebox{-27}{\resizebox{7pt}{2pt}{$\sim$}}}}}}
+\setstackgap{S}{-1.5pt}
 %---Physics---%
 \usepackage{physics}
 \usepackage{siunitx}
@@ -151,13 +153,50 @@ bodyfont=\normalfont,
 ]{exobreak}
 
 \declaretheorem[style=exobreak, name=Exercise,%
+numberwithin = section, %
 postheadhook=\leavevmode\myleftbar, %
 prefoothook = \endmyleftbar]{exo}
+
+%show just the name in theorem list
+\makeatletter
+%\show\ll@problem gives default definition:
+% \protect \numberline {\csname the\thmt@envname \endcsname }\thmt@thmname \ifx
+% \@empty \thmt@shortoptarg \else \protect \thmtformatoptarg {\thmt@shortoptarg 
+% }\fi
+\def\ll@exo{%
+  \protect\numberline{\theexo}\thmt@shortoptarg%
+}
+\makeatother
+
+%Chapter division in theorem list
+%\colorlet{shadecolor}{lightgray!25}
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\thmtlo@chaptervspacehack
+  {\addtocontents{loe}{\protect\addvspace{10\p@}}}
+  {\addtocontents{loe}{\protect\thmlopatch@endchapter\protect\thmlopatch@chapter{\thechapter}}}
+  {}{}
+\AtEndDocument{\addtocontents{loe}{\protect\thmlopatch@endchapter}}
+\long\def\thmlopatch@chapter#1#2\thmlopatch@endchapter{%
+  \setbox\z@=\vbox{#2}%
+  \ifdim\ht\z@>\z@
+    \hbox{\bfseries\chaptername\ #1}\nobreak
+    #2
+    \addvspace{10\p@}
+  \fi
+}
+\def\thmlopatch@endchapter{}
+
+\makeatother
+\renewcommand{\thmtformatoptarg}[1]{ -- #1}
+\renewcommand{\listtheoremname}{List of definitions}
+%%%
 
 \declaretheorem[style=exobreak, name=Example,%
 postheadhook=\leavevmode\myleftbar, %
 prefoothook = \endmyleftbar]{example}
- 
+
 
 %---Custom commands---%
 \newcommand{\q}[1]{``#1''}              %quotes

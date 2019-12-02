@@ -1,0 +1,32 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Model Selection and Validation}
+\lesson{9}{12/11/19}
+Often there are several models available for data analysis, and one desires to choose the best performing one. Note that their performance cannot be measured on the \textit{test set}, as this would give a biased estimate of the generalization error.
+
+So, the idea is to split the training set in two: a set used only for training, and one only for comparing different models, denoted as the \textbf{validation set} $V$. Let $L_V$ be the loss computed on $V$ (with $m_V$ elements). Then, from Hoeffding inequality, for every $\delta \in (0,1)$, with probability $\geq 1- \delta$ (over the choice of $V$) we have:
+\begin{align*}
+    |L_V(h) - L_D(h)| \leq \sqrt{\frac{\log(2 \delta^{-1})}{2 m_V} }
+\end{align*}        
+Note that this not depend at all on the hypothesis class - because the validation samples \textit{are not used} for training!\\
+
+This is true even if we are selecting the best performing algorithm on the validation set - assuming that we are comparing a \textit{small number} of models.
+
+More formally, consider a set of \textit{different algorithms} (or the same algorithm with  different hyperparameters), trained on $S$ and leading to a set of ERM predictors $\mathcal{H}=\{h_1,h_2, \dots, h_r\}$ (do not confuse $\mathcal{H}$ with the set $\mathcal{H}_i$ of each hypothesis class).
+\begin{enumerate}
+    \item We can apply the previous theorem to each $h_i$, i.e. $\forall h_i$ we know that the probability $\mathbb{P}_{\mathrm{bad,V}}$ that the error on $V$ is far from the generalization error $L_D$ is $\leq \delta$.
+    \item We want now a bound over \textit{all} the models $h_i$. Applying the Union Bound:
+    \begin{align*}
+        p(E_1,E_2,\dots, E_n) \leq\sum_i p(E_i) \Rightarrow \mathbb{P}_{\mathrm{bad, all} }  \leq \sum_i \delta   = |H| \delta
+    \end{align*}        
+    So, $\forall h \in \mathcal{H}$, with probability $\geq 1- \delta$, the following holds:
+    \begin{align*}
+        |L_D(h) - L_V(h)| \leq \sqrt{\frac{\log(2 \delta^{-1})}{2 m_V} } = \sqrt{\frac{\log(2|\mathcal{H}|\delta^{-1})}{2m_V} }
+    \end{align*}  
+\end{enumerate}
+    
+...
+\end{document}

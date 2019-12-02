@@ -1,0 +1,274 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Continuous Diffusion}
+\lesson{?}{21/11/19}
+%Pag. 86-90 book
+We see now how to compute transition probabilities $W(x,t|x_0,0)$ using the path integral formalism and some powerful variational techniques.
+
+Consider a 1D harmonic oscillator, $\dd{x} = - k x \dd{\tau}$, in the \textit{overdamped limit}, meaning with an extra term $\sqrt{2D} \dd{B}$. Recall that $k = m\omega^2/\gamma$, and $F = -m \omega^2 x$. Then:
+\begin{align*}
+    W(x,t|x_0,0) = \int \prod_{\tau = 0}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau}}} \exp\left(-\frac{1}{4D} \int_0^t \dd{\tau}(\dot{x}(\tau) + kx)^2 \right) \delta(x(t)-x) 
+\end{align*}      
+Previously, we computed this integral by evaluating:
+\begin{align*}
+    \langle \exp\left(\frac{k^2}{4D} \int x^2(\tau)\dd{\tau} \right) \delta(x(t)-x) \rangle_W
+\end{align*}
+But now we use variational methods, so that:
+\begin{align*}
+    W(x,t|x_0,0) = \phi(t) \exp\left(-\frac{1}{4D} \operatorname{Stat} \int_0^t (\dot{x}(\tau) + kx(\tau))^2 \dd{\tau}  \right)
+\end{align*}
+where the $\operatorname{Stat}$ term evaluates to the integral computed at the stationary point $x_c$:
+\begin{align*}
+    \int_0^t (\dot{x}_c(\tau) +kx_c(\tau))^2 \dd{\tau}
+\end{align*}  
+We can compute this in the \textit{Lagrangian} formalism, by defining the action $S$:
+\begin{align*}
+    S = \int_0^t L(\dot{x}, x) \dd{\tau} \qquad L(\dot{x},x) = (\dot{x} + kx)^2
+\end{align*}  
+Then the Lagrangian equations are:
+\begin{align*}
+    x_c \colon 0 \overset{!}{=}  \pdv{L}{x} \Big|_{x_c} - \dv{t} \pdv{L}{\dot{x}} \Big|_{x_c} = 2k(\dot{x}_c + kx_c) - 2(\ddot{x}_c + k\dot{x}_c) = 2(k^2 x_c - \ddot{x}_c) 
+\end{align*}
+as:
+\begin{align*}
+    \pdv{L}{x} &= 2k(\dot{x} + kx)\\
+    \pdv{L}{\dot{x}} &= 2(\dot{x} + kx)
+\end{align*}
+Then, by rearranging, we find the equation of motion:
+\begin{align*}
+    \ddot{x}_c = k^2 x_c
+\end{align*}
+with the boundary conditions $x_c(0) = x_0$ and $x_c(t) = x$ (the two extrema of the path).
+
+Note that the classical equation of motion, in absence of friction and thermal noise, is just:
+\begin{align*}
+    m\ddot{x} = - m\omega^2 x \Rightarrow \ddot{x} = -\omega^2 x
+\end{align*}
+Here the solution is an \textit{oscillating function}, i.e. $x(t) = A\sin(\omega t + \varphi)$, which is very different from that of $\ddot{x}_c = k^2 x_c$. This last one is solved by a linear combination of exponentials:
+\begin{align*}
+    x_c(\tau) = A e^{k \tau} + B e^{-k \tau}
+\end{align*}   
+Imposing the boundary conditions, we find:
+\begin{align*}
+    x_0 &\overset{!}{=} A + B\\
+    x &\overset{!}{=}  A e^{kt} + Be^{-kt} 
+\end{align*}
+which is a set of two equations in two unknowns, with solution:
+\begin{align*}
+    A = \frac{x-x_0 e^{-k t}}{2 \sinh(kt)}; \qquad B = -\frac{(x-x_0 e^{kt})}{2 \sinh(kt)} 
+\end{align*}
+Then:
+\begin{align*}
+    \dot{x}_c = k (A e^{kt} - B e^{-kt}) \quad x_c(\tau) = A e^{k \tau} + B e^{-k \tau}
+\end{align*}
+and we can plug these into the integral:
+\begin{align*}
+    \int_0^t (\dot{x}_c(\tau) + k x_c(\tau))^2 \dd{\tau}
+\end{align*}
+leading to the solution:
+\begin{align*}
+    W(x,t|x_0,0) &= \int \prod_{\tau = 0} ^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau} }} \exp\left(-\frac{1}{4D} \int_0^t \dd{\tau}(\dot{x}(\tau) + kx)^2 \right) \delta(x(t)-x) =\\
+    &= \Phi(t) \exp\left(-\frac{k}{2D} \frac{(x-x_0 e^{-kt})^2}{(1-e^{-2kt})} \right)
+\end{align*}
+We can also evaluate the more general $W(x,t|x_0,t_0)$ just by substituting $t \to t-t_0$.
+
+$\Phi(t)$ is just the normalization constant, which is computed by:
+\begin{align*}
+    1 \overset{!}{=} \dd{x} W(x,t|x_0,0) = \Phi(t) \sqrt{\frac{2 \pi D}{k} (1 - e^{-2kt}) }
+\end{align*} 
+In the limit $t \to \infty$ the transition probability becomes:
+\begin{align*}
+    W(x,t|x_0, 0) = \sqrt{\frac{k}{2 \pi D} } \underbrace{\exp\left(-\frac{k}{2D} x^2\right)}_{e^{- \beta U(x)}} 
+\end{align*} 
+as:
+\begin{align*}
+    \frac{k}{2 D} = \beta \frac{m \omega^2}{2}  \quad U(x) = \frac{m\omega^2}{2} x^2  
+\end{align*}
+
+Consider now the general case (not the overdamped limit):
+\begin{align*}
+    \dd{x}(\tau) &= v(\tau) \dd{\tau} \\
+    \dd{v}(\tau) &= -\frac{\gamma}{m} v(\tau) \dd{\tau} + \frac{\gamma \sqrt{2D}}{m} \dd{B}  
+\end{align*}
+Recall in fact that in the overdamped limit we consider $\gamma/m \to \infty$, leading to $\dd{x}(\tau) = \sqrt{2D} \dd{B}$, which is similar to the expression we obtained for Brownian motion.
+
+In principle we could consider:
+\begin{align*}
+    \begin{cases}
+        \dd{x}(\tau) = v(\tau) \dd{\tau} + \textcolor{Red}{2 \hat{D}\sqrt{\dd{\hat{B}}}}\\
+        \dd{v}(\tau) = -\frac{\gamma}{m} v(\tau) \dd{\tau} + \frac{\gamma \sqrt{2D}}{m} \dd{B}  
+    \end{cases}
+\end{align*}
+with $B$ and $\hat{B}$ being two \textit{independent} random motions, so that:
+\begin{align*}
+    \dd{P} (\Delta B_1, \Delta \hat{B}_1, \dots, \Delta B_N, \Delta \hat{B}_N) = \prod_{i=1}^N \frac{\dd{B}_i}{\sqrt{4 \pi  \Delta t_i}} \frac{\dd{\hat{B}_i}}{\sqrt{4 \pi \Delta t_i}} \exp\left(-\frac{1}{2} \sum_i \frac{\Delta B_i^2}{\Delta t_i}  - \frac{1}{2} \sum_i \frac{\Delta \hat{B}_i^2}{\Delta t_i}    \right)  
+\end{align*}
+In the continuum limit:
+\begin{align*}
+    \dd{P}\left(\{x,v\}\right) = \prod_{\tau = 0}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi \hat{D} \dd{\tau}}} \frac{\dd{v(\tau)}}{4 \pi D \gamma^2/m^2} \exp\left(-\frac{m^2}{4 D \gamma^2} \int_0^t \dd{\tau}\left(\dot{v}(\tau) + \frac{\gamma}{m}v(\tau) \right)^2- \frac{1}{4 \hat{D}}\int_0^t \dd{\tau}(\dot{x}(\tau) - v(\tau))^2  \right) 
+\end{align*}
+In the limit $\hat{D} \to 0$:
+\begin{align*}
+    \prod_i \dd{\Delta x_i} \delta\left(\frac{\Delta x_i}{\Delta t_i} - v_i \right) \to \prod_\tau \dd{x}(\tau) \delta(\dot{x}(\tau) - v(\tau))
+ \end{align*} 
+ leading to:
+ \begin{align*}
+     \prod_i \frac{\dd{\Delta x_i}}{\sqrt{4 \pi \hat{D} \Delta t_i}} \exp\left(-\frac{1}{4 \hat{D}}\left[\frac{\Delta x_i}{\Delta t_i} - v_i\right] \right)^2
+ \end{align*}
+ and
+ \begin{align*}
+     \dd{x} = v\dd{\tau} + \sqrt{2 \hat{D}} \dd{\hat{B}} \Rightarrow \frac{(\dd{\hat{B}})^2}{\dd{\tau}} = \frac{(\dd{x} - v \dd{\tau})^2}{\sqrt{2 \hat{D}} \dd{\tau}}  
+ \end{align*}
+So we have:\marginpar{warning! accuracy not 100\%}
+\begin{align*}
+    \dd{P}(\{x,v\}) = \left(\prod_{\tau = 0^+}^k \dd{x}(\tau)\right) \prod_{\tau = 0^+}^t \frac{\dd{v}(\tau)}{\sqrt{4 \pi D \dd{\tau}} } \exp\left(-\frac{m^2}{4 D \gamma^2} \int_0^t \dd{\tau} (\dot{v} + \frac{\gamma}{m} v )^2 \right) \cdot\\
+    \cdot \left(\prod_\tau \delta(\dot{x}(\tau)- v(\tau)) \delta(x(t) - x_0 - \int_0^t v(\tau) \dd{\tau})\right) 
+\end{align*}
+
+\begin{align*}
+    &\int \dd{P}(\{x,v\})  \delta(x(t)-x) \delta(v(t)-v) = W(x,v,t|x_0, v_0, 0) = \\
+    &= \int \prod_{\tau = 0^+}^t \frac{\dd{v}(\tau)}{\sqrt{4 \pi D \dd{\tau} \gamma /m^2}} \exp\left(-\frac{m^2}{4 D \gamma} \int_0^t \left(\dot{v} + \frac{\gamma}{m} v \right)^2 \dd{\tau} \right) \delta(v(t) -v )\hlc{Yellow}{ \delta\left(x-x_0 - \int_0^t v(\tau) \dd{\tau}\right) }=\\
+    &= \Phi(t) \exp\left(-\frac{m^2}{4 D \gamma} \int_0^t (\dot{v}_c(\tau) + \frac{\gamma v_c(\tau)}{m} )^2 \dd{\tau} \right)
+\end{align*}
+To stationarize the exponential, we need to impose the constraint:
+\begin{align*}
+    x-x_0 = \int_0^t v(\tau) \dd{\tau}
+\end{align*}
+Recall that if we want to find the stationary points of $F(z_1, \dots, z_k)$ on the manifold (= subjected to the constraints) $\Phi (z_1, \dots, z_k)$, we use the Lagrange multipliers:
+\begin{align*}
+    \pdv{z_i} (F(z_1, \dots, z_k) + \lambda \Phi (z_1, \dots, z_k)) = 0 
+\end{align*} 
+We find all the coordinates as functions of $\lambda$ ($z_i(\lambda)$) and then search the $\lambda^*$ such that:
+\begin{align*}
+    \Phi(z_1(\lambda^*), \dots, z_k(\lambda^*)) = 0
+\end{align*} 
+In our case:
+\begin{align*}
+    \int_0^t \left(\dot{v} + \frac{\gamma}{m} v \right)^2 \dd{\tau} \qquad(\leftarrow F)\\
+    \int_0^t v(\tau)\dd{\tau} - (x-x_0) = 0 \qquad (\leftarrow \Phi)
+\end{align*}
+leading to:
+\begin{align*}
+    \int_0^t \left(\dot{v} + \frac{\gamma}{m}v \right)^2 \dd{\tau} + \lambda \left[\int_0^t v(\tau) \dd{\tau} - (x-x_0)\right]\\
+    \int_0^t \underbrace{\left[\left(\dot{v} + \frac{\gamma}{m} v \right)^2 + \lambda v(\tau)\right]}_{L(v,\dot{v})} \dd{\tau} - \lambda(x-x_0)
+\end{align*}
+Finding the Euler-Lagrange equation for the second one:
+\begin{align*}
+    0 = \left(\pdv{L}{v} - \dv{t} \pdv{L}{\dot{v}}\right)\Big|_{v = v_0} = \lambda + 2 \left(\frac{\gamma}{m} \right)^2 v_c - 2 \ddot{v}_c = 0 \Rightarrow \ddot{v}_c = \left(\frac{\gamma}{m} \right)^2 v_c + \lambda
+\end{align*}
+The homogeneous solution is again a combination of exponentials:
+\begin{align*}
+    v_c(\tau) = A \exp\left(-\frac{\gamma}{m}\tau \right) + B \exp\left(\frac{\gamma}{m} \tau \right)
+\end{align*}
+and then we add an inhomogeneous term $+\lambda (m/\gamma)^2$, so that we have $3$ parameters, with $3$ constraints :
+\begin{align*}
+    v_c(0) = v_0 \qquad v_c(t) = v\qquad \int_0^t v(\tau)\dd{\tau} = (x-x_0)
+\end{align*}  
+
+\begin{expl}
+    The highlighted part comes from:
+    \begin{align*}
+        &\int \dd{x_1}\dots \dd{x_N} \delta(x_1 - x_0 - v_0 \Delta t_1) \delta(x_2 - x_1 - v_1 \Delta t_2) \dots \delta(\overbrace{x_N}^{x} - x_{N-1} - v_{N-1} \Delta t_N  ) \delta(x_N - x) =\\
+        &= \int \dd{x}_2 \dots \dd{x}_N \delta(x_2 - x_0 - (v_0 \Delta t_1 + v_1 \Delta t_2)) \delta(x_3 - x_2 - \Delta t_3 v_2) \dots =\\
+        &= \int \dd{x_N} \delta(x_N - x_0 - \sum_i \Delta t_i v_{i-1}) \delta(x_N - x)
+    \end{align*}
+\end{expl}
+
+\section{Another problem}
+Consider a particle in a potential $U(x)$ that goes to $0$ at infinity, and has a local minimum separated by a \textit{barrier}. If the energy is sufficiently low, the particle can become \textit{trapped} inside this minimum. However, in the presence of thermal noise, there is a possibility of escape. 
+%Sec. 5.5.3. Gardiner IV ed.
+
+Before solving this problem, we focus on a simpler case: that of a particle confined in an interval $[a,b]$:
+\begin{align*}
+    \dd{x} = \frac{F}{\gamma} + \sqrt{2D} \dd{B} \quad F= -U' 
+\end{align*} 
+so that the Fokker-Planck equation becomes:
+\begin{align*}
+    \dot{p}(x,t|x_0,t_0) = \partial_x [U' P + D \partial_x P]
+\end{align*}
+Suppose that the boundary conditions are \textit{reflecting} in $a$ and \textit{absorbing} in $b$. 
+
+Expanding the notation:
+\begin{align*}
+    \dot{p}(x,t|x_0,t_0) = \partial_x\underbrace{[-A(x) p(x,t|x_0,t_0) + \partial_x(D(x) p(x,t|x_0,t_0))]}_{-J(x,t)} 
+\end{align*}
+with:
+\begin{align*}
+    D(x) \equiv D = \frac{k_B T}{\gamma}  \qquad A(x) = -U'(x)
+\end{align*}
+In $a$, the \textit{reflecting} boundary condition means that:
+\begin{align*}
+    J(a,t) = 0 \qquad \forall t
+\end{align*}  
+as the \textit{inward} flux and \textit{outward} one are the same, and so their sum is $0$.
+
+In $b$, however, the \textit{absorbing} boundary condition means that the probability to find the particle here is exactly $0$:
+\begin{align*}
+    p(b,t|x_0,t_0) = 0
+\end{align*}   
+
+The \textit{survival probability}, i.e. the probability of the particle still being inside the interval $[a,b]$ is:
+\begin{align*}
+    p_{\mathrm{surv} }(t,x_0) = \int p(x,t|x_0,t_0) \dd{x}
+\end{align*}  
+which is generally not $1$, as the boundary in $b$ leads to a \textit{violation} of the probability conservation (as here the particle \q{disappears}). Note, in fact, that $p(b,t|x_0,t_0) = 0$ does not mean that the flux here is null:
+\begin{align*}
+    J(b,t) &= \cancel{A(b) p(b,t|x_0,t_0)} - \partial_x(D(x) p(x,t|x_0,t_0)) = \\
+    &= \cancel{-(\partial_x D) p(b,t|x_0,t_0) }- D(b) \partial_x p(x,t|x_0,t_0)|_{x = b} \neq 0
+\end{align*}    
+We define $T(x)$ as being the \textit{lifetime} of the particle, i.e. the instant when the particle reaches $b$ for the first time. Then:
+\begin{align*}
+    p_{\mathrm{surv} }(t, x_0) = \mathbb{P}(T(x_0) > t)
+\end{align*}   
+That is, the survival probability is the probability that the particle \textit{has not yet reached} $b$ during the time interval $[0,t]$. 
+
+Consider now the \textit{forward} F-P equation:
+\begin{align*}
+    \partial_t p(x,t|x_0,t_0) = \partial_x [-A(x) p (x,t|x_0,t_0) + \partial_x (D(x)p(x,t|x_0,t_0))]
+\end{align*} 
+while the \textit{backward} F-P equation is:
+\begin{align*}
+    \partial_{t_0} p(x,t|x_0,t_0) = -A(x_0) \partial_{x_0} p(x,t|x_0,t_0) - D(x_0) \partial_{x_0}^2 p(x,t|x_0,t_0)
+\end{align*} 
+as here we are deriving wrt the \textit{initial coordinates}.  
+
+We can derive it from the ESCK relation:
+\begin{align*}
+    \int \dd{x'} p(x,t|x',t') p(x',t'|x_0,t_0) = p (x,t|x_0,t_0) \quad \forall t' \in (t,t_0)
+\end{align*}
+If we differentiate both sides wrt $t'$ we get $0$, as $p(x,t|x_0,t_0)$ does not depend on $t'$. So:
+\begin{align*}
+    0 = \int_a^b \dd{x'} [\partial_{t'} p(x,t|x',t') \cdot p(x',t'|x_0, t_0) + p(x,t|x',t') \hlc{Yellow}{\partial_{t'} p(x',t'|x_0,t_0)}]
+\end{align*}    
+We then apply the forward F-P equation to the highlighted term, and then integrate by parts, forgetting the boundary conditions, we arrive at:
+\begin{align*}
+    = \int_a^b \dd{x'} [\partial_{t'} p(x,t|x',t') + A(x') \partial_{x'} p(x,t|x',t') + D(x') \partial_{x'}^2 p(x,t|x',t')] p(x',t'|x_0,t_0) + \mathrm{Boundary\ terms}
+\end{align*}
+Considering now the limit $t' \to 0$, $p(x',t'|x_0,t_0) = \delta(x'-x_0)$, and so the integral can be computed, leading to the \textit{backward} F-P.    
+
+Returning to our case, if $A$ and $D$ are time independent, we have:
+\begin{align*}
+    p(x,t|x_0, t_0) = p(x,t-t_0|x_0,0)
+\end{align*}  
+Differentiating:
+\begin{align*}
+    \partial_{t_0} p(x,t|x_0,t_0) = -\partial_t p(x,t-t_0|x_0,0)
+\end{align*}
+Substituting in the backwards F-P:
+\begin{align*}
+    -\partial_t p(x,t|x_0,t_0) = -A(x_0)\partial_{x_0} p(x,t|x_0,t_0) -D(x_0) \partial_{x_0}^2 p(x,t|x_0,t_0)
+\end{align*}
+One boundary condition is just:
+\begin{align*}
+    p(x,t|x_0,t_0) \Big|_{x_0 = b} = 0 \quad \forall t,t_0
+\end{align*}
+meaning that if the particle \textit{starts} at the absorbing boundary, it immediately disappears. However, it is not obvious that the other boundary condition is:
+\begin{align*}
+    \partial_{x_0} p(x,t|x_0,t_0) \Big|_{x_0 = a} = 0
+\end{align*} 
+and we will prove it during the next lecture.
+
+\end{document}

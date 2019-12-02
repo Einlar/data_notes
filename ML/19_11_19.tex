@@ -1,0 +1,132 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Stochastic Gradient Descent}
+\lesson{11}{19/11/19}
+We now search a \textit{general approach} to minimize a differentiable (convex) function $f(\bm{w})$.
+
+Recall that the gradient $\nabla f(\bm{w})$ of a differentiable function $f\colon \mathbb{R}^d \to \mathbb{R}$ is defined as:
+\begin{align*}
+    \nabla f(\bm{w}) = \left(\pdv{f(\bm{w})}{w_1}, \dots, \pdv{f(\bm{w})}{w_d}\right)
+\end{align*}  
+and it is the \textit{vector} pointing in the direction of the \textit{largest increase of $f$} (in the region close to $\bm{w}$). 
+
+So, if we want to minimize $f(\bm{w})$, we can start with a guess $\bm{w}_0$ for the weights, and then \textit{move in the opposite direction} of the gradient until a minimum is found. As the gradient only gives a \textit{local information}, this process must be iterated over \textit{small steps}. This follows from the Taylor 1st order expansion:
+\begin{align*}
+    f(\bm{w}) \approx f(\bar{\bm{w}}) + \langle \bm{w} - \bar{\bm{w}}, \nabla f(\bar{\bm{w}}) \rangle 
+\end{align*}   
+
+This method works for a \textit{convex differentiable} function. It can be extended to \textit{non-differentiable} functions using \textbf{subgradients} (cfr book).
+
+The \textbf{gradient descent algorithm} is simply an implementation of that idea:\\ 
+
+\texttt{GD algorithm}:\\
+$\bm{w}^{(0)} \leftarrow \bm{0}$\\
+\texttt{for $t \leftarrow 0$ to $T - 1$ do:}\\
+\texttt{$\bm{w}^{(t+1)} = \bm{w}^{(t)} - \eta \nabla f(\bm{w}^{})$ } \\
+\texttt{return $\bar{\bm{w}} = \bm{w}^{(T)}$ }\\
+
+\textbf{Accuracy and Convergence}. Let $f(\bm{w})$ be a \textbf{convex} and $\bm{\rho}$\textbf{-Lipschitz} function. Consider an \textit{optimal solution} among the vectors with $B$-bounded norm:
+\begin{align*}
+    \bm{w}^* \in \arg\min_{\bm{w}\colon \norm{\bm{w}} \leq B} f(\bm{w})
+\end{align*}   
+Then, if we run the GD algorithm on $f$ for $T$ steps with the learning rate:
+\begin{align*}
+    \eta = \sqrt{\frac{B^2}{\rho^2 T} }
+\end{align*}  
+then the output vector $ \bar{\bm{w}}$  is \textit{close} to the optimum:
+\begin{align*}
+    f(\bm{\bar{w}}) - f(\bm{w}^*) \leq \frac{B \rho}{\sqrt{T}} 
+\end{align*} 
+Also, for every $\epsilon > 0$, to achieve $f(\bar{\bm{w}}) - f(\bm{w}^*) < \epsilon$ (getting arbitrarily close to the optimum) it suffices to run the GD algorithm for a number of iterations that satisfies:
+\begin{align*}
+    T \geq \frac{B^2 \rho^2}{\epsilon^2} 
+\end{align*}
+
+Computing the gradient is a \textbf{computationally intensive operation}, as it usually involves \textit{going over the entire training set $S$}. To speed things up we substitute the gradient with a \textit{random vector} with an expectation value equal to the gradient itself - for example the gradient computed \textit{at a single random sample}:
+\begin{align*}
+    \mathbb{E}\left[v_t|\bm{w}^{(t)}\right] = \underset{z \sim D}{\mathbb{E}} [ \nabla \ell (\bm{w}^{(z)}, z)] \underset{(a)}{=} \nabla \left[\underset{z \sim D}{\mathbb{E}}[\ell(\bm{w}^{(t)},z)] \right] = \nabla L_S(\bar{\bm{w}}^{(t)}) 
+\end{align*}  
+where in (a) we used the linearity of expectation, and $\bar{\bm{w}}^{(t)}$ is the \textit{mean}. In other words, $v_t$ is an unbiased estimator of the gradient. 
+
+The algorithm then becomes:\\
+\texttt{
+    \textbf{params} : Scalar $\eta > 0$, integer $T > 0$\\
+    \textbf{Init} : $\bm{w}^{(1)} = \bm{0}$\\
+    for $t = 1,2,\dots, T$:\\
+    1. sample $z \sim \mathcal{D}$\\
+    2. pick $\bm{v}_t = \nabla\ell(\bm{w}^{(t)}, z)$\\
+    3. update $\bm{w}^{(t+1)} = \bm{w}^{(t)} - \eta \bm{v}_t$\\
+    output $\bm{w}^{(T)}$       
+}
+
+For SGD, the following theorem holds.\\
+Consider a convex $\rho$-Lipschitz-bounded learning problem with parameters $\rho$, $B$. Then, for every $\epsilon > 0$, if we run the SGD method for minimizing $L_D(\bm{w})$ with a number of iterations (i.e. number of examples) $T \geq B^2 \rho^2 \epsilon^{-2}$ and with $\eta = \sqrt{B^2 \rho^{-2} T^{-1}}$ the output of SGD satisfies:
+\begin{align*}
+    \mathbb{E}[L_D(\bar{\bm{w}})] \leq \min_{\bm{w} \in \mathcal{H}} L_D(\bm{w}) + \epsilon
+\end{align*}        
+
+\subsection{SGD with regularization}
+If we use RLM, a good strategy for SGD is to use an \textit{adaptive step size} of value $\eta_t = 1/(\lambda t)$ (for a $\lambda$-strongly convex function). Note that $\eta$ monotonically decreases as the number of steps increases.
+
+Recall that, in RLM, we search the $\bar{\bm{w}}$ given by:
+\begin{align*}
+    \min_{\bar{\bm{w}}} \left(\frac{\lambda}{2} \norm{\bm{w}}^2 + L_S(\bm{w}) \right)
+\end{align*} 
+Let's denote with $f(\bm{w})$ the function subject to minimization:
+\begin{align*}
+    f(\bm{w}) = \frac{\lambda}{2} \norm{\bm{w}}^2 + L_S(\bm{w})
+\end{align*} 
+It's gradient is:
+\begin{align*}
+    \frac{\partial f}{\partial \bm{w}} = \cancel{2}\frac{\lambda}{\cancel{2}} \bm{w}^{(t)} + \frac{\partial L_S}{\partial \bm{w}}   
+\end{align*}
+$f(\bm{w})$ is $2 \lambda/2 = \lambda$-strongly convex. 
+
+The update rule is then:
+\begin{align*}
+    \bm{w}^{(t+1)} &= \bm{w}^{(t)} - \frac{1}{\lambda t} \left(\lambda \bm{w}^{(t)} + \bm{v}_t\right) = \left(1-\frac{1}{t} \right)\bm{w^{(t)}} - \frac{\bm{v}_t}{\lambda t} =\\
+    &= \frac{t-1}{t} \bm{w}^{(t)} -\frac{\bm{v}_t}{\lambda t} \underset{(a)}{=}  \frac{t-1}{t}   \left(\frac{t-2}{t-1} \bm{w}^{(t-1)} - \frac{1}{\lambda (t-1)}\bm{v}_t  \right) - \frac{1}{\lambda t} \bm{v}_t =\\
+    &= \dots = -\frac{1}{\lambda t} \sum_{i=1}^t \bm{v}_i  
+\end{align*}
+in (a) we compute $\bm{w}^{(t)}$ in terms of $\bm{w}^{(t-1)}$, by just reiterating this formula.
+
+Also, if the loss is $\rho$-Lipschitz, it can be proven that, after $T$ iterations, we have that:
+\begin{align*}
+    \mathbb{E}[f(\bar{\bm{w}})] - f(\bm{w}^*) \leq \frac{4 \rho^2}{\lambda T} (1+ \log(T)) 
+\end{align*} 
+
+\section{Support Vector Machines}
+We want to extend the \textit{hyperplane} model (perceptron) and solve its two main limitations:
+\begin{itemize}
+    \item Often there are multiple solutions equally \q{good} on the training set - but still one of them is more \q{significant} than the others, and should be preferred by the algorithm
+    \item Generalize to non-linear problems
+\end{itemize}
+
+Let's start with the simplest case, with a set of points $\bm{x}_i \in \mathbb{R}^d$ with binary labels $y_i \in \{\pm 1\}$. Suppose that $(\bm{x}_i, y_i)$ are linearly separable, that is there exists a $\bm{w}$ (and a bias ${b}$ ) such that: 
+\begin{align*}
+    y_i = \operatorname{sgn} (\langle \bm{w}, \bm{x}_i \rangle + b) \quad \forall i
+\end{align*}  
+that is:
+\begin{align*}
+    y_i (\langle \bm{w}, \bm{x}_i \rangle + b) > 0 \quad \forall i \in m
+\end{align*}
+In the presence of \textit{many} possible separating-hyperplanes, we define the \q{best one} as that with the \q{most amount of margin} - so that it's (probably) more tolerant to the presence of \q{noise}. Mathematically, we want to maximize the \textit{distance} between the hyperplane and the two closest samples (one for each class).
+
+Given a separating hyperplane defined by $L = \{\bm{v} \colon \langle \bm{v}, \bm{w} \rangle+ b = 0\}$ and given a sample $\bm{x}$, the distance of $bm{x}$, the distance of $\bm{x}$ to $L$ is:
+\begin{align*}
+    d(\bm{x}, L) = \min\{\norm{\bm{x}-\bm{v}} \colon \bm{v} \in L\}
+\end{align*}    
+We want to \textit{maximize} this distance.\\
+
+One relevant result is that, if $\norm{\bm{w}} = 1$, then:
+\begin{align*}
+    d(\bm{x}, L) = |\langle \bm{w}, \bm{x} \rangle + b|
+\end{align*} 
+ 
+ 
+
+
+\end{document}
