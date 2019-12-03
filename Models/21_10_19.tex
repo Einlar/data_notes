@@ -5,21 +5,146 @@
 
 \lesson{4b}{21/10/19}
 \section{Wiener's integral}
-From the previously derived results we know how to compute the probability for a Brownian particle, starting in $x_0 $ at $t_0$, to be inside an interval $[A,B]$ at a certain time $t$:
+Consider an \textit{unconstrained} Brownian particle, moving on the real line, starting in $x_0$ at $t_0$. By solving the diffusion equation we found that the probability of finding the particle in $[x,x+\dd{x}]$ at time $t > t_0$ is given by the \textbf{propagator}:
+\begin{align} \nonumber
+  \mathbb{P}\{x(t) \in [x,x+\dd{x}]|x(t_0) = x_0\} &=  W(x,t|x_0,t_0) \dd{x} = \\
+  &= \frac{1}{\sqrt{4 \pi D (t-t_0) }} \exp\left(-\frac{(x-x_0)^2}{4 D (t-t_0)} \right) \dd{x} \label{eqn:propagator}
+\end{align}  
+By integrating (\ref{eqn:propagator}) we can then find the probability of finding the particle inside an interval $[A,B]$ at time $t$: 
 \begin{align*}
-    \mathbb{P}\{x(t) \in [A,B]\} = \int_A^B \dd{x} W(x,t|x_0, t_0)
+    \mathbb{P}\{x(t) \in [A,B]|x(t_0) = x_0\} = \int_A^B \dd{x} W(x,t|x_0, t_0) \qquad t>t_0
 \end{align*}
-We are now interested in computing the expected value of \textit{functionals} of the trajectories, i.e. of quantities that depend on several (or all) points of the trajectory $x(\tau)$ of a Brownian particle. The simplest example is the \textit{correlation function}, which involves only the position at two different times $t_1 < t_2$:
-\begin{align*}
-    f(t_1, t_2) = x(t_1) x(t_2) \quad t_1 < t_2
-\end{align*} 
-A more general (and difficult) case is given by a function of the \textit{entire} trajectory, such as:
-\begin{align*}
-    F(\{x(\tau)\colon 0 < \tau \leq \tau\}) = f\left(\int_0^t x(\tau) a(\tau) \dd{\tau}\right)\qquad a,f\colon \mathbb{R} \to \mathbb{R}
-\end{align*}
-How to compute $\langle F \rangle$?\\
+We are now interested in computing the expected value $\langle f \rangle$  of \textbf{functionals} $f$ of the trajectory, i.e. of quantities depending on several (or all) points of the trajectory $x(\tau)$ of a Brownian particle. 
 
-As always, we start from the simplest case, and then work our way up to the most complex one. So, let's start with the two points case: $f(x(t_1), x(t_2))$. For the average $\langle f \rangle$ we need to \textit{weight} every possible value of $f$ with the probability that $f$ assumes that value, which will depend on the likelihood of the inputs $x(t_1)$ and $x(t_2)$. Thus, this becomes a problem of computing \textit{probabilities of compound events} - that is, of the particle passing through a specific sets of points at certain times. As $x(\tau) \in \mathbb{R}$, any kind of $\mathbb{P}\{x(t_1) = x_1, x(t_2) \in x_2\}$ for certain $t_1, t_2$ and $x_1, x_2$ will be $0$. We need, in general, to consider instead a \textit{range} of possibilities, i.e. that the particle passes through a set of \textbf{gates}, so that $x(t_1) \in [A_1, B_1]$ and $x(t_2) \in [A_2, B_2]$.\\
+\begin{itemize}
+    \item The simplest example is the \textbf{correlation function}, which is defined as the product of the particle's position at two different times $t_1 < t_2$:
+    \begin{align*}
+        f(\{x(t_1), x(t_2)\}) = x(t_1) x(t_2) \quad t_1 < t_2
+    \end{align*} 
+
+    \item A more general (and difficult) case is given by a function of the \textit{entire} trajectory, such as:
+    \begin{align*}
+        f(\{x(\tau)\colon 0 < \tau \leq \tau\}) = g\left(\int_0^t x(\tau) a(\tau) \dd{\tau}\right)\qquad a,\>g\colon \mathbb{R} \to \mathbb{R}
+    \end{align*}
+\end{itemize}
+
+\subsection{Functions of a discrete number of points}
+Let's start from the simplest case, and consider the \textbf{correlation function}:
+\begin{align*}
+    f(\{x(t_1), x(t_2)\}) = x(t_1) x(t_2) \qquad t_1 < t_2
+\end{align*}
+To compute $\langle f \rangle$ we will need the \textit{joint probability distribution} $g(x_1,x_2)$ that gives the probability of $x(t_1)$ being \q{close to} $x_1$ \textbf{and} $x(t_2)$ \q{close to} $x_2$ \textit{for the same trajectory}. Let us denote the three events of interest:
+\begin{align*}
+    A &\colon \text{Particle starts in $x_0$ at $t_0$}\\
+    B &\colon \text{Particle is close to $x_1$ at $t_1$ ($x(t_1) \in [x_1, x_1+\dd{x_1}]$)}\\
+    C &\colon \text{Particle is close to $x_2$ at $t_2$ ($x(t_2) \in [x_2, x_2+\dd{x_2}]$)} 
+\end{align*}
+We are interested in the joint probability $\mathbb{P}(C,B|A)$ (the order is defined by $t_2 > t_1 > t_0$). From probability theory:
+\begin{align*}
+    \mathbb{P}(C,B|A) = \mathbb{P}(C|B,A) \mathbb{P}(B|A)
+\end{align*} 
+We already now how to compute probabilities like $\mathbb{P}(B|A)$, but not like $\mathbb{P}(C|B,A)$. Fortunately, that is not needed.
+
+Recall, in fact, that Brownian motion is a \textit{Markovian process}, meaning that the \textit{future} depends only on the \textit{present state}, i.e. the particle \textit{has no memory}. So, \textbf{subsequent displacements are independent}: the probability of the particle going from $x_1$ to $x_2$ is the same whether it has started at $x_0$ or at any other point $\tilde{x}_0$. In other words, if we take the \textit{present state} as the particle being in $x_1$ at $t_1$, the future (position at $t_2 > t_1$) depends only on that, and not on the past (position at $t_0$). So:
+\begin{align*}
+    \mathbb{P}(C|B,A) = \mathbb{P}(C|B)
+\end{align*}             
+leading to:
+\begin{align*}
+    \mathbb{P}(C,B|A) = \mathbb{P}(C|B) \mathbb{P}(B|A)
+\end{align*}
+Inserting the \textit{propagators} (\ref{eqn:propagator}):
+\begin{align*}
+    \dd{\mathbb{P}}_{t_1,t_2}(x_1, x_2) \equiv W(x_2,t_2|x_1,t_1) W(x_1,t_1|x_0,t_0) \dd{x_1} \dd{x_2}
+\end{align*}  
+This is the joint probability we need to compute $\langle f \rangle$. Of course, nothing stops us from considering $N$ \q{jumps} instead of only $2$:
+\begin{align} \nonumber
+    \dd{\mathbb{P}}_{t_1,\dots,t_n}(x_1,\dots,x_n |x_0,t_0) &\equiv W(x_n, t_n |x_{n-1},t_{n-1}) \dots W(x_1,t_1|x_0,t_0) \dd{x_1} \dd{x_2} \dots \dd{x_n} =\\
+    &= \exp\left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{4 \pi D \Delta t_i} \right) \prod_{i=1}^n \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} 
+    \label{eqn:ptn}
+\end{align}  
+Then, the average of a generic function $f(x(t_1), \dots, x(t_n))$ of the positions of the particle at times $t_1 < t_2 < \dots < t_n$ is defined as:
+\begin{align*}
+    \langle f(x(t_1), \dots, x(t_n)) \rangle_w = \int_{\mathbb{R}^n} f(x_1, \dots, x_n) \dd{\mathbb{P}}_{t_1, \dots, t_n} (x_1, \dots, x_n|x_0,t_0)
+\end{align*}  
+
+\subsection{Functionals of the whole trajectory}
+The quantity in (\ref{eqn:ptn}) can be interpreted as the \textit{infinitesimal volume element} spanned by all the \textit{trajectories} passing through a set of \textit{tiny gates}, as represented in figure \ref{fig:gates}.
+
+The underlying idea is that \textit{probabilities} satisfy the axioms of \textit{measures}, that is \textit{functions that assign a measure} , i.e. a generalization of \q{size}, \textit{to all sets included in a specific collection}.
+
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Images/diffusion1.pdf}
+    \caption{All trajectories that pass through the set of \textit{gates} $[x_i, x_i + \dd{x_i}]$ at times $t_i$ (such as the $x(t)$ here represented) contribute to the \textit{volume} $\dd{\mathbb{P}}_{t_1, \dots,t_n}(x_1,\dots,x_N)$ \label{fig:gates}}.
+\end{figure}
+
+We now try to formalize this idea in order to extend the results of the previous section to the case of functions depending on a \textit{infinite} number of trajectory points.
+
+\begin{enumerate}
+    \item \textbf{Space definition}. Let $T \subset \mathbb{R}$ (\textbf{index set}), denote with $\mathbb{R}^T$ the set of all functions (\textbf{stochastic processes}) $k\colon T \to \mathbb{R}$. The idea is that an element of $\mathbb{R}^T$ is a collection of \textit{random variables} indexed by $T$.
+    
+    In our case $T$ is a collection of time instants (e.g. $T=[0,+\infty)$) and a generic element of $\mathbb{R}^T$ is made of \textit{all the traversed points of a trajectory at times} $T$:  
+    \begin{align*}
+        \{x(t) \colon t \in T\} \in \mathbb{R}^T
+    \end{align*}
+    \item \textbf{Probability measure on finite points}. The expression in (\ref{eqn:ptn}), as observed, allows us to \textit{measure} the volumes spanned by trajectories traversing a set of gates. Let's formalize this idea. Consider a \textit{finite} set of times $T = \{t_i\}_{i=1,\dots,n}$ with $n \in \mathbb{N}, t_i \in \mathbb{R}$ and $t_1 < t_2 < \dots t_n$, each associated to a \textit{gate} $H_i = [a_i, b_i]$, with $a_i, b_i \in \mathbb{R}$ and $a_i < b_i$.        
+    All the trajectories $\mathbb{R}^T$ traversing each $H_i$ at a time $t_i \in T$ span a \textbf{cylindrical set} $A$ of the form: 
+    \begin{align*}
+        A = \{x(t)\colon x(t_1) \in H_1, \dots, x(t_n) \in H_n\} \subset \mathbb{R}^T
+    \end{align*}
+    Using (\ref{eqn:ptn}) and integrating over the \textit{gates} we can define the measure of $A$-like sets as:
+    \begin{align*}
+        P_w(A) \equiv \int_{\mathbb{R}^n} \dd{\mathbb{P}}_{t_1,\dots,t_n} (x_1,\dots,x_n|x_0,t_0) \mathbb{I}_{H_1}(x_1) \dots \mathbb{I}_
+        {H_n}(x_n)
+    \end{align*}  
+    where $\mathbb{I}_{H_i}(x_i)$ are \textbf{characteristic functions} of the gates:
+    \begin{align*}
+        \mathbb{I}_{H_i}(x) = \begin{cases}
+            1 & x \in H_i\\
+            0 & \text{otherwise}
+        \end{cases}
+    \end{align*}  
+    In our case $H_i$ are just intervals, and so:
+    \begin{align}
+        P_w(A) \equiv \mathbb{P}_{t_1, \dots, t_n}(A) \underset{(\ref{eqn:ptn})}{=}  \int_{H_1} \dd{x_1}\int_{H_2}\dd{x_2} \cdots \int_{H_n} \dd{x_n} \prod_{i=1}^n \frac{1}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) 
+        \label{eqn:pmeas1}
+    \end{align} 
+    with $\Delta t_i = t_i - t_{i-1}$.
+    \item \textbf{Generalization on infinite points}. Note that (\ref{eqn:pmeas1}) holds for any $n$. So, using $A$-like sets, we can construct a $\sigma$-algebra\footnote{A $\sigma$-algebra on a set $X$ is a collection $\Sigma$ of subsets of $X$ that includes $X$ itself, is closed under complement, and is closed under countable unions} $\mathcal{F}$ of $\mathbb{R}^T$. Then, by applying \textbf{Kolmogorov extension theorem} we can extend the measure $P_w$ we just found to the entire $\mathcal{F}$. 
+    \item \textbf{Probability space}. We now have a set of \textit{all possible outcomes} $\mathbb{R}^T$ (in our case, all the possible trajectories that can be produced by a Brownian motion). We also have the collection of all \textit{events} $\mathcal{F}$, that is subsets of $\mathbb{R}^T$ for which is meaningful to assign a \textit{probability measure} $P_w \colon \mathcal{F} \to [0,1]$. The triad $(\mathbb{R}^T, \mathcal{F}, P_w)$ forms a \textbf{probability space}, that gives a rigorous meaning to the concept of \q{computing the probability of a trajectory}.    
+\end{enumerate}
+The \textbf{measure} so obtained is called \textbf{Wiener measure}, and denoted as the following:
+\begin{align*}
+    P_w(A) \equiv \int_A \dd{_w}x(\tau)
+\end{align*}  
+Then we can compute expected values. For example, if $f(\{x(\tau)\colon \tau \in T\})$ is a function depending on the points traversed at times in a set $T$, then:  
+\begin{align*}
+    \langle f \rangle_w \equiv \int_{\mathbb{R}^T} f(x(\tau)) \dd{_w} x(\tau) \qquad T=[0,\infty)
+\end{align*}
+
+Note that the Weiner measure \textit{exists} and it's well defined (Kolmogorov's theorem), but we know it explicitly only in the \textit{finite case}. So, to compute the expected value of functionals $F(\{x(t)\})$ over \textit{continuous trajectories} we first \textit{discretize} the trajectory, and then take a \textit{continuum limit}. 
+\begin{enumerate}
+    \item Suppose we have a functional $F(\{x(\tau)\colon 0< \tau < t\})$, and we want to compute $\langle F \rangle$.
+    \item We \textit{discretize} the problem by \textit{arbitrarily}  subdividing the time interval in $n$ parts $0 = t_1 < t_2 < \dots < t_n < t_{n+1} = t$. Then we consider an \textit{approximated} functional $F_N(\{x(t_1), \dots, x(t_n+1)\})$ (for example approximating the path $x(\tau)$ with a piecewise linear function, depending only on $x(t_1),\dots,x(t_{n+1})$), so that:
+    \begin{align*}
+        F = ``\lim_{N \to \infty}" F_N
+    \end{align*}
+    where $N \to\infty $ means that $\max \Delta t_i \to 0$, with $\Delta t_i = t_i - t_{i-1}$. This limit needs to be properly defined (by using the Weiner measure to define a norm in a space of \textit{integrable} functionals, etc.), but we will not do that here.
+    \item Then the \textbf{Weiner path integral} is defined as:
+    \begin{align*}
+        \langle F \rangle_w &= \int \dd{_w}x(\tau) F(\{x(\tau)\colon 0 < \tau< t \}) \equiv ``\lim_{N \to \infty}" \langle F_N \rangle_w =\\
+        &= \int \dd{\mathbb{P}}_{t_1,\dots,t_n}(x_1,\dots,x_n|x_0,t_0) F_N(x(t_1), \dots, x(t_{n+1}))
+    \end{align*} 
+    %Sistemare indici! x_0, x_{n+1}... etc
+\end{enumerate}
+
+
+      
+
+
+\begin{comment}
 
 In general, if we consider $N$ gates $[A_i, B_i]_{i=1, \dots, N}$ the probability of a particle passing through all of them will be:
 \begin{align*}
@@ -55,7 +180,7 @@ In a certain (probabilistic) sense, $dP_{t_2,t_1}$ measures the \textit{volume} 
     &\underset{(a)}{=}  \exp\left(-\frac{1}{4D} \int_0^t \dd{\tau} \dot{x}^2 (\tau)\right) \prod_{\tau=0}^t \frac{\dd{x}(\tau)}{\sqrt{4 \pi D \dd{\tau}}}  
 \end{align*}      
 where in (a) we replaced the infinite \q{dense} sum with a formal integral (Riemann sum) of $(\dd{x}/\dd{t})^2 = \dot{x}^2(\tau)$. 
-
+\end{comment}
 
 
 \section{Notes 1}
