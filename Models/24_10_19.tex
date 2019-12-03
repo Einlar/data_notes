@@ -3,7 +3,7 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\lesson{4b}{21/10/19}
+\lesson{4}{21/10/19}
 \section{Wiener's integral}
 Consider an \textit{unconstrained} Brownian particle, moving on the real line, starting in $x_0$ at $t_0$. By solving the diffusion equation we found that the probability of finding the particle in $[x,x+\dd{x}]$ at time $t > t_0$ is given by the \textbf{propagator}:
 \begin{align} \nonumber
@@ -124,10 +124,10 @@ Then we can compute expected values. For example, if $f(\{x(\tau)\colon \tau \in
     \langle f \rangle_w \equiv \int_{\mathbb{R}^T} f(x(\tau)) \dd{_w} x(\tau) \qquad T=[0,\infty)
 \end{align*}
 
-Note that the Weiner measure \textit{exists} and it's well defined (Kolmogorov's theorem), but we know it explicitly only in the \textit{finite case}. So, to compute the expected value of functionals $F(\{x(t)\})$ over \textit{continuous trajectories} we first \textit{discretize} the trajectory, and then take a \textit{continuum limit}. 
+Note that the Weiner measure \textit{exists} and it's well defined (Kolmogorov's theorem), but we know it explicitly only in specific \textit{finite cases}. So, to compute the expected value of functionals $F(\{x(t)\})$ over \textit{continuous trajectories} we first \textit{discretize} the trajectory, and then take a \textit{continuum limit}. 
 \begin{enumerate}
     \item Suppose we have a functional $F(\{x(\tau)\colon 0< \tau < t\})$, and we want to compute $\langle F \rangle$.
-    \item We \textit{discretize} the problem by \textit{arbitrarily}  subdividing the time interval in $n$ parts $0 = t_1 < t_2 < \dots < t_n < t_{n+1} = t$. Then we consider an \textit{approximated} functional $F_N(\{x(t_1), \dots, x(t_n+1)\})$ (for example approximating the path $x(\tau)$ with a piecewise linear function, depending only on $x(t_1),\dots,x(t_{n+1})$), so that:
+    \item We \textit{discretize} the problem by \textit{arbitrarily}  subdividing the time interval $[0,t]$  in $n$ parts $0 = t_0 < t_1 < t_2 < \dots < t_n  = t$. Then we consider an \textit{approximated} functional $F_N(\{x(t_0), \dots, x(t_n)\})$ (for example approximating the path $x(\tau)$ with a piecewise linear function, depending only on $x(t_0),\dots,x(t_{n})$), so that:
     \begin{align*}
         F = ``\lim_{N \to \infty}" F_N
     \end{align*}
@@ -135,11 +135,28 @@ Note that the Weiner measure \textit{exists} and it's well defined (Kolmogorov's
     \item Then the \textbf{Weiner path integral} is defined as:
     \begin{align*}
         \langle F \rangle_w &= \int \dd{_w}x(\tau) F(\{x(\tau)\colon 0 < \tau< t \}) \equiv ``\lim_{N \to \infty}" \langle F_N \rangle_w =\\
-        &= \int \dd{\mathbb{P}}_{t_1,\dots,t_n}(x_1,\dots,x_n|x_0,t_0) F_N(x(t_1), \dots, x(t_{n+1}))
+        &= ``\lim_{N \to \infty}" \int \dd{\mathbb{P}}_{t_1,\dots,t_n}(x_1,\dots,x_n|x_0,t_0) F_N(x(t_0), \dots, x(t_{n}))
     \end{align*} 
-    %Sistemare indici! x_0, x_{n+1}... etc
+    Geometrically, we are evaluating $F$ for every possible Brownian path $x(\tau)$, and then averaging all these results, each weighted by the \textit{probability} of the corresponding path.    
 \end{enumerate}
 
+\begin{example}[Correlation function and ESCK property]
+    As expected, the more general definition of the Weiner measure - involving the continuum limit $N \to \infty$ - reduces to (\ref{eqn:ptn}) when evaluated for a function depending only on a finite set of particle's positions. 
+
+    For example, consider the expected value of the \textit{correlation function} (assume the particle starting in $0$ at time $0$ for simplicity):
+    \begin{align*}
+        \langle x(t_1') x(t_2') \rangle &= \int \dd{_wx} x_1(t_1') x_2(t_2') =\\
+        &= ``\lim_{N \to \infty}" \int \dd{\mathbb{P}}_{t_1, \dots, t_N}(x_1, \dots, x_N|0,0)x(t_k) x(t_n) = \\
+    \intertext{
+    where we chose the discretization so that $t_k = t_1'$ and $t_n = t_2'$. Then, by expanding the measure and applying the ESCK property we get (the limit is omitted):}
+    &=\int \dd{x_1}\dots \dd{x_N} W(x_N,t_N|x_{N-1},t_{N-1}) \dots W(x_1, t_1|0,0) x_k x_n=\\
+    &\underset{(a)}{=} \int \dd{x_k} \dd{x_n} W(x_n,t_n|x_k,t_k) W(x_k,t_k|0,0) x_k x_n
+    \end{align*}
+    which is the same result we could have obtained directly from (\ref{eqn:ptn}): 
+    \begin{align*}
+        \langle x(t_1') x(t_2') \rangle = \int \dd{x_1'} \dd{x_2'} W(x_2',t_2'|x_1',t_1') W(x_1',t_1'|0,0) x_1' x_2' 
+    \end{align*}
+\end{example}
 
       
 
@@ -180,7 +197,7 @@ In a certain (probabilistic) sense, $dP_{t_2,t_1}$ measures the \textit{volume} 
     &\underset{(a)}{=}  \exp\left(-\frac{1}{4D} \int_0^t \dd{\tau} \dot{x}^2 (\tau)\right) \prod_{\tau=0}^t \frac{\dd{x}(\tau)}{\sqrt{4 \pi D \dd{\tau}}}  
 \end{align*}      
 where in (a) we replaced the infinite \q{dense} sum with a formal integral (Riemann sum) of $(\dd{x}/\dd{t})^2 = \dot{x}^2(\tau)$. 
-\end{comment}
+
 
 
 \section{Notes 1}
@@ -279,10 +296,11 @@ Note that:
 \begin{align*}
     W(x,t|0,0) = \frac{1}{\sqrt{4\pi D t}} \exp\left(-\frac{x^2}{4 D t} \right) = \int \dd{_W x} \delta(x(t)-x)
 \end{align*}
+\end{comment}
 
 \section{Change of random variables}
 Consider a random variable $X \sim q(x)$, with $q(x)$ being a generic distribution (e.g. $q(x) = \mu e^{-\mu x}$). Now consider a function $y(x)$, e.g. $y(x) = x^2$. $Y$ is then a new random variable, with a certain distribution $p(y)$. We now want to compute $p(y)$ starting from $q(x)$ and $y(x)$.\\
-Suppose that $y(x)$ is invertible. Then, if we extract a value from $X$, it will be inside $[x,x+\dd{x}]$ with a probability $q(x) \dd{x}$. Knowing $X$, we can use $y(x)$ to uniquely determine $Y$, that will be in $[y,y+\dd{y}]$ with the same probability. So, the following holds:
+Suppose that $y(x)$ is invertible. Then, if we extract a value from $X$, it will be inside $[x,x+\dd{x}]$ with a probability $q(x) \dd{x}$. Knowing $X$, we can use the relation $y(x)$ to uniquely determine $Y$, that will be in $[y,y+\dd{y}]$ with the same probability. So, the following holds:
 \begin{align}
     q(x) \dd{x} = p(y) \dd{y}
     \label{eqn:p-cons}
@@ -292,39 +310,65 @@ We can compute $\dd{y}$ by \textit{nudging} $y(x)$, and expanding in Taylor seri
     y(x+\dd{x}) \equiv y + \dd{y} + O(\dd{y}^2) = y(x) + \underbrace{\dd{x} y'(x)}_{\dd{y}} + O(\dd{x}^2) 
 \end{align*} 
 and so $\dd{y} = \dd{x} y'(x)$. Substituting in (\ref{eqn:p-cons}) we get:
-\begin{align*}
+\begin{align}
     q(x) \dd{x} = p(y)\dd{y} = p(y(x)) y'(x) \dd{x} \Rightarrow p(y) = q(x(y)) \dv{x}{y} (x(y))
-\end{align*}  
+    \label{eqn:simple-rule}
+\end{align}  
 
-For a more general $y(x)$, $x \sim q(x)$ and $y=y(x)$, the expected value of a function $f$ is:
+For a more general $y(x)$, $x \sim q(x)$ and $y=y(x)$, the expected value of a function $f$ in terms of $q(x)$:
+\begin{align}\nonumber
+    \langle f(y) \rangle &= \int_{\mathbb{R}} \dd{x} f(y(x)) q(x) = \\
+    \nonumber
+    &= \int_{\mathbb{R}} \dd{x} f(y(x)) q(x) \underbrace{\textcolor{Blue}{\int_{\mathbb{R}} \dd{z} \delta(z-y(x))}}_{=1} = \\ 
+    &\underset{(a)}{=}  \int_{\mathbb{R}} \dd{z} f(z) \underbrace{\int_{\mathbb{R}} \dd{x} q(x) \delta(z-y(x))}_{\langle \delta(z-y(x)) \rangle_{q(x)}}  
+    \label{eqn:pz}
+\end{align}    
+where in (a) we used the fact that $\delta(z-y(x)) = 1$ only when $z=y(x)$, and it's $0$ otherwise, and so:
 \begin{align*}
-    \langle f(y) \rangle &= \int \dd{x} f(y(x)) q(x) = \int \dd{y} f(y) p(y) = \\
-    &= \int \dd{x} f(y(x)) q(x) \underbrace{\int \dd{z} \delta(z-y(x))}_{=1} = \\
-    &= \int \dd{z} f(z) \underbrace{\int \dd{x} q(x) \delta(z-y(x))}_{\langle \delta(z-y(x)) \rangle}  
-\end{align*}    
-and so:
-\begin{align*}
-    p(z) = \int \dd{x} q(x) \delta(z- y(x)) = \langle \delta (z-y(x)) \rangle
-\end{align*}
-which, in general, is not:
+    f(y(x)) = \int_{\mathbb{R}} \dd{z} f(z) \delta(z-y(x))
+\end{align*}   
+Of course we can rewrite $\langle f \rangle$ directly in terms of $p(y)$:
+\begin{align}
+    \langle f(y) \rangle = \int_{\mathbb{R}} \dd{y} f(y) p(y)
+    \label{eqn:py}
+\end{align} 
+Comparing (\ref{eqn:pz}) with (\ref{eqn:py}) and renaming $y \to z$ leads to: 
+\begin{align}
+    p(z) = \int_{\mathbb{R}} \dd{x} q(x) \delta(z- y(x)) = \langle \delta (z-y(x)) \rangle_{q(x)}
+    \label{eqn:pz}
+\end{align}
+which, in general, is not the same as the previously obtained result:
 \begin{align*}
     p(z) \neq q(x(z)) \dv{x(z)}{z}
 \end{align*}
-However, if $y(x)$ is invertible, i.e. $\mathrm{sgn} y'(x) = \text{constant}$ ($y'(x) \neq 0$ always), then:
-\begin{align*}
-    \delta(z-y(x)) = \frac{\delta(x-x(z))}{|y'(x)|} 
-\end{align*} 
-leading to:
-\begin{align*}
-    p(z) = \langle \frac{\delta(x-x(z))}{|y'(x)|}  \rangle_q = \int \dd{x} q(x) \frac{\delta(x-x(z))}{|y'(x)|} = q(x(z)) |y'(x(z))|^{-1} = q(x(z)) \dv{x}{y}  
-\end{align*}
-and we recover the previous formula.
+To retrieve this special case we must assume $y(x)$ to be invertible, with inverse $x(y)$. This means that $\operatorname{sgn} y'(x) = A$, with $A \in \mathbb{R}\setminus \{0\}$ constant.
 
-\section{The 1st integral}
+We want now to compute $\delta(z-y(x))$ in this case. Recall that $\delta \circ g$, if $g$ is a continuously differentiable function with $g(x_0) = 0$ and $g'(x) \neq 0 \> \forall x$ is:
+\begin{align*}
+    \delta(g(x)) = \frac{\delta(x-x_0)}{|g'(x_0)|} 
+\end{align*}      
+So, if we let $g(x) = z-y(x)$, the only zero is at $x = x(z)$, as then $y(x(z)) = z$. So:
+\begin{align*}
+    \delta(z-y(x)) = \frac{\delta(x-x(z))}{|y'(x(z))|} 
+\end{align*} 
+Substituting back in (\ref{eqn:pz}):
+\begin{align}\nonumber
+    p(z) &= \langle \frac{\delta(x-x(z))}{|y'(x(z))|}  \rangle_{q(x)} = \int_{\mathbb{R}} \dd{x} q(x) \frac{\delta(x-x(z))}{|y'(x(z))|} = q(x(z)) |y'(x(z))|^{-1} =\\
+    &=  q(x(z)) \dv{x(y)}{y} \Big|_{y= x(z)}  
+\end{align}
+which is the same rule found in (\ref{eqn:simple-rule}).
+
+\section{The 1st integral} %Make a better sectioning
+Thanks to the Wiener measure we have a way to assign probabilities to \textit{paths} $x(\tau)$. We can recover from this the \textit{transition probabilities} we started from, by considering the functional that \textit{evaluates} a path at an instant $t$: $x(\tau) \mapsto x(t) \equiv x_t$. Then, by applying (\ref{eqn:pz}) we can compute the distribution followed by $x_t$: 
+\begin{align}
+    p(x_t) = W(x_t,t|0,0) = \langle \delta(x_t-x(\tau)) \rangle_w = \int \dd{_Wx(\tau)} \delta(x_t - x(\tau))
+    \label{eqn:transition-path}
+\end{align} 
+(The starting condition $x(t_0) = x_0$ is \textit{contained} in the definition of the measure $\dd{_W}x(\tau)$).\\
 So we can now write:
 \begin{align*}
     W(x,t|0,0) &= \int \dd{_W x} \delta(x(t)-x) =\\
-    &= "\lim_{N \to \infty}"
+    &= ``\lim_{N \to \infty}"
     \int \prod_{i=1}^{N+1} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\sum_{i=1}^N \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) \delta(x_{N+1} - x)
 \end{align*}
 where $t_n = t$, $x(t_n) = x_{N+1}$.\\
@@ -338,15 +382,28 @@ If we set $x_t = 0$ (for simplicity), we get:
     W(0, t | 0,0) = \frac{1}{\sqrt{4 \pi D t}} 
     \label{eqn:I1res}
 \end{align} 
-As an exercise to get some familiarity with Wiener integrals, we want now to \textit{re-derive} this result, by instead solving a \textit{path integral}:
-\begin{align*}
-    W(0,t|0,0) = \int_{\mathcal{C}\{0,0;0,t\}} \dd{_Wx(\tau)} = \langle \delta(0 - x) \rangle = \langle \delta(x) \rangle \equiv I_1 ???
-\end{align*}  
-Here we are computing the \textit{fraction} of Brownian paths that start in $x=0$ at $t=0$ and return in $x=0$ after a fixed interval $t$.
+As an exercise to get some familiarity with Wiener integrals, we want now to \textit{re-derive} this result, by evaluating the Weiner path integral in (\ref{eqn:transition-path}), with $x_t = 0$:
+\begin{align}
+    W(0,t|0,0) = \langle \delta(0-x(\tau)) \rangle_w = \int \dd{_Wx(\tau)} \delta(x(\tau)) \equiv I_1
+    \label{eqn:I1def}
+\end{align} 
 
-The standard way to compute a Wiener integral is to \textit{discretize} it, and then take a \textit{continuum} limit. So, consider a uniform time discretization $\{t_i\}_{i=1,\dots, N+1}$, $\epsilon$ apart from each other, so that: 
+First, it is convenient to establish some additional notation. Let $T = [0,\infty)$.  We denote with $\mathcal{C}\{0,0;t'\}$ the subset of trajectories in $\mathbb{R}^T$ starting from $x=0$ at $t=0$, and lasting a time span $t'$. Then, $\mathcal{C}\{0,0;x',t'\}$ is the subset of $\mathcal{C}\{0,0;t'\}$ when even the end-point is fixed to be $x(t') = x'$. The following \textit{normalization} property holds:
 \begin{align*}
-    t_i - t_{i-1} = \epsilon = \frac{t}{N+1} \quad \forall i = 1, \dots, N+1 
+    \langle 1 \rangle_w = \int_{\mathcal{C}\{0,0;t\}} 1\cdot \dd{_wx(\tau)} = 1
+\end{align*}        
+
+We can then rewrite (\ref{eqn:I1def}) as:
+\begin{align*}
+    I_1 = \int_{\mathcal{C}\{0,0;0,t\}} \dd{_Wx(\tau)}
+\end{align*}  
+Geometrically, $W(0,t|0,0) = I_1$ is the probability that a Brownian particle starting at the origin \textit{returns} in it after a finite amount of time $t$.
+
+\medskip
+
+The standard way to compute a Wiener integral is to \textit{discretize} it, and then take a \textit{continuum} limit. So, consider for simplicity a \textbf{uniform}  time discretization $\{t_i\}_{i=1,\dots, N+1}$, with instants $\epsilon$-apart from each other, so that: 
+\begin{align*}
+    t_i - t_{i-1} \equiv \epsilon = \frac{t}{N+1} \quad \forall i = 1, \dots, N+1 
 \end{align*}
 Note that the end-points are $x_0 = x_{N+1} = 0$.\\
 Then:
