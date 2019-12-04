@@ -3,62 +3,189 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\section{Integral n.3}
+\section{A first functional}
 \lesson{6}{28/10/19}
-Consider a Brownian trajectory $x(\tau)$, and a functional that \textit{weights} every traversed point $x(\tau)$ with a function $a\colon \mathbb{R} \to \mathbb{R}$, and then applies another function $F\colon \mathbb{R} \to \mathbb{R}$ to the total integral:
+Consider a Brownian trajectory $x(\tau)$ (from now on, we will assume that all trajectories start in $x=0$ at $t = 0$), and a functional that \textit{weights} every traversed point $x(\tau)$ with a function $a\colon \mathbb{R} \to \mathbb{R}$, and then applies another function $F\colon \mathbb{R} \to \mathbb{R}$ to the total integral:
 \begin{align*}
     F[x(\tau)] = F\left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right)
 \end{align*}    
-We now want to compute its expected value:
+For simplicity, we set $D = 1/4$, so that:
 \begin{align*}
-    I_3 \equiv \langle F[x(\tau)] \rangle = \int_{\mathcal{C}\{0,0;t\}} \dd{_Wx(\tau)} F[x(\tau)]
-\end{align*}
-
-
-We considered the following integral:
-\begin{align*}
-    \langle F\left(\int_{0}^{t} a(\tau) x(\tau) \dd{\tau}\right) \rangle
-\end{align*}
-To solve this, we need to discretize the path, and then consider the continuum limit.\\
-We start by applying the transformation:
-\begin{align*}
-    A(\tau) = \int_{\tau}^{t} a(\tau') \dd{\tau'}
-\end{align*}
-Note that $\partial_\tau A(\tau) = -a(\tau)$, and that $A(t) = 0$. The integral becomes:
-\begin{align*}
-    \int_{0}^{t} a(\tau) x(\tau) \dd{\tau} = - \int_{0}^{t} \partial_\tau  A(\tau) x(\tau) \dd{\tau} 
-\end{align*}  
-Integrating by parts we get:
-\begin{align*}
-    = - A(\tau) x(\tau) \Big|_0^t + \int_0^t A(\tau) \dot{x}(\tau) \dd{\tau}
-\end{align*}
-The first term is $0$, as $A(\tau) = 0$, and $x(0) = 0$ (paths, for simplicity, always start from $0$ - as any generic path can be shifted to satisfy this condition).\\
-We then discretize the path, starting from $t_0 = 0$ and arriving to $t_N$. Let $\dot{x}(\tau) \dd{\tau} \equiv \dd{x} = x_i - x_{i-1}$, where $x_i \equiv x(t_i)$. Then, the integral is just the limit of the Riemann sum:
-\begin{align*}
-    = \lim_{N \to \infty} \sum_{i=1}^N A(t_i) (x_i - x_{i-1})
-\end{align*}        
-For simplicity, denote $A_i \equiv A(t_i)$ and $(x_i - x_{i-1}) \equiv \Delta x_i$. Then:
-\begin{align*}
-    F\left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right) = F\left(\int_{0}^{t} A(\tau) \dot{x}(\tau) \dd{\tau} \right) = \lim_{N \to \infty} F\left(\sum_{i=1}^N A_i \Delta x_i\right)
-\end{align*}  
-We consider now the expectation value. If we are allowed to bring the average inside the integral, we get:
-\begin{align*}
-    \langle F\left(\int_{0}^{t} a(\tau) x(\tau)\dd{\tau}\right) \rangle = \lim_{N \to \infty} \int \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp \left(-\sum_{i=1}^N \frac{\Delta x_i^2}{\Delta t_i} \right)  \cdot F\left(\sum_{i=1}^N \Delta x_i A_i\right) \int \dd{z}\\
-    \cdot \delta\left(z-\sum_{i=1}^N A_i \Delta x_i\right)
-\end{align*}
-where $D=1/4$ and $t = t/(4D)$. The last term is equal to $1$, and it is introduced just to exchange the integrals and lead to:
-\begin{align*}
-    \int \dd{z} F(z) \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} F\left(\sum_i A_i \Delta x_i\right) \delta\left(z \sum_i A_i \Delta x_i\right) \cdot \exp\left(-\sum_i \frac{\Delta x_i^2}{\Delta t_i} \right)
-\end{align*}   
-Then we write the $\delta$ in terms of its Fourier transform:
-\begin{align*}
-    \delta(z \sum_i A_i \Delta x_i) = \int_{\mathbb{R}} \frac{\dd{\alpha}}{2\pi} \exp(i \alpha (z- \sum_i A_i \Delta x_i)) 
+    \dd{\mathbb{P}}_{t_1,\dots,t_n} (x_1,\dots,x_n|0,0) = \exp\left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{\pi \Delta t_i} \right) \prod_{i=1}^n \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} 
 \end{align*} 
+This is equivalent to a time rescaling $t \to \tau = 4Dt$.
+
+We want now to compute $\langle F \rangle$:
+\begin{align*}
+    I_3 \equiv \langle F[x(\tau)] \rangle_w = \int_{\mathcal{C}\{0,0;t\}} \dd{_Wx(\tau)} F[x(\tau)]
+\end{align*}
+
+\begin{expl}
+    \textbf{Note}: the next computations will follow the book. Prof. Maritan's method for evaluating $I_3$ is quicker, but more advanced, and will be presented at the end.  
+\end{expl}
+Then we start by discretizing, by choosing a time grid $0 = t_0 < t_1 < \dots < t_N = t$:
+\begin{align*}
+    I_3 &= \lim_{N \to \infty} I_3^{(N)}\\
+    I_3^{(N)} &= \int_{-\infty}^{+\infty} \frac{\dd{x_1}}{\sqrt{\pi \Delta t_1}} \dots \int_{-\infty}^{+\infty} \frac{\dd{x_N}}{\sqrt{ \pi \Delta t_N }}  F\left(\sum_{i=1}^N a_i x_i \Delta t_i\right) \exp\left(-\sum_{i=1}^N \frac{(\hlc{Yellow}{x_i - x_{i-1}})^2}{\Delta t_i} \right) \qquad
+\substack{\displaystyle a_i \equiv a(t_i)\\\displaystyle x_i \equiv x(t_i)}
+\end{align*}
+This integral can be evaluated by transforming it to a \textit{gaussian integral} that we already know. So we start by changing variables:
+\begin{align}
+    x_i - x_{i-1} = y_i \qquad i=1,\dots,N \label{eqn:first-cov}
+\end{align}
+Note that:
+\begin{align*}
+    \sum_{j=1}^i y_j = \cancel{x_1} - \underbrace{x_0}_{=0}  + x_2 - \cancel{x_1} + \dots + x_i - \bcancel{x_{i-1}} = x_i \qquad 1 \leq i \leq N
+\end{align*}
+So, when we compute the transformation of the volume element:
+\begin{align*}
+    \operatorname{det}\left|\pdv{\{x_i\}}{\{y_j\}}\right| = \operatorname{det} \left|\begin{array}{cccc}
+    1 & 0 & 0 & 0 \\ 
+    1 & 1 & 0 & 0 \\ 
+    \vdots & \vdots & \ddots & 0 \\ 
+    1 & 1 & \cdots & 1
+    \end{array}\right|_{N\times N} = 1
+\end{align*}
+as the determinant of a lower triangular matrix is equal to the product of the diagonal entries.
+
+All that's left is to transform the argument of $F$. Let's start by writing the first terms of the sum and apply the change of variables:
+\begin{align}\nonumber
+    \sum_{i=1}^N a_i x_i \Delta t_i &= a_1 x_1 \Delta t_1 + a_2 x_2 \Delta t_2 + \dots = \\ \nonumber
+    &= a_1(y_1) \Delta t_1 + a_2(y_1 + y_2) \Delta t_2 + \dots =\\ \nonumber
+    &= y_1\left(\sum_{j=1}^N a_j \Delta t_j\right) + y_2\left(\sum_{j=2}^N a_j \Delta t_j\right) + \dots + y_N a_N \Delta t_N =\\
+    &= \sum_{i=1}^N y_i \underbrace{\left(\sum_{j=i}^N a_j \Delta t_j\right)}_{A_i} \equiv \sum_{i=1}^N A_i y_i \label{eqn:Ai}
+\end{align} 
+Substituting everything back:
+\begin{align*}
+    I_3^{(N)} = \int_{-\infty}^{+\infty} \frac{\dd{y_1}}{\sqrt{\pi \Delta t_1}} \dots \int_{-\infty}^{+\infty} \frac{\dd{y_N}}{\sqrt{\pi \Delta t_N}} F\left(\sum_{i=1}^N A_i y_i\right) \exp\left(-\sum_{i=1}^N \frac{y_i^2}{\Delta t_i} \right) \qquad A_i = \sum_{j=i}^N a_j \Delta t_j
+\end{align*}
+We can simplify this integral a bit more by rescaling the $y_i$:
+\begin{align*}
+    z_i = A_i y_i\qquad \dd{y_i} = \frac{\dd{z_i}}{A_i} 
+\end{align*} 
+As each $y_i$ is transformed independently, the jacobian is diagonal.
+\begin{align*}
+    I_3^{(N)} = \int_{-\infty}^{+\infty} \frac{\dd{z_1}}{\sqrt{\pi A_1^2 \Delta t_1}} \dots \int_{-\infty}^{+\infty} \frac{\dd{z_N}}{\sqrt{ \pi A_N^2 \Delta t_N}} F(z_1 +\dots + z_N) \exp\left(-\sum_{i=1}^N \frac{z_i^2}{A_i^2 \Delta t_i} \right)  
+\end{align*}
+This is the expected value of a function of the \textit{sum} of $N$ normally distributed random variables $\{z_i\}$. The idea is now to \textit{isolate} one of them from the argument of $F$, integrate over it, and reiterate. This is done by changing variables yet again:
+\begin{align*}
+    \begin{cases}
+        \eta = z_1 + z_2\\
+        \xi = z_2
+    \end{cases} \Rightarrow \begin{cases}
+        z_1 = \eta - \xi\\
+        z_2 = \xi
+    \end{cases} \Rightarrow \operatorname{det} \left|\pdv{\{z_1,z_2\}}{\{\eta,\xi\}}\right| = \left|\begin{array}{cc}
+    1 & -1 \\ 
+    0 & 1
+    \end{array}\right| = 1
+\end{align*}     
 leading to:
 \begin{align*}
-    = \int \frac{\dd{\alpha}}{2 \pi} \int \dd{z} F(z) e^{i \alpha z} \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} \exp \left(-\sum_{i=1}^N \frac{\Delta x_i^2}{\Delta t_i} - i \sum_{i=1}^N A_i \Delta x_i \right)  
+    I_3^{(N)} &= \int_{-\infty}^{+\infty} \frac{\dd{\eta}}{\sqrt{ \pi A_1^2 \Delta t_1}}\int_{-\infty}^{+\infty} \frac{\dd{\xi}}{\sqrt{ \pi A_2^2 \Delta t_2 }} \int_{-\infty}^{+\infty} \frac{\dd{z_3}}{\sqrt{\pi A_3^2 \Delta t_3}}\cdots \int_{-\infty}^{+\infty} \frac{\dd{z_N}}{\sqrt{\pi A_N^2 \Delta t_N}} \cdot\\
+    &\qquad \cdot F(\eta + z_3 + \dots + z_N) \exp\left(-\frac{(\eta-\xi)^2}{A_1^2 \Delta t_1} - \frac{\xi^2}{A_2^2 \Delta t_2} - \sum_{i=3}^N \frac{z_i^2}{A_i^2 \Delta t_i} \right)
 \end{align*}
-Then consider the change of variables: $y_i = \Delta x_i = x_1 - x_0 = x_1$, $y_2 = \Delta x_2 = x_2 - x_1; \dots, y_N = \Delta x_N = x_N - x_{N-1}$. The volume element will be transformed by the determinant of the Jacobian:
+Note how $\xi$ does not enter in the $F$ argument, and so we can integrate over it:
+\begin{align*}
+    I_\xi &= \int_{-\infty}^{+\infty} \dd{\xi} \frac{1}{\sqrt{\pi A_1^2 \Delta t_1} \sqrt{\pi A_2^2 \Delta t_1 }}\exp\left(-\frac{(\eta - \xi)^2}{A_1^2 \Delta t_1} - \frac{\xi^2}{A_2^2 \Delta t_2} \right) =\\
+    &= \int_{-\infty}^{+\infty} \dd{\xi} (\cdots) \exp\left(-\frac{\hlc{Yellow}{\xi^2 (A_2^2 \Delta t_1 + A_2^2 \Delta t_2)} - \hlc{SkyBlue}{(2\eta A_2^2 \Delta t_2)} - \hlc{ForestGreen}{(-\eta^2 A_2^2 \Delta t_2)}}{A_1^2 A_2^2 \Delta t_1 \Delta t_2} \right)
+\end{align*}  
+Recall the gaussian integral formula:
+\begin{align*}
+    \int_{-\infty}^{+\infty} \exp(-\hlc{Yellow}{a}x^2 +\hlc{SkyBlue}{ b}x + \hlc{ForestGreen}{c}) \dd{x} = \sqrt{\frac{\pi}{a} } \exp\left(\frac{b^2}{4a} + c \right)
+\end{align*}
+which evaluates to:
+\begin{align*}
+    I_\xi = \frac{1}{\sqrt{\pi (A_1^2 \Delta t_1 + A_2^2 \Delta t_2)}} \exp\left(-\frac{\eta^2}{A_1^2 \Delta t_1 + A_2^2 \Delta t_2} \right) 
+\end{align*}
+and substituting back in $I_3^{(N)}$:
+\begin{align*}
+    I_3^{(N)} &= \int_{-\infty}^{+\infty} \frac{\dd{\eta}}{\sqrt{\pi A_1^2 \Delta t_1 + \pi A_2^2 \Delta t_2}} \int_{-\infty}^{+\infty} \frac{\dd{z_3}}{\sqrt{ \pi A_3^2 \Delta t_3}} \cdots \int_{-\infty}^{+\infty} \frac{\dd{z_N}}{\sqrt{\pi A_N^2 \Delta t_N }} \cdot  \\
+    &\qquad \cdot F(\eta + z_3 + \dots + z_N) \exp\left(-\frac{\eta^2}{A_1^2 \Delta t_1 + A_2^2 \Delta t_2} - \sum_{i=3}^N \frac{z_i^2}{A_1^2 \Delta t_i} \right)
+\end{align*} 
+We can now reiterate this procedure until only one integration is left:
+\begin{align*}
+    I_3^{(N)} = \int_{-\infty}^{+\infty} \frac{\dd{z}}{\sqrt{\pi \sum_{i=1}^N A_i^2 \Delta t_i}} F(z) \exp\left(-\frac{z^2}{\sum_{i=1}^N A_i^2 \Delta t_i} \right) 
+\end{align*}
+We are now finally ready to take the continuum limit $\Delta t_i \to 0$, $N \to\infty$. Note that:
+\begin{align}
+    \lim_{\Delta t_i \to 0} A_i = \int_{\tau}^t a(s) \dd{s} = A(\tau)
+    \label{eqn:Atau}
+\end{align}  
+as the discrete sum goes from $t_i = \tau$ to $t_N = t$. Then:
+\begin{align*}
+    R \equiv \lim_{\Delta t \to 0 } \sum_{i=1}^N A_i^2 \Delta t_i = \int_0^t \dd{\tau} \left(\int_{\tau}^t \dd{s} a(s) \right)^2
+\end{align*}  
+and so:
+\begin{align*}
+    I_3 = \lim_{N \to\infty } I_3^{(N)} = \int_{-\infty}^{+\infty} \dd{z} \frac{F(z)}{\sqrt{\pi R}} \exp\left(-\frac{z^2}{R} \right) 
+\end{align*}
+And to recover $D$ we can just substitute $R \to 4 D R$.   
+
+
+
+\subsection{Alternative method}
+We consider now a different (quicker) technique to compute $I_3$. So we start again from:
+\begin{align*}
+    I_3 \equiv \langle F[x(\tau)] \rangle_w = \int_{C\{0,0;t\}} \dd{_Wx(\tau)} F\left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right)
+\end{align*}
+It is convenient to apply the change of variables we did in (\ref{eqn:Ai}). We can do \textit{before} discretizing, by defining $A(\tau)$ as in (\ref{eqn:Atau}):
+\begin{align}
+    A(\tau) \equiv \int_\tau^t a(s) \dd{s}
+    \label{eqn:Atau2}
+\end{align}
+Note that $\dot{A}(\tau) = -a(\tau)$, and so the argument of $F$ becomes:
+\begin{align*}
+    \int_0^t a(\tau) x(\tau) \dd{\tau} &= -\int_0^t \partial_\tau A(\tau) x(\tau) \dd{\tau} 
+\intertext{Integrating by parts:}
+    &= -\cancel{\left[x(\tau) A(\tau)\right]}_{\tau=0}^{\tau=t} + \int_0^t A(\tau) \dot{x}(\tau) \dd{\tau}
+\end{align*}
+And now we discretize the path over the instants $0 = t_0 < t_1 < \dots < t_N$, so that:
+\begin{align*}
+    \int_0^t A(\tau) \dot{x}(\tau) \dd{\tau} &= \lim_{\Delta t_i \to 0} \sum_{i=1}^N A(t_i) \frac{x(t_i) - x(t_{i-1})}{\Delta t_i} \Delta t_i =\\
+    &= \lim_{N \to \infty} \sum_{i=1}^N A_i (x_i - x_{i-1})
+    = \lim_{N \to \infty} \sum_{i=1}^N A_i \Delta x_i
+    \qquad \substack{\displaystyle x_i \equiv x(t_i)\\\displaystyle A_i \equiv A(t_i)}
+\end{align*}
+Substituting back (here $D = 1/4$ for simplicity):
+\begin{align*}
+    I_3 &= \lim_{N \to\infty } I_3^{(N)}\\
+    I_3^{(N)} &= \int_{\mathbb{R}^N} \left(\prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{ \pi \Delta t_i}} \right)\exp\left(-\sum_{i=1}^N \frac{(\Delta x_i)^2}{\Delta t_i} \right)  F\left(\sum_{i=1}^N A_i \Delta x_i \right)
+\end{align*}
+The idea is now to \textit{apply} a change of random variable, rewriting the average $\langle F[x(\tau)] \rangle_w$ (according to the distribution of \textit{paths}) as the average $\langle F(z) \rangle_{p(z)}$, where $p(z)$ is the distribution followed by the argument of $F$:
+\begin{align*}
+    \sum_{i=1}^N A_i \Delta x_i
+\end{align*}  
+So, we begin by inserting the appropriate $\delta$:
+\begin{align*}
+    I_3^{(N)} = \int_{\mathbb{R}^N} \left(\prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{ \pi \Delta t_i }}\right) \exp\left(-\sum_{i=1}^N \frac{(\Delta x_i)^2}{\Delta t_i} \right)F\left(\sum_{i=1}^N A_i \Delta x_i\right) \underbrace{\textcolor{Blue}{\int_{\mathbb{R}} \dd{z} \delta\left(z - \sum_{i=1}^{N} A_i \Delta x_i\right)} }_{=1} 
+\end{align*}   
+Exchanging the integrals leads to:
+\begin{align*}
+    &\langle F\left(\sum_{i=1}^N A_i \Delta x_i\right) \rangle_w = \langle F(z) \rangle_{p(z)} =\span\\
+   & =\int_{\mathbb{R}} \dd{z} F(z) \underbrace{\int_{\mathbb{R}^N} \left(\prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i }}\right) F\left(\sum_{i=1}^N A_i \Delta x_i\right) \delta\left(z- \sum_{i=1}^N A_i \Delta x_i\right) \exp\left(-\sum_{i=1}^N \frac{(\Delta x_i)^2}{\Delta t_i} \right)}_{p(z)} 
+\end{align*}
+We can evaluate $I_3^{(N)}$ by transforming it to a \textit{gaussian integral}. First, we remove the $\delta$ with a Fourier transform:
+\begin{align*}
+    2\pi \delta (x) = \int_{\mathbb{R}} e^{i \alpha x} \dd{\alpha}
+\end{align*}    
+which, in this case, leads to:
+\begin{align*}
+    \delta\left(z - \sum_{i=1}^N A_i \Delta x_i\right) = \int_{\mathbb{R}} \frac{\dd{\alpha}}{2\pi} \exp\left(i \alpha \left(z- \sum_{i=1}^N A_i \Delta x_i\right)\right) 
+\end{align*} 
+Substituting back:
+\begin{align*}
+    I_3^{(N)} = \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} \int_{\mathbb{R}} \dd{z} F(z) e^{i \alpha z} \int_{\mathbb{R}^N} \left(\prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}}\right) \exp \left(-\sum_{i=1}^N \frac{\Delta x_i^2}{\Delta t_i} - i \alpha \sum_{i=1}^N A_i \Delta x_i \right)  
+\end{align*}
+We see that the last term is similar to a multivariate gaussian with a imaginary term, that we know how to integrate. We just need to remove the \textit{differences} in the exponential with a change of variables (as in (\ref{eqn:first-cov})):
+\begin{align*}
+    y_1 &= \Delta x_1 = x_1 -\overbrace{x_0}^{=0} = x_1\\
+    y_2 &= \Delta x_2 = x_2 - x_1\\
+    &\>\>\vdots\\
+    y_N &= \Delta x_N = x_N - x_{N-1}
+\end{align*}
+
+The volume element will be transformed by the determinant of the Jacobian:
 \begin{align*}
     J = \operatorname{det} \frac{\partial (x_1 \dots x_N)}{\partial(y_1 \dots y_N)} = \left[\operatorname{det} \frac{\partial (y_1 \dots y_N)}{\partial (x_1 \dots x_N)}  \right]^{-1} = \left|
     \begin{array}{ccccc}
@@ -70,43 +197,48 @@ Then consider the change of variables: $y_i = \Delta x_i = x_1 - x_0 = x_1$, $y_
     \end{array}
     \right|^{-1} = 1
 \end{align*}
-(It is a tri-diagonal matrix).\\
-Then we arrive at:
+where we used the fact that $\operatorname{det}A^{-1} = (\operatorname{det}A)^{-1}$, and that the determinant of a lower triangular matrix is just the product of the diagonal entries.
+
+The integral then becomes:
 \begin{align*}
-    \int \frac{\dd{\alpha}}{2 \pi} \int \dd{z} F(z) e^{i \alpha z} \int \prod_{i=1}^N \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}} \exp\left(-\sum_{i=1}^N \frac{y_i^2}{\Delta t_i} - i \sum_{i=1}^N A_i y_i \right) \prod_{i=1}^N \int \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}} \exp\left(-\frac{y_i^2}{\sqrt{\pi \Delta t_i}} - i \alpha A_i y_i \right)   
+    I_3^{(N)} &= 
+    \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} \int_{\mathbb{R}} \dd{z} F(z) e^{i \alpha z} \int_{\mathbb{R}^N} \left( \prod_{i=1}^N \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}}\right) \exp\left(-\sum_{i=1}^N \frac{y_i^2}{\Delta t_i} - i \alpha \sum_{i=1}^N A_i y_i \right) =\\
+    &= \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} \int_{\mathbb{R}} \dd{z} F(z) e^{i \alpha z} \left[\prod_{i=1}^N  \int_{\mathbb{R}} \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}} \exp\left(-\frac{y_i^2}{ \Delta t_i} - i \alpha A_i y_i \right) \right]   
 \end{align*}
-which is a gaussian integral, with solution:
+The terms in the product are all independent gaussian integrals. Recall that:
+\begin{align}
+    \int_{\mathbb{R}} \dd{k} e^{-ia k^2 - ibk} = \sqrt{\frac{\pi}{ia} } \exp\left(\frac{ib^2}{4 a} \right)
+    \label{eqn:gaussian-integral1}
+\end{align}
+So, with $ia = 1/\Delta t_i$ and $b = \alpha A_i$ we get:
 \begin{align*}
-    = \int \frac{\dd{\alpha}}{2 \pi} \left[\int \dd{z} F(z) \prod_i \exp\left(-\frac{\alpha^2}{4} A_i^2 \Delta t_i \right) e^{i \alpha z}\right] 
+    \int_{\mathbb{R}} \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}} \exp\left(-\frac{y_i^2}{\Delta t_i} - i \alpha A_i y_i \right)  = \exp\left(-\frac{\alpha^2 A_i^2 \Delta t_i}{4} \right)
+\end{align*}  
+and substituting back in the integral leads to:
+\begin{align*}
+    I_3^{(N)} &= \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} \int_{\mathbb{R}} \dd{z} F(z)  e^{i \alpha z} \left[ \prod_{i=1}^N \exp\left(-\frac{\alpha^2 A_i^2 \Delta t_i}{4} \right) \right] =\\
+    &= \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} \int_{\mathbb{R}} \dd{z} F(z) e^{i \alpha z} \exp\left(-\frac{\alpha^2}{4} \sum_{i=1}^N A_i^2 \Delta t_i \right)
 \end{align*}
-Note that:
+Applying the continuum limit ($N \to\infty$, $\Delta t_i \to 0$), the exponential argument becomes the limit of a Riemann sum, i.e. a integral:
 \begin{align*}
-    \prod_i \exp\left(-\frac{\alpha^2}{4} A_i^2 \Delta t_i \right) =
-    \exp\left(-\frac{\alpha^2}{4} \sum_{i=1}^N A_i^2 \Delta t_i \right)
+    \sum_{i=1}^N A(t_i)^2 \Delta t_i  \xrightarrow[N \to \infty]{}  \int_0^t A^2(\tau) \dd{\tau} \underset{(\ref{eqn:Atau2})}{=}  \int_0^t \dd{\tau} \left(\int_{\tau}^t \dd{s} a(s)\right)^2 \equiv R(t)
 \end{align*}
-and then, in the limit the Riemann summation becomes an integral:
+Substituting back:
 \begin{align*}
-    \sum_{i=1}^N A^2(t_i) \Delta t_i  \xrightarrow[N \to \infty]{}  \int_0^t A^2(\tau) \dd{\tau}
+    I_3 \equiv
+    \langle F\left(\int_{0}^t a(\tau )x(\tau)\right) \rangle = \lim_{N \to\infty } I_3^{(N)} = \int_{\mathbb{R}} \dd{z} \int_{R} \frac{\dd{\alpha}}{2 \pi} \exp\left(-\frac{\alpha^2}{4} R(t) + i \alpha z \right) 
 \end{align*}
-so that:
+All that's left is to evaluate the last gaussian integral thanks to (\ref{eqn:gaussian-integral1}) with $ia = R(t)/4$ and $b = -z$, leading to:
 \begin{align*}
-    \int_0^t \dd{\tau} A^2(\tau) = \int_0^t \dd{\tau} \left(\int_{\tau}^t \dd{\tau} a(\tau)\right)^2 \equiv R(t)
-\end{align*}
-Finally, we arrive at:
-\begin{align*}
-    \langle F\left(\int_{0}^t a(\tau )x(\tau)\right) \rangle = \int \dd{z} \int \frac{\dd{\alpha}}{2 \pi} \exp\left(-\frac{\alpha^2}{4} R(t) + i \alpha z \right) 
-\end{align*}
-which is also a gaussian integral!
-\begin{align*}
-    = \int \dd{z} F(z) \frac{1}{2 \pi} \sqrt{\frac{4 \pi}{R(t)} } \exp\left(-\frac{z^2}{R(t)} \right) = \int \dd{z} F(z) \sqrt{\frac{\pi}{R(t)} } \exp\left(-\frac{z^2}{R(t)} \right)  
+    I_3 = \int_{\mathbb{R}} \dd{z} F(z) \frac{1}{2 \pi} \sqrt{\frac{4 \pi}{R(t)} } \exp\left(-\frac{z^2}{R(t)} \right) = \frac{1}{\sqrt{\pi R(t)}} \int_{\mathbb{R}} \dd{z} F(z) \exp\left(-\frac{z^2}{R(t)} \right)  
 \end{align*}
 
 So, we showed that:
 \begin{align*}
-    \langle F\left(\int_0^t a(\tau) x(\tau)\dd{\tau}\right) \rangle = \sqrt{\frac{\pi}{R(t)} } \int \exp\left(-\frac{z^2}{R(t)} F(z) \dd{z}\right); \qquad R(t) \equiv \int_0^t \left(\int_\tau^t a(\tau') \dd{\tau'}\right)^2
+    \langle F\left(\int_0^t a(\tau) x(\tau)\dd{\tau}\right) \rangle = \sqrt{\frac{1}{ \pi R(t)} } \int_{\mathbb{R}} \dd{z} F(z) \exp\left(-\frac{z^2}{R(t)} \right); \qquad R(t) \equiv \int_0^t \dd{\tau}\left(\int_\tau^t a(s) \dd{s}\right)^2
 \end{align*}
 
-\subsection{Example 1}
+\subsection{Example 1} \marginpar{TO DO}
 Choose:
 \begin{align*}
     F(z) = e^{hz}
@@ -147,149 +279,259 @@ On the other hand, an even moment leads to:
     \langle \left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right)^{2k} \rangle = R^{k} \frac{(2k)!}{2^{k} k!} 
 \end{align*}
 
-\section{The 4th integral}
-Consider now:
+\section{Exponential functional}
+We consider now the following functional:
 \begin{align*}
-    \langle \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \rangle
+    F[x(\tau)] = \exp\left(-\int_0^t \dd{\tau} P(\tau) x^2(\tau) \right) 
 \end{align*}
-To solve this, we will use a method introduced by Gelfand-Yaglom.\\
-Expanding the average:
+As before, we wish to compute $\langle F \rangle_w$. We start by discretizing the path over a \textbf{uniform}\footnote{The same result can be proved without this assumption, but which a much more heavy notation.}  grid $0 = t_0 < t_1 < \dots < t_N = t$ so that $\Delta t_i = t_i - t_{i-1} \equiv \epsilon = t/N$. 
+\begin{align} \nonumber
+    I_4 &\equiv \int_{\mathcal{C}\{0,0;t\}} \dd{_Wx(\tau)} \exp\left(-\int_0^t \dd{\tau} P(\tau) x^2(\tau)\right) = \lim_{N \to \infty} I_4^{(N)}\\
+    I_4^{(N)} &= \int_{-\infty}^{+\infty} \frac{\dd{x_1}}{\sqrt{ \pi \epsilon}} \cdots \int_{-\infty}^{+\infty} \frac{\dd{x_N}}{\sqrt{\pi \epsilon }} \exp\left(-\sum_{i=1}^N P_i x_i^2 \epsilon - \sum_{i=1}^N \frac{(x_i - x_{i-1})^2}{\epsilon} \right)  \qquad \substack{\displaystyle x_i \equiv x(ti)\\\displaystyle P_i \equiv P(t_i)} \label{eqn:I4N}
+\end{align}  
+The exponential argument is a \textbf{quadratic form}:
 \begin{align*}
-    \int \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} \exp\left(-\sum_i \frac{\Delta x_i^2}{\Delta t_i} - \sum_{i=1}^N P_i x_i^2 \Delta t_i\right) 
-\end{align*}
-with $x_i \equiv x(t_i), P_i \equiv P(t_i)$, and we consider the limit for $N \to \infty$ in the Riemann summation. Recall that $\Delta x_i = x_i - x_{i-1}$, and denote $\Delta t_i = \epsilon = t/N$ (regular discretization in time - in fact the result is independent on the chosen mesh, but proving involves a much more heavy notation, which is omitted for simplicity). This leads to:
-\begin{align*}
-    \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} e^{-\bm{x}^T a \bm{x}}
-\end{align*}   
-where $a$ is a $N \times N$ tri-diagonal matrix: 
-\begin{align*}
-    a = \left(\begin{array}{ccccc}
-    a_1 & - 1/\epsilon & 0 & \dots & 0 \\ 
-    -\epsilon^{-1} & a_2 & -\epsilon^{-1} & 0 & \vdots\\ 
-    0 & \ddots & \ddots & \ddots & 0\\ 
-    0 & 0 & -\epsilon^{-1} & a_{N-1} & -\epsilon^{-1}\\
-    0 & 0 & 0 & -\epsilon^{-1} & a_N
-    \end{array}\right)
-\end{align*}
-so that the integral becomes:
-\begin{align*}
-    = \frac{1}{\epsilon^{N/2} (\operatorname{det} a )^{1/2}} = \frac{1}{(\operatorname{det}(\epsilon a))^{1/2} }  
-\end{align*}
-Consider the determinant:
-\begin{align*}
-    \epsilon a = \left|\begin{array}{ccccc}
-    \epsilon a_1 & -1 & 0 & \dots & 0 \\ 
-    -1 & \epsilon a_2 & -1 & 0 & \vdots \\ 
-    0 & \ddots & \ddots & \ddots & \vdots \\ 
-    \vdots & \ddots & -1 & \epsilon a_{N-1} & -1 \\ 
-    0 & \dots & 0 & -1 & \epsilon a_N
-    \end{array}\right| \equiv D_1^{(N)}
-\end{align*}
-If we consider the block starting from $a_k$:
-\begin{align*}
-    D_k^{(N)} \equiv = \left|\begin{array}{ccccc}
-    \epsilon a_k & -1 & 0 & \dots & 0 \\ 
-    -1 & \epsilon a_{k+1} & -1 & 0 & \vdots \\ 
-    0 & \ddots & \ddots & \ddots & \vdots \\ 
-    \vdots & \ddots & -1 & a_{N-1} & -1 \\ 
-    0 & \dots & 0 & -1 & \epsilon a_N
-    \end{array}\right|
+    &-\epsilon (P_1 x_1^2 + \dots + P_N x_N^2) - \frac{1}{\epsilon} [\cancel{x_0^2 }+ x_1^2 - \cancel{2x_0 x}_1 + x_1^2 + x_2^2 -2 x_1 x_2 + \dots + x_{N-1}^2 + x_N^2 -2x_{N-1}x_N] =\\
+    &=-\epsilon \sum_{i=1}^N P_i x_i^2 - \frac{1}{\epsilon} \left[2 \sum_{i=1}^{N-1} x_i^2 + x_N^2 -2 \sum_{i=1}^N x_{i-1} x_i \right]=\\
+    &=-\left[x_1^2 \left(\hlc{Yellow}{\epsilon P_1 + \frac{2}{\epsilon}} \right) + \dots + x^2_{N-1}\left(\hlc{Yellow}{\epsilon P_{N-1} + \frac{2}{\epsilon}} \right) + x_N^2\left(\hlc{SkyBlue}{\epsilon P_N + \frac{1}{\epsilon}} \right)+\hlc{ForestGreen}{\frac{2}{\epsilon}} \sum_{i=1}^N x_i x_{i-1} \right] =\\
+    &=- \sum_{i,j=1}^N A_{ij} x_i x_j 
 \end{align*} 
-then we note that $a_1 = \epsilon P_i + 2/\epsilon$ for $0<i<N$ and $a_N = \epsilon P_n + 1/\epsilon$, leading to:
+where $A_{ij}$ are matrix elements of a matrix $A_N$:
 \begin{align*}
-    D_k^{(N)} = \epsilon a_k D_{k+1}^{(N)} + 1 \left|\begin{array}{ccccc}
-    -1 & -1 & 0 & \dots & 0 \\ 
+    A_{ij} = \delta_{ij} a_i - \hlc{ForestGreen}{\frac{1}{\epsilon}} (\delta_{i,j-1} + \delta_{i-1,j}) \qquad a_i = \hlc{Yellow}{P_i \epsilon + \frac{1}{\epsilon} (2} \hlc{SkyBlue}{- \delta_{iN}})\\
+    A_N = \left(\begin{array}{ccccc}
+        a_1 & - 1/\epsilon & 0 & \dots & 0 \\ 
+        -\epsilon^{-1} & a_2 & -\epsilon^{-1} & 0 & \vdots\\ 
+        0 & \ddots & \ddots & \ddots & 0\\ 
+        0 & 0 & -\epsilon^{-1} & a_{N-1} & -\epsilon^{-1}\\
+        0 & 0 & 0 & -\epsilon^{-1} & a_N
+        \end{array}\right)
+\end{align*} 
+We can now rewrite $I_4^{(N)}$ as:
+\begin{align*}
+    I_4^{(N)} = \int_{\mathbb{R}^N} \left(\prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{ \pi \epsilon}} \right) e^{-\bm{x}^T A_N \bm{x}} \qquad \bm{x}^T = (x_1,\dots,x_N)
+\end{align*} 
+This is the integral of a multivariate gaussian, and evaluates to:
+\begin{align*}
+    I_4^{(N)} = \frac{1}{\epsilon^{N/2} (\operatorname{det} A_N)^{1/2}} = \frac{1}{(\operatorname{det}(\epsilon A_N))^{1/2} }  
+\end{align*}
+as for a $N \times N$ matrix we have $\operatorname{det}(\epsilon A_N) = \epsilon^N \operatorname{det}A_N$. This has the advantage of removing all denominators in $A_N$.
+
+To compute this determinant we use a method suggested by Gelfand and Yaglom (1960). We start by denoting with $D_k^{(N)}$ the determinant of the matrix obtained by removing the first $k-1$ rows and columns from $\epsilon A_N$:
+\begin{align*}
+    D_k^{(N)} \equiv \left|\begin{array}{ccccc}
+        \hlc{Yellow}{\epsilon a_k} & \hlc{SkyBlue}{-1} & 0 & \dots & 0 \\ 
+        -1 & \epsilon a_{k+1} & -1 & 0 & \vdots \\ 
+        0 & \ddots & \ddots & \ddots & 0 \\ 
+        \vdots & \ddots & -1 & a_{N-1} & -1 \\ 
+        0 & \dots & 0 & -1 & \epsilon a_N
+        \end{array}\right|
+\end{align*}    
+So that $D_1^{(N)} = \operatorname{det} \epsilon A_N$ is the determinant we want to compute.
+
+
+Expanding $D_k^{(N)}$ from the first row we get:
+\begin{align*}
+    D_k^{(N)} &=\hlc{Yellow}{ \epsilon a_k }D_{k+1} -(\hlc{SkyBlue}{-1}) \left|\begin{array}{ccccc}
+    \hlc{ForestGreen}{-1} & -1 & 0 & \dots & 0 \\ 
     0 & \epsilon a_{k+2} & -1 & \ddots & \vdots \\ 
-    0 & \ddots & \ddots & \ddots & 0 \\ 
-    0 & \dots & 0 & -1 & \epsilon a_N 
-    \end{array}\right| = \epsilon a_k D^{(N)}_{k+1} -1 D_{k+2}^{(N)}
-\end{align*}
-If we now consider:
-\begin{align*}
-    D_k^{(N)} - 2 D_{k+1}^{(N)} + D_{k+2}^{(N)} = \epsilon a_k D_{k+1}^{(N)} - 2 D_{k+1}^{(N)} = D_{k+1}^{(N)} (\epsilon a_k - 2)
-\end{align*}
-Denote $t = N \epsilon$, $\tau = (k-1)\epsilon$, so that:
-\begin{align*}
-    D_k^{(N)}  \xrightarrow[N \to \infty]{\epsilon \downarrow 0, \tau \text{ const}} D(\tau)  
-\end{align*}  
-and so the difference considered before becomes the second derivative:
-\begin{align*}
-    D(\tau) - 2D(\tau + \epsilon) + D(\tau + 2 \epsilon) = \epsilon^2 P(\tau + \epsilon) D(\tau + \epsilon) 
-\end{align*}
-as:
-\begin{align*}
-    \epsilon a_k - 2 = \epsilon^2 P_k + 2 - 2 = \epsilon^2 P_k \to \epsilon^2 P(\tau + 2) = \epsilon^2 P(\tau) + O(\tau^3)
-\end{align*}
-Dividing by $\epsilon^2$:
-\begin{align*}
-    \frac{D(\tau + \epsilon) + D(\tau) - 2D(\tau + \epsilon)}{\epsilon^2} = P(\tau + \epsilon) D(\tau + \epsilon) 
+    0 & \ddots & \ddots & \ddots & 0\\
+    \vdots & \ddots  & -1 & a_{N-1} & -1\\ 
+    0 & 0 & 0 &-1 & \epsilon a_N
+    \end{array}\right| =\\
+    &\underset{(a)}{=} \epsilon a_k D_{k+1}^{(N)} + (\hlc{ForestGreen}{-1}) D_{k+2}^{(N)} = \epsilon \left(\epsilon P_k + \frac{2}{\epsilon} \right) D_{k+1}^{(N)} - D_{k+2}^{(N)} = \\
+    &= (\epsilon^2 P_k + 2) D_{k+1}^{(N)} - D_{k+2}^{(N)}
 \end{align*} 
-Expanding $D(\tau)$ around $\tau + \epsilon$:
+where in (a) we expanded the last determinant following the first column.
+
+Rearranging:
+\begin{align}
+    \frac{D_k^{(N)} - 2 D_{k+1}^{(N)} + D_{k+2}^{(N)}}{\epsilon^2} = P_k D_{k+1}^{(N)} 
+    \label{eqn:discrete-rel}
+\end{align}
+We introduce now the variable $\tau = (k-1)t/N$, representing the \textit{fraction} of removed rows/columns in each determinant, rescaled to the final time $t$. Performing a continuum limit $N \to \infty$ we can then map $D_k^{(N)}  \xrightarrow[N \to \infty]{}  D(s)$. Then, the relation (\ref{eqn:discrete-rel}) becomes a \textit{differential equation}: 
+\begin{align}
+    \dv[2]{D(\tau)}{\tau} = P(\tau) D(\tau)
+    \label{eqn:detdiffeq}
+\end{align}
+In fact, note that the first term of (\ref{eqn:discrete-rel}) is a second derivative in the \textit{finite difference} approximation. This can be shown by Taylor expanding a generic function $f(x)$ to get the points immediately before and after:
 \begin{align*}
-    D(\tau) = D(\tau + \epsilon) - \epsilon D'(\tau + \epsilon) + \frac{\epsilon^2}{2} D''(\tau + \epsilon) 
-\end{align*}  
-and also for $D(\tau + 2\epsilon)$ :
-\begin{align*}
-    D(\tau + 2\epsilon) = D(\tau + \epsilon) + \epsilon D'(\tau + \epsilon) + \frac{\epsilon^2}{2} D''(\tau + \epsilon) + O(\epsilon^3)  
-\end{align*}
-Subtracting term by term and dividing by $\epsilon^2$: 
-\begin{align*}
-    D''(\tau + \epsilon) + O(\epsilon^2) = P(\tau + \epsilon) D(\tau + \epsilon)
-\end{align*}
-and for $\epsilon \to 0$ we are left with:
-\begin{align*}
-    D''(\tau) = P(\tau) D(\tau)
+    f(x+ \Delta x) &= f(x) + f'(x) \Delta x + \frac{1}{2} f''(x) (\Delta x)^2  + O((\Delta x)^3)\\ 
+    f(x- \Delta x) &= f(x) - f'(x) \Delta x + \frac{1}{2} f''(x) (\Delta x)^2 + O((\Delta x)^3)  
 \end{align*} 
-This is the Gelfand method, to represent an infinite dimensional matrix in a recursive way and arrive at a differential equation.\\
-Returning to the initial integral:
+Summing side by side, and denoting $f(x) \equiv f_i$, $f(x-\Delta x) \equiv f_{i-1}$ and $f(x+ \Delta x) = f_{i+1}$:
 \begin{align*}
-    \langle \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \rangle = \lim_{N \uparrow \infty} \frac{1}{\sqrt{D_1^{(N)}}} = \frac{1}{\sqrt{D(0) }}  \equiv I_0
-\end{align*}
-However, to be able to integrate this differential equation, we need two boundary conditions.\\
-We start from:
+    f_{i+1} + f_{i-1} = 2 f_i + f_i'' (\Delta x)^2 + O((\Delta x)^3)
+\end{align*}   
+Rearranging, shifting $i \to i+1$ and ignoring the higher order terms leads to:
 \begin{align*}
-    D_N^{(N)} = \epsilon a_N = \epsilon^2 P_N + 1  \xrightarrow[\epsilon \to 0]{}   1 = D(t)
-\end{align*}
-as:
-\begin{align*}
-    \tau = (k-1)\epsilon \underset{k=N}{=} (N-1)\epsilon = t- \tau = \dots 
-\end{align*}
-For the first derivative, we need:
-\begin{align*}
-    D_{N-1}^{(N)} = \left|\begin{array}{cc}
-    \epsilon a_{N-1} & -1 \\ 
-    -1 & \epsilon a_N
-    \end{array}\right| = 1 + \epsilon^2 P_{N-1} + 2 \epsilon^2 P_N + P_N P_{N-1} \epsilon^4
-\end{align*}
-so that:
-\begin{align*}
-    D'(t) = \frac{D^{(N)}_N - D^{(N)}_{N-1}}{\epsilon} = -(P_N P_{N-1} \epsilon^4 + \epsilon^2 P_N + \epsilon^2 P_{N-1}) \frac{1}{\epsilon} \to 0  
-\end{align*}
-So we get the two boundary conditions:
-\begin{align*}
-    D(t) = 1 \qquad D'(t) = 0
+    \frac{f_{i+2} - 2f_{i+1} + f_i}{(\Delta x)^2} = f_{i+1}'' 
 \end{align*}
 
-Before proceeding with the solution, we need another result:
+\begin{expl}
+    Analogously, this can be seen by computing the second derivative as \textit{the derivative of the first derivative} in terms of incremental ratios:
+    \begin{align*}
+        f''(x) &= \lim_{\Delta x \to 0} \frac{1}{\Delta x} \left(\frac{f(x+\Delta x) - f(x)}{\Delta x} - \frac{f(x)-f(x - \Delta x)}{\Delta x }  \right) =\\
+        &= \lim_{\Delta x \to 0} \frac{f(x+ \Delta x) - 2 f(x) + f(x- \Delta x)}{(\Delta x)^2} 
+    \end{align*} 
+\end{expl}
+
+Returning to the problem, we note that the determinant of the full matrix, in the continuum limit, is given by:
 \begin{align*}
-    \langle \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \delta(x(t) - x) \rangle \equiv I
+    \operatorname{det}(\epsilon A_N) = D_1^{(N)}  \xrightarrow[N \to \infty]{}  D(0) 
 \end{align*}
-which is computed by resorting to the discretization trick:
+(as $s = (k-1)t/N \Big|_{k=1} \equiv 0$). So, we just need to solve (\ref{eqn:detdiffeq}) and evaluate it at $\tau = 0$. 
+
+To do this, we first need \textit{two} boundary conditions, as (\ref{eqn:detdiffeq}) is a second order differential equation. 
+
+Noting that $D_N^{(N)}$ is just the last diagonal entry, we have:
 \begin{align*}
-    I_N = \int \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} \exp\left(-\sum_{i=1}^N \frac{\Delta x_i^2}{\Delta t_i} - \sum_i \epsilon P_i x_i^2 \right) \delta(x_N - x)
+    D_N^{(N)} = \epsilon a_N = \epsilon^2 p_N + 1  \xrightarrow[\substack{N \to \infty\\ \epsilon \to 0}]{} 1 
+\end{align*}  
+As $s = (k-1)t/N \big|_{k=N} = t$ for $N \to \infty$, this means that:
+\begin{align*}
+    D(t) = 1
 \end{align*}
-using the Fourier transform for the $\delta$:
+For the second boundary condition, we search a relation for the first derivative at $\tau = t$:
 \begin{align*}
-    \delta(x_N - x) = \int \frac{\dd{\alpha}}{2 \pi} e^{i \alpha (x_N - x)} 
+    \dv{D(\tau)}{\tau} \Big|_{\tau = t} = \lim_{N \to \infty} \frac{D_N^{(N)} - D_{N-1}^{(N)}}{\epsilon} 
+\end{align*}   
+$D^{(N)}_{N-1}$ can be computed directly:
+\begin{align*}
+    D_{N-1}^{(N)} = \left|\begin{array}{cc}
+    P_{N-1} \epsilon^2 +2 & -1 \\ 
+    -1 & P_N \epsilon^2 + 1
+    \end{array}\right| = P_{N-1} P_N \epsilon^4 + \epsilon^2(P_{N-1}+ 2P_N) + 1 
 \end{align*} 
-and exchanging the integrals:
+leading to:
 \begin{align*}
-    = \int \dd{\alpha} e^{-i \alpha x} \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} \exp\left(\underbrace{-\sum_i \left(\frac{\Delta x_i^2}{\epsilon} + P_i \epsilon x_i^2 \right) }_{\bm{x}^T a \bm{x}}+ i \alpha x_N\right)
+    \dv{D(\tau)}{\tau}\Big|_{\tau=t} = \lim_{\epsilon \to 0} \frac{\epsilon^2 P_N + 1 - P_{N-1}P_N \epsilon^4 - \epsilon^2(P_{N-1} + 2 P_N)-1}{\epsilon}  = 0
 \end{align*}
-Leading to:
+
+Summarizing, we found that:
 \begin{align*}
-    I_N = \int \frac{\dd{\alpha}}{2 \pi} e^{i \alpha x} \int \prod_i \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} \exp(-\bm{x}^T a \bm{x} + i \alpha x_N)  
+    I_4 \equiv \langle \exp\left(-\int_0^t \dd{\tau} P(\tau) x^2(\tau) \right)\rangle_w = \frac{1}{\sqrt{D(0)}} 
 \end{align*}
+where $D(\tau)$ is the solution of the differential equation:
+\begin{align*}
+    \dv[2]{D(\tau)}{\tau} = P(\tau) D(\tau)
+\end{align*}  
+with the following boundary conditions:
+\begin{align*}
+    \begin{cases}
+        D(t) = 1\\
+        \dot{D}(t) = \dv{D(\tau)}{\tau}\Big|_{\tau = t} = 0
+    \end{cases}
+\end{align*}
+
+\begin{example}[$p(\tau) = k^2$, free end-point]
+    Let's compute $I_4$ with the choice of $P(\tau) = k^2$. The differential equation becomes:
+    \begin{align*}
+        \dv[2]{D(\tau)}{\tau} = k^2 D(\tau)
+    \end{align*}  
+    which is that of a \textit{harmonic repulsor}. The solution is a linear combination of exponentials:
+    \begin{align*}
+        D(\tau) = A e^{k \tau} + Be^{-k \tau}
+    \end{align*} 
+    Differentiating:
+    \begin{align*}
+        \dot{D}(\tau) = k(Ae^{k \tau} - B e^{-k \tau})
+    \end{align*}
+    We can now impose the boundary conditions:
+    \begin{align*}
+        \begin{cases}
+            D(t) \overset{!}{=}  1 = A e^{kt} + Be^{-kt} & (a)\\
+            \dot{D}(t) \overset{!}{=} 0 = \cancel{k}(A e^{kt} - Be^{-kt}) & (b)
+        \end{cases}
+    \end{align*}
+    leading to:
+    \begin{align*}
+        (a) + (b)&\colon 2 A e^{kt} = 1 \Rightarrow A = \frac{1}{2} e^{-kt}\\
+        (a) - (b)&\colon 2Be^{-kt} = 1 \Rightarrow B = \frac{1}{2}e^{kt}  
+    \end{align*}
+    So the solution is:
+    \begin{align*}
+        D(\tau) = \frac{1}{2}\left[e^{k(t-\tau)} + e^{-k(t-\tau)}\right] = \cosh(k(t-\tau)) 
+    \end{align*}
+    from which:
+    \begin{align*}
+        I_4 = \lim_{N \to\infty }^{(N)} = \frac{1}{\sqrt{D(0)}} = \frac{1}{\sqrt{\cosh(kt)}}  
+    \end{align*}
+\end{example}
+
+\subsection{Fixed endpoint}
+We consider now a small variation of $I_4$, where we integrated on paths with a fixed \textit{end-point} $x(t) \equiv x_t$:
+\begin{align*}
+    \hat{I}_4 = \langle \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \delta(\hlc{Yellow}{x}\hlc{SkyBlue}{-x(t)} \rangle_w = \int_{\mathcal{C}\{0,0;x_t,t\}} \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right)
+\end{align*}   
+First, we rewrite the $\delta$ in terms of a Fourier transform:
+\begin{align*}
+    I_4' = \int_{-\infty}^{+\infty} \frac{\dd{\alpha}}{2\pi} \hlc{Yellow}{e^{i \alpha x}} \langle \exp \left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \hlc{SkyBlue}{e^{-i \alpha x(t)}} \rangle_w 
+\end{align*} 
+Then we discretize the path as before, with $0 = t_0 < t_1 < \dots < t_N = t$ uniformly distributed ($\Delta t_i = t_i - t_{i-1} \equiv \epsilon = t/N$):
+\begin{align*}
+    \hat{I}_4 &= \lim_{N \to \infty} \hat{I}_4^{(N)}\\
+    \hat{I}_4^{(N)} &= \textcolor{Red}{\int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi}} \textcolor{Red}{e^{i \alpha x}} \int_{\mathbb{R}^N} \left(\prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{ \pi \epsilon}} \right) \exp\left(-\sum_{i=1}^N P_i x_i^2 \epsilon - \sum_{i=1}^N \frac{(x_i - x_{i-1})^2}{\epsilon} \textcolor{Red}{- i \alpha x_N} \right)
+\end{align*}
+where the red terms are the only differences from (\ref{eqn:I4N}). We can rewrite the quadratic form with the matrix $A_N$ as before:
+\begin{align*}
+    \hat{I}_4^{(N)} = \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} e^{i \alpha x} \int_{\mathbb{R}^N} \left(\prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{\pi \epsilon}} \right) \exp(-\bm{x}^T A_N \bm{x} - i \alpha x_N)
+\end{align*} 
+Also, we can express $i \alpha x_N$ as a scalar product: 
+\begin{align*}
+    i \alpha x_N = \bm{h}^T \bm{x} \qquad h_l = \delta_{lN} (-i \alpha)
+\end{align*}
+So that we can now use the gaussian integral:
+\begin{align*}
+    \int_{\mathbb{R}^N} \dd[N]{\bm{x}} \exp\left(-\frac{1}{2} \bm{x}^T A \bm{x} + \bm{b} \cdot \bm{x} \right) = \exp \left(\frac{1}{2} \bm{b} \cdot A^{-1}\bm{b} \right) (2 \pi)^{N/2} (\operatorname{det} A)^{-1/2}
+\end{align*}
+with $A = 2 A_N$ and $\bm{b} = \bm{h}$:
+\begin{align*}
+    I' &\equiv \int_{\mathbb{R}^N} \dd[N]{\bm{x}} \exp(-\bm{x}^T A \bm{x} + \bm{h}^T \bm{x}) = \exp\left(\frac{1}{4} \bm{h}^T A^{-1} \bm{h} \right) (\cancel{2}\pi)^{N/2} (\cancel{2^N} \operatorname{det}A_N )^{-1/2} =\\
+    &= \sqrt{\frac{\pi ^N}{\operatorname{det} A_N } } \exp\left(\frac{1}{4}(-i \alpha)^2 (A^{-1}_N)_{NN} \right) = \underbrace{\sqrt{\frac{\pi^N}{\operatorname{det} A_N} }}_{I_0}  \exp\left(-\frac{1}{4} \alpha^2 (A_N^{-1})_{NN} \right)
+\end{align*}
+where $(A_N^{-1})_{NN}$ is the last diagonal element of the inverse matrix of $A_N$. Substituting back:
+\begin{align*}
+    \hat{I}_4^{(N)} = I_0 \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} \exp\left(i \alpha x - \frac{1}{4} \alpha^2 (A_N^{-1})_{NN} \right)
+\end{align*}
+which is again a gaussian integral, and following formula (\ref{eqn:gaussian-integral1}) with $a = (A_N^{-1})_{NN}/4$ and $b = -x$ leads to: 
+\begin{align*}
+    \hat{I}_4^{(N)} = \frac{I_0}{\bcancel{2} \pi} \sqrt{\frac{\bcancel{4} \pi}{(A_N^{-1})_{NN}} } \exp\left(-\frac{x^2}{(A_N^{-1})_{NN}} \right) = \frac{I_0}{\sqrt{ \pi (A_N^{-1})_{NN}}} \exp\left(-\frac{x^2}{(A_N^{-1})_{NN}} \right) 
+\end{align*}
+
+All that's left is to compute $(A_N^{-1})_{NN}$ and take the continuum limit. Recall from linear algebra that:
+\begin{align*}
+    A^{-1} = \frac{1}{\operatorname{det}A } C_{ji} 
+\end{align*} 
+where $C_{ij}$ are the \textit{cofactors} of $A$, i.e. the determinants of the matrices obtained from $A$ by removing the $i$-th row and $j$-th column. In our case:
+\begin{align*}
+    (A_N^{-1})_{NN} = \frac{C_{NN}}{\operatorname{det} A_N} 
+\end{align*}      
+Before, we obtained $\operatorname{det} A_N$ by means of $D_k^{(N)}$, i.e. the determinants of the matrices obtained by removing the first $k$ rows and columns, so that $D_1^{(N)} = \epsilon^N \operatorname{det} A_N$. To find $C_{NN}$ we proceed similarly. Start with matrix $\epsilon A_N$, and remove the last row and column (cofactor definition). Then $\tilde{D}_k^{(N)}$ is the determinant obtained by removing also the first $k-1$ rows and columns:
+\begin{align*}
+    \tilde{D}_{k}^{(N-1)} = \left(\begin{array}{ccccc}
+    \epsilon a_k & -1 & 0 & \dots & 0 \\ 
+    -1 & \epsilon a_{k-1} & -1 & 0 & \vdots \\ 
+    0 & \ddots & \ddots & \ddots & \vdots \\ 
+    \vdots & \ddots & -1 & \epsilon a_{N-2} & -1 \\ 
+    0 & \dots & \dots & -1 & \epsilon a_{N-1}
+    \end{array}\right)
+\end{align*}   
+Repeating the steps of the Gelfand-Yaglom method, we find the same differential equations for $\tilde{D}$:
+\begin{align*}
+    \partial_\tau^2 \tilde{D}(\tau) = P(\tau) D(\tau)
+\end{align*}  
+However, now the boundary conditions have changed. In fact, the last diagonal entry is now different:
+\begin{align*}
+    \tilde{D}_{N-1}^{(N-1)} = \epsilon^2 a_{N-1} \dots 
+\end{align*}
+\marginpar{To be continued}
+
+
+
+
+ 
+
 If we denote $i \alpha x_N = \bm{h}^T \bm{x}$, with $h_l = \delta_{lN} (-i \alpha)$, then:
 \begin{align*}
     \int \exp(-\bm{x}^T a \bm{x} + \bm{h}^T \bm{x}) = \frac{\pi^{N/2}}{|a|^{1/2}}\exp\left(\frac{1}{4} \bm{h}^T a^{-1}\bm{h} \right) = \frac{\pi^{N/2}}{|a|^{1/2}} \exp\left(-\frac{1}{4}\alpha^2 (a^{-1})_{NN} \right)  
