@@ -91,9 +91,9 @@ Note how $\xi$ does not enter in the $F$ argument, and so we can integrate over 
     &= \int_{-\infty}^{+\infty} \dd{\xi} (\cdots) \exp\left(-\frac{\hlc{Yellow}{\xi^2 (A_2^2 \Delta t_1 + A_2^2 \Delta t_2)} - \hlc{SkyBlue}{(2\eta A_2^2 \Delta t_2)} - \hlc{ForestGreen}{(-\eta^2 A_2^2 \Delta t_2)}}{A_1^2 A_2^2 \Delta t_1 \Delta t_2} \right)
 \end{align*}  
 Recall the gaussian integral formula:
-\begin{align*}
-    \int_{-\infty}^{+\infty} \exp(-\hlc{Yellow}{a}x^2 +\hlc{SkyBlue}{ b}x + \hlc{ForestGreen}{c}) \dd{x} = \sqrt{\frac{\pi}{a} } \exp\left(\frac{b^2}{4a} + c \right)
-\end{align*}
+\begin{align}
+    \int_{-\infty}^{+\infty} \exp(-\hlc{Yellow}{a}x^2 +\hlc{SkyBlue}{ b}x + \hlc{ForestGreen}{c}) \dd{x} = \sqrt{\frac{\pi}{a} } \exp\left(\frac{b^2}{4a} + c \right)\label{eqn:gauss-int}
+\end{align}
 which evaluates to:
 \begin{align*}
     I_\xi = \frac{1}{\sqrt{\pi (A_1^2 \Delta t_1 + A_2^2 \Delta t_2)}} \exp\left(-\frac{\eta^2}{A_1^2 \Delta t_1 + A_2^2 \Delta t_2} \right) 
@@ -234,50 +234,62 @@ All that's left is to evaluate the last gaussian integral thanks to (\ref{eqn:ga
 \end{align*}
 
 So, we showed that:
-\begin{align*}
-    \langle F\left(\int_0^t a(\tau) x(\tau)\dd{\tau}\right) \rangle = \sqrt{\frac{1}{ \pi R(t)} } \int_{\mathbb{R}} \dd{z} F(z) \exp\left(-\frac{z^2}{R(t)} \right); \qquad R(t) \equiv \int_0^t \dd{\tau}\left(\int_\tau^t a(s) \dd{s}\right)^2
-\end{align*}
+\begin{align}
+    \langle F\left(\int_0^t a(\tau) x(\tau)\dd{\tau}\right) \rangle_w = \sqrt{\frac{1}{ \pi R(t)} } \int_{\mathbb{R}} \dd{z} F(z) \exp\left(-\frac{z^2}{R(t)} \right); \qquad R(t) \equiv \int_0^t \dd{\tau}\left(\int_\tau^t a(s) \dd{s}\right)^2
+    \label{eqn:I3-res}
+\end{align}
 
-\subsection{Example 1} \marginpar{TO DO}
-Choose:
-\begin{align*}
-    F(z) = e^{hz}
-\end{align*} 
-Then:
-\begin{align*}
-    \langle \exp\left(h \int_0^\tau a(\tau) x(\tau) \dd{\tau}\right) \rangle = \sqrt{\frac{\pi}{R} } \int \dd{z} \exp\left(-\frac{z^2}{R} + hz \right) = \exp\left(\frac{h^2 R}{4} \right) \equiv G(h)
-\end{align*}
-This is just the \textit{generating function} of $h(z)$. In fact: 
-\begin{align*}
-    G'(h) = \langle \int_0^t a(\tau) x(\tau) \dd{\tau} \exp\left(h \int_0^\tau a x \dd{\tau}\right) \rangle
-\end{align*}
-and setting $h = 0$ leads to the first moment of $h(z)$:
-\begin{align*}
-    G'(0) = \langle \int_0^t a(\tau) x(\tau) \dd{\tau} \rangle
-\end{align*}  
-As we know $G(z)$, we can differentiate the result, obtaining:
-\begin{align*}
-    G'(h) = \frac{h}{2} R \exp\left(\frac{h^2 R}{4} \right) 
-\end{align*} 
-and then $G'(0) = 0$.\\
-Then, for the second moment:
-\begin{align*}
-    G''(h) = \frac{R}{2} \exp\left(\frac{h^2 R}{4} \right) + \frac{h^2}{4} R^2 \exp\left(\frac{h^2 R}{4} \right) \Rightarrow G''(0) = \frac{R}{2}  
-\end{align*} 
+\newpage 
+\begin{example}[Generating function]
+    Let $F(z) = e^{hz}$. Inserting in (\ref{eqn:I3-res}) results in:
+    \begin{align}
+        \langle \exp\left(h \int_0^t a(\tau) x(\tau) \dd{\tau}\right) \rangle_w = \frac{1}{ \sqrt{\pi R}}  \int_{\mathbb{R}} \dd{z} \exp\left(-\frac{z^2}{R} + hz \right) \underset{(a)}{=}  \exp\left(\frac{h^2 R}{4} \right) \equiv G(h)
+        \label{eqn:Is}
+    \end{align}
+    where in (a) we used formula (\ref{eqn:gauss-int}) with $a=1/R$ and $b=h$. 
+    
+    Note that $G(h)$ is the \textbf{generating function} (CFR def. in 10/10 notes) of the integral:
+    \begin{align*}
+        I=\int_0^t a(\tau) x(\tau) \dd{\tau}
+    \end{align*}   
+    We can then retrieve the $n$-th moment of $I$ by computing the $n$-th derivative of $G(h)$:
+    \begin{align*}
+        \dv[n]{h} G(h)\Big|_{h = 0} = \langle I^n \rangle_w
+    \end{align*} 
+    We can see this by differentiating the left side of (\ref{eqn:Is}):      
+    \begin{align*}
+        G'(h) = \langle \int_0^t a(\tau) x(\tau) \dd{\tau} \exp\left(h \int_0^\tau a x \dd{\tau}\right) \rangle_w
+    \end{align*}
+    and then setting $h = 0$:
+    \begin{align*}
+        G'(0) = \langle \int_0^t a(\tau) x(\tau) \dd{\tau} \rangle_w = \langle I \rangle_w
+    \end{align*}  
+    Then, differentiating the right side of (\ref{eqn:Is}) we have immediately the result:
+    \begin{align*}
+        \langle I \rangle_w = G'(h)\Big|_{h=0} =  \frac{h}{2} R \exp\left(\frac{h^2 R}{4} \right) \Big|_{h = 0} = 0
+    \end{align*}
 
-Consider now a generic odd moment:
-\begin{align*}
-    \langle \left(\int_0^t a(\tau)x(\tau) \dd{\tau}\right)^{2k+1} \rangle = 0 \qquad \forall k \in \mathbb{N}
-\end{align*}
-In fact, if we expand $G(h)$, we get:
-\begin{align*}
-    G(h) = \sum_{n=0}^\infty
- \left(\frac{R}{4} \right)^n \frac{1}{n!} h^{2n} \end{align*}
-Since all the powers are even, if we differentiate an odd number of times and set $h=0$ we are \q{selecting} an odd power - which just is not there - and so the result will be $0$.\\
-On the other hand, an even moment leads to:
-\begin{align*}
-    \langle \left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right)^{2k} \rangle = R^{k} \frac{(2k)!}{2^{k} k!} 
-\end{align*}
+    If we differentiate again we get the second moment:
+    \begin{align*}
+        G''(h) = \frac{R}{2} \exp\left(\frac{h^2 R}{4} \right) + \frac{h^2}{4} R^2 \exp\left(\frac{h^2 R}{4} \right) \Rightarrow G''(0) = \langle I^2 \rangle_w = \frac{R}{2}  
+    \end{align*} 
+    
+    Consider now a generic odd moment:
+    \begin{align*}
+        \langle \left(\int_0^t a(\tau)x(\tau) \dd{\tau}\right)^{2k+1} \rangle_w = 0 \qquad \forall k \in \mathbb{N}
+    \end{align*}
+    In fact, if we expand $G(h)$, we get:
+    \begin{align*}
+        G(h) = \sum_{n=0}^\infty
+     \left(\frac{R}{4} \right)^n \frac{1}{n!} h^{2n} \end{align*}
+    Since all the powers are even, if we differentiate an odd number of times and set $h=0$ we are \q{selecting} an odd power - which just is not there - and so the result will be $0$.\\
+    On the other hand, an even moment leads to:
+    \begin{align*}
+        \langle \left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right)^{2k} \rangle_w = \left(\frac{R}{2} \right)^2 \frac{(2k)!}{2^{k} k!} 
+    \end{align*}
+    (computations omitted).
+        
+\end{example}
 
 \section{Exponential functional}
 We consider now the following functional:
@@ -424,15 +436,16 @@ with the following boundary conditions:
     \end{cases}
 \end{align*}
 
-\begin{example}[$p(\tau) = k^2$, free end-point]
+\begin{example}[$P(\tau) = k^2$, free end-point]
     Let's compute $I_4$ with the choice of $P(\tau) = k^2$. The differential equation becomes:
     \begin{align*}
         \dv[2]{D(\tau)}{\tau} = k^2 D(\tau)
     \end{align*}  
     which is that of a \textit{harmonic repulsor}. The solution is a linear combination of exponentials:
-    \begin{align*}
+    \begin{align}
         D(\tau) = A e^{k \tau} + Be^{-k \tau}
-    \end{align*} 
+        \label{eqn:Dtau}
+    \end{align} 
     Differentiating:
     \begin{align*}
         \dot{D}(\tau) = k(Ae^{k \tau} - B e^{-k \tau})
@@ -450,9 +463,10 @@ with the following boundary conditions:
         (a) - (b)&\colon 2Be^{-kt} = 1 \Rightarrow B = \frac{1}{2}e^{kt}  
     \end{align*}
     So the solution is:
-    \begin{align*}
+    \begin{align}
         D(\tau) = \frac{1}{2}\left[e^{k(t-\tau)} + e^{-k(t-\tau)}\right] = \cosh(k(t-\tau)) 
-    \end{align*}
+        \label{eqn:Dtau1}
+    \end{align}
     from which:
     \begin{align*}
         I_4 = \lim_{N \to\infty }^{(N)} = \frac{1}{\sqrt{D(0)}} = \frac{1}{\sqrt{\cosh(kt)}}  
@@ -487,17 +501,18 @@ So that we can now use the gaussian integral:
 \end{align*}
 with $A = 2 A_N$ and $\bm{b} = \bm{h}$:
 \begin{align*}
-    I' &\equiv \int_{\mathbb{R}^N} \dd[N]{\bm{x}} \exp(-\bm{x}^T A \bm{x} + \bm{h}^T \bm{x}) = \exp\left(\frac{1}{4} \bm{h}^T A^{-1} \bm{h} \right) (\cancel{2}\pi)^{N/2} (\cancel{2^N} \operatorname{det}A_N )^{-1/2} =\\
-    &= \sqrt{\frac{\pi ^N}{\operatorname{det} A_N } } \exp\left(\frac{1}{4}(-i \alpha)^2 (A^{-1}_N)_{NN} \right) = \underbrace{\sqrt{\frac{\pi^N}{\operatorname{det} A_N} }}_{I_0}  \exp\left(-\frac{1}{4} \alpha^2 (A_N^{-1})_{NN} \right)
+    I' &\equiv \frac{1}{\sqrt{(\pi \epsilon)^N}} \int_{\mathbb{R}^N} \dd[N]{\bm{x}} \exp(-\bm{x}^T A \bm{x} + \bm{h}^T \bm{x}) = \frac{1}{\sqrt{(\pi \epsilon)^N}}\exp\left(\frac{1}{4} \bm{h}^T A^{-1} \bm{h} \right) (\cancel{2}\pi)^{N/2} (\cancel{2^N} \operatorname{det}A_N )^{-1/2} =\\
+    &= \frac{1}{\sqrt{(\cancel{\pi} \epsilon)^N}}\sqrt{\frac{\cancel{\pi ^N}}{\operatorname{det} A_N } } \exp\left(\frac{1}{4}(-i \alpha)^2 (A^{-1}_N)_{NN} \right) = \underbrace{\sqrt{\frac{1}{\epsilon^N \operatorname{det} A_N} }}_{I_0}  \exp\left(-\frac{1}{4} \alpha^2 (A_N^{-1})_{NN} \right)
 \end{align*}
 where $(A_N^{-1})_{NN}$ is the last diagonal element of the inverse matrix of $A_N$. Substituting back:
 \begin{align*}
     \hat{I}_4^{(N)} = I_0 \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} \exp\left(i \alpha x - \frac{1}{4} \alpha^2 (A_N^{-1})_{NN} \right)
 \end{align*}
 which is again a gaussian integral, and following formula (\ref{eqn:gaussian-integral1}) with $a = (A_N^{-1})_{NN}/4$ and $b = -x$ leads to: 
-\begin{align*}
+\begin{align}
     \hat{I}_4^{(N)} = \frac{I_0}{\bcancel{2} \pi} \sqrt{\frac{\bcancel{4} \pi}{(A_N^{-1})_{NN}} } \exp\left(-\frac{x^2}{(A_N^{-1})_{NN}} \right) = \frac{I_0}{\sqrt{ \pi (A_N^{-1})_{NN}}} \exp\left(-\frac{x^2}{(A_N^{-1})_{NN}} \right) 
-\end{align*}
+    \label{eqn:latestI4N}
+\end{align}
 
 All that's left is to compute $(A_N^{-1})_{NN}$ and take the continuum limit. Recall from linear algebra that:
 \begin{align*}
@@ -507,86 +522,103 @@ where $C_{ij}$ are the \textit{cofactors} of $A$, i.e. the determinants of the m
 \begin{align*}
     (A_N^{-1})_{NN} = \frac{C_{NN}}{\operatorname{det} A_N} 
 \end{align*}      
-Before, we obtained $\operatorname{det} A_N$ by means of $D_k^{(N)}$, i.e. the determinants of the matrices obtained by removing the first $k$ rows and columns, so that $D_1^{(N)} = \epsilon^N \operatorname{det} A_N$. To find $C_{NN}$ we proceed similarly. Start with matrix $\epsilon A_N$, and remove the last row and column (cofactor definition). Then $\tilde{D}_k^{(N)}$ is the determinant obtained by removing also the first $k-1$ rows and columns:
+Before, we obtained $\operatorname{det} A_N$ by means of $D_k^{(N)}$, i.e. the determinants of the matrices obtained by removing the first $k-1$ rows and columns, so that $D_1^{(N)} = \epsilon^N \operatorname{det} A_N$. This leads to:
 \begin{align*}
-    \tilde{D}_{k}^{(N-1)} = \left(\begin{array}{ccccc}
-    \epsilon a_k & -1 & 0 & \dots & 0 \\ 
-    -1 & \epsilon a_{k-1} & -1 & 0 & \vdots \\ 
-    0 & \ddots & \ddots & \ddots & \vdots \\ 
-    \vdots & \ddots & -1 & \epsilon a_{N-2} & -1 \\ 
-    0 & \dots & \dots & -1 & \epsilon a_{N-1}
-    \end{array}\right)
-\end{align*}   
-Repeating the steps of the Gelfand-Yaglom method, we find the same differential equations for $\tilde{D}$:
+    (A_N^{-1})_{NN} = \frac{\epsilon^N}{D_1^{(N)}} C_{NN} 
+\end{align*}
+For $C_{NN}$ we have to compute the determinant of the $(N-1)\times (N-1)$  matrix $A_*^{(N-1)}$, obtained by removing the last row and column from $A_N$. Note that $A_*^{(N-1)} \neq A^{(N-1)}$, as they differ for the \textit{last diagonal element} which is:
+\begin{align}
+    (A_*^{(N-1)})_{N-1,N-1} = P_{N-1} \epsilon + \hlc{Yellow}{\frac{2}{\epsilon}} \neq (A^{(N-1)}_{N-1,N-1}) = P_{N-1} \epsilon + \hlc{Yellow}{\frac{1}{\epsilon}}  
+    \label{eqn:element-difference}
+\end{align} 
+We proceed in a similar manner, defining $\hat{D}_k^{(N-1)}$ to be the determinant of the matrix obtained by removing the first $k-1$ rows and columns from $\epsilon A_*^{(N-1)}$ (again, we multiply by $\epsilon$ to remove denominators):
+\begin{align*}
+    \hat{D}_{k}^{(N-1)} = \left|\begin{array}{ccccc}
+        \epsilon a_k & -1 & 0 & \dots & 0 \\ 
+        -1 & \epsilon a_{k-1} & -1 & 0 & \vdots \\ 
+        0 & \ddots & \ddots & \ddots & \vdots \\ 
+        \vdots & \ddots & -1 & \epsilon a_{N-2} & -1 \\ 
+        0 & \dots & \dots & -1 & \epsilon a_{N-1}
+        \end{array}\right|
+\end{align*}
+
+So $\hat{D}_1^{(N-1)} = \epsilon^{N-1} \operatorname{det} A_*^{(N-1)} = \epsilon^{N-1} C_{NN}$ leading to:
+\begin{align*}
+    (A_N^{-1})_{NN} = \frac{\epsilon^N}{D_1^{(N)}} \frac{1}{\epsilon^{N-1}} \hat{D}_1^{(N-1)} = \epsilon \frac{\hat{D}_1^{(N-1)}}{D_1^{(N)}}   
+\end{align*}
+For simplicity, it is convenient to define $\tilde{D}_1^{(N-1)} \equiv \epsilon \hat{D}_1^{(N-1)}$, so that:
+\begin{align}
+    (A_N^{-1})_{NN} = \frac{\tilde{D}_1^{(N-1)}}{D_1^{(N)}} 
+    \label{eqn:latestelement}
+\end{align}
+Repeating the steps for the continuum limit, we get the same differential equation for $\tilde{D}(\tau)$:
 \begin{align*}
     \partial_\tau^2 \tilde{D}(\tau) = P(\tau) D(\tau)
-\end{align*}  
-However, now the boundary conditions have changed. In fact, the last diagonal entry is now different:
-\begin{align*}
-    \tilde{D}_{N-1}^{(N-1)} = \epsilon^2 a_{N-1} \dots 
-\end{align*}
-\marginpar{To be continued}
-
-
-
-
- 
-
-If we denote $i \alpha x_N = \bm{h}^T \bm{x}$, with $h_l = \delta_{lN} (-i \alpha)$, then:
-\begin{align*}
-    \int \exp(-\bm{x}^T a \bm{x} + \bm{h}^T \bm{x}) = \frac{\pi^{N/2}}{|a|^{1/2}}\exp\left(\frac{1}{4} \bm{h}^T a^{-1}\bm{h} \right) = \frac{\pi^{N/2}}{|a|^{1/2}} \exp\left(-\frac{1}{4}\alpha^2 (a^{-1})_{NN} \right)  
-\end{align*}
-Substituting back:
-\begin{align*}
-    I_N = I_0 \int \frac{\dd{\alpha}}{2 \pi} \exp\left(i \alpha x - \frac{1}{4} \alpha^2 (a^{-1})_{NN}\right)  = I_0 \frac{1}{2 \pi} \sqrt{4 \pi} \left(\frac{1}{(a^{-1})_{NN}} \right)^{1/2} \exp\left(-\frac{x^2}{(a^{-1})_{NN}} \right) 
-\end{align*}
-Recalling the form of $a$, we can compute $(a^{-1})_{NN}$:
-\begin{align*}
-    (a^{-1})_{NN} = \dots = \text{See the notes}
-\end{align*}  
-
-And through the magical power of friendship, we finally arrive to:
-\begin{align*}
-    I = \lim_{N \to \infty} I_N = \frac{1}{\sqrt{\pi \widetilde{D}(0)}} \exp\left(-x^2 \frac{D(0)}{\widetilde{D}(0)} \right) 
-\end{align*}
-where:
-\begin{align*}
-    \widetilde{D}''(\tau) = P(\tau) \widetilde{D}(\tau); \qquad \widetilde{D}(t) = 0 \quad \widetilde{D}(t) = -1
-\end{align*}
-which are different initial conditions than that of $D$:
-\begin{align*}
-    D''(\tau) = P(\tau) D(\tau) \qquad D(t)=1; \quad D'(t) = 0
 \end{align*} 
-As $P(\tau) = k^2$ independent of $\tau$, we arrive at:
+However, due to (\ref{eqn:element-difference}), the boundary conditions are now different:
 \begin{align*}
-    I_0 &= \langle \exp\left({-k^2} \int_0^t x^2 (\tau) \dd{\tau}\right) \rangle \\
-    I &= \langle \exp\left(-k^2 \int_0^t x^2(\tau) \dd{\tau} \delta(x- x(t))\right) \rangle
-\end{align*}  
-Recall that:
-\begin{align*}
-    D''(\tau) = k^2 D(\tau); \quad D(\tau) = A e^{k \tau} + B e^{-k \tau}
+    \tilde{D}^{(N-1)}_{N-1} &= \epsilon(\epsilon^2 P_{N-1} + 2) = P_{N-1} \epsilon^3 + 2 \epsilon  \xrightarrow[\epsilon \to 0]{} 0 = \tilde{D}(t)\\
+    \tilde{D}^{(N-1)}_{N-2} &= \epsilon \left|\begin{array}{cc}
+    P_{N-2}\epsilon^2 + 2 & -1 \\ 
+    -1 & P_{N-1}\epsilon^2 + 2
+    \end{array}\right| = \epsilon(P_{N-1}P_{N-2} \epsilon^4 + 2(p_{N-1}+P_{N-2})\epsilon^2 + 3)\\
+    \frac{\tilde{D}_{N-1}^{(N-1)}-\tilde{D}_{N-2}^{(N-1)}}{\epsilon} &= -1 + O(\epsilon^2)  \xrightarrow[\epsilon \to 0]{} -1 = \dv{\tilde{D}(\tau)}{\tau}\Big|_{\tau = t}
 \end{align*}
-Imposing the initial conditions:
+
+Then, substituting (\ref{eqn:latestelement}) in (\ref{eqn:latestI4N}) we get:
+\begin{align} \nonumber
+    \hat{I}_4^{(N)} &= \frac{I_0}{\sqrt{\pi (A_N^{-1})_{NN}}} \exp\left(-x^2\frac{D_1^{(N)}}{\tilde{D}_1^{(N-1)}} \right) \qquad I_0 = \frac{1}{\sqrt{\epsilon^N \operatorname{det}A_N  }} = \frac{1}{\sqrt{ D_1^{(N)}}}\\
+    I_4 &= \lim_{N \to\infty } \hat{I}_4^{(N)} = \frac{1}{\sqrt{\pi \tilde{D}(0)}} \exp\left(-x^2 \frac{D(0)}{\tilde{D}(0)} \right) 
+    \label{eqn:hatI4}
+\end{align}
+
+Where $D(\tau)$ and $\tilde{D}(\tau)$ are solutions of the following differential equations with the following boundary conditions:
 \begin{align*}
-    D(t) &= Ae^{kt} + Be^{-kt} = 1\\
-    D'(t) &= kAe^{kt} - kB e^{-kt} = 0
+    \tilde{D}''(\tau) &= P(\tau) \tilde{D}(\tau)
+    && \begin{cases}
+        \tilde{D}(t) = 0\\
+        \dv{\tilde{D}(\tau)}{\tau}\Big|_{\tau = t} = -1
+    \end{cases}\\
+    D''(\tau) &= P(\tau) D(\tau) &&
+    \begin{cases}
+        D(t) = 1\\
+        \dv{D(\tau)}{\tau}\Big|_{\tau=t} = 0
+    \end{cases}
 \end{align*}
-Solving for $A$ and $B$ we get:
-\begin{align*}
-    D(\tau) = \frac{1}{2} (e^{k(t- \tau)} + e^{-k(t - \tau)}) = \cosh (k(t- \tau))
-\end{align*}  
-If we repeat the same steps for $\widetilde{D}$, with $\widetilde{D}(t) = 0$ and $\widetilde{D}'(t) = -1$, the solution will be:
-\begin{align*}
-    \widetilde{D}(\tau) = \widetilde{A} e^{k \tau} + \widetilde{B} e^{-k \tau}
-\end{align*} 
-and solving for $\widetilde{A}$ and $\widetilde{B}$ leads to:
-\begin{align*}
-    D(\tau) = \frac{1}{2 k}(e^{k(t-\tau)} + e^{-k(t-\tau)})  = \frac{1}{k}\sinh(k(t-\tau)) 
-\end{align*}    
-Ans substituting back:
-\begin{align*}
-    I = \sqrt{\frac{k}{\pi \sinh(kt)}} \exp\left(-x^2 k \coth (kt)\right)
-\end{align*}
+
+\begin{example}[$P(\tau) = k^2$ with fixed end-point]
+    Let $P(\tau) = k^2$, with $k \in \mathbb{R}$ constant. We already solved the equation for $D(\tau)$ with the right boundary conditions in (\ref{eqn:Dtau1}):
+    \begin{align*}
+        D(\tau) = \cosh(k(t-\tau))
+    \end{align*}    
+    For $\tilde{D}(\tau)$ we start from the general integral (\ref{eqn:Dtau}) and impose the appropriate boundary conditions:
+    \begin{align*}
+        \begin{cases}
+            \tilde{D}(t) = \tilde{A} e^{kt} + \tilde{B}e^{-kt} = 0 & (a)\\
+            \dv{\tilde{D}(\tau)}{\tau}\Big|_{\tau= t} = k(\tilde{A} e^{kt}-\tilde{B}e^{-kt}) = -1 & (b)
+        \end{cases}
+    \end{align*} 
+    so that:
+    \begin{align*}
+        k(a) + (b) &\colon 2 \tilde{A} k e^{kt} = -1 \Rightarrow \tilde{A} = -\frac{1}{2k} e^{-kt}\\
+        k(a) - (b) &\colon 2 B ke^{-kt} = 1 \Rightarrow \tilde{B} = \frac{1}{2k} e^{kt} 
+    \end{align*}
+    leading to the solution:
+    \begin{align*}
+        \tilde{D}(\tau) = \frac{1}{2k}(e^{k(t-\tau)} - e^{-k(t-\tau)}) = \frac{1}{k} \sinh(k(t-\tau))  
+    \end{align*}
+    Finally, using the result we found in (\ref{eqn:hatI4}):
+    \begin{align*}
+        \langle \exp\left(-k^2 \int_0^t x^2(\tau) \dd{\tau} \delta(x - x(t))\right) \rangle_w &= \int_{\mathcal{C}\{0,0;x_t,t\}} \exp\left(-k^2 \int_0^t x^2(\tau) \dd{\tau}\right) \dd{_Wx(\tau)} =\\
+        &= \sqrt{\frac{k}{\sinh(kt)} } \exp(-k x_t^2 \coth(kt))
+    \end{align*}
+
+
+    
+
+
+
+\end{example}
 
 \end{document}
 
