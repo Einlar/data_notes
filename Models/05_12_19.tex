@@ -1,0 +1,220 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Disordered Systems - Ergodicity Breaking without Symmetry Breaking}
+
+\textbf{References}:
+\begin{enumerate}
+    \item \q{Spin glass theory and beyond} (1987), Marl Mézard, Giorgio Parisi, M. A. Virasoro, \textit{very technical, difficult to follow} 
+    \item \q{Information, Theory, Computation} (2009), Marl Mézard, Andrea Montanari, \textit{more clear} 
+    \item \q{Statistical Physics of Spin Glasses and Information Processing} (2001), Hidetoshi Nishimori, \textit{very clear, today's lecture comes from one of its chapter} 
+    \item \q{Random fields and spin glasses} (2006), Irene Giardina, Cirand De Dominicis, \textit{sometime not rigorous, requires attention} 
+\end{enumerate}
+\textbf{Reviews Papers}:\\
+(\textit{Applications of disordered system results to Condensed Matter})
+\begin{enumerate}
+    \item \q{Theoretical Perspective on the glass transition and amorphous materials} Ludovic Berthier, Giulio Biroli, Rev. Mod. Phys 83 (2011)
+    \item \q{Supercooled Liquids for Pedestrians}, Andrea Cavagna, Phys. Rep 476 (2009)
+\end{enumerate} 
+
+\lesson{?}{05/12/19}
+
+Disordered Systems are important in physics because they are examples of systems that exhibit \textit{ergodicity breaking without symmetry breaking}.  
+
+There will be $4$ lectures for this part, following this outline:
+\begin{enumerate}
+    \item Neural Network
+    \item Sherrington Kirkpatric model, p-spin
+    \item Franz-Parisi Potential, calculations $\sim$ p-spin 
+\end{enumerate}
+
+\section{Introduction}
+In physics, usually we deal with potentials like the following:
+\begin{itemize}
+    \item \textbf{Harmonic potential} with a single \textbf{global} minimum: 
+    \begin{align*}
+        \mathcal{E} = \frac{1}{2} m \dot{x}^2 + V(x) \qquad V(x) = \frac{1}{2} k x^2  
+    \end{align*} 
+    \item \textbf{Bistable potential} with two equivalent minima:
+    \begin{align*}
+        \mathcal{E} = K + V(x) \qquad V(x) = \frac{a}{2}x^2  + \frac{b}{4}x^4   
+    \end{align*} 
+\end{itemize}
+However, when examining a real macroscopic system in statistical mechanics we deal with more complicated potentials. For example, consider $N \sim 10^{23}$ particles, with positions $\{\bm{x}_1, \dots, \bm{x}_N\}$ ($\bm{x}_i \in \mathbb{R}^3$), one way to model \textit{close-range} interactions is thanks to the following:
+\begin{align*}
+    V(\bm{x}_i, \bm{x}_j) = \left(\frac{\sigma_{ij}}{|\bm{x}_i - \bm{x}_j|} \right)^{12} - \left(\frac{\sigma_{ij}}{|\bm{x}_i - \bm{x}_j|} \right)^6
+\end{align*}   
+where $\sigma_{ij}$ are random numbers, with a distribution $p(\sigma_
+{ij}) \sim \sigma_{ij}^{-3}$. 
+
+In these cases, we have \textit{many} ($\sim e^{N^2}$) local minima, both for the energy $\mathcal{E}$ and the \textit{free energy} $F = \mathcal{E} - TS$. While theoretically we could \textit{label} each minima, macroscopically we cannot distinguish them, because they \q{all look the same}: this is the main problem of studying \textit{disordered systems}.
+
+
+Consider now a set of interacting particles with spins $\bm{S} = \{S_1, \dots, S_N\}$. The average $\langle S_i \rangle$ measures the overall \textit{magnetization} of the system: if $\langle S_i \rangle = 0$ we are in the \textit{disordered state}, while if $\langle S_i \rangle \neq 0$ there is some \textit{preferred} alignment of the spins.
+
+Suppose the potential has many local minima, labelled with greek letters: $\alpha$, $\beta$, $\gamma$, etc. 
+We can try to distinguish them by the value of $\langle S_i \rangle$. For example, if we focus on $\alpha$ and $\delta$, supposing that:  
+\begin{align*}
+    \langle S_i \rangle_\alpha \neq \langle S_i \rangle_{\delta}
+\end{align*}     
+by measuring $\langle S_i \rangle$ we can know if the system is in $\alpha$ or $\delta$.    
+The average \textit{over a local minimum} is defined as the following:
+\begin{align*}
+    \langle \cdots \rangle = \frac{1}{Z_{\alpha}} \sum_{\{\bm{S} \in \alpha\}} \left( e^{-\beta H[\bm{S}] }S_i\right)  \qquad Z_\alpha = \sum_{\bm{S} \in \alpha} e^{-\beta H[\bm{S}] }
+\end{align*} 
+where $\bm{S} \in \alpha$ means a sum over all possible collections of spins that result in the same minimum $\alpha$ for the potential.\\  
+When doing this calculation in practice, however, we find that:
+\begin{align*}
+    \langle S_i \rangle_\alpha = \langle S_i \rangle_{\beta} = \dots = 0
+\end{align*}
+meaning that this approach yields no result.
+
+We can use this qualitative result to \textit{quantify} whether a system is in a \textit{ergodic} or \textit{non-ergodic} phase, depending on how much the local minima \textit{overlap} with each other.    
+So, we introduce an \textbf{order parameter} for disordered systems called \textbf{overlap}, and defined as following:
+\begin{align*}
+    q^{\alpha \beta} = \frac{1}{N} \sum_{i=1}^N S_i^\alpha S_i^\beta \qquad \substack{\displaystyle\bm{S}^\alpha = \{S_1^\alpha, \dots, S_N^\alpha\}\\\displaystyle \bm{S}^\beta = \{S_1^\beta, \dots, S_N^\beta\}}
+\end{align*}  
+Then:
+\begin{itemize}
+    \item If the system is in a \textbf{ergodic phase} (high temperature) we have $\langle q^{\alpha \beta} \rangle = 0$ 
+    \item If the system is in a \textbf{non-ergodic phase} (low temperature) then $\langle q^{\alpha \beta} \rangle \neq 0$   
+\end{itemize}
+
+\section{Neural Network}
+Consider a network of units, \textbf{neurons}, connected by \textbf{synapses}. We denote the state of each neuron with a \textit{spin}-like number $S_i = \{-1,+1\}$ with the following meaning:
+\begin{itemize}
+    \item $S_i = +1$: the $i$-th neuron is \textit{excited} 
+    \item $S_i = -1$: the $i$-th neuron is \textit{at rest}     
+\end{itemize}
+Connections between neurons have a certain \textit{weight} $J_{ij}$ , called \textbf{synaptic efficacy}. Each neuron receives an \textit{input impulse} equal to the \textit{activity of all other neurons} weighted by the \textit{strength of their connection} to that neuron: 
+\begin{align*}
+    h_i(t) = \sum_{j=1}^N J_{ij} (S_j(t) + 1)
+\end{align*}   
+Let's limit $J_{ij}$ to only two values:
+\begin{align*}
+    J_{ij} = \begin{cases}
+        +1 & \text{Excitatory synapse}\\
+        -1 & \text{Inhibitory synapse}
+    \end{cases}
+\end{align*} 
+meaning that neurons can contribute to \textit{activate} or \textit{turn off} other neurons.
+
+Then, we introduce a \textit{time evolution} in the system, following the \textbf{dynamic rule}:
+\begin{align}
+    S_i(t+1) = \operatorname{sgn}(h_i(t) - \theta^*_i) 
+    \label{eqn:dynamic-rule}
+\end{align}  
+This means that the $i$-th neuron's state at time $t+1$ will be \textit{excited} if the input impulse is greater than a threshold $\theta^*_i$, or \textit{at rest} otherwise.
+
+If we make the simplifying assumption that:
+\begin{align*}
+    \theta_i = \sum_{j=1}^N J_{ij}
+\end{align*}
+the dynamic rule becomes:
+\begin{align*}
+    (\ref{eqn:dynamic-rule}) = \operatorname{sgn} \Big(\underbrace{\sum_{j=1}^N J_{ij} (1+ S_j(t))}_{h_i(t)}  - \underbrace{\sum_{j=1}^N J_{ij}}_{\theta^*_i} \Big) \Rightarrow S_i(t+1) = \operatorname{sgn}\left(\sum_{j=1}^N J_{ij} S_j(t)\right) 
+\end{align*}
+
+We then assume that \textit{all neurons} are connected to each other, meaning that:
+\begin{align*}
+    J_{ij} \neq 0 \qquad \forall (i,j) \text{ such that } i \neq j 
+\end{align*} 
+and we prohibit \textit{self connections}:
+\begin{align}
+    J_{\iota} = 0 \text{ (Hebb rule)}
+    \label{eqn:Jij}
+\end{align} 
+We then need a rule to choose $J_{ij}$ with $i \neq j$. The idea is that a neural network's purpose is to \textit{store patterns}. We define a \textbf{pattern} as a vector of spins:
+\begin{align*}
+    \bm{\xi}^\mu = \{\xi_1^\mu, \dots, \xi_N^\mu\} \qquad \xi_i^\mu = \{+1,-1\}
+\end{align*} 
+Suppose we have $p$ patterns ($\mu = 1, \dots, p$), and we want to store them in the neural network. We then define:
+\begin{align}
+    J_{ij} = \frac{1}{N} \sum_{\mu = 1}^p \xi_i^\mu\xi_j^\mu  
+    \label{eqn:Jineqj}
+\end{align} 
+This is so that $\xi^\mu$ are all \textit{fixed point} of the activation dynamics, meaning that neurons storing these patterns \textit{keep them} during the time evolution:
+\begin{align*}
+    S_i(t) = \xi_i^\mu \Rightarrow S_i(t+1) = \xi_i^\mu
+\end{align*}  
+That is, $\xi_i^\mu$ are \textit{solutions} of the dynamic rule equation:
+\begin{align*}
+    \xi_i^\mu = \operatorname{sgn}\left(\sum_{j=1}^N J_{ij} \xi_j^\mu \right) 
+\end{align*}  
+In fact:
+\begin{align*}
+    \operatorname{sgn} \left(\sum_{j=1}^N J_{ij} \xi_j^\mu\right) &\underset{(\ref{eqn:Jineqj})}{=} \operatorname{sgn}\left(\sum_{j=1}^N \frac{1}{N} \sum_{\nu=1}^p \xi_i^\nu \xi_j^\nu \xi_j^\mu \right) = \operatorname{sgn}\Big(\sum_{\nu = 1}^p \underbrace{\Big(\frac{1}{N} \sum_{j=1}^N \xi_j^\mu \xi_j^\nu \Big)}_{\delta_{\mu \nu} + O(1/\sqrt{N})} \Big) \underset{(a)}{=} \\
+    &= \operatorname{sgn}\left(\sum_{\nu=1}^p \xi_i^\nu \delta_{\mu \nu}\right) = \operatorname{sgn}(\xi_i^\mu) \underset{(a)}{=}  \xi_i^\mu 
+\end{align*}
+in (a) the idea is that we are taking the average of $\xi_j^\mu \xi_j^\nu$. As $\xi_j^{\mu, \nu} = \{\pm 1\}$, if they are two \textit{different (uncorrelated) vectors}, that mean will tend to $0$, and it's exactly $1$ if $\xi_j^\mu = \xi_j^\nu$ for all $j$. Then in (b) we used the fact that $\xi_i^\mu = \{\pm 1\}$. Also, here we are assuming that $p/N  \xrightarrow[N \to \infty]{}  0$.
+\medskip  
+
+The constraint (\ref{eqn:Jineqj}) together with Hebb's rule (\ref{eqn:Jij}) form the \textbf{Hopfield Model} for a neural network.    
+
+If we now define the \textbf{energy} of the network as:
+\begin{align*}
+    \mathcal{E}\equiv -\frac{1}{2} \sum_{ij} S_i S_j J_{ij} = - \frac{1}{2} \sum_i S_i h_i  
+\end{align*} 
+We can choose the initial spin configuration with a Boltzmann distribution:
+\begin{align*}
+    p(S_1, \dots, S_N) = \frac{1}{Z} \exp\left(-\beta \mathcal{E}(S_1, \dots, S_N)\right) \qquad \beta = \frac{1}{T}  
+\end{align*}
+The energy has \textit{lots} of minima, each one corresponding to a different \textit{pattern} stored in the network. At low energy, the network dynamics will make the network \textit{converge} to the closest minimum.
+
+We now show search the minima of the \textit{free energy}. First, the partition function $Z$ is defined as:
+\begin{align}
+    Z \equiv \sum_{\{S_1, \dots, S_N\}} \exp(-\beta \mathcal{E}(S_1, \dots, S_N))
+    \label{eqn:Zfunc}
+\end{align}  
+and the \textbf{free energy} $f$:
+\begin{align*}
+    f = -\frac{1}{N \beta} \log(Z) 
+\end{align*}  
+We want to show that the \q{$p$} patterns embedded in $J_{ij}$ are $p$ stationary points of the free energy.   
+
+Inserting (\ref{eqn:Jineqj}) in (\ref{eqn:Zfunc}) leads to:
+\begin{align*}
+    Z = \sum_{\{\bm{S}\}} \exp\left(\frac{\beta}{2 N} \sum_{i,j=1}^N S_i S_j  \sum_{\mu= 1}^p \xi_i^\mu \xi_j^\mu \right)
+\end{align*}
+Note that, \textit{to be precise}, we should use:
+\begin{align*}
+    J_{ij} = (1-\delta_{ij}) \frac{1}{N} \sum_{\mu=1}^p \xi_i^\mu \xi_j^\mu 
+\end{align*} 
+However, this would lead to harder computations. So we \textit{omit} the $\delta_{ij}$, letting the diagonal elements be non-zero. This can be shown to be a \textit{good approximation} of the general case (but we will not prove it).
+
+Then, using:
+\begin{align*}
+    \sum_{i,j=1}^N x_i x_j = \left(\sum_{j=1}^N x_i\right)^2
+\end{align*}
+leads to:
+\begin{align*}
+    Z=\sum_{\{\bm{S}\}} \exp\left[\frac{\beta}{2 N} \sum_{\mu=1}^p \left(\sum_{i=1}^N \xi_i^\mu S_i\right)^2 \right]
+\end{align*}
+To deal with the square we use the Hubbard-Stratonovich transformation (which is just the \textit{inverse of the completation of the square}):
+\begin{align*}
+    \exp\left(\frac{\beta}{2 N} x^2\right) = \int_{-\infty}^{+\infty} \dd{q} \exp\left(-\frac{1}{2} N \beta q^2 + \beta q x \right)
+\end{align*}
+so that:
+\begin{align*}
+    Z= \sum_{\{\bm{S}\}} \int_{-\infty}^{+\infty} \prod_{\mu = 1}^p \dd{q_\mu} \exp \left[-\frac{1}{2} N \beta \sum_{\mu =1}^p q_\mu^2 + \beta\sum_{\mu=1}^p q_\mu \sum_{i=1}^N \xi_i^\mu S_i   \right]
+\end{align*}
+Note that now $S_i$ appears in a \textit{linear term}. We can finally compute the sum, term by term:
+\begin{align*}
+    \sum_{S_i = \{+1,-1\}} \exp \left[\beta\left(\sum_{\mu=1}^p q_\mu \xi_i^\mu\right) S_i\right] &=  \exp\left(\beta \sum_{\mu=1}^p q_\mu \xi_i^\mu\right) + \exp\left(-\beta \sum_{\mu=1}^p q_\mu\xi_i^\mu \right) =\\
+    &= 2 \cosh(\beta \bm{q} \cdot \bm{\xi}_i)\qquad \Big| \> \bm{q} \cdot \bm{\xi}_i = \sum_{\mu=1}^p q_\mu \xi_i^\mu 
+\intertext{where the \textit{greek} coordinates denote the \textit{patterns}, and the \textit{latin} ones the \textit{spins} inside each pattern.}
+    &= \exp\left(log(2\cosh (\beta \bm{q} \cdot \bm{\xi}_i))\right)
+\end{align*}  
+Substituting back:
+\begin{align*}
+    Z&=\int_{-\infty}^{+\infty} \prod_{\mu=1}^p \dd{p}_\mu \exp\left[-\beta N u(q_1, \dots, q_p)\right]\\
+    u(\bm{q}) &= \frac{1}{2}\sum_{\mu= 1}^p q_\mu^2 -\frac{1}{\beta N} \sum_{i=1}^N \ln(2 \cosh(\beta \bm{q} \cdot \bm{\xi}_i))  
+\end{align*}
+All that's left is to compute the \textit{stationary points} of $u(\bm{q})$, that is the points satisfying:
+\begin{align*}
+    \left(\pdv{u}{q_1}, \pdv{u}{q_2}, \dots, \pdv{u}{q_2}\right) = \bm{0}
+\end{align*}
+
+\end{document}
