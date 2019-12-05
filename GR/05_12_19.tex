@@ -1,0 +1,221 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{}
+\lesson{?}{05/12/19}
+
+We introduced the notion of $4$-spin $S^\alpha$, which, in the gyro rest frame is $S^\alpha =(0, \bm{S})$. We showed that $\bm{u}\cdot \bm{S} = 0$ always, and along a geodesic $\bm{S}\cdot \bm{S} = \text{Constant} = S_*^2$. The spin satisfies the following equation:
+\begin{align*}
+    \dv{S^\alpha}{\tau} + \Gamma^\alpha_{\beta \gamma} u^\beta S^\gamma = 0
+\end{align*}   
+We consider now a \textit{circular orbit} around a central mass $M$. Consider the gyroscope moving in the plane $\theta = \pi/2$, initially pointing in the radial direction. What will be the final direction after \textit{one full rotation}?
+
+Thanks to the problem's symmetry, we noted that:
+\begin{align*}
+    S^\theta = 0 \Rightarrow S^\alpha = (S^t, S^r, 0, S^\varphi)
+\end{align*}
+From $\bm{S}\cdot \bm{u} = 0$ we have that:
+\begin{align*}
+    S^t = R^2 \Omega \left(1-\frac{2GM}{R} \right)^{-1} S^\varphi
+\end{align*} 
+where:
+\begin{align*}
+    u^\alpha = u^t(1,0,0,\Omega) \qquad \Omega = \dv{\varphi}{t}
+\end{align*}
+as:
+\begin{align*}
+    u^3 = u^t \Omega = \dv{\varphi}{\tau}
+\end{align*}
+Also:
+\begin{align*}
+    \Omega^2 = \frac{GM}{R^3} 
+\end{align*}
+Initially, only $S^r \neq 0$, and so $S^\varphi = S^t = 0$.
+
+During last lecture we wrote the equation for $S^r$:
+\begin{align*}
+    \dv{S^r}{\tau} + \left(3GM - R\right) \Omega u^t S^\varphi = 0
+\end{align*} 
+
+We now compute the equation for $S^\varphi$. The geodesics equation reads:
+\begin{align*}
+    \dv{S^\varphi}{\tau} + \Gamma^3_{\beta \gamma} u^\beta S^\varphi = 0
+\end{align*}
+The only non-zero components can be for $\beta = \{0,3\}$ and $\gamma = \{0,1,3\}$, so all the possible combinations are:
+\begin{align*}
+    \Gamma^3_{00}, \Gamma^3_{01}, \Gamma_{03}^3\\
+    \Gamma^3_{30}, \Gamma^3_{31}, \Gamma^3_{33}
+\end{align*}   
+As the Schwarzschild metric is diagonal, a non-zero Christoffel symbol must have always two equal indices. This leaves us with:
+\begin{align*}
+    \Gamma^3_{00}, \cancel{\Gamma^3_{01}}, \Gamma_{03}^3\\
+    \Gamma^3_{30}, \Gamma^3_{31}, \Gamma^3_{33}
+\end{align*}
+When two indices are the same, the third one denotes the derivative. As $\varphi$ derivatives are null:
+\begin{align*}
+    \cancel{\Gamma^3_{00}},\cancel{ \Gamma^3_{01}}, \Gamma_{03}^3\\
+    \Gamma^3_{30}, \Gamma^3_{31}, \cancel{\Gamma^3_{33}}
+\end{align*}  
+and also the time derivative of $g_{33}$ are null:
+\begin{align*}
+    \cancel{\Gamma^3_{00}}, \cancel{\Gamma^3_{01}}, \cancel{\Gamma_{03}^3}\\
+    \cancel{\Gamma^3_{30}}, \Gamma^3_{31}, \cancel{\Gamma^3_{33}}
+\end{align*} 
+So we just have to compute $\Gamma_{31}^1$:
+\begin{align*}
+    \Gamma^3_{31} = \frac{1}{2} g^{33} (\cancel{g_{31,3}} + g_{33,1} - \cancel{g_{31,3}}) = \frac{1}{2r^2} \pdv{r} r^2 = \frac{1}{r}   
+\end{align*} 
+Substituting back:
+\begin{align*}
+    \dv{S^\varphi}{\tau} + \frac{1}{r} \underbrace{u^t \Omega}_{u^3}  S^t \Big|_{r=R} = 0
+\end{align*}
+We can rewrite it as:
+\begin{align*}
+    \dv{S^\varphi}{\tau} + \frac{\Omega}{R} \dv{t}{\tau} S^r = 0 
+\end{align*}
+And changing variables (\textit{or multiplying by } $\dd{\tau}/\dd{t}$...):
+\begin{align*}
+    \dv{S^\varphi}{t} + \frac{\Omega}{R} S^r = 0 
+\end{align*}
+If we do the same with the first equation we arrive at:
+\begin{align*}
+    \begin{cases}
+        \dv{S^r}{t} + (3GM - R) \Omega S^\varphi = 0\\
+        \dv{S^\varphi}{t} + \frac{\Omega}{R} S^r = 0 
+    \end{cases}
+\end{align*}
+If we differentiate the first one with respect to $t$, we can then substitute inside the second one, and obtain a second order differential equation with only one variable ($r$):
+\begin{align*}
+    \dv[2]{S^r}{t} + (3GM - R) \Omega \dv{S^\varphi}{t} = 0\\
+    \Rightarrow \dv[2]{S^r}{t} + (3GM - R) \Omega \frac{-\Omega}{R} S^r = 0 
+\end{align*} 
+After some algebra:
+\begin{align*}
+    \dv{S^r}{t} + \underbrace{\left(1-\frac{3GM}{R} \right)\Omega^2}_{\omega^2}  S^r = 0
+\end{align*}
+which is the equation of the simple harmonic oscillator. Note that:
+\begin{align*}
+    1-\frac{3GM}{R} > 0 
+\end{align*}
+as for a \textit{stable} circular orbit we need $R > 6GM$. Then the solution is:
+\begin{align*}
+    S^r = A \cos\left(\bar{\Omega} t\right) \qquad \bar{\Omega} = \left(1-\frac{3GM}{R} \right)^{1/2} \Omega
+\end{align*}  
+We choose the cosine because $S^r$ is maximum \textit{at the start}, i.e. for $t=0$. 
+
+Substituting this solution in the first equation (as we know $S^r$, it is easy to compute $\dd{S^r}/\dd{t}$):
+\begin{align*}
+    -A \bar{\Omega} \sin(\bar{\Omega} t) &= (R-3GM) \Omega S^\varphi\\
+    -A \bar{\Omega} \sin(\bar{\Omega} t) &= R - \Omega \left(1-\frac{3GM}{R} \right) S^{\varphi}\\
+-A \bar{\Omega} \sin(\bar{\Omega} t) &= R \Omega \frac{\bar{\Omega}^2}{\Omega^2} S^\varphi  
+\end{align*}
+leading to:
+\begin{align*}
+    S^\varphi = -\frac{A}{R} \frac{\Omega}{\bar{\Omega}} \sin(\bar{\Omega} t)  
+\end{align*}
+
+To compute the integration constant $A$ we use $\bm{S} \cdot \bm{S} \equiv S_*^2 = \text{Constant}$. Evaluating it at the starting time:
+\begin{align*}
+    \bm{S}\cdot \bm{S} = S^\mu S^\nu g_{\mu \nu} = (S^r)^2 g_{11} = A^2 \left(1-\frac{2GM}{R} \right)^{-1} \Rightarrow A = S_* \sqrt{1-\frac{2GM}{R} }
+\end{align*} 
+
+Summarizing:
+\begin{align*}
+    S^\mu(t) = (S^t, S^r, 0, S^\varphi); \qquad S^\mu(0) = (S_r(0), 0,0,0)\span\\
+    \begin{cases}
+        S^t = R^2 \Omega \left(1-\frac{2GM}{R} \right)^{-1} S^\varphi\\
+        S^r = A \cos(\bar{\Omega} t)\\
+        S^\varphi = - \frac{A}{R} \frac{\Omega}{\bar{\Omega}} \sin(\bar{\Omega} t)  
+    \end{cases} \quad \bar{\Omega} = \sqrt{1-\frac{3GM}{R} } \Omega; \> A = S_* \sqrt{1-\frac{2GM}{R} }; \> \bm{S}\cdot \bm{S} = S_*^2
+\end{align*}
+
+Initially $\bm{S}$ is in the radial component, meaning that it's equal to the unit vector $\hat{e}^r$ in the radial direction for that observer ($O$). 
+
+At a later $t$, suppose that the gyroscope points at a different angle $\Delta \varphi$. The $\cos(D \varphi)$ is the \textbf{ratio} between the \textit{radial component of $S^\alpha$ measured by $O$ at time $t$}, and the \textit{radial component of $S^\alpha$ measured by $O$ at time $0$}. This is really what needs to be done when \textit{we make the measurement in practice}.  So:
+\begin{align*}
+    \cos(\Delta \varphi) = \frac{\bm{\hat{e}^r} \cdot \bm{S}(t)}{\bm{\hat{e}^r}\cdot \bm{S}(t=0)} = \frac{(\bm{\hat{e}^r})^\alpha g_{\alpha \beta} S^\beta(t)}{(\bm{\hat{e}^r})^\alpha g_{\alpha \beta} S^\beta (t=0)}  
+\end{align*}       
+where:
+\begin{align*}
+    \bm{\hat{e}^r} = \left(0,\frac{1}{\sqrt{g_{11} }},0,0 \right)
+\end{align*}
+So:
+\begin{align*}
+    \cos(\Delta \varphi) = \frac{(\bm{\hat{e}^r})^1 g_{11} S^1(t)}{(\bm{\hat{e}^r})^1 g_{11} S^1(t=0)} = \frac{S^r(t)}{S^r(t=0)}  = \cos(\bar{\Omega} t)
+\end{align*}
+
+We know that when an observer is moving, due to Lorentz transformation, both the \textit{time} component and the \textit{spatial component in that direction} will change. So, to compute $S^\alpha$ in a \textit{rest frame}, it is necessary to make a boost in the $\varphi$ direction, which is the only direction of motion in that circular orbit. This, however, will make calculations much harder, and we are interested only in the $r$ component - which does not change in the boost, as the observer does not move in that direction. So, even if we don't do the boost - and so we are not really in a rest frame (note, in fact, that $S^t$ generally is $\neq 0$ during that motion), the calculation for $\cos (\Delta\varphi )$, as it only involves $r$ components, provides the right result.   
+
+(If we were instead to compute $\tan \Delta \varphi$, we would need also the $\varphi$ component, and so we would need to do the boost).
+
+\begin{align*}
+    \cos(\Delta \varphi) = \cos(\bar{\Omega} t) \Rightarrow \Delta \varphi = \pm \bar{\Omega} t 
+\end{align*}
+Which one should we choose? We now what happens when $M = 0$, and so we choose the one that makes sense in that limit. In this case, the gyroscope always points in the \textit{same direction}. If the orbit is counter-clockwise, this means that the gyroscope, with respect to the \textit{local rotating basis} is rotating \textit{clockwise}, meaning that:
+\begin{align*}
+    \Delta \varphi =  - \Omega t
+\end{align*}   
+[Insert fig. 1]
+
+When $M=0$, however, the coordinate system is still rotating at $\Omega$, but the vector just at $\bar{\Omega} < \Omega$. So, from the point of view of someone at infinity, the gyroscope is rotating at $\Gamma - \bar{\Omega}$, meaning that it's \textit{bending} \textit{towards} the direction of motion:
+\begin{align*}
+    \Omega_{\substack{\text{wrt}\\\text{infinity}}} = 
+    \Omega_{\substack{\text{of $\bm{\hat{e}^r}$, $\bm{\hat{e}^\varphi}$ }\\\text{coordinate}\\\text{system} }} -
+    \Omega_{\substack{\text{of spin}\\\text{in that}\\\text{coordinate}\\\text{system}}} = \Omega - \bar{\Omega}
+\end{align*}      
+How much $\Delta \varphi_\infty$ it is accumulated in $1$ orbit?
+\begin{align*}
+    \Delta \varphi_{\substack{\text{wrt}\\\text{infinity}}} &= (\Omega - \bar{\Omega})t = \frac{2\pi}{\Omega} (\Omega - \bar{\Omega}) = 2\pi \left(1-\frac{\bar{\Omega}}{\Omega} \right)  = 2\pi \left[1-\sqrt{{1-\frac{3GM}{R} } }\right]\\
+    &\underset{GM \ll R}{\approx} 2 \pi \left[1-\left(1-\frac{3GM}{2R} \right)\right] = \frac{3 \pi GM}{R} 
+\end{align*}  
+where we used $\Omega = \dd{\varphi}/\dd{t} \Rightarrow t = (2\pi)/\Omega$.
+
+This is the effect of \textbf{geodetic precession}. Note that angular momentum in GR is conserved as a $4$-vector.
+
+
+\section{Slowly rotating geometry}
+Let's examine what happens to a gyroscope moving in a \textit{slowly rotating geometry}. We start from the line element:
+\begin{align*}
+    \dd{s}^2 = \dd{s}^2_{\mathrm{Schwarzschild}} - \frac{4GJ}{r} \sin^2 \theta \dd{t} \dd{\varphi} + \text{Terms of order $J^2$ or higher } 
+\end{align*} 
+(see homework to check that this metric satisfies Einstein's equation up to linear order in $J$). 
+
+\medskip
+
+Now we have \textit{non-diagonal} elements:
+\begin{align*}
+    g_{03} = g_{30} = -\frac{2G J}{r} \sin^2 \theta 
+\end{align*} 
+
+If we insert $c \neq 1$:
+\begin{align*}
+    \underbrace{\dd{s}^2}_{[\mathcal{L}^2]}  = \dd{s}^2_{\mathrm{Schwarz.} } -. \frac{4GJ}{c^3 r^2}  \sin^2 \theta \underbrace{(r \dd{\varphi}) }_{[\mathcal{L}]}\underbrace{ (c\dd{t})}_{[\mathcal{L}]} 
+\end{align*} 
+This means:
+\begin{align*}
+    \left[\frac{GJ}{c^3 r^2} \right] = \mathcal{N} 
+\end{align*}
+is a pure number, and so:
+\begin{align*}
+    [J] = \left[\frac{c^3 r^2}{G} \right] = \frac{\si{\m\squared \per \s\cubed}\si{\m\squared}}{\si{\N \m\squared\per\kilo\g\squared}} = \frac{\si{\m\cubed}}{\si{\s\cubed}} \frac{\si{\kilo\g\squared}}{\si{\newton}} = \frac{\si{\m\cubed}}{\si{\s\cubed}} \frac{\si{\kilo\g\squared}}{\si{\kilo\g \m\per \s\squared}} = \si{\kilo\g \m\squared \per \s} 
+\end{align*}
+This means that $J$ has the dimensions of an angular momentum.  
+
+To simplify calculations, we consider the motion of a gyroscope moving in free fall \textit{along the rotation axis}, and initially aligned along the $\hat{x}$ direction. 
+
+If $J=0$, obviously the gyroscope will remain aligned along $\hat{x}$. We expect a change of $\vec{S}$ in the order of $O\left(GJ/(c^3 r^2)\right)$. This is quantity that is \textit{dimensionless} and \textit{very small} (an analogue of $GM/R$ in a rotating geometry). Note, in fact, that in this case the gyroscope is not orbiting $M$, and so any change of its spin is due to $J$ (the mass, by itself, \textit{cannot} produce a rotation of this gyroscope - so terms of $O(GM/R^2)$ alone are automatically null).
+
+Then, for $M$ small, we will also have terms of order: 
+\begin{align*}
+    O\left(\frac{GJ}{c^3 r^2}  \times \frac{GM}{rc^2} \right)
+\end{align*}
+where the $GM/r^2$ we had before reappears. Note that this terms are a \textit{correction of a correction}, and so we can ignore them, and set $M=0$. This means that we can use the following metric:
+\begin{align*}
+    \dd{s}^2 = \underbrace{\eta_{\mu \nu}}_{M=0} \dd{x}^\mu \dd{x}^\nu - \frac{4 GJ}{r} \sin^2 \theta \dd{t} \dd{\varphi} 
+\end{align*}   
+
+Summarizing, we are consider a rotating mass $M$ that produces a rotating geometry. We mathematically \textit{split} the influence of $J$ and $M$ on the gyroscope rotation. We note that $M$ alone \textit{cannot} produce any effect, while $J$ alone can. Also, terms with both $M$ and $J$ are of higher order. So, for simplicity, we can ignore $M$, and mathematically set it to $0$.  
+
+\end{document}
