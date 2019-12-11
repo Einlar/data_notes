@@ -2,60 +2,64 @@
 %
 \documentclass[../template.tex]{subfiles}
 \begin{document}
-
-In this lesson we will look at two proofs:
-\begin{enumerate}
-    \item Continuity of Brownian Paths
-    \item Differentiability of Brownian Paths
-\end{enumerate}
-Both proofs are available on the textbook, but they are not rigorous (don't look at them!).
-
-
 \section{Continuity of Brownian Path}
 \lesson{6}{04/11/19}
-Consider a Brownian path $x(t)$, i.e. a set of contiguous segments connecting discrete points. We can write the probability density for a path as:
+Consider a particle starting in $x=0$ at $t=0$, and traversing $N$ points $\{x_i\}_{i=1,\dots,N}$ such that all increments $\Delta x_i = x_i - x_{i-1}$ are \textit{independent} and described by a \textit{gaussian pdf}. The density function for such a trajectory $\{x_i\}$ is the usual product of transition probabilities:
+\begin{align}
+    \dd{\mathbb{P}}_{t_1, \dots, t_N} (x_1, \dots, x_N) = \left(\prod_{i=1}^N
+    \frac{\dd{x_i}}{\sqrt{4 \pi \Delta t_i D}}  \right) \exp\left(-\sum_{i=1}^N  \frac{(\Delta x_i)^2}{4 D \Delta t_i} \right) \quad \substack{\Delta t_i = t_i-t_{i-1}\\ \Delta x_i = x_i - x_{i-1}}
+    \label{eqn:dP}
+\end{align}
+We now show that, taking the continuum limit $\max_i \Delta t_i \to 0$ leads to paths $\{x(\tau)\}$ that are \textit{almost surely continuous}. In other words, for any interval $T \subseteq \mathbb{R}$, the subset $N \subset \mathbb{R}^T$ of functions that are discontinuous has $0$ Wiener measure. 
+
+Mathematically, we want to show that, as $\Delta t_i \to 0$, the probability that $\Delta x_i$ is close to $0$ approaches certainty:   
 \begin{align*}
-    \dd{P}_{t_1, \dots, t_N} (x_1, \dots, x_N) = \prod_{i=1}^N \left[
-    \frac{\dd{x_i}}{\sqrt{4 \pi \Delta t_i D}} \exp\left(-\sum_{i=1}^N (x_i - x_{i-1})^2 \frac{1}{4 D \Delta t_i} \right) 
-    \right]
-\end{align*} 
-with $\Delta t_i = t_i - t_{i-1}$, $\Delta x_i = x_i - x_{i-1}$.\\
-Now, if we consider the continuum limit ($\max_i \Delta t_i \downarrow 0$), is the path $x(t)$ a continuous function? Mathematically, we want to show that, as $\Delta t_i \to 0$, also $\Delta x_i \to 0$. More precisely, as this process is stochastic, we need to use a limit \q{in the probabilistic sense}, that is:
-\begin{align*}
-    \lim_{\Delta t_i \to 0} P(|\Delta x_i| < \epsilon) = 1 \quad \forall \epsilon > 0
+    \lim_{\Delta t_i \to 0} \mathbb{P}(|\Delta x_i| < \epsilon) = 1 \quad \forall \epsilon > 0
 \end{align*}   
-Note that this expression alone is just a necessary condition for continuity, and a full proof would require a more advanced math, so we will limit ourselves to this simple case.\\
-By simply plugging in the probability distribution:
+This is just the probability that, during time $\Delta t_i$, the particle makes a jump of size lower than $\epsilon$:
 \begin{align*}
-    P(|\Delta x_i| < \epsilon) = \int_{|\Delta x_i| < \epsilon} \frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\frac{(\Delta x_i)^2}{4 D \Delta t_i} \right) 
+    \mathbb{P}(|\Delta x_i| < \epsilon) &= \mathbb{P}(x_{i-1} - \epsilon< x_{i} < x_{i-1}+\epsilon|x(t_{i-1}) = x_i) =\\
+    &= \int_{x_{i-1}-\epsilon}^{x_{i-1}+\epsilon} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) =\\
+    &\underset{(a)}{=}  \int_{-\epsilon}^{+\epsilon} \frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\frac{(\Delta x_i)^2}{4 D \Delta t_i} \right)
 \end{align*}
-where we applied a translation to the integration variable ($x_i \to \Delta x_i$), which does not modify the volume element.\\
-With another change of variables ($\Delta x_i/\sqrt{\Delta t_i} = z$) we arrive at:
+where in (a) we translated the variable of integration $\Delta x_i = x_{i}- x_{i-1}$.\\
+With another change of variables:
 \begin{align*}
-    = \int_{|z| < \epsilon/\sqrt{\Delta t_i}} \dd{z} \exp\left(-\frac{z^2}{4 D} \right) \frac{1}{\sqrt{4 \pi D}} \xrightarrow[]{\Delta t_i \downarrow 0} \int \dd{z} \frac{1}{\sqrt{4 \pi D}} \exp\left(-\frac{z^2 }{4 D} \right) = 1
-\end{align*} 
+    \frac{(\Delta x_i)^2}{\Delta t_i} = z^2 \Rightarrow z = \frac{\Delta x_i}{\sqrt{ \Delta t_i}} \Rightarrow \dd{\Delta x_i} = \dd{z} \sqrt{\Delta t_i}  
+\end{align*}
+we get:
+\begin{align*}
+    \mathbb{P}(|\Delta x_i| < \epsilon) = \int_{|z| < \epsilon/\sqrt{\Delta t_i }} \frac{\dd{z}\cancel{\sqrt{\Delta t_i}}}{\sqrt{4 \pi D \cancel{\Delta t_i}}}  \exp\left(-\frac{z^2}{4D} \right)
+\end{align*}
+And taking the continuum limit leads to:
+\begin{align*}
+    \lim_{\Delta t_i \to 0} \mathbb{P}(|\Delta x_i| < \epsilon) = \int_{-\infty}^{+\infty} \frac{\dd{z}}{\sqrt{4 \pi D}} \exp\left(-\frac{z^2}{4D} \right) =1
+\end{align*}
+
+ 
 
 \section{Differentiability of Brownian Path}
-With a very similar calculation we can also show that:
+With a very similar calculation (here omitted) we can also show that:
 \begin{align*}
     \lim_{\Delta t_i \downarrow 0} \left( \left|\frac{\Delta x_i}{\Delta t_i}\right| > k \right) = 1 \quad \forall k > 0
 \end{align*}
-that is the Brownian motion is \q{fractal}, in the sense that it is continuous everywhere, but nowhere differentiable.
+meaning that Brownian paths are \textit{almost surely everywhere non-differentiable}.
 
+\medskip
 
-If we now go back to the initial probability distribution, and rewrite it as:
+Nonetheless, it is sometimes useful to consider \q{formal derivatives} of a Brownian path, that acquire a definite meaning only when considering a \textit{finite discretization}. For example, we can start from (\ref{eqn:dP}) and rewrite it as:
 \begin{align*}
-    dP_{t_1, \dots, t_N} (x_1, \dots, x_N) = \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{4 \pi \Delta t_i }}\exp\left(-\frac{1}{4 D} \sum_{i=1}^N \Delta t_i \left(\frac{\Delta x_i}{\Delta t_i} \right)^2 \right) 
+    d\mathbb{P}_{t_1, \dots, t_N} (x_1, \dots, x_N) = \left(\prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{4 \pi \Delta t_i }}\right) \exp\left(-\frac{1}{4 D} \sum_{i=1}^N \textcolor{Red}{\Delta t_i} \left(\frac{\Delta x_i}{\textcolor{Red}{\Delta t_i}} \right)^2 \right) 
 \end{align*}
-Note that if $\Delta t \downarrow 0$, the summation in the exponential can be regarded as a Riemann sum:
+Then, in the continuum limit $\Delta t_i \to 0$, the sum in the exponential argument becomes a Riemann integral:
 \begin{align*}
-    \sum_{i=1}^N \Delta t_i \left(\frac{\Delta x_i}{\Delta t_i} \right)^2 \xrightarrow[\Delta t \to 0]{} \int \dd{\tau} \left(\frac{\Delta x_i}{\tau} \right)^2
+    \sum_{i=1}^N \Delta t_i \left(\frac{\Delta x_i}{\Delta t_i} \right)^2 \xrightarrow[\Delta t \to 0]{} \int_0^t \dd{\tau} \underbrace{\left(\frac{\dd{x_i}}{\dd{\tau}} \right)^2}_{\dot{x}^2(\tau)}  \qquad t= t_N
 \end{align*} 
-leading to:
+where $t = t_N$. Substituting it back leads to:
 \begin{align*}
     \dd{x_w}(\tau) = \prod_{\tau = 0^+}^t \frac{\dd{x}(\tau)}{\sqrt{4 \pi D \dd{\tau}}} \exp\left(-\frac{1}{4 D} \int_0^t \dot{x}^2 (\tau) \dd{\tau} \right) 
 \end{align*}
-with $\dot{x} = \dd{x}/\dd{\tau}$. Note that this is just a formal expression, with no defined meaning (it is valid only introducing a discretization) - which however will be useful as can be manipulated (formally) into expressions with a definite meaning.
+This expression has no rigorous meaning in this form ($\dot{x}(\tau)$  \textit{does not} exists!) but can be \textit{formally manipulated} into other expressions that \textit{have} a definite meaning, thus proving useful for the discussion.  
 
 \section{Forces on the particle}
 Let's return to the beginning. We started with a particle capable of moving in discrete steps (with probabilities $P_+$ and $P_-$ of going to the right or to the left), leading to the Master Equation, then to the Diffusion Equation and finally to the Path Integral.\\
