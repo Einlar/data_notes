@@ -1,0 +1,201 @@
+non%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\lesson{?}{9/12/19}
+\section{Hopfield Model - part 2}
+We arrived at:
+\begin{align*}
+    Z = \sum_{\{S_1, \dots, S_N\}} \exp\left(\frac{\beta}{2} \sum_{i < j} J_{ij} S_i S_j\right) \qquad S_i = \{-1,+1\}
+\end{align*}
+and, for the Hopfield model:
+\begin{align*}
+    J_{ij} = \frac{1}{N} \sum_{\mu=1}^p \xi_1^\mu \xi_j^\mu 
+\end{align*}
+where $\bm{\xi}^\mu = \{\xi_1^\mu, \dots, \xi_N^\mu\}$, with $\mu = 1, \dots, p$  are $p$ \textit{patterns} that are initially stored in the network. 
+
+We rewrote the partition function as:
+\begin{align*}
+    Z &= \int_{-\infty}^{+\infty} \prod_{\mu =1}^d \dd{q_\mu} \exp\left(-\beta N u(q_1, \dots, q_p)\right)\\
+    u(\bm{q}) &= \frac{1}{2} \sum_{\mu=1}^p q_\mu^2 - \frac{1}{\beta N } \sum_{i=1}^N\underbrace{ \ln \left[2 \cosh(\beta \bm{q}\cdot \bm{\xi}_i)\right]}_{\ln 2 + \ln (\cosh \dots)}   \qquad \bm{q}\cdot \bm{\xi}_i = \sum_{\mu=1}^p q_{\mu} \xi_i^\mu
+\end{align*}
+To compute these integrals we use the \textit{saddle point approximation}. So we look for the configuration $\bm{q}^* = \{q_1^*, \dots, q^*_p\}$ that \textit{minimizes} $u(\bm{q})$:
+\begin{align}
+    \bm{q}^* = \min_{\bm{q}} u(\bm{q}) \Rightarrow \pdv{u}{q_1} = 0, \pdv{u}{q_2} = 0, \dots, \pdv{u}{q_p}=0
+    \label{eqn:saddle-eq}
+\end{align}    
+Then, applying the approximation:
+\begin{align*}
+    Z = e^{-\beta N u(q_1^*, \dots, q^*_p)}
+\end{align*}
+And finally we can compute the \textit{free energy}:
+\begin{align*}
+    f = -\frac{1}{N \beta}\log(Z) = u(q_1^*, \dots, q^*_p) 
+\end{align*} 
+So all that's left is to solve the $p$ equations in (\ref{eqn:saddle-eq}):
+\begin{align*}
+    \pdv{u}{q_\nu} &= q_\nu - \frac{1}{\beta N} \sum_{i=1}^N \frac{\sinh(\beta \bm{q}\cdot \bm{\xi_i})}{\cosh(\beta \bm{q}\cdot \bm{\xi_i})} \beta \xi_i^\nu \overset{!}{=} 0\\
+    &\Rightarrow q_\nu = \frac{1}{N} \sum_{i=1}^N \tanh(\beta \bm{q}\cdot \bm{\xi_i}) \xi_i^\nu  
+\end{align*}
+In vector notation:
+\begin{align*}
+    \bm{q} = \frac{1}{N} \sum_{i=1}^N \tanh(\beta \bm{q}\cdot \bm{\xi_i}) \bm{\xi_i}
+\end{align*}
+We are interested in the case with \textit{many neurons}, that is the limit for $N \to \infty$. So:
+\begin{align*}
+    \frac{1}{N} \sum_{i=1}^N f(\xi) = \langle f \rangle  = \int \dd{\xi} p(\xi) f(\xi)
+\end{align*} 
+and we know that $\xi_i = {-1,+1}$ with the same $1/2$ probability. This means:
+\begin{align*}
+    = \int \dd{\xi} p(\xi)\left(\frac{1}{2} \sum_{x=\{\pm1\}} \delta(x- \xi)\right)
+\end{align*}  
+leading to:
+\begin{align*}
+    \bm{q} = \mathbb{E}[\tanh(\beta \bm{q}\cdot \bm{\xi}) \bm{\xi}] \Rightarrow q_\mu = \mathbb{E}[\tanh (\beta \bm{q}\cdot \bm{\xi_i})\xi^\mu]
+\end{align*}
+
+To find the physical interpretation of $\bm{q}$ , recall, from the previous steps, that:
+\begin{align*}
+    Z &= \sum_{\{S_1, \dots, S_N\}} \int_{-\infty}^{+\infty} \prod_{\mu=1}^p \dd{q_\mu} \exp\left(-\beta N \tilde{u}(\bm{q}; S_1, \dots, S_N)\right)\\
+    \tilde{u}(\bm{q}, S_1, \dots, S_N) &= \frac{1}{2} \sum_{\mu = 1}^p q_{\mu}^2 - \frac{1}{N} \sum_{\mu=1}^p q_\mu \sum_{i=1}^N S_i \xi_i^\mu  
+\end{align*} 
+where we have also the \textit{physical} parameters $S_i$ (network's state). If we now repeat the previous steps, looking for the minimum of the exponential, we get:
+\begin{align*}
+    \pdv{u}{q_\nu} = 0 \Rightarrow q_\mu = \frac{1}{N} \sum_{i=1}^N S_i \xi_i^\mu 
+\end{align*}
+So we can interpret the $q_\mu$ as the \textit{overlap} of the network's state with the $\mu$-th pattern of the neural network.
+
+Suppose now $\bm{q} = (q_1, 0,\dots,0)$ (vector with only the first component non-zero). Plugging it in the equations:
+\begin{align*}
+    \text{First eq.}\colon q_1 &= \mathbb{E}[\tanh(\beta q_1 \xi^1) \xi^1]\\
+    \text{Last $p-1$ eqs.}\colon q_\nu &= \mathbb{E}[\tanh (\beta q_i \xi^1)\xi^\nu] \qquad \nu \neq 1
+\end{align*} 
+Note that:
+\begin{align*}
+    q_1 &= \frac{1}{2}\tanh (\beta q_1) \cdot 1 - \frac{1}{2} \tanh(\beta q_1)(-1)  \\
+    q_\nu &= \sum_{\xi_1, \dots, \xi_p} p(\xi_1)\cdots p(\xi_p) \tanh(\beta \xi^1) \xi^\nu  
+\end{align*}
+So the last $p-1$ equations are satisfied by $q_\nu = 0$, and we are left with the \textit{first equation} $q=\tanh(\beta q)$, which is similar to the equation for the magnetization in the Ising model: $m = \tanh(\beta m)$. We then observe that, if we sample configurations with a Boltzmann-probability:
+\begin{align*}
+    \exp(\beta \sum_{ij} J_{ij} S_i S_j)
+\end{align*}
+for $T < T_c$, where $T_c$ is a certain \textit{critical temperature}, we have a non-zero probability to sample a network configuration that is \textit{strongly (anti)correlated} with one of the patterns. 
+[Insert fig.1]
+
+\section{Sherrington-KirkPatrick Model}
+The SK model is a netweork \textit{without any pattern embedded inside}. We start by recalling the energy function for the Hopfield Model:
+\begin{align*}
+    H = -\sum_{i < j} J_{ij} S_i S_j \qquad S_i = \{-1,+1\}
+\end{align*} 
+However, we now pick the $J_{ij}$ weights \textit{at random}, according to a Gaussian distribution:
+\begin{align*}
+    p(J_{ij}) = \frac{1}{\sigma} \sqrt{\frac{N}{2\pi} }  \exp\left(-\frac{N}{2 \sigma^2} J_{ij}^2 \right)
+\end{align*}  
+Each spin $S_i$ interacts with \textit{all other spins} (\textbf{long range interaction model}) with a \textit{random strength}. Note that:
+\begin{align*}
+    \langle J^2 \rangle \sim \frac{1}{N} 
+\end{align*}   
+This choice will lead to an \textit{extensive}  total free energy, that is:
+\begin{align*}
+    F &= \frac{1}{\beta} \log (Z_J) \sim N\\
+    Z_J &= \sum_{\{S_1,\dots, S_N\}} \exp\left(-\beta H_J[S_1, \dots, S_N]\right)
+\end{align*}
+Note that now the partition function \textit{explicitly depends} on the system's realization (the choice of $J_{ij}$). Also, the number of \textit{connections} is in the order of $O(N^2)$, while in the Ising's model (local interactions) we had $O(N)$.\\
+
+We can check that $F$ is linear in $N$ by doing a \textit{high-temperature expansion} (small $\beta$ expansion) of $Z$:
+\begin{align*}
+    Z_J &= \sum_{\{S_1,\dots, S_N\}} \exp\left(\beta \sum_{i < j} J_{ij} S_i S_j\right) =\\
+    &\approx \sum_{\{S_1, \dots, S_N\}} \left(1+\beta \sum_{i < j} J_{ij} S_i S_j + \frac{\beta^2}{2} \sum_{i < j} \sum_{k < l} J_{ij} J_{kl} S_i S_j S_k S_l \right)
+\end{align*}   
+Note that if we have a product of $p \in \mathbb{N}$ spins, with an odd number of copies of index $k$, their sum over \textit{all states} will be $0$:
+\begin{align*}
+    \sum_{S_{i_k} = \{\pm1\}} S_{i_1} S_{i_2} \cdots \overbrace{S_{i_k} \cdots S_{i_k}}^{2m+1}  \cdots S_{i_p} = 0
+\end{align*}     
+Also:
+\begin{align*}
+    \sum_{\{S_1,\dots,S_N\}} 1 = 2^N
+\end{align*}
+So we can expand $Z_J$:
+\begin{align*}
+    Z_J &\approx 2^N + \underbrace{\sum_{\{S_1,\dots, S_N\}} \sum_{i<j} J_{ij} S_i S_j}_{=0} + \frac{\beta^2}{2} \underbrace{{\sum_{i<j} \sum_{k<l} J_{ij} J_{kl} S_i S_j S_k S_l }}_{\sum_{i<j} J_{ij}^2}=\\
+    &=  2^N \left(1+\frac{\beta^2}{2} \sum_{i<j}J_{ij}^2 + O(\beta^3) \right)
+\end{align*} 
+Taking the logarithm:
+\begin{align*}
+    \log(Z_J) &= N \log (2) + \log\left(1+\frac{\beta^2}{2} \sum_{i<j} J_{ij}^2 + O(\beta^3) \right) = \\
+    &= N \log(2) + \frac{\beta^2}{2} \underbrace{\sum_{i<j} J_{ij}^2}_{\sim N^2 \langle J^2 \rangle}  + O(\beta^2) =\\
+    &= N \log(2) + \frac{\beta^2}{2} N^2 \langle J^2 \rangle  + \cdots \sim F
+\end{align*}
+So to have $F \sim N$ we need $\langle J^2 \rangle = 1/N$, confirming the choice we made before.
+
+
+Now, consider again the free energy:
+\begin{align*}
+    f_J = -\frac{1}{N \beta} \log\left(\sum_{\{\bm{S}\}} \exp\left(\beta \sum_{i < j} J_{ij} S_i S_j\right)\right) = -\frac{1}{N \beta} \ln(Z_J) 
+\end{align*}
+And we are interested in the $N \to \infty$ limit. We would like that, in this limit, the result will not depend on the specific choice of $J_{ij}$, meaning that \textit{averages over disorder} make sense. This happens with free energy, and we say that it is \textit{self-averaging}, that is:
+\begin{align*}
+    \lim_{N \to \infty }  \frac{\overline{[F_J^2]} - \overline{[F_J]}^2}{\overline{[F_J]}^2} \sim \frac{1}{\sqrt{N}} 
+\end{align*} 
+where $[\dots]$ denotes an \textit{average over disorder}:
+\begin{align*}
+    \overline{[f_J]} = \int \prod_{i<j} \dd{J_{ij}} p(J_{ij}) f(\{J_
+    ij\}_{i < j})
+\end{align*}  
+In other words, this mean that the \textit{free energy} takes a \textit{more and more} \q{definite} value (i.e. its distribution $p(f)$ has a smaller width) as we consider a larger and larger system:
+\begin{align*}
+    \lim_{N \to \infty} -\frac{1}{N \beta} \log(Z_J) = \lim_{N \to \infty } - \frac{1}{N \beta} \overline{\log (Z_J)}   = f
+\end{align*}
+[Insert fig.2]
+However, if we write that integral:
+\begin{align*}
+    \overline{[f_J]} = \int \prod_{i < j} \dd{J_{ij}} p(J_{ij}) \left(-\frac{1}{N \beta} \right)\log \left(\sum_{\{\bm{S}\}} \exp\left(\beta \sum_{i<j} S_i S_j J_{ij}\right)\right)
+\end{align*}
+we note that the $J_{ij}$ appears both as the variables of integration, and as terms of the sum over all states, leading to a very difficult expression to evaluate. To simplify the problem we use the \textbf{Replica trick}, that involves rewriting the logarithm in terms of its Taylor expansion:
+\begin{align*}
+    \log(x) = \lim_{n \to 0} \frac{x^n - 1 }{n} 
+\end{align*}  
+Then:
+\begin{align*}
+    \log\left(\sum_{\{\bm{S}\}}\right) \exp\left(\beta \sum_{i<j} S_i S_j J_{ij}\right) = \lim_{n \to 0} \frac{\displaystyle \sum_{\{\bm{S}\}} \exp\left(\beta \sum_{i<j} J_{ij} S_i S_j\right)^n - 1}{n} 
+\end{align*}
+Let's focus on the power term:
+\begin{align}
+    \int_{-\infty}^{+\infty} \prod_{i< j} \dd{J_{ij}} p(J_{ij}) \sum_{\substack{\{S^\alpha_i, \dots, S_N^\alpha\}\\\alpha = 1,\dots,n}} \exp \left(\beta \sum_{\alpha= 1 }^n \sum_{i<j} J_{ij} S^\alpha_i S_j^\alpha\right)
+    \label{eqn:power}
+\end{align}
+where $n \in \mathbb{N}$ for all the intermediate steps, but at the end we take $n \to 0$ as if it were a real parameter. The index $\alpha$ \textit{labels} the \textit{replicas} of the system, that is the elements of a set of $n$ copies of the original system. 
+
+Note now that:
+\begin{enumerate}
+    \item Replicas are uncoupled: there are no products $S_i^\alpha S_j^\beta$ with $\alpha \neq \beta$ (replicas \textit{do not interact})
+    \item Spins are coupled: there are products of spins carrying different indexes, such as $S_i^\alpha S_j^\alpha$   
+\end{enumerate}
+By performing a \textit{gaussian integration} we can \textit{move} the coupling from spins to replicas, so that:
+\begin{enumerate}
+    \item Replicas become coupled
+    \item Spins become uncoupled
+\end{enumerate}  
+The idea is that the energy will form a \textit{many valleys landscape}. If we now consider two copies (replicas) evolving in this landscape, they will \textit{behave} as \textit{non-interacting particles} if the temperature is high enough, but will \textit{strongly interact} when the temperature is low. This is the meaning of \q{coupled replicas}, as we will now mathematically derive.
+
+\marginpar{This part may contain errors!}
+
+We start by integrating a single term of (\ref{eqn:power}):
+\begin{align*}
+    \int_{-\infty}^{+\infty} \dd{J_{ij}} \exp\left(-\frac{N}{2 \sigma^2} J_{ij}^2 + \beta J_{ij} \sum_{\alpha=1}^n S_i^\alpha S_j^\alpha\right) &= \exp\left(\frac{\beta^2 \sigma^2}{2 N} \sum_{\alpha,\beta=1}^n S_i^\alpha S_i^\beta S_j^\alpha S_j^\beta  \right) =\\
+    &= \exp\left(\frac{\beta^2 \sigma^2}{\textcolor{Red}{2} \cdot 2N} \sum_{\alpha,\beta=1}^n \textcolor{Red}{\sum_{i\neq j}} S_i^\alpha S_j^\beta \right) =\\
+    &\approx \exp\left(\frac{\beta^2 \sigma^2}{4N} \sum_{\alpha,\beta=1}^n \left(\sum_{i=1}^N S_i^\alpha S_i^\beta\right)^2 \right)
+\end{align*}
+and then:
+\begin{align*}
+    \overline{\log(Z_J)} = \lim_{n \to 0} \frac{\overline{Z^n} - 1}{n} \Rightarrow \lim_{n \to 0} \overline{Z^n} 
+\end{align*}
+and so:
+\begin{align*}
+    \overline{Z^n} = \sum_{\substack{\{S_1^\alpha,\dots,S_N^\alpha,\}\\ \alpha=1,\dots,n}} \exp\left(\frac{\beta^2 \sigma^2}{4N} \sum_{\alpha,\beta=1}^n \left(\sum_{i=1}^N S_i^\alpha S_i^\beta\right)^2 \right)
+\end{align*}
+
+
+
+\end{document}
