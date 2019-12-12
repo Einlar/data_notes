@@ -1,0 +1,189 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Orbits in Kerr geometry}
+\lesson{?}{12/12/19}
+Note that in general orbits will be \textit{non-planar}. In fact, if we start with a planar orbit \textit{tilted} wrt the axis of rotation of the geometry, the frame dragging effect will make it \textit{non-planar}. The only exception is for an \textit{equatorial orbit} at $\theta \equiv \pi/2$. In this case:
+\begin{align*}
+    \rho^2 = r^2 + a^2 \cos^2 \theta =r^2
+\end{align*}
+And also the line element becomes much simpler:
+\begin{align*}
+    \theta = \frac{\pi}{2} \Rightarrow \dd{s}^2 = -\left(1-\frac{2GM}{r} \right) \dd{t^2} - \frac{4GMa}{r} \dd{t} \dd{\varphi} + \frac{r^2}{\Delta} \dd{r^2} + \left(r^2 + a^2 + \frac{2GMa^2}{r} \right)  \dd{\varphi^2}
+\end{align*}
+The orbit's computation is analogous to that of the Schwarzschild case, and so we only outline the steps. Consider a mass $m$ with $4$-velocity:
+\begin{align*}
+    u^\alpha = (u^t, u^r, 0, u^\varphi)
+\end{align*}  
+We have two Killing vectors:
+\begin{align*}
+    \xi^\mu = (1,0,0,0) \qquad \xi^\mu = (0,0,0,1)
+\end{align*}
+leading to two constants of motion:
+\begin{align*}
+    \xi^\mu = (1,0,0,0) &\Rightarrow e \equiv -\bm{\xi}\cdot \bm{\mu} = -(g_{00}u^t + g_{03} u^\varphi) \\
+    \xi^\mu = (0,0,0,1) &\Rightarrow l \equiv \bm{\xi}\cdot \bm{\mu} = g_{30} u^t + g_{33} u^\varphi
+\end{align*}
+where $e$, $l$ represent respectively the energy and the angular momentum of the particle per unit mass, as observed from a \textit{far away} observer. We can invert these relations and derive $u^t(e,\varphi)$, $u^\varphi(e,l)$, and then insert them in $\bm{u}\cdot \bm{u} = -1$, from which we get an equation for $u^r \equiv \dd{r}/\dd{\tau}$:
+\begin{align*}
+    \frac{1}{2}\left(\dv{r}{\tau}\right)^2 + V_{\mathrm{eff}}(r,e,l) = \frac{e^2-1}{2} 
+\end{align*}       
+which is the equation of motion of a particle in an effective potential:
+\begin{align}
+    V_{\mathrm{eff} }(r,e,l) = -\frac{GM}{r} + \frac{l^2 -a^2(e^2-1)}{2r^2} - \frac{GM(l-ae)^2}{r^3}   \label{eqn:motion-kerr}
+\end{align}
+Note that if $a=J/M=0$ we return to the Schwarzschild case.
+
+\subsection{Circular orbits}
+We now study equation (\ref{eqn:motion-kerr}) in the simplest case of circular orbits, with $r$ constant:
+\begin{align*}
+    \dv{r}{\tau} = 0
+\end{align*} 
+Substituting in (\ref{eqn:motion-kerr}) we get:
+\begin{align*}
+    V_{\mathrm{eff}} = \frac{e^2-1}{2} 
+\end{align*}
+To have $r$ constant we also need to be at a stationary point of $V_{\mathrm{eff}}$:
+\begin{align*}
+    \pdv{V_{\mathrm{eff} }}{r} = 0
+\end{align*}  
+We are interested in a \textit{stable} orbit, for which $V_{\mathrm{eff} }$ is \textit{minimum}:
+\begin{align*}
+    \pdv[2]{V_{\mathrm{eff} }}{r} \geq 0
+\end{align*}   
+We can now find the \textit{Innermost Stable Circular Orbit}, that is the orbit that lies \textit{at the boundary} between stable and unstable orbits:
+\begin{align*}
+    \pdv[2]{V_{\mathrm{eff} }}{r} = 0
+\end{align*}  
+Putting all conditions together:
+\begin{align*}
+    \begin{cases}
+        V_{\mathrm{eff}}=\frac{e^2-1}{2}\\
+        \pdv{V_{\mathrm{eff} }}{r} = 0\\
+        \pdv[2]{V_{\mathrm{eff} }}{r} = 0 
+    \end{cases}
+\end{align*}
+which we can solve for $e$, $l$ and $r$. After some tedious algebra (referenced in the lecture notes, but not required for the exam) we arrive to:
+[Figure 1]
+
+\subsection{Ergosphere}
+We observe that circular orbits can be made closer to the black hole (small $R_{\mathrm{isco}}$) if we rotate in the same direction as the $\bm{J}$.  
+
+One can show that, as you get \q{too close} to the black hole, you must rotate in the same direction. We will show that, if you are \q{too close} to the black hole, you cannot remain at rest, no matter what (for \textit{any motion}, not only \textit{geodesic motion}). 
+
+\medskip
+
+Consider a \textit{stationary object} in Kerr geometry, with $u^\alpha = (u^t, 0, 0, 0)$. We note that, at sufficiently small $r$, we cannot have $\bm{u}\cdot \bm{u} = -1$ with $u^\alpha$ of this form, meaning that \textit{it is not physically possible} to have such $4$-velocity:
+\begin{align*}
+    -1 \overset{?}{=} \bm{u}\cdot\bm{u} = g_{\mu \nu} u^\mu u^\nu = g_{00} (u^t)^2 = -\left(1-\frac{2GMr}{l^2} \right)(u^t)^2
+\end{align*}      
+So it is possible to \textit{stay at rest} only if:
+\begin{align*}
+    1-\frac{2GMr}{\underbrace{r^2 + a^2 \cos^2 \theta}_{l^2} }  > 0 \Rightarrow r^2 - 2GMr + a^2 \cos^2 \theta > 0 \Rightarrow r < r_- \lor  r > r_+
+\end{align*} 
+with $r_\pm$ being the two solutions of the associate equation:
+\begin{align*}
+    r^2 - 2GMr + a^2 \cos^2 \theta = 0 \Rightarrow r_\pm = GM \pm \sqrt{G^2 M^2 - a^2 \cos^2 \theta}
+\end{align*} 
+Comparing $r_\pm$ with the horizon $r_H$:
+\begin{align*}
+    r_H = GM + \sqrt{G^2 M^2 -a^2}
+\end{align*}  
+we find that $r_1 < r_H \leq r_2$. The volume between $r_1$ and $r_H$ is inside the horizon, and so cannot be seen from the outside, while in the region $[r_H, r_+ \equiv r_E]$ an observer \textit{cannot} remain at rest, but \textit{must} have some angular momentum in the same direction as $\bm{J}$. This is called the \textbf{ergosphere}. 
+
+The full expression is:
+\begin{align*}
+    r_E(\theta) = GM + \sqrt{G^2 M^2 - a^2 \cos^2 \theta}
+\end{align*}
+Noting that:
+\begin{align*}
+    r_E(\theta = 0,\pi) = r_H \qquad r_E\left(\theta= \frac{\pi}{2}   \right) = 2GM
+\end{align*}
+we can draw [Figure 2].
+
+(Note that for light $\bm{u}\cdot\bm{u} = 0$, and so the ergosphere does not apply)
+
+\subsection{Penrose process}
+It is possible to extract energy and angular momentum from a Kerr black hole.
+
+Consider a particle, denoted as \q{in}, that comes from infinity and reaches the ergosphere and goes inside it, where it decays in a particle \q{out} that goes to infinity, and a second particle \q{bh} that goes into the black hole. 
+
+For simplicity, let's consider the process in the \textit{equatorial plane}. [Figure 3]
+
+In a LIF, energy and momentum are conserved during the decay:
+\begin{align}\label{eqn:cons-e-p}
+    P_{\mathrm{IN}}^\mu = P_{\mathrm{OUT}}^\mu + P_{\mathrm{BH}}^\mu
+\end{align}
+This is a tensorial relation, and so it is valid in all frames of reference.
+
+A stationary observer at infinity measures the incoming energy as:
+\begin{align*}
+    \mathcal{E}_\mathrm{IN} = -\bm{P_{\mathrm{IN}}}\cdot(1,0,0,0)  
+\end{align*}
+where $(1,\bm{0})$ is the $4$-velocity of that \textit{stationary} observer. The same holds for the energy output:
+\begin{align*}
+    \mathcal{E}_{\mathrm{OUT}} = - \bm{P_{\mathrm{OUT}}} \cdot (1,0,0,0)
+\end{align*}    
+Recall that $\xi^\alpha = (1,0,0,0)$ is a Killing vector for the Kerr metric. So:
+\begin{align*}
+    E_{\mathrm{IN}}=-\bm{\xi}\cdot \bm{P_{\mathrm{IN}}}
+\end{align*} 
+is the same quantity as the beginning and at the decay. For the same reason:
+\begin{align*}
+    \mathcal{E}_{\mathrm{OUT} } = -\bm{\xi}\cdot \bm{P_{\mathrm{OUT} }}
+\end{align*} 
+is the same quantity at the decay and at the end of the process.
+
+Contracting (\ref{eqn:cons-e-p}):
+\begin{align*}
+    -\bm{\xi}\cdot \bm{P_{\mathrm{IN} }} = - \bm{\xi} \cdot \bm{P_{\mathrm{OUT} }} - \bm{\xi}\cdot \bm{P_{\mathrm{BH} }} \Rightarrow \mathcal{E}_{\mathrm{IN} } = E_{\mathrm{OUT} } + (-\bm{\xi} \cdot \bm{P_\mathrm{BH}})
+\end{align*}
+Now, if BH also reached infinity, then $-\bm{\xi}\cdot \bm{P_\mathrm{BH} }$ would be the energy of BH measured by the observer, and it would need to be positive, meaning that $\mathcal{E}_{\mathrm{IN} } > \mathcal{E}_{\mathrm{OUT} }$, as usual. 
+
+However, since the particle BH does not go to $\infty$, the product $-\bm{\xi} \cdot \bm{P_\mathrm{BH} }$ has \textbf{not} the meaning of an energy, and it can be arranged to be negative, meaning that $\mathcal{E}_{\mathrm{OUT} } > \mathcal{E}_{\mathrm{IN} }$, and we can \textit{extract} energy from the black hole.
+
+Note that $g_{tt} > 0$ in the ergosphere:
+\begin{align*}
+    g_{t t} = -\underbrace{\left(1-\frac{2GMr}{l^2} \right)}_{<0 
+\text{ in ergosphere}} > 0
+\end{align*} 
+So:
+\begin{align*}
+    -\bm{\xi}\cdot\bm{P}_{\mathrm{IN} } = -\bm{\xi} \cdot \bm{P_{\mathrm{OUT} }} - \bm{\xi}\cdot \bm{P_{\mathrm{BH} }}
+\end{align*}
+is the conservation of a \textit{spatial} component of the $4$-momentum at the decay, meaning that $-\bm{\xi}\cdot \bm{P_
+\mathrm{BH} }$ can indeed be negative.   
+
+From the point of view of a far away observer, the \textit{excess} energy must come from the black hole.
+
+\medskip
+
+We now see that, in the Penrose process, the black hole also loses \textit{angular momentum}.
+
+Assume there is an observer in the ergosphere at fixed $r$ and $\theta$, with $4$-velocity:
+\begin{align*}
+    u^\alpha_{\mathrm{obs}} = u^t_{\mathrm{obs}}(1,0,0,\Omega_{\mathrm{obs} }) \qquad \Omega_{\mathrm{obs} } = \dv{\varphi}{t} > 0
+\end{align*}  
+Assume that the observer is at the location of the decay at the right time. For this observer we have conservation of energy, and in particular the energy of BH must be positive:
+\begin{align*}
+    \mathcal{E}_{\mathrm{BH}} = - \bm{u}_{\mathrm{obs}}\cdot \bm{P_{\mathrm{BH} }} > 0
+\end{align*} 
+Note that:
+\begin{align*}
+    u^\alpha_{\mathrm{obs} } = u^t_{\mathrm{obs} }(1,0,0,0) + u^t_{\mathrm{obs} }\Omega_{\mathrm{obs} }(0,0,0,1)
+\end{align*}
+and both $(1,0,0,0)$ and $(0,0,0,1)$ are Killing vectors. So:
+\begin{align*}
+    -\bm{u_{\mathrm{obs} }} \cdot \bm{P_{\mathrm{BH} }} = -\underbrace{u^t_{\mathrm{obs} } }_{>0}\bm{\xi} \cdot \bm{P_{\mathrm{BH} }} - \underbrace{u^t_{\mathrm{obs} } }_{>0}\Omega_{\mathrm{obs} } l_{\mathrm{BH} } > 0
+\end{align*} 
+Rearranging:
+\begin{align*}
+    -\bm{\xi} \cdot \bm{P_{\mathrm{BH} }} > \underbrace{\Omega_{\mathrm{obs} }}_{>0}  l_{\mathrm{BH} }
+\end{align*}
+As the quantity on the left side can be taken negative (if we want $\mathcal{E}_\mathrm{OUT} > \mathcal{E}_{\mathrm{IN} }$) then $l_{\mathrm{BH} } < 0$. This means that the black hole loses angular momentum when it \q{absorbs} BH.  
+
+
+
+\end{document}
