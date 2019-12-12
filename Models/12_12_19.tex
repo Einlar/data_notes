@@ -1,0 +1,186 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\lesson{?}{12/12/19}
+
+\section{Sherrington KirkPatrick - part 2}
+We want to compute the \textit{free energy}:
+\begin{align*}
+    f &= \lim_{N \to \infty} -\frac{1}{N \beta} \overline{\log (Z_J)} \\
+    Z_J &= \sum_{\{S_1, \dots, S_N\}} \exp(-\beta H_J[S_1, \dots, S_N]) \\
+    H_J&= - \sum_{i < j} J_{ij} S_i S_j\\
+    P(J_i) &= \frac{1}{\sigma} \sqrt{\frac{N}{2 \pi} }\exp\left(-\frac{N J_i^2}{2 \sigma^2} \right) 
+\end{align*} 
+Introducing the \textit{replica trick} we compute $\overline{\log(Z_J)}$ in terms of $\overline{Z^n}$:
+\begin{align*}
+    \overline{Z^n} = \exp\left(\frac{N \beta^2 \sigma^2 n}{4} \right) \sum_{\substack{\{S_1,\dots,S_n\}\\ \alpha = 1,\dots,n}} \exp\left(\frac{\beta^2 \sigma^2}{4N} \sum_{\alpha, \beta} \left(\sum_{i=1}^N S_i^\alpha S_i^\beta\right)^2\right)
+\end{align*}   
+To \textit{unfold} the square we do an Hubbard-Stratonovich transformation:
+\begin{align}
+    \overline{Z^n} = \sum_{\substack{\{S_1^\alpha, \dots, S_N^\alpha\}\\ \alpha =1,\dots,n}}\int_{-\infty}^{+\infty} \left(\prod_{\alpha < \beta}^n \dd{q}_{\alpha \beta}\right) \exp\left(-\frac{N \beta^2 \sigma^2}{2} \sum_{\alpha < \beta} q^2_{\alpha \beta}\right) \hlc{Yellow}{\exp\left(\beta^2 \sigma^2 \sum_{\alpha < \beta} q_{\alpha \beta} \sum_{i=1}^N S_i^\alpha S_i^\beta\right)}
+    \label{eqn:Zn}
+\end{align}
+Note that now the spin products are \textit{not squared}, and we introduced variables $q_{\alpha \beta}$ that, as we will show later on, represent \textit{overlaps}.
+
+We can then bring the summation \textit{inside} the integral, and, noting that it only acts on the highlighted term, we only need to compute the following:
+\begin{align}\nonumber
+    \sum_{\substack{\{S_1^\alpha,\dots, S_N^\alpha\}\\ \alpha =1,\dots,n}} \exp\left(\beta^2 \sigma^2 \sum_{\alpha < \beta} a_{\alpha \beta} \sum_{i=1}^N S_i^\alpha S_i^\beta\right) &= \prod_{i=1}^N \left[\sum_{\substack{\{S_i^\alpha\}\\\alpha=1,\dots,n}} \exp\left(\beta^2 \sigma^2 \sum_{\alpha < \beta} q_{\alpha \beta} S_i^\alpha S_i^\beta \right)\right] =\\
+    &= \left[\sum_{\substack{\{S^\alpha\}\\ \alpha=1,\dots,n}}
+    \exp\left(\beta^2 \sigma^2 \sum_{\alpha < \beta} q_{\alpha \beta} S^\alpha S^\beta\right)
+    \right]^N
+    \label{eqn:partial-sum1}
+\end{align} 
+We then define:
+\begin{align*}
+    L(q_{\alpha \beta})= \beta^2 \sigma^2 \sum_{\alpha < \beta} q_{\alpha \beta} S^\alpha S^\beta
+\end{align*}
+So that:
+\begin{align*}
+    (\ref{eqn:partial-sum1}) = [\operatorname{Tr} e^{L}]^N = \exp\left(N \log[\operatorname{Tr} e^{L (q_{\alpha \beta})} ]\right)
+\end{align*}
+This explicit computation is very technical, especially in the limit $n \to 0$ we are interested on, and so we will not see it in full detail.
+
+Substituting back in (\ref{eqn:Zn}) leads to:
+\begin{align*}
+    \overline{Z^n} &= \exp\left(\frac{n \beta^2 \sigma^2 N}{4} \right) \int_{-\infty}^{+\infty} \prod_{\alpha < \beta} \dd{q_{\alpha \beta}} \exp\left(-\frac{N \beta^2 \sigma^2}{2} \sum_{\alpha < \beta} q_{\alpha \beta}^2 + N \log [\operatorname{Tr} e^{L(q_{\alpha \beta})} ]\right) =\\
+    &= \exp\left(\frac{n \beta^2 \sigma^2 N}{4}\right) \int_{-\infty}^{+\infty} \prod_{\alpha < \beta} \dd{q_{\alpha \beta}} \exp\left(- n N A[q_{\alpha \beta}]\right)\\
+    A(q_{\alpha \beta}) &= \left[\frac{1}{n} \frac{\beta^2 \sigma^2}{2} \sum_{\alpha < \beta} q_{\alpha \beta}^2 - \frac{1}{n} \log[\operatorname{Tr} e^{L(q_{\alpha \beta})} ]   \right]
+\end{align*}
+We compute the integral with a saddle point approximation. So we start by minimizing the argument:
+\begin{align*}
+    \pdv{A}{q_{\alpha \beta}} (q_{\alpha \beta}) \Big|_{q_{\alpha \beta}^*} \overset{!}{=} 0
+\end{align*}
+leading to:
+\begin{align}
+    \overline{Z^n} = \exp\left(-n N A [q_{\alpha \beta}^*]\right)
+    \label{eqn:Zn2}
+\end{align}
+And now we can return to the free energy:
+\begin{align}
+    f = \lim_{\substack{N \to \infty\\ n \to 0}} -\frac{1}{n N \beta}(\overline{Z^n} - 1) \label{eqn:f}
+\end{align}
+Expanding the exponential in (\ref{eqn:Zn}) to first order and inserting in (\ref{eqn:f}):
+\begin{align*}
+    f = \frac{1-n N A[q_{\alpha \beta}^*] - 1}{N n} (-\frac{1}{\beta} ) = \frac{1}{\beta}  A[q_{\alpha \beta}^*]
+\end{align*}
+(where we are ignoring the prefactor $\exp(n \beta^2 \sigma^2 N /4)$).
+
+\medskip
+
+We want now to understand what is the physical meaning of $q_{\alpha \beta}$. Stepping back, we start from the expression from $\overline{Z^n}$ right after the replica trick:
+\begin{align*}
+    \overline{Z^n} &= \sum_{\substack{\{S_1^\alpha,\dots,S_N^\alpha\}\\ \alpha=1,\dots,n}} \int_{-\infty}^{+\infty} \prod_{\alpha < \beta} \dd{q_{\alpha \beta}} \exp\left(-\frac{N \beta^2 \sigma^2}{2} \sum_{\alpha < \beta} q_{\alpha \beta}^2 + \textcolor{Red}{\frac{N}{N} } \beta^2 \sigma^2 \sum_{\alpha < \beta} q_{\alpha \beta} \sum_{i=1}^N S_i^\alpha S_i^\beta \right) =\\
+    &= \sum_{\substack{\{S_1^\alpha,\dots,S_N^\alpha\}\\ \alpha=1,\dots,n}} \int_{-\infty}^{+\infty} \prod_{\alpha < \beta} \dd{q_{\alpha \beta}} \exp\left(-N u(q_{\alpha \beta}, S_i^\alpha,\dots, S_N^\alpha)\right)\\
+    u &= \frac{\beta^2 \sigma^2}{2} \sum_{\alpha < \beta} q_{\alpha \beta}^2 - \beta^2 \sigma^2 \sum_{\alpha < \beta} q_{\alpha \beta}\frac{1}{N} \sum_{i=1}^N S_i^\alpha S_i^\beta  
+\end{align*}  
+And then we compute the integral by saddle point approximation:
+\begin{align*}
+    \pdv{u}{q_{\alpha \beta}} (q_{\alpha \beta})\Big|_{q_{\alpha \beta}^*} \overset{!}{=} 0 \Rightarrow q_{\alpha \beta}^* = \frac{1}{N} \sum_{i=1}^N S_i^\alpha S_i^\beta 
+\end{align*}
+So each term $q_{\alpha \beta}$, in the saddle point approximation, represents the normalized scalar product of spins of the replicas $\alpha$ and $\beta$. So $q_{\alpha \beta}$ is a real symmetric matrix.
+
+We also have a second order phase transition at \textit{critical temperature} $T_c$. For $T > T_c$ (1) the system is ergodic, and for $T < T_c$ (2) is non ergodic, and the phase space splits in \textit{disjoint ergodic components}, where a system starting in one of them \textit{cannot evolve} to one of the others.
+
+The two possibilities correspond to two different ansatz for $q_{\alpha \beta}$:
+\begin{enumerate}
+    \item $\displaystyle \left(\begin{array}{cccc}
+    1 & q_0 & \dots & q_0 \\ 
+    q_0 & \ddots & q_0 & \vdots \\ 
+    \vdots & q_0 & \ddots & q_0 \\ 
+    q_0 & \dots & q_0 & 1
+    \end{array}\right)_{n \times n} = q_{\alpha \beta}$\\
+    This ansatz leads to the minimum of the free energy. 
+    \item It is easier to understand the ansatz for $n \gg 1$. Here we have a \textit{hierarchical ansatz}. We start by constructing:
+    \begin{align*}
+        q_{\alpha \beta} = \left(\begin{array}{cccc}
+        M_1 & Q_0 & \dots & Q_0 \\ 
+        Q_0 & M_1 & Q_0 & \vdots \\ 
+        \vdots & Q_0 & \ddots & Q_0 \\ 
+        Q_0 & \dots & Q_0 & M_1
+        \end{array}\right)
+    \end{align*}  
+    where $Q_0$ are matrices $m_1 \times m_1$ with entries all equal to $q_0$. Every $M_1$ block is a $m_1 \times m_1$ matrix with the \textit{same structure}:
+    \begin{align*}
+        M_1 = \left(\begin{array}{cccc}
+        M_2 & Q_1 & \dots & Q_1 \\ 
+        Q_1 & \ddots & Q_1 & \vdots \\ 
+        \vdots & \ddots & M_2 & Q_1 \\ 
+        Q_1 & \dots & Q_1 & M_2
+        \end{array}\right)
+    \end{align*}   
+    with $Q_1$ blocks of size $m_2 \times m_2$ of all entries equal to $q_1$. We can reiterate this structure to find $M_2$, and then (for $n \to \infty$)  take this process to $M_{\infty}$, so that $n > m_1 > m_2 > m_3 > \dots > m_\infty$, and also $q_0 < q_1 < \dots < q_\infty$. Then, in the continuum limit we have a function $q(x) \colon [0,1] \mapsto [0,1]$, which is \textit{monotonic}, and so we can invert it:
+    \begin{align*}
+        x[q] = \int_0^q \dd{q} p(q)
+    \end{align*}           
+    which is the \textit{cumulative probability} of getting an overlap $\leq q$ between two replicas sampled at random from a Boltzmann distribution. Only then we can take the limit for $n \to 0$.   
+\end{enumerate}
+
+[Insert figure 1]
+
+\section{p-spin model}
+For $p=3$ the $p$-spin model involves an energy defined as follows:
+\begin{align} \label{eqn:p3}
+    H_J = -\sum_{i < j < k} J_{ijk} \sigma_i \sigma_j \sigma_k \qquad \sigma_i \in \mathbb{R}
+\end{align}
+Note that now spins $\bm{\sigma} = \{\sigma_1,\dots,\sigma_N\}$ \textit{are not discrete}, but are real numbers: $\sigma_i \in (-\infty,+\infty)$.
+
+To keep the energy bounded we introduce a \textit{spherical constraint}, i.e. we fix the norm of the spin vector $\bm{\sigma}$: 
+\begin{align*}
+    N \overset{!}{=} \sum_{i=1}^N \sigma_i^2
+\end{align*} 
+
+We can generalize (\ref{eqn:p3}) to a generic value of $p \in \mathbb{N}$:
+\begin{align*}
+    H_J = -\sum_{i_1 < \dots < i_p} J_{i_1,\dots,i_p} \sigma_{i_1} \cdots \sigma_{i_p}
+\end{align*} 
+We will make explicit computations in the case of $p=3$, but all the conclusions will be general for systems with $p>2$. $p=2$ is a special case, and must be analysed separately.
+
+We choose the $J_{ijk}$ with a gaussian pdf:
+\begin{align*}
+    P(J_{ijk}) = \frac{N^{\frac{p-1}{2} }}{\sqrt{p! \pi}} \exp\left(-\frac{N^{p-1}}{p!} J_{ijk}^2 \right) 
+\end{align*} 
+The spins are sampled with a Boltzmann pdf:
+\begin{align*}
+    P_J(\sigma_1, \dots, \sigma_N) = \exp(-\beta H_J[\sigma_1, \dots, \sigma_N]) \delta\left(N- \sum_{i=1}^N \sigma_i^2\right)
+\end{align*}
+And then the partition function is defined as:
+\begin{align*}
+    Z_J = \int_{-\infty}^{+\infty} \prod_{i=1}^N \dd{\sigma_i} P_J(\sigma_1, \dots, \sigma_N)
+\end{align*}
+As before, we are interested in computing the \textbf{free energy}:
+\begin{align*}
+    f = \lim_{N \to \infty} -\frac{1}{N^\beta} \overline{\log(Z_J)} 
+\end{align*} 
+Note that, in this model, we have \textit{non-linear interactions}, that is interactions of more than two spins at once (terms of order $>2$).
+
+Again we employ the replica trick:
+\begin{align*}
+    f &= \lim_{\substack{N \to \infty\\ n \to 0}} - \frac{1}{N \beta} \frac{\overline{Z^n} - 1 }{n}\\
+    \overline{Z^n} &=  \int_{-\infty}^{+\infty} \prod_{i<j<k} \dd{J_{ijk}} P(J_{ijk}) \left[\int_{-\infty}^{+\infty} \prod_{i=1}^N \dd{\sigma_i} \exp(-\beta H_J [\sigma_1, \dots, \sigma_N]) \delta\left(N-\sum_{i=1}^N \sigma_i^2\right)\right]^n =\\
+    &= \int_{-\infty}^{+\infty} \prod_{i < j} \dd{J_{ijk}} P(J_{ijk}) \int_{-\infty}^{+\infty} \underbrace{\prod_{\alpha = 1}^n \prod_{i=1}^N \dd{\sigma_i}^\alpha }_{\mathcal{D}\sigma} \exp\left(\beta \sum_{\alpha=1}^n \underbrace{\sum_{i<j<k}}_{\sim N^3}  J_{ijk} \sigma_i^\alpha \sigma_j^\alpha \sigma_k^\alpha\right) \prod_{\alpha=1}^n \delta\left(N-\sum_{i=1}^N [\sigma_i^\alpha]^2\right)
+\end{align*}
+For the central sum we have to compute $\sim N^3$ gaussian integrals, of the form:
+\begin{align*}
+    \int_{-\infty}^{+\infty} \dd{J_{ijk}} \exp\left(-\frac{N^{p-1}}{p!} J_{ijk}^2 + \beta J_{ijk} \sum_{\alpha=1}^n \sigma_i^\alpha \sigma_j^\alpha \sigma_k^\alpha  \right) &= \exp\left(\frac{\beta^2 p!}{4 N^{p-1}} \left( \sum_{\alpha = 1}^n \sigma_i^\alpha \sigma_j^\alpha \sigma_k^\alpha\right )^2 \right) =\\
+    &= \exp\left(\frac{\beta^2 p!}{4 N^{p-1}} \sum_{\alpha< \beta}^n (\sigma_i^\alpha \sigma_i^\beta) (\sigma_j^\alpha\sigma_j^\beta) (\sigma_k^\alpha \sigma_k^\beta)\right)
+\end{align*} 
+Taking into account the $N^3$ terms:
+\begin{align*}
+    \exp\left(\frac{\beta^2 p!}{4 N^{p-1}} \sum_{\alpha < \beta} \textcolor{Red}{\sum_{i< j < k}} (\sigma_i^\alpha \sigma_i^\beta) (\sigma_j^\alpha \sigma_j^\beta) (\sigma_k^\alpha \sigma_k^\beta)\right)
+\end{align*} 
+Note that:
+\begin{align*}
+    p! \sum_{i_1<i_2 < \dots i_p} \equiv \sum_{i_1, i_2,\dots,i_p}
+\end{align*}
+and so:
+\begin{align*}
+    \exp\left(\frac{\beta^2 \textcolor{Red}{\cancel{p!}}}{4 N^{p-1}} \sum_{\alpha < \beta} \textcolor{Red}{\sum_{ijk}} (\sigma_i^\alpha \sigma_i^\beta) (\sigma_j^\alpha \sigma_j^\beta) (\sigma_k^\alpha \sigma_k^\beta)\right)
+\end{align*}
+Also, note that:
+\begin{align*}
+    \exp\left(\frac{\beta^2}{4} \textcolor{Blue}{N} \sum_{\alpha < \beta} \left(\frac{1}{\textcolor{Blue}{N}}\sum_{i=1}^N \sigma_i^\alpha \sigma_i^\beta \right)^p \right)
+\end{align*}
+
+\end{document}
