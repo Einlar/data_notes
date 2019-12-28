@@ -62,164 +62,240 @@ where $t = t_N$. Substituting it back leads to:
 This expression has no rigorous meaning in this form ($\dot{x}(\tau)$  \textit{does not} exists!) but can be \textit{formally manipulated} into other expressions that \textit{have} a definite meaning, thus proving useful for the discussion.  
 
 \section{Forces on the particle}
-Let's return to the beginning. We started with a particle capable of moving in discrete steps (with probabilities $P_+$ and $P_-$ of going to the right or to the left), leading to the Master Equation, then to the Diffusion Equation and finally to the Path Integral.\\
-In particular, we arrived at:
+We want now to generalize the framework we obtained to the case of a diffusing particle subject to \textit{external forces}, e.g. a drop of ink diffusing through a water medium in the presence of gravity.
+
+To do this, we first return to the beginning, deduce a Master Equation for a more general \textit{evolution}, and then choose the right probability distribution reproducing the behaviour in presence of forces.
+
+So, let's start by considering a particle moving on a \textit{uniform} one-dimensional lattice ($x_i = i \cdot l$, $t_n = n \cdot \epsilon$), and satisfying the Markovian property, meaning that the probability $W_i(t_{n+1})$ of being at the position labelled by $i$ at the \textit{next time-step} $t_{n+1}$ depends only on the current state $t_n$, that is on the current probabilities $W_j(t_n) \> \forall j$) and on the current transition probabilities $W_{ij}(t_n)$ from $j$ to $i$:
+\begin{align}\label{eqn:Markov1}
+    W_i(t_{n+1}) = \sum_{j=-\infty}^{+\infty} W_{ij}(t_n) W_j(t_n)
+\end{align}
+
+Previously, we assumed that:
 \begin{align*}
-    \pdv{t} w(\bm{x}, t | \bm{x_0}, t_0) = \nabla^2 w(\bm{\bar{x}}, t| \bm{\bar{x}_0}, t_0)
-\end{align*}
-We want now to generalize this expression to the presence of \textit{forces} acting on the particle. We recall the usual discretization $x_i = i \cdot l$, $t_n = n \cdot \epsilon$. In general, the probability that the particle will be at position $i$ at time $t_{n+1}$ depends only on the states (probabilities) of the previous time step $t_n$:
-\begin{align*}
-    w_{i}(t_{n+1}) = \sum_j W_{ij}(t_n) w_j(t_n)
-\end{align*}     
-where $W_j(t_n)$ is the probability of the particle being at $j$ at $t_n$, and $W_{ij}(t_n)$ is the probability of jumping from $j$ to $i$ at $t_n$ (transition probability).\\
-In the first lecture we assumed that:
-\begin{align*}
-    w_{ij}(t_n) = \delta_{j,i-1} P_+ + \delta_{j,i+1} P_-
+    W_{ij}(t_n) = \delta_{j,i-1} P_+ + \delta_{j,i+1} P_-
 \end{align*}        
-i.e. the particle only jumps from adjacent positions, one step at a time, and cannot remain at the same place.\\
-Now we drop that assumption, leading to:
+Which means that the particle only jumps from adjacent positions, one step at a time, and cannot remain at the same place. This Master Equation leads, in $d=3$ and in the continuum limit, to the usual Diffusion Equation:
 \begin{align*}
-    w(x, t_{n+1})\dd{x} = \int \dd{z} W(z | x-z, t_n) w(x-z, t_n) \dd{x}
+    \pdv{t} W(\bm{x}, t|\bm{x_0}, t_0) = \nabla^2 W(\bm{x},t | \bm{x_0},t_0)
 \end{align*}
-i.e. the particle can make jumps of \textit{any} size, and is not restricted to the discretization. The integrand is just the probability for a particle starting from $[x,x+\dd{x}]$ to make a jump of size $z$ and arriving at $[x-z, x+\dd{x}-z]$.\\
-In the discrete case we previously considered, the condition $\sum_i W_{ij} (t_n) = 1$ (along with the master equation $w_i(t_{n+1}) = \sum_j W_{ij} (t_n) w_j(t_n)$) implied the conservation of probability $\sum_i w_i(t_{n+1}) = \sum_i w_i(t_n) = \dots = \sum_i w_i(0) = 1$.\\
-Now, in the more general case, we have:
-\begin{align*}
-    w(x,t_{n+1}) &= \int \dd{z} W(z | x-z, t_n) w(x-z, t_n) = \\
-    &= \int \dd{y} \int \dd{z} W(z|y,t_n) w(y, t_n) = \int \dd{y} w(y,t_n)
-\end{align*}
-with $y = x-z$ only if:
-\begin{align*}
-    \int \dd{z} W(z|y,t) = 1 \quad \forall y, \forall t \geq 0
-\end{align*} 
-We now consider the continuum limit in time:
-\begin{align*}
-    w(x,t_{n+1}) - w(x,t_n) = \int \dd{z} W(z| x-z, t_n) w(x-z, t_n) - w(x,t_n)
-\end{align*}
-Multiplying by $1$:
-\begin{align*}
-    w(x, t_{n+1} ) - w(x,t_n) &= \int \dd{z} W(z| x-z, t_n) w(x-z, t_n) - \textcolor{Blue}{\int \dd{z} W(z| x, t_n)} w(x,t_n) =\\
-    &= \int \dd{z} \left[\underbrace{W(z| x-z,t_n) w(x-z, t_n) }_{F_z(x-z)} - \underbrace{W(z|x,t_n) w(x,t_n)}_{F_z(x)} \right] =\\
-    &= F_z(x) - z \pdv{x} F_z(x) + \frac{z^2}{2} \pdv[2]{x} F_z(x) + \dots =\\
-    &= -\int \dd{z} z \pdv{x} \left[W(z| x, t_n) w(x,t_n)\right] + \frac{1}{2} \int \dd{z} z^2 \pdv[2]{x} \left[W(z|x,t_n)w(x,t_n)\right] + \dots 
-\end{align*}
-We then consider a sort of $k$-th moment of the distribution: 
-\begin{align*}
-    \mu_k(x,t) = \int \dd{z} z^k W(z|x,t)
-\end{align*}
-so that $\mu_0(x,t) = 1$ due to the normalization. Returning to the previous expression:
-\begin{align*}
-    w(x,t_{n+1}) - w(x,t_n) &= \sum_{k=1}^\infty \frac{(-1)^k}{k!} \pdv{k}[\mu_k(x,t) w(x,t_n)] =\\
-&= \pdv{x} \left\{
-\sum_{k=1}^\infty  (-1)^k  \pdv[k-1]{x} [\mu_k(x,t) w(x,t_n)] 
-\right\} = -\pdv{x}J(x,t_n) \\
-\end{align*} 
-where the right side can be interpreted as the flux $J$.\\ 
-If we integrate over $x$, the left side is equal to $0$ (due to the normalization):
-\begin{align*}
-    0 = \sum_{k\geq 1} (-1)^k \int_{-\infty}^{+\infty} \left(\pdv{x}\right)^k [\mu_k(x,t) w(x,t_n)]
-\end{align*}  
-So, if the flux at the boundaries is $0$, then the probability is conserved (e.g. if the system is closed).
+%TO DO: insert figures (look at the notebook)
 
-If we now divide by the time interval (to get the derivative):
+We now consider a more general case, where we drop the discretization of the space domain, allowing \textit{jumps} of \textit{any size} in $\mathbb{R}$. Then (\ref{eqn:Markov1}) becomes:
+\begin{align}
+    \label{eqn:Markov2}
+    W(x,t_{n+1}) \dd{x} = \int_{-\infty}^{+\infty} \dd{z} W(x, t_{n+1}|x-z,t_n) W(x-z,t_n)
+\end{align}
+The integrand is the probability of the particle being in $[x-z,x-z+\dd{x}]$ at time $t_n$ and making a jump of size $z$ to reach $[x,x+\dd{x}]$ at time $t_{n+1}$. By summing over \textit{all possible jump sizes} we compute the total probability of the particle being \textit{near} the arrival position.
+
+If we require \textit{jumps} to be \textbf{independent} of each other\footnote{This is a stronger requirement than the Markovian property. In fact, \textit{independent increments} imply a \textit{Markov process}, but the converse is not true. See \url{http://statweb.stanford.edu/~adembo/math-136/Markov_note.pdf}}, as it is physically evident by the problem's symmetry, then the \textit{jump} probabilities $W(x,t_{n+1}|x-z,t_n)$ depend only on the \textit{jump size} $z$.  
+
+Assuming a \textit{isolate system}, as the particle cannot \textit{escape}, \textbf{probability is conserved}:
 \begin{align*}
-    \frac{w(x,t_{n+1})- w(x,t_n)}{t_{n+1}-t_n} = \pdv{x} \left\{
-    \sum_{k=1}^\infty \frac{(-1)^k}{k!}  \pdv[k-1]{x} \frac{\mu_k(x,t_n) w(x,t_n)}{t_{n+1}-t_n} 
-    \right\} 
+    \int_{\mathbb{R}} \dd{x} W(x,t_{n+1}) &\overset{!}{=} \int_{\mathbb{R}} \dd{y} W(y,t_n)\\
+    &\underset{(\ref{eqn:Markov2})}{=} \int_{\mathbb{R}} \dd{z} \int_{\mathbb{R}} \dd{x W(x,t_{n+1}|x-z,t_n)} W(x-z,t_n) =\\
+    &\underset{(a)}{=} \int_{\mathbb{R}} \dd{z} \int_{\mathbb{R}} \dd{y} W(y+z,t_{n+1}|y,t_n) W(y,t_n) =\\
+    &\underset{(b)}{=} \left(\int_{\mathbb{R}} \dd{z} W(\bar{y} + z,t_{n+1}|\bar{y},t_n) \right) \left(\int_{\mathbb{R}} \dd{y} W(y,t_n) \right) \qquad \forall \bar{y} \in \mathbb{R}
 \end{align*}
-Letting $t_{n+1}-t_n=\epsilon$, in the limit $\epsilon \to 0$  the left side will be $\dot{w}(x,t)$. Now, recall that for the pdf:
+where in (a) we changed variables $x \mapsto y=x-z$, with $\dd{y} = \dd{x}$, and in (b) we used the \textit{independent increments} property ($\bar{y}$ is a arbitrary constant). Comparing the first and last lines leads to:
 \begin{align*}
-    \frac{1}{\sqrt{4 \pi D \epsilon}} \exp\left(-\frac{(\Delta x)^2}{4 D \epsilon} \right)
+    \int_{\mathbb{R}} \dd{z} W(y+z,t_{n+1}|y,t_n) = 1
+\end{align*} 
+Intuitively, if the particle \textit{cannot disappear}, it \textit{must make a jump}.   
+
+Here on, for notation simplicity, we denote:
+\begin{align*}
+    W(y+z,t_{n+1}|y,t_n) \equiv W(+z|y,t_n)
 \end{align*}
-we have $\langle  \Delta x \rangle = 0$ and $\langle (\Delta x)^2 \rangle = 2 D \epsilon$, with $|\Delta x| \approx \sqrt{\epsilon}$.\\
-If the particle is subject to a force, then it will move in a \textit{preferred direction}. So we want:
+
+Starting from (\ref{eqn:Markov2}) and taking the continuum limit in time we can write a \textit{more general} diffusion equation. We start by constructing the difference quotient:
 \begin{align*}
-    \langle  z \rangle = \int z W(z|x,t) \propto \epsilon f(x)
+    W(x,t_{n+1}) - W(x,t_n) &= \int_{\mathbb{R}} \dd{z} W(+z| x-z, t_n) W(x-z, t_n) - W(x,t_n) =\\
+    &= \int_\mathbb{R} \dd{z} W(+z| x-z, t_n) W(x-z, t_n) - \underbrace{\textcolor{Blue}{\int \dd{z} W(+z| x, t_n)}}_{=1} W(x,t_n) =\\
+    &= \int_\mathbb{R} \dd{z} \Big[\underbrace{W(+z| x-z,t_n) W(x-z, t_n) }_{F_z(x-z)} - \underbrace{W(+z|x,t_n) W(x,t_n)}_{F_z(x)} \Big] =\\
+    &= \int_{\mathbb{R}} \dd{z} \left[F_z(x-z) - F_z(x)\right] = \\
+    &\underset{(a)}{=} \int_{\mathbb{R}} \dd{z} \left[\cancel{F_z(x)} -z \pdv{x} F_z(x) + \frac{z^2}{2} \pdv[2]{x} [F_z(x)] +\dots - \cancel{F_z(x)}\right] = \\
+    &=-\int_{\mathbb{R}} \dd{z} z \pdv{x} [F_z(x)] + \frac{1}{2} \int_\mathbb{R} \dd{z} z^2 \pdv[2]{x} [F_z(x)] + \dots =\\
+    &\underset{(b)}{=} -\pdv{x} \Bigg[\underbrace{\left(\int_{\mathbb{R}} \dd{z} z\,W(+z|x,t_n)\right)}_{\mu_1(x,t_n)} W(x,t_n)\Bigg]  +\\
+    &\quad\> + \frac{1}{2} \pdv[2]{x} \Bigg[\underbrace{\left(\int_{\mathbb{R}} \dd{z} z \, W(+z|x,t_n)\right)}_{\mu_2(x,t_n)} W(x,t_n)\Bigg] + \dots
+\end{align*}
+where $F_z(x)$ is the probability of a \textit{jump} of size $z$ from the position $x$. In (a) we expanded $F_z$ about $x$, and in (b) we exchanged the order of integrals and derivatives. Then we define the $k$-th moment of the \textit{jump} pdf as follows:
+\begin{align*}
+    \mu_k(x,t) = \int_{\mathbb{R}} \dd{z} z^k \, W(+z|x,t)
+\end{align*}  
+This allows us to rewrite the above difference in a more compact form:
+\begin{align*}
+    W(x,t_{n+1}) - W(x,t_n) &= \sum_{k=1}^{+\infty} \frac{(-1)^k}{k!} \pdv[k]{x} \left(\mu_k(x,t_n) W(x,t_n)\right) 
+\intertext{Physically, as probability is conserved, by the continuity equation, the \textit{change} in probability density equals the divergence of a \textit{flux}, which is just the $x$ derivative in this one-dimensional case. So, if we \textit{extract} a derivative, we can write the flux explicitly:}
+&= \pdv{x}\left(\sum_{k=1}^{+\infty} \frac{(-1)^k}{k!} \pdv[k-1]{x}(\mu_k(x,t_n) W(x,t_n)) \right)\\
+&\equiv -\pdv{x} J(x,t_n)
+\end{align*}
+where $J(x,t_n)$ is the \textit{outward flux} at $x$, meaning that if $J>0$, then $W(x,t_{n+1}) < W(x,t_n)$ (the particle \textit{escapes} from $x$ to another place), and otherwise if $J<0$ we have $W(x,t_{n+1}) > W(x,t_n)$ (the particle is \textit{sucked in} $x$).
+
+If we integrate both sides over $x$ and apply the probability conservation we get the boundary conditions for the flux:
+\begin{align*}
+    \int_{\mathbb{R}} (W(x,t_{n+1}) - W(x,t_n)) \dd{x} &= \int_{\mathbb{R}} \dd{x } \left(-\pdv{x} J(x,t_n)\right)\\
+    1-1 &= -J(x,t_n) \Big|_{-\infty}^{+\infty} = J(-\infty,t_n) - J(+\infty,t_n)
+\end{align*}
+This means that, in a \textit{isolate system}, the \textit{flux} at $\pm \infty$ must be the same.  
+
+Finally, normalizing by the time interval we get the complete difference quotient, which will become a time derivative in the continuum limit.
+\begin{align}
+    \frac{W(x,t_{n+1})- W(x,t_n)}{t_{n+1}-t_n} = \pdv{x} \left\{
+    \sum_{k=1}^\infty \frac{(-1)^k}{k!}  \pdv[k-1]{x} \frac{\mu_k(x,t_n) W(x,t_n)}{t_{n+1}-t_n} 
+    \right\}
+    \label{eqn:rapporto-incrementale} 
+\end{align}
+Letting $t_{n+1}-t_n=\epsilon$, in the limit $\epsilon \to 0$  the left side will be $\dot{W}(x,t)$.
+
+\medskip
+
+All that's left is to find an explicit definition for the \textit{jump pdf} $W(+z|x,t)$. Previously, we assumed a \textbf{gaussian} pdf for the displacements:
+\begin{align*}
+    z \sim \frac{1}{\sqrt{4 \pi D \epsilon}}  \exp\left(-\frac{(\Delta x)^2}{4 D \epsilon} \right)
+\end{align*} 
+With this choice, the first two moments become:
+\begin{align*}
+    \mu_1 = 0 \qquad \mu_2 = 2 D \epsilon
+\end{align*}
+And the variance:
+\begin{align*}
+    \operatorname{Var}(z) =  \mu_2 - \mu_1^2 = 2 D \epsilon \propto \epsilon 
+\end{align*}
+
+However, for a particle subject to a force we would expect to have a \textit{preferred jump direction}, leading to a \textit{constant velocity motion} in the direction of the force. So we require a different $\mu_1$: 
+\begin{align*}
+    \langle z \rangle = \mu_1 = \int_{\mathbb{R}} z W(+z|x,t) \propto \epsilon f(x)
+\end{align*} 
+We still want to fix the variance to be proportional to $\epsilon$, as it is expected in a diffusion process. 
+
+An appropriate choice for such a distribution is given by:
+\begin{align}
+    W(+z|x,t) = F\left(\frac{z-\epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}}  \right)
+    \label{eqn:Fbig}
+\end{align}
+with $F, \hat{D}\colon \mathbb{R} \to \mathbb{R}$ functions, satisfying certain conditions, and with a physical meaning that we will now see.
+
+First of all, we check the normalization:
+\begin{align*}
+    1 \overset{!}{=} \int_{\mathbb{R}} \dd{z} W(+z|x,t)  = \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}} \int_{\mathbb{R}} \dd{z} F\left(\frac{z-\epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) \underset{(a)}{=} \int_{\mathbb{R}} \dd{y} F(y)  
+\end{align*}
+where in (a) we changed variables:
+\begin{align}
+    y = \frac{z-\epsilon f(x,t) }{\sqrt{\epsilon \hat{D}(x,t)}} \qquad \dd{z} = \sqrt{\epsilon \hat{D}(x,t)} \dd{y}  \label{eqn:cov1}
+\end{align}
+Then we compute the first moment:
+\begin{align*}
+    \langle z \rangle &= \mu_1(x,t) = \int_{\mathbb{R}} \dd{z} z \, F\left(\frac{z- \epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}} =\\
+    &\underset{(\ref{eqn:cov1})}{=} \int_{\mathbb{R}} \dd{y} \left(\epsilon f(x,t) + y \sqrt{\epsilon \hat{D}(x,t)}\right) F(y) = \\
+    &= \epsilon f(x,t) \underbrace{\int_{\mathbb{R}} F(y) \dd{y}}_{=1} + \sqrt{\epsilon \hat{D}(x,t)} \int_{\mathbb{R}} yF(y) \overset{!}{=} \epsilon f(x,t)
+\end{align*}
+So, in order to have the right normalization and the desired $\langle z \rangle$ we need:
+\begin{align*}
+    \begin{cases}
+        \int_{\mathbb{R}} \dd{y} F(y) = 1\\
+        \int_{\mathbb{R}} \dd{y} y F(y) = 0
+    \end{cases}
+\end{align*}
+Both conditions are satisfied, for example, by all even normalized functions.
+
+For the second moment:
+\begin{align*}
+    \mu_2(x,t) &= \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}} \int_{\mathbb{R}} \dd{z} z^2  F\left(\frac{z-\epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) =\\
+    &\underset{(\ref{eqn:cov1})}{=} \int_{\mathbb{R}} \dd{y} (\epsilon f(x,t) + y \sqrt{\epsilon \hat{D}(x,t)})^2 F(y) =\\
+    &= \int_{\mathbb{R}} \dd{y} F(y) [\epsilon^2 f^2 + y^2 \hat{D} \epsilon + \cancel{2 \epsilon \sqrt{\epsilon} \hat{D} f y}] =\\
+    &= \epsilon^2 f^2 + \hat{D} \epsilon \int_{\mathbb{R}} \dd{y} y^2 F(y) = \epsilon^2 f^2 + \hat{D} \epsilon \langle y^2 \rangle_{F(y)}
+\end{align*}
+And so the variance becomes:
+\begin{align*}
+    \operatorname{Var}(z) = \mu_2 - \mu_1^2 = \epsilon \hat{D} \langle y^2 \rangle_{F(y)} \propto \epsilon
+\end{align*}
+which is proportional to $\epsilon$ as desired. For notational simplicity, we introduce a new function $D\colon \mathbb{R} \to \mathbb{R}$ such that:
+\begin{align*}
+    \operatorname{Var}(z) = \epsilon\hat{D} \langle y^2 \rangle_{F(y)} \equiv 2 D(x,t) \epsilon \Rightarrow \mu_2(x,t) = \epsilon^2 f^2 + 2 D(x,t)   
+\end{align*} 
+
+We note that higher order moments are all of order $O(\epsilon^{3/2})$. For example, the third moment is:
+\begin{align*}
+    \mu_3(x,t) &= \frac{1}{\sqrt{\epsilon \hat{D}(x,t)} \int_{\mathbb{R}}} \dd{z} z^2 F\left(\frac{z- \epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) = \\ 
+    &\underset{(\ref{eqn:cov1})}{=} \int_{\mathbb{R}} \dd{y} (\epsilon f(x,t) + y \sqrt{\epsilon \hat{D}(x,t)})^3 F(y) =\\
+    &= \int_{\mathbb{R}} \dd{y} \left(\epsilon^3 f^3 + y^3 (\epsilon \hat{D})^{3/2} + \cancel{3 \epsilon^2 f^2 y \sqrt{\epsilon \hat{D}}} + 3 \epsilon^2 f \hat{D} y^2\right) F(y) =\\
+    &= \epsilon^3 f^3 + (\epsilon \hat{D})^{3/2} + 3 \epsilon^2 f \hat{D} \langle y^2 \rangle_{F(y)} = O(\epsilon^{3/2})
+\end{align*} 
+
+Substituting back (\ref{eqn:Fbig}) in (\ref{eqn:rapporto-incrementale}) we arrive to:
+\begin{align*}
+    \frac{W(x, t_{n+1}) - W(x,t_n)}{\epsilon} &= -\pdv{x} \Bigg[W(x,t_n) \underbrace{\frac{\mu_1(x,t_n)}{\epsilon}}_{f(x,t)}  \Bigg] + \frac{1}{2} \pdv[2]{x} \Bigg[ \underbrace{\frac{\mu_2(x,t_n)}{\epsilon}}_{\epsilon f^2 + 2D(x,t)}  W(x,t_n)\Bigg]  +\\
+    &\quad\>\>+ \underbrace{\frac{1}{3!} \pdv[3]{x} \Bigg[W(x,t_n) \frac{\mu_3 (x,t_n)}{\epsilon} \Bigg] + \dots}_{O(\epsilon^{1/2})} 
+\end{align*}
+
+Taking the limit $\epsilon \to 0$, we are left with:
+\begin{align*}
+    \pdv{W(x,t)}{t} &= -\pdv{x}[f(x,t) W(x,t)] + \frac{1}{\cancel{2}} \pdv[2]{x}[\cancel{2} D(x,t)W(x,t)] =\\
+    &= - \pdv{x} \Big[f(x,t) W(x,t) - \pdv{x} \big(D(x,t) W(x,t)\big)\Big]  
+\end{align*} 
+This is the \textbf{Fokker-Planck equation}, describing the diffusion process in the presence of a \textit{force} $f(x,t)$, and a diffusion parameter $D(x,t)$.
+
+Note that, in absence of forces $f(x,t) \equiv 0$ and with a constant diffusion $D(x,t) \equiv D$ we retrieve the usual \textit{diffusion equation}:
+\begin{align*}
+    \pdv{t} W(x,t) = D \pdv[2]{x}W(x,t)
+\end{align*}     
+
+\section{Langevin equation}
+The Fokker-Planck equation involves \textit{probability distributions}, meaning that it describes the behaviour of \textit{ensembles of trajectories} at once. However, we can find an equivalent description by focusing on a \textit{single path}. 
+
+We start with a Wiener process, that is a stochastic process with \textit{independent} and \textit{gaussian} increments and \textit{continuous} paths. Considering a time discretization $\{t_i\}$, the evolution of a single trajectory is described by:
+\begin{align}
+    x(t_{i+1}) = x(t_i) + \Delta x(t_i) \label{eqn:increment}
+\end{align}
+where the increment $\Delta x(t_i)$ is sampled from a gaussian pdf:
+\begin{align*}
+    \Delta x_i(t_i) \sim \frac{1}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\frac{(\Delta x)^2}{4 D \Delta t_i} \right) 
+\end{align*}
+To simplify notation, we change variables, so that:
+\begin{align*}
+    \frac{\Delta B^2}{2} = \frac{\Delta x^2}{4 D} \Rightarrow \Delta B = \frac{\Delta x}{\sqrt{2 D}}    
+\end{align*}
+If $x \sim p(x)$, and $y = y(x) \sim g(y)$, then by the rule for a change of random variables we have:
+\begin{align*}
+    g(y) = p(x(y)) \dv{x(y)}{y}(x(y))
+\end{align*}
+In this case:
+\begin{align*}
+    \Delta B \sim \frac{1}{\sqrt{4 \pi D \Delta t_i }} \exp\left(-\frac{(\Delta B)^2}{2 \Delta t_i} \right) \underbrace{\dv{\Delta x}{\Delta B}}_{\sqrt{2 D}} = \frac{1}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\frac{(\Delta B)^2}{2 \Delta t_i} \right)  
+\end{align*}
+Note that now $\langle \Delta B^2(t_i) \rangle = \Delta t_i$, leaving out the $D$.
+
+Substituting in (\ref{eqn:increment}) and rearranging we get:
+\begin{align}
+    x(t_{i+1}) - x(t_i) = \sqrt{2 D} \Delta B(t_i)  \label{eqn:increment2}
+\end{align}
+We want now to form a time derivative in the left side, in order to arrive a (stochastic) differential equation for paths. To do this, we first extract a $\Delta t_i$ factor from $\Delta B(t_i)$ by performing another change of variables:
+\begin{align}
+    \Delta B(t_i) \equiv \Delta t_i \xi(t_i) 
+    \label{eqn:deltaB}
+\end{align}  
+so that $\Delta x_i = \sqrt{2D} \Delta t_i \xi$, and all the \textit{randomness} is now contained in the random variable $\xi$, which is distributed according to:
+\begin{align*}
+    \xi(t_i) \sim \frac{1}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\frac{\Delta t_i^2 \xi_i^2}{2 \Delta t_i} \right) \underbrace{\dv{\Delta B_i}{\xi (t_i)}}_{\Delta t_i} = \sqrt{\frac{\Delta t_i}{2 \pi} } \exp\left(-\frac{\Delta t_i }{2} \xi_i^2 \right) \qquad \xi_i \equiv \xi(t_i)  
 \end{align*}   
-where $f(x)$ is the force (e.g. $f(x) = mg$ for gravity). In fact, in a constant regime, the velocity of a particle is constant (when friction and the force balance out).\\
-And then, the variance of $z$ should be:
+Substituting back in (\ref{eqn:increment2}) and dividing by $\Delta t_i$ leads to:
 \begin{align*}
-    \langle (z- \langle  z \rangle)^2 \rangle = \operatorname{Var}(z) \propto \epsilon  
-\end{align*}  
-So we make an \textit{ansatz}:
-\begin{align*}
-    W(z|x,t) = F\left(\frac{z- \epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) \frac{1}{\sqrt{\epsilon\hat{D}(x,t) }} 
-\end{align*} 
-Let's see why this guess is good. First, we integrate over $z$ to check the normalization:
-\begin{align*}
-    1 &\overset{!}{=}  \int_{-\infty}^{+\infty} \dd{z} W(z| x,t) = \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}} \int_{-\infty}^{+\infty} \dd{z} F\left(\frac{z-\epsilon f(x,t) }{\sqrt{\epsilon \hat{D}(x,t)}} \right) =\\
-    &= \int_{-\infty}^{+\infty} \dd{y} F(y)
-\end{align*}  
-Then:
-\begin{align*}
-    \langle z \rangle = \int \dd{z} z F\left(\frac{z- \epsilon f(x,t)}{\sqrt{\epsilon\hat{D}(x,t) }} \right) \frac{1}{\sqrt{\epsilon \hat{D}(x,t )}} = \int \dd{y} (\epsilon f(x,t) + y\sqrt{\epsilon \hat{D} (x,t)}) F(y) \overset{!}{=}  \epsilon f(x,t)
+    \frac{x(t_{i+1})-x(t_i)}{\Delta t_i}  = \sqrt{2D} \xi(t_i)
 \end{align*}
-So, summarizing, we require two conditions for $F$:
-\begin{align*}
-    1 &= \int \dd{y} F(y)\\
-    0 &= \int \dd{y} y F(y)
-\end{align*} 
-Note that all normalized even functions (where $F(y) = F(-y)$) satisfy both of them (but they are not the only ones).\\
-Consider now the higher moments:
-\begin{align*}
-    \mu_2 (x,t) &= \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}} \int \dd{z} z^2 F\left(\frac{z- \epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) = \int \dd{y} (\epsilon f(x,t) + y \sqrt{\epsilon \hat{D}(x,t)})^2 F(y) = \\
-    &= \int \dd{y} F(y) \left[ \epsilon^2 f^2 + 2 \epsilon \sqrt{\epsilon} \hat{D} f y + y^2 \hat{D} \epsilon \right] =\\
-    &= \epsilon ^2 f^2  + 0 + \epsilon \hat{D} \int \dd{y} y^2 F(y) =\\
-    &= \epsilon^2 f^2 + \epsilon \hat{D} \langle y^2 \rangle_F  \\
-\end{align*}  
-and so:
-\begin{align*}
-    \operatorname{Var}(z) = \mu_2 - \mu_1^2 = \epsilon \hat{D} \langle y^2 \rangle_F 
-\end{align*}
-which is consistent with the random walk properties.\\
-Summarizing:
-\begin{align*}
-    \mu_1(x,t)
- = \epsilon f(x,t) \qquad \mu_2(x,t) = \epsilon \hat{D} (x,t) \langle y^2 \rangle_F = 2D(x,t)
-\end{align*}
-Now, for the third moment:
-\begin{align*}
-    \langle z^3 \rangle = \dots = \int \dd{y} F(y) (\epsilon f + y \sqrt{\epsilon \hat{D}} )^3 
-\end{align*}
-Recall that:
-\begin{align*}
-    \frac{w(x,t_{n+1}) - w(x,t_n)}{\epsilon} &= -\pdv{x} \left[w(x,t) \underbrace{\frac{\mu_1(x,t)}{\epsilon}}_{f(x,t)}  \right] + \frac{1}{2} \pdv[2]{x} \left[w(x,t) \underbrace{\frac{\mu_2(x,t)}{\epsilon}}_{2D(x,t)}  \right]  + \frac{1}{3!} \pdv[3]{x} \left[w \frac{\mu_3}{\epsilon} \right] + \dots
-\end{align*}
-The higher terms are at least of $O(\sqrt{\epsilon})$, and thus vanish in the limit. 
-\begin{align*}
-    \dot{w}(x,t) = -\pdv{x} \underbrace{\left[f(x,t) w(x,t) - \pdv{x}(D(x,t) w(x,t))\right]}_{J(x,t)} 
-\end{align*}
-Then, if $f(x,t) = 0$ (free particle) and $D(x,t) = D$ constant, then we get the diffusion equation:
-\begin{align*}
-\dot{w}(x,t) = D\pdv[2]{x} w(x,t) 
-\end{align*}
-However, this equation is much more general, and it is called the \textbf{Fokker-Plank}  equation.  
-
-\section{Langenvin equation}
-Following the approach of the first lessons, we now search for a general solution for the motion.\\
-In general, the position at the next time step for a free particle is given by:
-\begin{align*}
-    x(t_{i+1}) = x(t_i) + \Delta x(t_i)
-\end{align*}
-where $\Delta x(t_i)$ is sampled from a gaussian distribution:
-\begin{align*}
-    \Delta x(t_i) \sim \frac{1}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\frac{\Delta x^2}{4 D \Delta t_i } \right)
-\end{align*} 
-We can rewrite it as:
-\begin{align*}
-    x(t_{i+1}) = x(t_i) + \sqrt{2D } \Delta B(t_i)
-\end{align*}
-with:
-\begin{align*}
-    \Delta x_i = \sqrt{2D} \Delta B(t_i); \quad \Delta B(t_i) \sim \frac{1}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\frac{\Delta B_i^2}{2 \Delta t_i} \right) 
-\end{align*}
-and $\langle \Delta B^2 (t_i) \rangle = \Delta t_i$.\\
-So, if we define $\Delta B(t_i) = \Delta t_i \xi(t_i)$, dividing both sides by $\Delta t_i$ we get:
-\begin{align*}
+And by taking the continuum limit $\Delta t_i \to 0$ we get the \textbf{Langevin equation} for a Brownian particle:
+\begin{align}
     \dot{x}(t) = \sqrt{2D} \xi(t)
-\end{align*}    
-which is the \textbf{Langenvin} equation for a Brownian particle.\\
-However, recall that the spatial derivative for a brownian trajectory does not exist - so this is a \textit{quasi-equation}, without a rigorous meaning.
+    \label{eqn:langevin1}
+\end{align}
+Note that, as we saw previously, Brownian paths are not differentiable - and so this is just a \textit{formal} equation, with a definite meaning only in a given \textit{discretization}. Also, note that $\xi(t)$ is a random variable, and so this is an example of a \textbf{stochastic differential equation}. It is not clear how to find a solution to such an equation, or even how to \textit{define} what a solution should be - and this will be the main topic of the next section.
+
+We can rewrite (\ref{eqn:langevin1}) in a more \textit{rigorous} form by \q{multiplying by $\dd{t}$}, i.e. performing the change of variables (\ref{eqn:deltaB}), which - in the continuum limit - is $\dd{B} = \xi \dd{t}$, leading to:
+\begin{align*}
+    \dd{x(t)} = \sqrt{2 D} \dd{B} \qquad \dd{B} \sim \frac{1}{\sqrt{2 \pi \dd{t}}} \exp\left(-\frac{\dd{B}^2}{2 \dd{t}} \right) 
+\end{align*}  
+
+\begin{comment}
 \begin{align*}
     \xi(t_i) \sim \sqrt{\frac{\Delta t_i}{2 \pi} } \exp\left(-\frac{\Delta t_i \xi_i^2}{2 } \right)
 \end{align*}  
@@ -228,10 +304,15 @@ and then:
     P(\xi \dots ) \propto \exp\left(-\frac{1}{2} \int \xi^2 (\tau) \dd{\tau} \right)
 \end{align*}
 and $\langle \xi(\tau) \rangle = 0$, $\langle \xi (\tau) \xi (\tau') \rangle = \delta(\tau - \tau')$.
+\end{comment}
 
+Before moving on, we want to generalize this equation to the presence of \textit{external forces}. As we saw previously, this just results in adding a \textit{constant velocity motion} to the particle, leading to the full \textbf{Langevin equation}: 
 \begin{align*}
-    \dd{x}(t) = \sqrt{2D} \dd{B}; \qquad \dd{B} \sim \frac{1}{\sqrt{2 \pi \dd{t}}} \exp\left(-\frac{\dd{B}^2}{2 \dd{t}} \right) 
-\end{align*}
+    \dot{x}(t) &= f(x,t) + \sqrt{2 D}\xi(t)\\
+    \dd{x(t)} &= f(x,t) \dd{t} + \sqrt{2 D} \dd{B} \qquad \dd{B} \sim \frac{1}{\sqrt{2 \pi \dd{t}}} \exp\left(-\frac{\dd{B}^2}{2 \dd{t}} \right) 
+\end{align*} 
+
+\begin{comment}
 Now consider a particle moving in 3D:
 \begin{align*}
     m \ddot{\bm{r}} (t) = - \gamma\dot{\bm{r}} + \bm{F}_{\mathrm{ext} } + \bm{F}_{\mathrm{noise} }(t)
@@ -258,5 +339,6 @@ This has no meaning unless we define a discretization:
     \dd{x}(t) = f(x,t) \dd{t} + \sqrt{2D} \dd{B}\qquad \dd{B} \sim \frac{1}{\sqrt{2\pi \dd{t}}} \exp\left(-\frac{(\dd{B})^2}{2\dd{t}} \right) 
 \end{align*}
 which is a \textit{stochastic differential equation}. But how to integrate it? 
+\end{comment}
 
 \end{document}
