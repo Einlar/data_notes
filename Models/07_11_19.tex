@@ -20,75 +20,189 @@ We want to show that this kind equation leads to the same Fokker-Planck equation
     \mathbb{P}(x,t)  \xrightarrow[t \to \infty]{}  \frac{1}{z} \exp\left(-\frac{V(x)}{k_B T} \right) 
 \end{align*}
 
-\section{Stochastic integral}
-Now the main problem is that the Langenvin equation is a \textbf{stochastic equation}, and we do not (yet) know how to integrate a stochastic term:
+\section{Stochastic integrals}
+We arrived at the Langevin equation:
+\begin{align}
+    \dv{x}{t} = f(x,t) + \sqrt{2D(x,t)} \xi(t)
+    \label{eqn:langevin1}
+\end{align}
+where $\xi(t)$ is a \q{rapidly varying, highly irregular function}, i.e. such that for $t\neq t'$, $\xi(t)$ and $\xi(t')$ are statistically independent. As $\langle \xi(t) \rangle = 0$, this means that:
+\begin{align*}
+    \langle \xi(t) \xi(t') \rangle = \delta(t - t')
+\end{align*}  
+Equation (\ref{eqn:langevin1}) does not make much sense, as $\dot{x}(t)$ does not exist anywhere. Even changing variables to $\dd{B}$ (i.e. \q{multiplying} both sides by $\dd{t}$) and integrating, we are left with the following equation: 
 \begin{align*}
     x(t) = x(0) + \int_0^t f(x(\tau), \tau) \dd{\tau} + \int_0^t \sqrt{2D(x(\tau), \tau)} \dd{B(\tau)} 
-\end{align*} 
-Note that we cannot \q{multiply} by $\dd{\tau}/\dd{\tau}$ to change variables, as this would require the \textit{existence of the first derivative}!\\
-So, let's consider a stochastic integral:
-\begin{align*}
-    S = \int_0^t G(\tau) \dd{B}(\tau)
-\end{align*}  
-This is a \textbf{random variable}. To compute it, we first discretize it:
-\begin{align*}
-    S_n = \sum_{i=0}^{n} G(\tau_i) [B(t_i) - B(t_{i-1})]
 \end{align*}
-where $t_{i-1} \leq \tau_i \leq t_i$. If $B(t)$ is well-behaving (has a first derivative), then how we choose $\tau_i$ inside $[t_{i-1},t_i]$ does not matter, as the limit will be always the same. However, this is not the case in this expression.\\
-First, we ask what does it mean to take the limit $n \to \infty$. Suppose $S_n$ is a generic random variable, and we consider $S_n  \xrightarrow[n \to \infty]{} S$. We can consider the following definitions:
-\begin{enumerate}
-    \item \textbf{Standard (stochastic) limit}: $S_n  \xrightarrow[n \to \infty]{\mathrm{a.s.}}  S$, i.e. $S_n$ tends to $S$ \textit{almost surely}. More precisely:
+It is not clear how the last integral is defined, as it involves a \textit{stochastic term} $\dd{B}$.
+
+\medskip
+
+So, before tackling the full problem, we take a step back and study the theory behind \textbf{stochastic calculus}. Let's introduce a \textit{generic} integral of that kind:
+\begin{align*}
+    S_t = \int_0^t G(\tau) \dd{B(\tau)}
+\end{align*} 
+Intuitively, we could see this as an \textit{infinite sum}, where each term $G(\tau)$ is weighted by the outcome of a random variable $B(\tau)$.
+
+So, to compute it, an idea is to first introduce a \textit{time discretization} $\{t_j\}_{j=0, \dots, n}$, with $t_n = t$, leading to:  
+\begin{align}
+    S_n = \sum_{i=0}^{n} G(\tau_i) [B(t_i) - B(t_{i-1})] \qquad t_{i-1} \leq \tau_i \leq t_i
+    \label{eqn:discretization1}
+\end{align}
+and then take the continuum limit for $n \to \infty$. This, however, proves to be more difficult than expected, for the following reasons:
+
+\begin{itemize}
+    \item First of all, the increments $B(t_i) - B(t_{i-1})$ are chosen \textit{at random}. This means that $S_n$ is a \textbf{random variable}. In fact,
+    we could see $S_t$ as the sum of points from $G(\tau)$, each \textit{weighted} with a \textit{randomly chosen} \textit{weight}.\\   
+    So it is necessary to define what it means to take the limit of a sequence of random variables $S_n$. As we will see, there is no unique definition.
+    \item It is not clear how to choose the \textit{sampling instants} $\tau_i$ for $G(\tau)$ in the discretization (\ref{eqn:discretization1}). We could hope that in the limit of $n \to\infty$, any choice would lead to the same final result. This would be indeed true if $B(\tau)$ were a differentiable function - except it is only \textit{continuous} and \textit{nowhere differentiable}. So we need to pay attention to the \textit{specific} (and arbitrary) rule to be used in computing the discretization. 
+\end{itemize}
+
+\subsection{Limits of sequences of random variables}
+\begin{expl}
+    \textbf{Some basic definitions}. Recall that a probability space is defined by a triple $(\Omega, \mathcal{F}, \mathbb{P})$, where $\Omega$ is a set of outcomes (\textit{sample space}), $\mathcal{F}$ is a $\sigma$-algebra on $\Omega$, containing all possible \textit{events}, that is \textit{sets of outcomes}, and $\mathbb{P}\colon \mathcal{F} \to [0,1]$ is the \textit{probability measure}. Then, a \textbf{random variable} is a \textit{measurable function}  $X\colon \Omega \to S$, with $S$ denoting a \textit{state space}. 
+    
+    For example, let $\Omega$ be the set of all possible results of rolling two dice, i.e. the set of ordered pairs $(x_1, x_2)$ with $x_1,x_2 \in \{1,2,3,4,5,6\}$. Then $\mathcal{F}$ is the set of \textit{all possible subsets} of $\Omega$ (including both $\Omega$ and $\varnothing$) and $\mathbb{P}\colon \mathcal{F}\ni f \mapsto \mathbb{P}(f)$ is given by:
     \begin{align*}
-        \forall \epsilon > 0\quad \exists N \colon n \geq N \> |S_n - S| < \epsilon    
-    \end{align*}     
-    In other words, the fractions of sequences $S_n$ that \textit{do not come $\epsilon$-close to $S$} tends to $0$ as the number $N$ of considered sequences goes to infinity.
-    \item $S_n  \xrightarrow[n \to \infty]{P} S$, meaning that:
-    \begin{align*}
-        \lim_{n \to \infty} \mathbb{P}(|S-S_n| > \epsilon) = 0 \quad \forall \epsilon > 0
+        \mathbb{P}(f) = \frac{|f|}{36} 
     \end{align*}
-    This definition is closely related to (1), but here we focus on the \textit{probability} of getting a \q{bad sequence}, and not on the occurrences when this does indeed happen.
-    \item \textbf{Convergence in Distribution sense}. $S_n  \xrightarrow[n \to \infty]{P}  S$, that is:
+    where $|f|$ is the cardinality of the set $f$. 
+
+    A random variable can be, for example, the \textit{sum} of the two dice:
     \begin{align*}
-        \mathbb{P}(S_n \in A) \to \mathbb{P}(S \in A)    
+        X(\omega) = x_1 + x_2 \quad \forall \omega=(x_1, x_2) \in \Omega
+    \end{align*} 
+    Then, we can compute the probability of $X$ assuming a certain value by measuring with $\mathbb{P}$ the preimage set of $X$:
+    \begin{align*}
+        \mathbb{P}(X=2) = \mathbb{P}(\omega \in \Omega | X(\omega) = 2) = \mathbb{P}(\{1,1\}) = \frac{1}{36} 
+    \end{align*}
+    For discrete one-dimensional variables such as these all of this formalism does not lead to much gain, as there is an immediate and natural choice for $(\Omega, \mathcal{F}, \mathbb{P})$, which is usually denoted by the saying \q{random}. However, in more complex cases it becomes imperative to precisely define $\Omega$, $\mathcal{F}$ and $\mathbb{P}$, so to avoid ambiguous results (see Bertrand's paradox).
+\end{expl}
+
+Consider a sequence $\{X_n\}_{n\in \mathbb{N}}$ of random variables in a certain probability space $(\Omega, \mathcal{F}, \mathbb{P})$. Suppose that $X$ is another random variable, and we would like to give meaning to the concept of $X_n$ \q{tending to} $X$:
+\begin{align*}
+    X_n  \xrightarrow[n \to \infty]{} X
+\end{align*}
+There are several possibilities, here stated from the weakest to the strongest:
+\begin{enumerate}
+    \item \textbf{Convergence in distribution}. In this case, we simply require that the distribution of $S_n$ approaches that of $S$ as $n \to\infty$. Let $F_n$ and $F$ be the cumulative distributions of $S_n$ and $S$, respectively. Then:
+    \begin{align*}
+        X_n \xrightarrow[n \to \infty]{D} X \Leftrightarrow \lim_{n \to \infty} F_n(x) = F(x) \qquad \forall x \in \mathbb{R} |  F \text{ is continuous at $x$ }
     \end{align*}  
-    \item $S_n  \xrightarrow[n \to \infty]{L^q} S$, where:
+    (The cumulative distribution, or cdf, is defined as $F_X(x) = \mathbb{P}(X \leq x)$).
+
+    Note that, as we are merely comparing functions, there is no need for $X_n$ or $X$ to be defined on the \textit{same probability space}. Also, here the focus is on \textit{integral properties} of the random variables, so there is no guarantee that sampling $X_n$ and $X$ will lead to \textit{close} results, even for a large $n$. For example, consider $X_n$ to be a sequence of standard gaussians, which obviously converges to a standard gaussian ($X$) in the distribution sense. If we sample a number from $X_{100}$ and one from $X$, they could be arbitrarily far away from each other with a non-zero probability, that remains the same for all $n$. If we want to \textit{exclude} that possibility we need a \textit{stronger requirement}, which leads to the next definition.   
+    \item \textbf{Convergence in probability} (\textit{Stochastic limit}). If the probability of values of $X_n$ being \textit{far} from values of $X$ vanishes as $n \to\infty$, then $X_n$ converges \textit{in probability} to $X$:
     \begin{align*}
-        \langle |S_n - S |^q \rangle  \xrightarrow[n \to \infty]{}  0
-    \end{align*}       
+        X_n  \xrightarrow[n \to \infty]{P} X \Leftrightarrow \lim_{n \to\infty} \mathbb{P}(|X_n - X| > \epsilon) = 0
+    \end{align*} 
+    Expanding the definition, this means that:
+    \begin{align*}
+        \forall \epsilon> 0, \forall \delta > 0, \exists N(\epsilon , \delta) \text{ s.t. } \forall n \geq N, \mathbb{P}(|X_n - X| > \epsilon) < \delta 
+    \end{align*}
+    In other words, the probability of \q{a significant discordance} between values sampled from $X_n$ and $X$ vanishes as $n \to \infty$. Intuitively, $X_n$ and $X$ are \textit{strongly related}, i.e. they not only distribute similarly, but also come from \textit{similar processes}. For example, let $X$ be the \textit{true length} of a stick chosen \textit{at random} from a population of sticks, and $X_n$ be a measurement of that length made with an instrument that is more and more precise as $n \to\infty$. Then, for large $n$, it is clear that $X_n$ will have a value that is really close to that of $X$. In this case, we say that $X_n$ converges \textit{in probability} to $X$, as $n \to\infty$.  
+    \item \textbf{Almost sure convergence}. An even stronger limit requires that:
+    \begin{align*}
+        X_n  \xrightarrow[n \to \infty]{\mathrm{a.s.}} X \Leftrightarrow  \mathbb{P}\left(\liminf_{n \to \infty} \{\omega \in \Omega \colon |X_n(\omega) - X(\omega)| < \epsilon\}\right) = 1 \qquad \forall \epsilon > 0
+    \end{align*}
+    Here, the $\liminf$ of a sequence of sets $A_n$ is defined as:
+    \begin{align*}
+        \liminf_{n \to\infty } A_n = \bigcup_{N = 1}^{\infty} \bigcap_{n \geq N} A_n
+    \end{align*}
+    A member of $\liminf A_n$ is a member of \textit{all} sets $A_n$, \textit{except} a \textit{finite} number of them (i.e. it's \textit{definitively} a member of the $A_n$, as it is $\in A_n$ for all $n \geq \bar{n}$). So the term inside the parentheses is the set of all outcomes $\omega \in \Omega$ for which $X_n(\omega)$ is \textit{definitively} close to $X(\omega)$, i.e. it \textit{covers} all events resulting in a sequence of $X_n$ that \textit{converges} to $X$. 
+
+    If we take $X_n$ and $X$ to be \textit{real-valued} random variables, then the definition is simpler:
+    \begin{align*}
+        X_n  \xrightarrow[n \to \infty]{\mathrm{a.s.}} X \Leftrightarrow \mathbb{P} \left(\omega \in \Omega \colon \lim_{n \to \infty} X_n(\omega) = X(\omega)\right) = 1
+    \end{align*} 
+    Or, in other words:
+    \begin{align*}
+        \lim_{n \to\infty } X_n(\omega) = X(\omega) \qquad \forall \omega \in \Omega \setminus A
+    \end{align*}
+    where $A \subset \Omega$ has $0$ measure.  
 \end{enumerate}
-One can show that $(1) \Rightarrow (2) \Rightarrow (3)$, and $(4) \Rightarrow (2)$. This last implication can be easily derived. First, we note that the probability of a sequence $S_n$ not $\epsilon$-close to $S$ is just the expected value of the chracteristic function of the set where an inequality holds:
-\begin{align*}
-    \langle \mathbb{I}_{|S-S_n| > \epsilon} \rangle = \mathbb{P}(|S-S_n| > \epsilon) \leq \langle \underbrace{\mathbb{I}_{|S-S_n|>\epsilon}}_{\leq 1}  \cdot \underbrace{\left|\frac{S-S_n}{\epsilon}  \right|^q}_{\leq 1}  \rangle \leq \langle |S-S_n|^q \rangle \frac{1}{\epsilon^q}  \xrightarrow[n \to \infty]{} 0   
-\end{align*}     
 
-In our case, we consider the $L^2$ convergence definition. So we say that $S_n \to S$ as $n \to \infty$ iff:
-\begin{align*}
-    \lim_{n \to \infty} \langle (S_n - S)^2 \rangle = 0
-\end{align*}   
-This implies the \textit{standard convergence} of the expected value:
-\begin{align*}
-    \langle S_n \rangle \to \langle S \rangle
-\end{align*} 
-In fact:
-\begin{align*}
-    |\langle S_n \rangle - \langle S \rangle| = |\langle S_n - S \rangle| \leq \langle |S_n - S| \rangle
-\end{align*}
+\begin{expl}
+    \textbf{Almost sure convergence vs probability convergence}. The difference between the two definitions is subtle, and can be somewhat seen from the following example, taken from \url{http://bit.ly/2u2E9Rk} and \url{http://bit.ly/2Zy66vO}.
 
-Also, the H\"older inequality holds:
-\begin{align*}
-    |\langle fg \rangle| \leq \langle |fg| \rangle \leq \langle f^2 \rangle^{1/2} \langle g^2 \rangle^{1/2}
-\end{align*}
-that, for this particular instance, is also called the \textit{Schwartz inequality}.\\
+    Consider a sequence $\{X_n\}$ of \textit{independent} random variables with only two possible values, $0$ and $1$, such that:
+    \begin{align*}
+        \mathbb{P}(X_n = 1) = \frac{1}{n} \qquad \mathbb{P}(X_n = 0) = 1-\frac{1}{n}  
+    \end{align*} 
+    For $\epsilon> 0$:
+    \begin{align*}
+        \mathbb{P}(|X_n| \geq \epsilon) = \begin{cases}
+            \frac{1}{n} & 0 < \epsilon \leq 1\\
+            0 & \text{otherwise}  
+        \end{cases}
+    \end{align*} 
+    As $n \to\infty$, $\mathbb{P}(|X_n| \geq \epsilon) \to 0$, and so $X_n  \xrightarrow[n \to \infty]{P} 0$.
 
-If we apply it to the previous expression:
-\begin{align*}
-    \langle |S_n - S| \rangle \leq \langle (S_n - S)^2 \rangle^{1/2} \langle 1^2 \rangle^{1/2} = \langle (S_n - S)^2 \rangle^{1/2}
-\end{align*}
-which implies our thesis: $\lim_{n \to \infty} \langle S_n \rangle = \langle S \rangle$. In the case of q=2, the convergence is called "mean square" (m.s.)\\
+    However, $X_n$ \textbf{does not} converge almost surely to $0$. Consider a \textit{realization} of the sequence $X_n$, i.e. the measured outcomes of all $X_n$ during \q{one run} of the experiment. This will be a binary sequence, like $000101001\dots$. Now, consider an \textit{ensemble} of such sequences. What is the average number of ones in them?
+    
+    We can estimate it by summing the probability to have a $1$ in the first place, in the second, and so on:
+    \begin{align*}
+        \sum_{n=1}^\infty \frac{1}{n} = +\infty 
+    \end{align*}
+    This in fact implies, by the second Borel Cantelli theorem\footnote{See a proof at \url{http://bit.ly/2tcfZU4} The main idea is that, given a set of \textit{independent} events ($X_n = 1$), the sum of their probabilities diverges, then \textit{surely} an infinite number of them \textit{do indeed occur}. Formally: if $\sum_{n=1}^{+\infty} \mathbb{P}(X_n=1) = \infty$, then $\mathbb{P}(\limsup_{n \to\infty } \{X_n = 1\}) = \mathbb{P}(\cap_{N=1}^\infty \cup_{n \geq N} \{X_n = 1\}) = \mathbb{P}(\{X_n=1\} \mathrm{\ i.o.}) = 1$}, that the probability of getting $X_n = 1$ \textit{infinitely often} (i.o.) is $1$, and so $X_n$ \textit{cannot} converge \textit{almost surely} to $0$.    
+\end{expl}
 
-Reference: Chapter 3 of book by Gardiner, \textit{Handbook of Stochastic Processes}.  
+It can be proven that \textit{almost sure convergence} implies \textit{convergence in probability}, which implies \textit{convergence in distribution}.
+However, for our purposes we are interested in \textit{another kind of convergence}:
+\begin{itemize}
+    \item \textbf{$L^q$ convergence}:
+    \begin{align*}
+        X_n  \xrightarrow[n \to \infty]{L^q} X  \Leftrightarrow \lim_{n \to\infty }\langle |X_n-X|^q \rangle = 0 \qquad q \in \mathbb{N}
+    \end{align*}
+    Note that this implies \textit{convergence in probability}. In fact:
+    \begin{align}
+        \mathbb{P}(|X-X_n| > \epsilon) = \langle \mathbb{I}_{|X-X_n| > \epsilon} \rangle \leq \langle \underbrace{\mathbb{I}_{|X-X_n|>\epsilon}}_{0\leq \odot \leq 1} \textcolor{Red}{\underbrace{\left| \frac{X-X_n}{\epsilon} \right|^q}_{\geq 1}}   \rangle \label{eqn:dimLq1}
+    \end{align} 
+    where is a \textit{characteristic function}, i.e. the random variable that is $1$ when $|X-X_n| > \epsilon$ and $0$ otherwise - so that the second term is always $\geq 1$ when it is not killed by the first one. Then, by substituting $\mathbb{I}$ with its \textit{maximum} $1$ we get a \textit{greater} term:
+    \begin{align*}
+        (\ref{eqn:dimLq1}) \leq \langle |X-X_n|^q \rangle \frac{1}{\epsilon^q}  \xrightarrow[n \to \infty]{} 0 \qquad \forall \epsilon> 0 
+    \end{align*}  
+    where we used the linearity of the average to extract the constant $\epsilon^q$, and then the $L^q$ convergence (assumed by hypothesis).
 
-\begin{example}[a]
+    Also, $L^q$ convergence implies the convergence (in the usual sense) of the $q$-th moment:
+    \begin{align}
+        X_n  \xrightarrow[n \to \infty]{L^q} X \Rightarrow \lim_{n \to\infty } \langle |X_n|^q \rangle = \langle |X|^q \rangle
+        \label{eqn:convq}
+    \end{align}
+    If we choose $q=2$, we obtain \textbf{mean square convergence}:
+    \begin{align*}
+        X_n  \xrightarrow[n \to \infty]{\mathrm{m.s.}} X \Leftrightarrow \lim_{n \to\infty } \langle |X_n - X|^2 \rangle = 0
+    \end{align*} 
+    In this case it is easy to prove (\ref{eqn:convq}) by using the Cauchy-Schwarz inequality:
+    \begin{align*}
+        (\mathbb{E}(XY))^2 \leq \mathbb{E}(X^2) \mathbb{E}(Y^2)
+    \end{align*}
+    If we let $X = X_n - X$ and $Y = 1$, and assume that $X_n$ converges to $X$ in mean square, we obtain:
+    \begin{align*}
+        0 \leq (\mathbb{E}(X_n - X))^2 \leq \mathbb{E}((X_n - X)^2) \mathbb{E}(1) \xrightarrow[n \to \infty]{} 0
+    \end{align*}
+    And so:
+    \begin{align*}
+        \mathbb{E}(X_n - X) = \mathbb{E}(X_n) - \mathbb{E}(X) \xrightarrow[n \to \infty]{}  0 \Rightarrow \lim_{n \to \infty} \mathbb{E}(X_n) = \mathbb{E}(X) \qquad \square
+    \end{align*}
+    \begin{expl}
+        \textbf{H\"older inequality}. Cauchy inequality is, in this case, a special case of the more general H\"older inequality. Consider a measure space $(S,\Sigma,\mu)$ (where $S$ is the space, $\Sigma$ a $\sigma$-algebra and $\mu$ a measure), and two measurable functions $f,g\colon S \to \mathbb{R}$:
+        \begin{align*}
+            \norm{f g}_1 \leq \norm{f}_p \norm{g}_p \qquad \norm{\cdot}_p = \left(\int_S |\cdot|^p \dd{\mu}\right)^{1/p}
+        \end{align*}  
+    \end{expl}
+\end{itemize}
+To compute a stochastic integral, we will proceed like the following:
+\begin{itemize}
+    \item Discretize the integral as a finite (Riemann) sum, obtaining a sequence of \textit{finer} and \textit{finer} random variables $\{S_n\}_{n \in \mathbb{N}}$  
+    \item Use a \textit{mean square} limit to compute the limit $S$ of the sequence $\{S_n\}$
+\end{itemize}
+
+
+\subsection{Prescriptions}
+All that's left is to choose a \textit{rule} for the mid-points in the terms of the discretized sum. As we will see in the following example, there are several different possibilities, each leading to \textit{different results}.  
+
+\begin{example}[A simple stochastic integral]
     Suppose $G(\tau) = B(\tau)$, and consider the following integral:
     \begin{align*}
         S = \int_0^t B(\tau) \dd{B(\tau)}
@@ -97,96 +211,112 @@ Reference: Chapter 3 of book by Gardiner, \textit{Handbook of Stochastic Process
     \begin{align*}
         S = \int_0^t B(\tau) \dv{B(\tau)}{\tau} \dd{\tau} = \frac{1}{2} B^2(\tau) \Big|_0^t = \frac{B^2(t) - B^2(0)}{2} \quad \text{if } \exists \dv{B}{\tau}  
     \end{align*} 
-    But $\dv{\beta}{\tau}$ does not exist!\\
-    So, we first discretize:
+    However, here $B(\tau)$ is a \textit{rapidly varying irregular function}, which is nowhere differentiable.
+
+    So, following our plan, we first discretize:
     \begin{align}
-        S_n = \sum_{i=1}^n B(\tau_i) [B(t_i) - B(t_{i-1})] \qquad t_0 = 0; t_n = t
+        S_n = \sum_{i=1}^n B(\tau_i) [B(t_i) - B(t_{i-1})] \qquad t_0 \equiv 0;\> t_n \equiv t; \> t_{i-1} \leq \tau_i \leq t_{i}
         \label{eqn:Sn1}
     \end{align} 
-    Then:
+    We now need a rule for choosing the $\tau_i$. The simplest possibility is to fix them in the \q{same relative position} in every interval $[t_{i-1}, t_i]$, that is:
+    \begin{align}
+        \tau_i = \lambda t_i + (1- \lambda) t_{i-1} \qquad \lambda\in [0,1]
+        \label{eqn:tau-choice}
+    \end{align}
+    Depending on the value of $\lambda$, the limit $S$ will be different. We can quickly check this \textit{before} computing $S$, by focusing on the \textit{expected values}. In fact, we know that if $S_n  \xrightarrow[n \to \infty]{\mathrm{m.s.}} S$, then $\langle S_n \rangle  \xrightarrow[n \to \infty]{}  S$ in the usual sense. So, we compute the average of $S_n$:
     \begin{align*}
-        \langle S_n \rangle = \sum_{i=1}^{n} \langle B(\tau_i) (B(t_i) - B(t_{i-1})) \rangle
+        \langle S_n \rangle = \sum_{i=1}^{n} \langle B(\tau_i) (B(t_i) - B(t_{i-1})) \rangle = \sum_{i=1}^n (\langle B(\tau_i) B(t_i)  \rangle - \langle B(\tau_i) B(t_{i-1}) \rangle)
     \end{align*}
-    Recall that:
+    We already computed the correlator function for the Brownian noise $B(t)$:
     \begin{align}
         \langle B(t) B(t') \rangle = \min(t,t')
         \label{eqn:correlator}
     \end{align}
-    And so, as $t_{i-1} \leq \tau_i \leq t_i$: 
+    And so, as $t_{i-1} \leq \tau_i \leq t_i$, we get: 
     \begin{align*}
-        (\ref{eqn:Sn1}) = \langle S_n \rangle = \sum_{i=1}^n [\langle B(\tau_i) B(t_i) \rangle - \langle B(\tau_i) B(t_{i-1}) \rangle] \underset{(\ref{eqn:correlator})}{=}  \sum_{i=1}^n (\tau_i - t_{i-1}) 
+        \langle S_n \rangle = \sum_{i=1}^n (\tau_i - t_{i-1})
     \end{align*}
-    Then suppose $\tau_i$ lies in \q{the same place} at every interval $[t_{i-1},t_i]$, so that the following holds:  
+    Substituting the choice for $\tau$ (\ref{eqn:tau-choice}):
     \begin{align*}
-        \tau_i = \lambda t_i + (1- \lambda) t_{i-1}
-    \end{align*}
-    Substituting in the previous expression:
+        \langle S_n \rangle = \lambda \sum_{i=1}^n (t_i -t_{i-1}) = \lambda t_n = \lambda t  
+    \end{align*} 
+    Which does not depend on $n$, making the limit trivial:
     \begin{align*}
-        \langle S_n \rangle = \lambda \sum_{i=1}^n (t_i - t_{i-1}) = \lambda t
-    \end{align*}
-    And finally:
-    \begin{align*}
-        \lim_{n \to \infty} \langle S_n \rangle = \lambda t
-    \end{align*}
-    So the limit \textit{depends} on how we choose the $\tau_i$ inside the intervals $[t_{i-1}, t_i]$ - which is \textbf{not} true in ordinary calculus (where the result is independent on this choice).\\
-    There are many possibilities for $\lambda$:
+        \langle S \rangle = \lim_{n \to\infty } \langle S_n \rangle = \lambda t 
+    \end{align*}  
+    This dependence on the \textbf{prescription} of $\tau_i$ is an important difference from ordinary calculus, meaning that many common results cannot be directly translated to stochastic calculus.
+
+    In practice, there are many possibilities for $\lambda$. The two most common are:
     \begin{align*}
         \lambda = \begin{cases}
             0 & \text{Ito's prescription}\\
-            \frac{1}{2} & \text{Stratonovich's prescription (or middle-point prescr.)} 
+            \frac{1}{2} & \text{Stratonovich's prescription (also called middle-point prescription)} 
         \end{cases}
     \end{align*} 
-    Leading to:
+    Leading to, as we will see:
     \begin{align*}
         S_n  \xrightarrow[n \to \infty]{\mathrm{m.s.}} S = \begin{cases}
-            \frac{B^2(t) - B^2(0)}{2} & \lambda=1/2\\
-            \frac{B^2(t) - B^2(0)}{2} -\frac{t}{2} & \lambda = 0  
+            \frac{B^2(t) - B^2(0)}{2} -\frac{t}{2} & \lambda = 0  \\
+            \frac{B^2(t) - B^2(0)}{2} & \lambda=1/2            
         \end{cases}  
     \end{align*} 
-    The Stratonovich prescription gives exactly the same result as ordinary calculus. However, note that it involves a dependence \textit{on the future}, i.e. the next step of a path depends on the point that is a \textit{half-step} later. This has no a real physical meaning (in a certain sense, it \q{violates causality}). That's why many physicists prefer the Ito's prescription.\\
+    The Stratonovich prescription gives exactly the same result as ordinary calculus. However, note that it involves a dependence \textit{on the future}, i.e. the next step of a path depends on the point that is a \textit{half-step} later. This has no a real physical meaning (in a certain sense, it \q{violates causality}). That's why many physicists prefer the Ito's prescription.
 
-    So, we want now to prove that result:
-    \begin{align*}
-        \sum_{i=1}^n B(t_{i-1}) (B(t_i) - B(t_{i-1}))  \xrightarrow[n \to \infty]{\mathrm{m.s.}} \frac{B^2(t)- B(0)}{2} - \frac{t}{2}    
-    \end{align*}
-    Denote:
+    Let's explicitly compute both results.
+    
+    \medskip
+
+    \textbf{Ito's prescription}.  
+    We want to prove the following result:
+    \begin{align}
+        \sum_{i=1}^n B(t_{i-1}) (B(t_i) - B(t_{i-1}))  \xrightarrow[n \to \infty]{\mathrm{m.s.}} \frac{B^2(t)- B^2(0)}{2} - \frac{t}{2}    \label{eqn:ito-conv1}
+    \end{align}
+    Denoting:
     \begin{align*}
         B(t_i) = B_i; \qquad \Delta B_i = B_{i} - B_{i-1}
     \end{align*}
-    and so:
+    we can rewrite (\ref{eqn:Sn1}) as:
     \begin{align*}
-        S_n &= \sum_{i=1}^{n} B_{i-1} \Delta B_i = \frac{1}{2} \sum_{i=1}^{n} \left[(B_{i-1} + \Delta B_i)^2 - B_{i-1}^2 - (\Delta B_i)^2\right] = \\
-        &= \frac{1}{2} \sum_{i=1}^{n} \left[\hlc{Yellow}{B_i^2 - B_{i-1}^2 }- (\Delta B_i)^2\right] = \frac{1}{2} (\hlc{Yellow}{B_n^2 - B_0^2}) - \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2  
+        S_n = \sum_{i=1}^n B_{i-1} \Delta B_i
     \end{align*}
-    Then we want to show:
+    First of all, we \textit{split} that product in a sum of terms, with the double-product trick:
+    \begin{align*}
+        ab = \frac{1}{2}[(a+b)^2 - a^2 - b^2] 
+    \end{align*}
+    So that:
+    \begin{align*}
+        S_n &= \sum_{i=1}^{n} B_{i-1} \Delta B_i = \frac{1}{2} \sum_{i=1}^{n} \Big[\underbrace{(B_{i-1} + \Delta B_i)^2}_{B_i^2} - B_{i-1}^2 - (\Delta B_i)^2\Big] = \\
+        &= \frac{1}{2} \sum_{i=1}^{n} \left[\hlc{Yellow}{B_i^2 - B_{i-1}^2 }- (\Delta B_i)^2\right] = \frac{1}{2} (\hlc{Yellow}{B_n^2 - B_0^2}) - \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2 = \\
+        &= \frac{1}{2} (\hlc{Yellow}{B^2(t) - B^2(0)}) - \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2 
+    \end{align*}
+    Now (\ref{eqn:ito-conv2}) becomes:
     \begin{align*}
         \frac{B^2(t) - B^2(0)}{2} - \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2  \xrightarrow[n \to \infty]{\mathrm{m.s.} } \frac{B^2(t)-B(0)}{2} - \frac{t}{2} \qquad t_n = t; \> t_0 = 0
     \end{align*}
-    So we take their difference in modulus squared and take the limit of the average:
-    \begin{align*}
-       \langle \left| \cancel{\frac{B^2(t) - B^2(0)}{2} }- \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2 - \left[\cancel{\frac{B^2(t)-B(0)}{2}} - \frac{t}{2}  \right]   \right|^2 \rangle  \xrightarrow[n \to \infty]{?}  0
-    \end{align*}
+    Applying the definition of \textit{mean square limit}, this is equivalent to showing that: 
+    \begin{align} \label{eqn:ito-conv-def}
+       \langle \left| \cancel{\frac{B^2(t) - B^2(0)}{2} }- \frac{1}{2} \sum_{i=1}^n (\Delta B_i)^2 - \left[\cancel{\frac{B^2(t)-B^2(0)}{2}} - \frac{t}{2}  \right]   \right|^2 \rangle  \xrightarrow[n \to \infty]{?}  0
+    \end{align}
     Expanding:
-    \begin{align*}
-        \frac{1}{4} \langle \left[\sum_{i=1}^n (\Delta B_i)^2 + t \right]^2 \rangle = \frac{1}{4} \langle \left[t - \sum_{i=1}^n (\Delta B_i)^2 \right]^2 \rangle = \frac{1}{4} \langle \left[\sum_{i=1}^n (\Delta t_i - \Delta B_i^2)\right]^2 \rangle   
-    \end{align*}
-    Note that $t = \sum_{i=1}^n \Delta t_i $. Then, by expanding the square of the sum:
-    \begin{align*}
-        = \frac{1}{4} \langle \sum_{i=1}^n (\Delta t_i - (\Delta B_i)^2) \rangle \sum_j (\Delta t_j - (\Delta B_j)^2 ) 
-    \end{align*} 
-    as $\left( \sum_i a_i \right)^2 = \sum_{ij} a_i a_j$. In this summation we isolate the contribution with $i = j$ and $i \neq j$, and use the linearity of the average (as these are finite sums):
-    \begin{align*}
-        &= \frac{1}{4} \left[ \sum_{i=1}^n \langle (\Delta t_i - (\Delta B_i)^2)^2 \rangle + \sum_{i\neq j}^n \langle (\Delta t_i - (\Delta B_i)^2) (\Delta t_j - (\Delta B_j)^2) \rangle\right]
-    \end{align*}    
-    The only random variable is now the $\Delta B_i$. Recall that:
+    \begin{align} \nonumber
+        \frac{1}{4} \langle \left[-\sum_{i=1}^n (\Delta B_i)^2 + t \right]^2 \rangle &= \frac{1}{4} \langle \left[t \textcolor{Red}{-} \sum_{i=1}^n (\Delta B_i)^2 \right]^2 \rangle \underset{(a)}{=}  \frac{1}{4} \langle \left[\sum_{i=1}^n (\Delta t_i - \Delta B_i^2)\right]^2 \rangle =\\
+        &\underset{(b)}{=} \frac{1}{4} \sum_{i,j=1}^n \langle [\Delta t_i - (\Delta B_i)^2] [\Delta t_j - (\Delta B_j)^2]  \rangle \label{eqn:ito-conv3}
+    \end{align}
+    where in (a) we used $t = \sum_{i=1}^n \Delta t_i$, and in (b) $(\sum_i a_i)^2 = \sum_{ij} a_i a_j$. We can rewrite the sum highlighting the case where $i = j$:
+    \begin{align}
+        (\ref{eqn:ito-conv3}) = \frac{1}{4} \left[ \sum_{i=1}^n \langle [\Delta t_i - (\Delta B_i)^2]^2 \rangle + \sum_{i\neq j}^n \langle [\Delta t_i - (\Delta B_i)^2] [\Delta t_j - (\Delta B_j)^2] \rangle\right]
+        \label{eqn:ito-conv4}
+    \end{align}  
+    Noting that the $\Delta B_i$ come from \textit{independent gaussians}, we have that the expected values integrals factorize:  
     \begin{align*}
         \langle A \rangle = \int \dd{\Delta B_i} \dots \dd{\Delta B_n} A \prod_{i=1}^n \frac{1}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\frac{(\Delta B_i)^2}{2 \Delta t_i} \right) 
     \end{align*} 
-    The $\Delta B_i$ are gaussian and \textbf{independent}, and so the average of the product is just the product of the averages:
+    In other words, this means that the average of the product is just the product of the averages:
     \begin{align*}
-        \langle (\Delta t_i - (\Delta B_i)^2) (\Delta t_j - (\Delta B_j)^2) \rangle = \langle (\Delta t_i - (\Delta B_i)^2) \rangle \langle  (\Delta t_j - (\Delta B_j)^2) \rangle
+        \langle (\Delta t_i - (\Delta B_i)^2) (\Delta t_j - (\Delta B_j)^2) \rangle &= \langle (\Delta t_i - (\Delta B_i)^2) \rangle \langle  (\Delta t_j - (\Delta B_j)^2) \rangle =\\
+        &= [\Delta t_i - \langle (\Delta B_i)^2 \rangle] [\Delta t_j - \langle (\Delta B_j)^2 \rangle]
     \end{align*}  
-    Then, recall that:
+    We already computed the second moment of that gaussian:
     \begin{align*}
         \langle (\Delta B_i)^2 \rangle = \int \frac{\dd{\Delta B_i}}{\sqrt{2 \pi \Delta t_i}} \Delta B_i^2 \exp\left(-\frac{\Delta B_i^2}{2 \Delta t_i} \right) = \Delta t_i
     \end{align*}
@@ -194,71 +324,70 @@ Reference: Chapter 3 of book by Gardiner, \textit{Handbook of Stochastic Process
     \begin{align*}
         \langle (\Delta t_i - (\Delta B_i)^2) \rangle = 0
     \end{align*}
-    The only term left is:
-    \begin{align*}
-        = \frac{1}{4} \sum_{i=1}^n \langle ( \Delta t_i - (\Delta B_i)^2)^2 \rangle  = \frac{1}{4} \sum_{i=1}^n \left[
+    So we are left only with the first term of (\ref{eqn:ito-conv4}):
+    \begin{align}
+        (\ref{eqn:ito-conv4}) = \frac{1}{4} \sum_{i=1}^n \langle [ \Delta t_i - (\Delta B_i)^2]^2 \rangle  = \frac{1}{4} \sum_{i=1}^n \left[
         \Delta t_i^2 - 2 \Delta t_i \underbrace{\langle (\Delta B_i)^2 \rangle}_{\Delta t_i}  + \langle  \Delta B_i^4 \rangle    
-        \right]  
-    \end{align*}
-    Recall that:
+        \right] \label{eqn:ito-conv5} 
+    \end{align}
+    Recall that, for a random variable $x$ sampled from a gaussian $\mathcal{N}(0, \sigma)$:  
     \begin{align*}
         \langle x^{2n} \rangle = \sigma^{2n} \frac{(2n)!}{2^n n!} = \begin{cases}
             \sigma^2 & n=1\\
             \sigma^4 \frac{4!}{4 \cdot 2!} = 3 \sigma ^4 & n=2 
         \end{cases}
     \end{align*}
-    if $x$ is sampled by a Gaussian with $0$ average. So:
+    In our case, this means that $\langle (\Delta B_i)^4\rangle = \Delta t_i^2$, leading to:
     \begin{align*}
+        (\ref{eqn:ito-conv5}) 
         = \frac{1}{2} \sum_{i=1}^n \Delta t_i^2 
     \end{align*}  
-    When taking the limit of the mesh ($n \to \infty$), the time intervals vanish, meaning that:
+    When taking the limit of the mesh ($n \to \infty$), the number of summed terms become infinite, but also the size of each of them vanishes:
     \begin{align*}
         \max_{i} \Delta t_i  \xrightarrow[n \to \infty]{}  0
     \end{align*}
-    So:
+    To resolve that limit we need to use the fact that the end-point is fixed ($t_n \equiv t$) and so:
     \begin{align*}
-        \frac{1}{2} \sum_{i=1}^n \Delta t_i^2 \leq \frac{1}{2} \left(\max_j \Delta t_j\right) \sum_i \Delta t_i  
+        \frac{1}{2} \sum_{i=1}^n \Delta t_i^2 \leq\frac{1}{2} \left(\sum_{i=1}^n \Delta t_i \right)^2 = \frac{1}{2}\left(\sum_{i=1}^n \Delta t_i\right)\underbrace{\left(\sum_{j=1}^n \Delta t_j\right)}_{t} \leq \frac{t}{2} \left(\max_i \Delta t_i\right) \xrightarrow[n \to \infty]{} 0
     \end{align*}
-    as $\Delta t_i \leq \max_j \Delta t_j$. Then $\sum_i \Delta t_i = t$: 
-    \begin{align*}
-        = \frac{t}{2} \max_{j} \Delta t_j  \xrightarrow[n \to \infty]{}  0
-    \end{align*} 
+    This proves (\ref{eqn:ito-conv-def}), and so the desired result (\ref{eqn:ito-conv1}).
 
+    \medskip
 
-    To prove the result with the S prescription, we then must show:
+    \textbf{Stratonovich's prescription}. In this case, we want to show that:
     \begin{align*}
-        S_n = \sum_{i=1}^n B\left(\frac{t_i + t_{i-1}}{2} \right)[B(t_i) - B(t_{i-1})]  \xrightarrow[n \to \infty]{\mathrm{m.s.} } \frac{B^2(t) - B^2(0)}{2}   
+        S_n = \sum_{i=1}^n \hlc{Yellow}{B\left(\frac{t_i + t_{i-1}}{2} \right)}[B(t_i) - B(t_{i-1})]  \xrightarrow[n \to \infty]{\mathrm{m.s.} } \frac{B^2(t) - B^2(0)}{2}   
     \end{align*}
     Note that now we need a set of \textit{middle points} in the mesh, which leads to some complications.\\
-    One trick is to simply \textit{double} the discretization, and choose the \textit{middle points} to be the \textit{odd} indices. We then define:
+    One trick is to simply \textit{double} the \q{resolution} of the discretization, and choose the \textit{middle points} to be the \textit{odd} indices. We then define:
     \begin{align*}
         S'_{2n}  = \sum_{i=1}^{2n} B_{2i -1} (B_{2i} - B_{2(i-1)}) 
     \end{align*}  
-    with $t_{2i - 1} \equiv (t_{2i} + t_{2(i-1)})/2$, while the $t_{2i}$ may be distributed arbitrarily.\\
+    with $t_{2i - 1} \equiv (t_{2i} + t_{2(i-1)})/2$, while the $t_{2i}$ may be distributed arbitrarily. The full computation is very long and tedious, and not much enlightening, and is therefore omitted.\\
     
     A shorter way to compute that, but not as rigorous, is by stating that:
     \begin{align*}
-        S_n = \sum_{i=1}^n \frac{B(t_i) + B(t_{i-1})}{2} (B(t_i)-B(t_{i-1})) 
-    \end{align*}
-    However it is not obvious, because $B(t_i)$ are all random variables. The two expressions \textit{have the same distribution}, but they \textit{are not the same}! In any way, if we do this, the thesis immediately follows:
-    \begin{align*}
-        = \frac{1}{2} \sum_{i=1}^n (B^2(t_i) - B^2(t_{i-1})) 
+        S_n &= \sum_{i=1}^n \hlc{Yellow}{\frac{B(t_i) + B(t_{i-1})}{2} }(B(t_i)-B(t_{i-1})) 
+    \intertext{
+    However it is not obvious that is possible to \textit{approximate} a midpoint of $B$ with an average, as $B(t_i$ are all random variables. In fact, it is possible to show that the two expressions \textit{have the same distribution}, but they \textit{are not the same random variable}! In any way, if we do this, the thesis immediately follows:}
+        &= \frac{1}{2} \sum_{i=1}^n (B^2(t_i) - B^2(t_{i-1})) 
     \end{align*}   
 \end{example}
 
-
+\subsection{Ito's calculus}
 In our calculations, we will be usually concerned with the following kinds of stochastic integrals $G(t)$:
 \begin{enumerate}
     \item $\displaystyle \int_0^t F(B(\tau)) \dd{B(\tau)}$
     \item $\displaystyle \int_0^t g(\tau) \dd{B(\tau)}$
     \item $\displaystyle \int_0^t g(\tau) \dd{\tau}$ (usual integrals)
 \end{enumerate}
-These integrals $G(t)$ are called \textit{non-anticipating functions}, because they are independent of $B(t') - B(t)$ for $t' > t$, meaning that they do not dependent on what happens in the Brownian motion at times later than $t$ (the future). So, by using Ito's prescription:
+These $G(t)$ are called \textbf{non-anticipating functions}, because they are independent of $B(t') - B(t)$ for $t' > t$, meaning that they do not dependent on what happens in the Brownian motion at times later than $t$ (i.e. they do not depend on the future). So, by using Ito's prescription (I.p.) in the discretization and \textit{mean square} (m.s.) for the continuum limit we get:
 \begin{align*}
-    \int F(B(\tau)) \dd{B(\tau)} \underset{\mathrm{m.s.\>I-p} }{=} \sum_{i=1}^n F(B_{i-1}) \Delta B_i 
+    \int_0^t F(B(\tau)) \dd{B(\tau)} \underset{\mathrm{m.s.}}{\overset{\mathrm{I.p.}}{=}} \sum_{i=1}^n F(B_{i-1}) \Delta B_i 
 \end{align*}     
-Note how $F(B_{i-1})$ and $\Delta B_i$ are independent of each other, simplifying the calculations. (Note that the Stratonovich prescription here causes \textit{troubles} during evaluation, as it introduces some interdependence between different terms).\\
+Note how $F(B_{i-1})$ and $\Delta B_i$ are independent of each other, simplifying the calculations. (Note that the Stratonovich prescription here causes \textit{troubles} during evaluation, as it introduces some interdependence between different terms).
 
+\begin{comment}
 The goal of the next lecture will be to derive the Langenvin equation from the Fokker-Planck equation, and also to show that integrals of the kind:
 \begin{align*}
     \int_0^t H(B(\tau), \tau) (\dd{B(\tau)})^k &\underset{m.s.}{=} \sum_{i=1}^n H(B_{i-1}, \tau_{i-1}) (\Delta B_i)^k =\\
@@ -277,7 +406,7 @@ leading to Ito's rules:
     \end{cases}
 \end{align*}
 
-
+\end{comment}
 
 
 
