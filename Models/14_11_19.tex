@@ -1,0 +1,203 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Harmonic overdamped oscillator}
+\lesson{9}{14/11/19}
+Using the framework developed in the previous sections, we now tackle a more general setting, that of a particle moving in a \textit{harmonic potential} and subject to thermal noise. This will be useful to model the local behaviour about the minima of \textit{any} potential - as they are approximately harmonic.
+
+So, consider a particle of mass $m$ moving in one dimension through a \textit{viscous} medium and immersed in a \textit{harmonic} potential. If we add a noise term, modelling the random collisions with the other (much smaller) particles in the fluid, the equation of motion becomes:
+\begin{align}\label{eqn:motion-harmonic}
+    m\ddot{x} = - \gamma \dot{x} - m \omega^2 x + \sqrt{2D} \gamma \xi
+\end{align}
+As $m/\gamma$ is much smaller than the timescale we are interested in, we can neglect it, reaching the \textit{overdamped limit}:
+\begin{align*}
+    \dot{x} = -\underbrace{\frac{m \omega^2}{\gamma}}_{k} x + \sqrt{2D} \xi  
+\end{align*} 
+And multiplying by $\dd{t}$:
+\begin{align*}
+    \dd{x(t)} = -kx(t) \dd{t} + \sqrt{2D} \dd{B(t)}
+\end{align*}
+
+To find a solution for $x(t)$ we introduce a time discretization $\{t_j\}_{j=1,\dots,n}$. Letting:
+\begin{align*}
+    x(t_i) \equiv x_i; \quad \Delta x_i \equiv x_{i} - x_{i-1}; \qquad B(t_i) \equiv B_i; \qquad \Delta t_i = t_{i} - t_{i-1}
+\end{align*}
+we arrive to:
+\begin{align*}
+    \Delta x_i = -k x_{i-1} \Delta t_i + \sqrt{2D} \Delta B_i
+\end{align*}
+where we used Ito's prescription to choose the \textit{mid-point} value of $x(t)$ in each discretized interval $[t_{i-1},t_i]$ to be evaluated at the smaller extremum $t_{i-1}$.
+
+Recall that the \textit{joint} pdf of the Brownian increments $\Delta B_i$ is:
+\begin{align*}
+    \mathbb{P}(\Delta B_1, \dots, \Delta B_n) = \prod_{i=1}^n \frac{\dd{\Delta B_i}}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\sum_{i=1}^n \frac{\Delta B_i^2}{ 2 \Delta t_i} \right) 
+\end{align*} 
+Then the probability of a path $x(t)$ passing \q{close to} a set of points $x_1, x_2, \dots, x_n$ at instants $t_1 < t_2 < \dots < t_n$ is:
+\begin{align*}
+    \mathbb{P}(x_1, x_2, \dots, x_n) &= \mathbb{P}(\Delta x_1) \mathbb{P}(\Delta x_2 | \Delta x_1) \mathbb{P}(\Delta x_3 | \Delta x_1, \Delta x_2) \cdots =\\
+    &= \prod_{i=1}^n \frac{\dd{\Delta x_i}}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\sum_{i=1}^n \frac{1}{2 \Delta t_i} \left(\frac{\Delta x_i + k x_{i-1} \Delta t_i}{\sqrt{2 D}} \right)^2 \right) J
+\end{align*}
+\begin{align*}
+    J = \operatorname{det}\Bigg| \pdv{(\Delta B_1, \dots, \Delta B_n)}{(\Delta x_1, \dots, \Delta x_n)}\Bigg| = \operatorname{det} \Bigg|\pdv{(\Delta x_1, \dots, \Delta x_n)}{(\Delta B_1, \dots, \Delta B_n)}\Bigg|^{-1} = \left|\begin{array}{cccc}
+    \sqrt{2D} & * & * & * \\ 
+    0 & \sqrt{2D} & * & \vdots \\ 
+    \vdots & \ddots & \ddots & \vdots \\ 
+    0 & \dots & 0 & \sqrt{2D}
+    \end{array}\right|^{-1} = (2 D)^{-n/2}
+\end{align*}
+and so:
+\begin{align} \label{eqn:H1}
+    \mathbb{P}(\Delta x_1, \dots, \Delta x_n) = \prod_{i=1}^n \left(\frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}}\right) \exp\left(-\sum_{i=1}^n \frac{1}{2 \Delta t_i} \left(\frac{\Delta x_i + k x_{i-1} \Delta t_i}{\sqrt{2D}} \right)^2 \right) 
+\end{align}
+Taking the limit $n \to \infty$:
+\begin{align*}
+    \mathbb{P}(x(\tau)) = \prod_{\tau = 0^+}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau}}} \exp\left(-\frac{1}{4 D} \int_0^t (\dot{x} + k x)^2 \dd{\tau} \right) 
+\end{align*}
+Expanding the square in (\ref{eqn:H1}):
+\begin{align}
+    \dd{P} = \prod_{i=1}^n \underbrace{\frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\sum_{i=1}^n \frac{\Delta x_i^2}{4 D \Delta t_i} \right) }_{\text{Wiener measure ($\dd{x_W}$)}} \underbrace{\exp\left(-\frac{k}{2D} \sum_{i=1}^n x_{i-1} \Delta x_i\right)}_{\text{stochastic integral}} \underbrace{\exp\left(-\frac{k^2}{4D} \sum_{i=1}^n \Delta t_i x_{i-1}^2 \right)}_{\text{normal integral}}   
+    \label{eqn:dP}
+\end{align}
+
+Let's focus on the stochastic integral.
+According to Ito's rules:
+\begin{align*}
+    h(x(t)) - h(x(0)) = \sum_{i=1}^n \Delta h_i = \sum_{i=1}^n (h_i' \Delta x_i + \frac{1}{2} h'' \underbrace{\Delta x_i^2}_{2 D \Delta t_i}  ) + 0
+\end{align*}
+Rearranging:
+\begin{align*}
+    \sum_{i=1}^n h_i' \Delta x_i = h(x(t)) - h(x(0)) - D \sum_{i=1}^n h'' \Delta t_i
+\end{align*}
+In the limit $n \to \infty$, the sums become integrals:
+\begin{align}
+    \label{eqn:stoc-int}
+    \int_{0}^t h' \dd{x(\tau)} = h(x(t)) - h(x(0)) - D \int_0^t h'' \dd{\tau}
+\end{align}
+
+Now, choose:
+\begin{align*}
+    h(x(t)) = \frac{x(t)^2}{2} 
+\end{align*}
+So that:
+\begin{align*}
+    h'(x(t)) = x(t) \qquad h''(x(t)) = 1
+\end{align*}
+Substituting in (\ref{eqn:stoc-int}) leads to:
+\begin{align*}
+    \sum_{i=1}^n x_{i-1} \Delta x_i  \xrightarrow[n \to \infty]{}  \int_0^t x(\tau) \dd{x(\tau)} = \frac{x^2(t) - x^2(0)}{2} - D\underbrace{\int_0^t \dd{\tau}}_{t} = \frac{x^2(t) - x^2(0)}{2} - Dt   
+\end{align*}
+Substituting this result back in (\ref{eqn:dP}) leads to:
+\begin{align*}
+    \dd{P} \underset{n \to \infty}{=}   \dd{x_W} \exp\left(-\frac{k}{2D} \left[\frac{x_t^2 - x_0^2}{2} - Dt \right] \right) \exp\left(-\frac{k^2}{4D} \int_0^t x^2(\tau) \dd{\tau} \right) 
+\end{align*}
+
+From this expression we can compute \textit{transition probabilities}. Let $T = [0,t]$ and $\mathbb{R}^T$ be the space of continuous functions $T \to \mathbb{R}$, then:
+\begin{align} \nonumber
+    W(x_t,t|x_0, 0) &= \langle \delta(x_t - x) \rangle_W = \int_{\mathbb{R}^T} \delta(x_t - x) \dd{P} =\\ \nonumber
+    &= \int_{\mathbb{R}^T} \dd{x_W} \delta(x(t) - x) \exp\left(-\frac{k}{2 D} \left[\frac{x_t^2 - x_0^2}{2} - Dt\right]  \right) \exp\left(-\frac{k^2}{4 D} \int_0^t x^2(\tau) \dd{\tau} \right) =\\ \nonumber
+    &= \exp\left(-\frac{k}{2D} \left[\frac{x_t^2 - x_0^2}{2} - Dt \right]\right) \underbrace{\int_{\mathbb{R}^T} \dd{x_W} \delta(x(t)-x) \exp\left(-\frac{k^2}{4 D} \int_0^t x^2(\tau) \dd{\tau} \right)}_{\text{CFR $I_4$ on 28/10}} =\\
+    &= \exp\left(-\frac{k}{2D} \left[\frac{x_t^2 - x_0^2}{2} - Dt \right] \right) \sqrt{\frac{k}{4 \pi D \sinh (kt)} } \exp\left(-\frac{k x_t^2}{4 D} \coth(kt)\right)
+    \label{eqn:tran-prob}
+\end{align} 
+
+\begin{exo}[Some more integrals]
+    Check that:
+    \begin{align*}
+        W(x,0|x_0,0) &= \delta(x-x_0)
+    \end{align*}
+    \textbf{Hint}. Start from the case $x_0 = 0$. Using (\ref{eqn:tran-prob}), after some algebra:
+    \begin{align}
+        W(x,t|0,0) = \sqrt{\frac{k}{2 \pi D (1-e^{-2kt})} } \exp\left(-\frac{k}{2D} \frac{x^2}{1- e^{-2kt}}  \right)
+        \label{eqn:tran-prob-simple}
+    \end{align}
+    And then show $W(x,t|0,0)  \xrightarrow[t \to 0]{} \delta(x)$. The general case follows by translating that solution. 
+\end{exo}
+
+\begin{expl}\textbf{Alternative derivation} 
+    The same result for the transition probabilities $W(x,t|x_0,0)$ can be found solving the Fokker-Planck equation:
+    \begin{align}
+        \dot{W}(x,t|x_0,0) = \pdv{x} \left(kx W + D \pdv{x}W\right)
+        \label{eqn:FP-harmonic}
+    \end{align}
+    A quick way to solve this differential equation is to note that $\{\Delta B_i\}$ are all i.i.d. gaussian variables, and so $x$, which is a sum of $\Delta B_i$ must have a \textit{gaussian} pdf. So we can make an \textit{ansatz} for the solution:
+    \begin{align}\label{eqn:ansatz-harmonic}
+        W(x,t|x_0,0) = \frac{1}{Z(t)} \exp\left({-a(t) x^2 + b(t)x}\right) 
+    \end{align}  
+    Where $a(t)$ and $b(t)$ are the gaussian parameters, and $Z(t)$ the normalization factor. All that's left is to substitute (\ref{eqn:ansatz-harmonic}) in (\ref{eqn:FP-harmonic}) and solve for $a,b,Z$.
+\end{expl}
+
+\subsection{Equilibrium distribution}
+As before, we expect the equilibrium distribution to follow Maxwell-Boltzmann formula:
+\begin{align}
+    W_{\mathrm{eq} }(x) = \frac{1}{Z} \exp(-\beta V(x)) = \frac{1}{Z} \exp\left(-\frac{m \omega^2 x^2}{2 k_B T} \right) \qquad Z = \int_{\mathbb{R}} \exp(-\beta V(x))  \label{eqn:mb-harmonic}
+\end{align}
+Starting from (\ref{eqn:tran-prob-simple}) and taking the limit $t \to \infty$:
+\begin{align}
+    \lim_{t \to \infty} W(x,t|0,0) = \sqrt{\frac{k}{2 \pi D} }\exp\left(-\frac{k}{2D} x^2 \right) \label{eqn:harmonic-limit}
+\end{align}
+Comparing (\ref{eqn:mb-harmonic}) with (\ref{eqn:harmonic-limit}) we find:
+\begin{align*}
+    \frac{m \omega^2}{2 k_B T} = \frac{k}{2D} = \frac{m \omega^2}{2 \gamma D} \Rightarrow k_B T = \gamma D   
+\end{align*}
+So we obtain the same relation between $D$ and $T$ that we found in the general case.
+
+\subsection{High dimensional generalization}
+We can generalize the previous results to the case where $\bm{\Delta B_i} = (\Delta B_i^1, \dots, \Delta B_i^d)^T$ are $d$-dimensional vectors, following a \textit{multivariate gaussian distribution}:
+\begin{align*}
+    \mathbb{P}(\bm{\Delta B_1}, \dots, \bm{\Delta B_n}) = \prod_{i=1}^n \prod_{\alpha =1}^d \frac{\dd{B_i^\alpha}}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\frac{\Delta B_i^\alpha}{2 \Delta t_i} \right) 
+\end{align*}  
+As different components of the same $\bm{\Delta B_i}$ are independent, by Ito's rules of integration:
+\begin{align*}
+    \dd{B_i^\alpha} \dd{B_i^\beta} = \delta_{\alpha \beta} \dd{t_i} \qquad \dd{B_i^\alpha} \dd{B_i^\beta} \dd{B_i^\gamma} = 0
+\end{align*}
+
+We then need to write $d$ different Langevin equations, one for each component:
+\begin{align*}
+    \dd{x^\alpha(t)} = f^\alpha(x(t),t) \dd{t} + \sqrt{2 D_\alpha (x(t),t)} \dd{B^\alpha(t)}
+\end{align*}
+More in general, the stochastic term could be:
+\begin{align*}
+    \sum_{\beta = 1}^d g_{\alpha \beta} (x(t),t) \dd{B^\beta(t)}
+\end{align*}
+and in our case $g_{\alpha \beta} = 2 \sqrt{2 D_\alpha} \delta_{\alpha \beta}$.
+
+\medskip
+
+
+The Fokker-Planck equation then becomes:
+\begin{align*}
+\dot{W}(\bm{x},t) = \sum_{\alpha=1}^d \pdv{x^\alpha} \left(-f_\alpha (\bm{x},t) W(\bm{x},t) + \pdv{x^\alpha} D_\alpha(\bm{x},t) W(\bm{x},t)\right)    
+\end{align*}
+
+And the joint probability for a \textit{discretized}  path:
+\begin{align*}
+    \mathbb{P}(\bm{\Delta x_1}, \dots, \bm{\Delta x_n}) &= \prod_{i=1}^n \prod_{\alpha =1}^d \frac{\dd{\Delta x_i^\alpha}}{\sqrt{4 \pi D_\alpha \Delta t_i}} \exp\left(-\sum_{i=1}^n \sum_{\alpha =1}^d \frac{(\Delta x_i^\alpha - f_{i-1}^\alpha \Delta t_i)^2}{4 D_\alpha \Delta t_i} \right)
+\end{align*}
+And taking the limit $n \to \infty$:
+\begin{align*}
+    \mathbb{P}(\bm{x}(\tau)) = \prod_{\tau=0^+}^t \left(\frac{\dd[d]{\bm{x}(\tau)}}{\sqrt{4 \pi\dd{\tau}} \prod_{\alpha=1}^d \sqrt{D_\alpha}}\right) \exp\left( - \sum_{\alpha=1}^d \frac{1}{4 D_\alpha} \int_0^t (\dot{x}^\alpha - f^\alpha)^2 \dd{\tau}\right)
+\end{align*}
+
+\subsection{Underdamped Harmonic Oscillator}
+If we do not ignore the inertia term in (\ref{eqn:motion-harmonic}) we are left with:
+\begin{align*}
+    m \ddot{\bm{x}} = m \dot{\bm{v}} = -\gamma \bm{\dot{x}} + \bm{F}(\bm{x}) + \sqrt{2D} \bm{\xi}
+\end{align*}
+This second order (stochastic) differential equation can be written as a system of two first order equations:
+\begin{align*}
+    \begin{dcases}
+        \dd{\bm{x}} = \bm{v} \dd{t}\\
+        \dd{\bm{v}} = \left(-\frac{\gamma}{m} \bm{v} + \frac{\bm{F}(\bm{x})}{m}  \right) \dd{t} + \frac{\sqrt{2D}}{m} \dd{\bm{B}} 
+    \end{dcases}
+\end{align*}
+This leads to a \textit{generalization} of the Fokker-Planck equation, named \textbf{Kramer equation}:
+\begin{align*}
+    \dot{W}(\bm{x}, \bm{v}, t) = \bm{\nabla}_{\bm{v}} \left[\left(\frac{\gamma \bm{v}}{m} - \frac{\bm{F}}{m}  \right) W(\bm{x}, \bm{v},t) + \frac{\gamma^2 D}{m^2} \bm{\nabla}_{\bm{v}} W(\bm{x}, \bm{v},t) \right] + \bm{\nabla}_{\bm{x}} (-\bm{v} W(\bm{x}, \bm{v},t))
+\end{align*}  
+In the limit $t \to \infty$, the distribution at equilibrium will be:
+\begin{align*}
+    W(\bm{x},\bm{v}) = \frac{1}{Z} \exp\left(-\beta\left[\frac{m \norm{\bm{v}}^2}{2} + V(\bm{x}) \right]\right)  \qquad D=\frac{k_B T}{\gamma} 
+\end{align*}
+\end{document}
