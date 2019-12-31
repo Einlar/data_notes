@@ -338,54 +338,54 @@ $h(x,t)$ can be chosen arbitrarily, as a \textit{test function}. We can then cho
 This proves that the Langenvin equation is \textit{equivalent} to the Fokker-Planck equation:
 \begin{align*}
     \text{F-P} && \dot{W}(x,t) &= -\pdv{x}\left[f(x,t) W(x,t) - \pdv{x}(W(x,t) D(x,t))\right]\\
-    \text{L} && \dd{x}(t) &= \dd{t} f(x(t),t) + \sqrt{2D(x(t),t)} \dd{B(t)}
+    \text{L} && \dd{x}(t) &= \dd{t} f(x(t),t) +     \sqrt{2D(x(t),t)} \dd{B(t)}
 \end{align*} 
 \end{comment}
 
-\section{The role of temperature} % TO DO
-Recall the definition of $f(x,t)$:
+\section{The role of temperature}
+From physical observations, we expect the amplitude of stochastic oscillations in Brownian motion to be dependent on temperature - as it is a direct effect of collisions with molecules in thermal equilibrium. So, we want to derive an explicit relation between the diffusion parameter $D$ and $T$.
+
+We start by assuming that, for $t \to \infty$, the particle will be \textit{at equilibrium}, meaning that its distribution will be given by the Maxwell-Boltzmann: 
 \begin{align*}
-    f(x,t) = \frac{F_{\mathrm{ext} }}{\gamma}; \qquad \gamma = 6 \pi a \eta; \qquad F_{\mathrm{ext} }(x) = -\pdv{V}{x} (x) 
+    W(x,t)  \xrightarrow[t \to \infty]{}  P_{\mathrm{eq} }(x) = \frac{e^{- \beta V(x)}}{Z} \qquad Z = \int_{\mathbb{R}} \dd{x} e^{- \beta V(x)}; \qquad \beta = \frac{1}{k_B T} 
+\end{align*}
+Recall the Fokker-Planck equation:
+\begin{align*}
+    \pdv{t} W(x,t) = - \pdv{x} \left[f(x,t) W(x,t) - \pdv{x} (D(x,t) W(x,t))\right]
+\end{align*}
+From the Langevin equivalence, and some physical reasoning, we found that:
+\begin{align*}
+    f(x,t) = \frac{F_{\mathrm{ext}}}{\gamma} = -\frac{1}{\gamma} \pdv{V(x)}{x} \qquad \gamma = 6 \pi \eta a  
+\end{align*}
+Where $F_{\mathrm{ext}}$ is an external conservative force with potential $V(x)$ acting on the Brownian particle, assumed to be a sphere of radius $a$ moving through a medium of viscosity $\eta$. Assuming $D(x,t) \equiv D$ for simplicity, the Fokker-Planck equation becomes:
+\begin{align*}
+    \pdv{W^*}{t} = \pdv{x} \left[\frac{W^*}{\gamma} \pdv{V}{x}  + D \pdv{W^*}{x} \right]
+\end{align*}
+Here we are interested in the \textit{particular solution} $W^*(x)$ that will be reached at the equilibrium, as it \textit{does not} depend on time. So:
+\begin{align*}
+    \pdv{W^*}{t} \overset{!}{=}  0 
+\end{align*}  
+Meaning that:
+\begin{align} \label{eqn:T1}
+    \left[\frac{W^*(x)}{\gamma} \pdv{V}{x} (x) + D \pdv{W^*}{x} (x) \right] = \mathrm{constant}  \qquad \forall x
+\end{align}
+As this relation holds for \textit{any} $x$, we can examine it in the limit $x \to \infty$ to find the value of the constant. In fact, as $W^*(x)$ is a normalized pdf, we expect:
+\begin{align*}
+    W^*, \pdv{W^*}{x} \xrightarrow[x \to \infty]{}  0
 \end{align*} 
-Assuming $D$ independent of $x$:
+And so the constant in (\ref{eqn:T1}) must be $0$, leading to:
 \begin{align*}
-    \dot{W}(x,t) = \pdv{x}\left[\frac{1}{\gamma} \pdv{V}{x} \cdot W + D \pdv{W}{x} \right]
-\end{align*}  
-We expect that a particle will reach, after some time, an equilibrium described by the Maxwell-Boltzmann distribution:
-\begin{align*}
-    W(x,t)  \xrightarrow[t \to \infty]{}  P_{\mathrm{eq} }(x) = \frac{e^{- \beta V(x)}}{z} \qquad z = \int \dd{x} e^{- \beta V(x)}; \qquad \beta = \frac{1}{k_B T} 
+    \pdv{W^*}{x} = - \frac{1}{\gamma D} W^* \pdv{V}{x} \Rightarrow \frac{1}{W^*} \pdv{W^*}{x} = \ln\left(W^*\right) = -\frac{1}{\gamma D} \pdv{V}{x}   
 \end{align*}
-At equilibrium, $\dot{W} = 0$ (stationary solution):
+Integrating, we find:
 \begin{align*}
-    \pdv{x}\left[\frac{1}{\gamma} W^* + D \pdv{x} W^* \right] = 0
+    \ln W^*(x) = - \frac{1}{\gamma D} V(x) + c \Rightarrow W^*(x) = K \exp\left(-\frac{1}{\gamma D} V(x) \right) \overset{!}{=}  \frac{1}{Z} \exp\left(-\beta V(x)\right)  
 \end{align*}
-We would like that $W^* = W_{\mathrm{eq}}$. We then ask: how many stationary solution are there? If there is only one, does it coincide always with $W_{\mathrm{eq} }$?\\
+And by comparing the two functions we obtain the desired relation:
+\begin{align*}
+    \beta = \frac{1}{\gamma D} = \frac{1}{k_B T} \Rightarrow D = \frac{k_B T}{\gamma} = \frac{k_B T}{6 \pi \eta a}    
+\end{align*}
+This is indeed the same relation that Einstein found when examining Brownian motion (\textit{fluctuation-dissipation relationship}, 1905). As $D(x,t) \propto T$, the amplitude of stochastic oscillations (from Langevin equation) is proportional $\sqrt{2D} \propto \sqrt{T}$.
 
-Note that the terms in the parenthesis must be constant:
-\begin{align*}
-    \Rightarrow [\dots] = \text{constant}
-\end{align*}
-We assume that $W^*$ vanishes at infinity  (as it is normalized), and also its first derivative:
-\begin{align*}
-    \mathbb{P}^*, \pdv{x} \mathbb{P}^*  \xrightarrow[x \to \infty]{}  0
-\end{align*}
-Then $[\dots]$ must be $0$:
-\begin{align*}
-    \pdv{x} \mathbb{P}^* = - \frac{1}{\gamma D} \pdv{V}{x} \mathbb{P}^* 
-\end{align*}  
-Dividing both sides by $\mathbb{P}^*$  and integrating:
-\begin{align*}
-    \pdv{x}\ln \mathbb{P}^*(x) = -\frac{1}{\gamma D} \pdv{V}{x} \Rightarrow \ln \mathbb{P}^*(x) = -\frac{1}{\gamma D} V(x) + \text{const}  
-\end{align*}
-Exponentiating:
-\begin{align*}
-    \mathbb{P}^*(x) = \exp\left(-\frac{1}{\gamma D} V(x) \right) \cdot K
-\end{align*}
-Comparing to the Maxwell-Boltzmann distribution:
-\begin{align*}
-    \frac{1}{\gamma D} = \beta \Rightarrow \gamma D = k_B T \Rightarrow D = \frac{k_B T}{6 \pi \eta a }  
-\end{align*}
-This is the Einstein relation (\textit{fluctuation-dissipation relationship}), found in 1905. As $D(x,t) \propto T$, the amplitude of stochastic oscillations in the Langenvin eq. is proportional to $\sqrt{T}$.\\
-
-However, are we sure that this is true \textit{for every initial condition}? 
+%Is it true for any initial condition?
 \end{document}
