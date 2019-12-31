@@ -249,7 +249,7 @@ We start with a Wiener process, that is a stochastic process with \textit{indepe
 \begin{align}
     x(t_{i+1}) = x(t_i) + \Delta x(t_i) \label{eqn:increment}
 \end{align}
-where the increment $\Delta x(t_i)$ is sampled from a gaussian pdf:
+where each increment $\Delta x(t_i)$ is sampled from a gaussian pdf:
 \begin{align*}
     \Delta x_i(t_i) \sim \frac{1}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\frac{(\Delta x)^2}{4 D \Delta t_i} \right) 
 \end{align*}
@@ -276,7 +276,7 @@ We want now to form a time derivative in the left side, in order to arrive a (st
     \Delta B(t_i) \equiv \Delta t_i \xi(t_i) 
     \label{eqn:deltaB}
 \end{align}  
-so that $\Delta x_i = \sqrt{2D} \Delta t_i \xi$, and all the \textit{randomness} is now contained in the random variable $\xi$, which is distributed according to:
+so that $\Delta x_i = \sqrt{2D} \Delta t_i \xi_i$, and all the \textit{randomness} is now contained in the random variable $\xi$, which is distributed according to:
 \begin{align*}
     \xi(t_i) \sim \frac{1}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\frac{\Delta t_i^2 \xi_i^2}{2 \Delta t_i} \right) \underbrace{\dv{\Delta B_i}{\xi (t_i)}}_{\Delta t_i} = \sqrt{\frac{\Delta t_i}{2 \pi} } \exp\left(-\frac{\Delta t_i }{2} \xi_i^2 \right) \qquad \xi_i \equiv \xi(t_i)  
 \end{align*}   
@@ -289,7 +289,14 @@ And by taking the continuum limit $\Delta t_i \to 0$ we get the \textbf{Langevin
     \dot{x}(t) = \sqrt{2D} \xi(t)
     \label{eqn:langevin1}
 \end{align}
-Note that, as we saw previously, Brownian paths are not differentiable - and so this is just a \textit{formal} equation, with a definite meaning only in a given \textit{discretization}. Also, note that $\xi(t)$ is a random variable, and so this is an example of a \textbf{stochastic differential equation}. It is not clear how to find a solution to such an equation, or even how to \textit{define} what a solution should be - and this will be the main topic of the next section.
+We can see $\xi(t)$ as a \textit{highly irregular, quickly varying function}, which, in a certain sense, expresses the result of Brownian collisions at a certain instant. In particular, the following holds:
+\begin{align*}
+    \langle \xi(t) \rangle = 0 \qquad \langle \xi(t) \xi(t') \rangle = \delta(t-t')
+\end{align*}
+meaning that the values of $\xi(t)$ at different instants are completely \textit{independent}. 
+\medskip
+
+Note that, as we saw previously, Brownian paths are not differentiable - and so $\dot{x}(t)$ does not exist, and this is just a \textit{formal} equation, with a definite meaning only in a given \textit{discretization}. Also, note that $\xi(t)$ is a random variable, and so this is an example of a \textbf{stochastic differential equation}. It is not clear how to find a solution to such an equation, or even how to \textit{define} what a solution should be - and this will be the main topic of the next section.
 
 We can rewrite (\ref{eqn:langevin1}) in a more \textit{rigorous} form by \q{multiplying by $\dd{t}$}, i.e. performing the change of variables (\ref{eqn:deltaB}), which - in the continuum limit - is $\dd{B} = \xi \dd{t}$, leading to:
 \begin{align*}
@@ -308,38 +315,41 @@ and $\langle \xi(\tau) \rangle = 0$, $\langle \xi (\tau) \xi (\tau') \rangle = \
 \end{comment}
 
 Before moving on, we want to generalize this equation to the presence of \textit{external forces}. As we saw previously, this just results in adding a \textit{constant velocity motion} to the particle, leading to the full \textbf{Langevin equation}: 
-\begin{align*}
-    \dot{x}(t) &= f(x,t) + \sqrt{2 D}\xi(t)\\
-    \dd{x(t)} &= f(x,t) \dd{t} + \sqrt{2 D} \dd{B} \qquad \dd{B} \sim \frac{1}{\sqrt{2 \pi \dd{t}}} \exp\left(-\frac{\dd{B}^2}{2 \dd{t}} \right) 
-\end{align*} 
+\begin{align}\nonumber
+    \dot{x}(t) &= f(x,t) + \sqrt{2 D(x,t)}\xi(t)\\
+    \dd{x(t)} &= f(x,t) \dd{t} + \sqrt{2 D(x,t)} \dd{B} \qquad \dd{B} \sim \frac{1}{\sqrt{2 \pi \dd{t}}} \exp\left(-\frac{\dd{B}^2}{2 \dd{t}} \right) 
+    \label{eqn:L-eq}
+\end{align} 
 
-\begin{comment}
-Now consider a particle moving in 3D:
+The \textit{physical} meaning of $f(x,t)$ and $D(x,t)$ can be more clearly seen by comparing (\ref{eqn:L-eq}) to the equation of motion of the Brownian particle.
+
+Consider a particle of mass $m$ immersed in a fluid, with a radius $a$ that is much larger than the surrounding molecules (typically $\sim 10^{-9}$ to \SI{e-7}{\m}). The forces acting on it will be that of \textit{viscous friction} $-\gamma \dot{\bm{r}}$, eventual \textit{external forces} $\bm{F}_{\mathrm{ext} }$ (e.g. gravity), and a rapidly varying and \textit{random} term $\bm{F}_{\mathrm{noise}}$, encompassing the effect of the large number of collisions ($\sim 10^{12}/\si{\s}$) with the smaller fluid particles:   
 \begin{align*}
     m \ddot{\bm{r}} (t) = - \gamma\dot{\bm{r}} + \bm{F}_{\mathrm{ext} } + \bm{F}_{\mathrm{noise} }(t)
 \end{align*}
-e.g. $\bm{F}_{\mathrm{ext} 
-} = -\bm{\hat{z}} g m$ for gravity, and $\bm{F}_{\mathrm{noise} }$ is the \textit{random force} due to collisions with other particles.\\
-If $\bm{F}_{\mathrm{ext} }$ is conservative, we can write:
-\begin{align*}
-    \bm{F}_{\mathrm{ext} }(\bm{r},t) = - \bm{\nabla} V(\bm{r},t)
-\end{align*}     
-with a certain potential $V(\bm{r}, t)$.\\
 Dividing both sides by $\gamma$:
-\begin{align*}
+\begin{align}
     \frac{m}{\gamma} \ddot{\bm{r}}(t) = - \dot{\bm{r}} + \frac{\bm{F}_{\mathrm{ext} }(\bm{r},t)}{\gamma} + \frac{\bm{F}_{\mathrm{noise} }(t)}{\gamma}  
-\end{align*}  
-where, by Stokes law, $\gamma = 6 \pi a \eta$ and $\eta$ is the viscosity of the surrounding fluid. Note that $[m \gamma^{-1}] = [t]$ - so this ratio sets a \textit{timescale} $\tau$, i.e. the characteristic time $\bar{v} - v(t) = e^{-t/\tau}$, where $\bar{v}$ is the final (constant) velocity.\\
-If $m/\gamma$ is much smaller than the timescale of observation, then we can neglect the acceleration term (i.e. the final constant state is reached almost immediately).\\
-We can then write:
+    \label{eqn:N1}
+\end{align}
+Assuming a spherical particle, $\gamma$ is given by Stokes law to be $6 \pi a \eta$, where $\eta$ is the viscosity of the surrounding fluid. 
+
+Note that, if we ignore the external force and the random term, the equation becomes:
 \begin{align*}
-    \dot{\bm{r}} = \underbrace{\frac{\bm{F}_{\mathrm{ext} }}{\gamma}}_{f}  + \frac{\bm{F}_{\mathrm{noise} }}{\gamma} \underset{d=1}{ \Rightarrow}  \dot{x}(t) = f(x,t) + \sqrt{2 D(x,t)}
+    \dv{\dot{\bm{r}}(t)}{t} = -\frac{\gamma}{m} v(t) 
 \end{align*}
-This has no meaning unless we define a discretization:
+which has solution:
 \begin{align*}
-    \dd{x}(t) = f(x,t) \dd{t} + \sqrt{2D} \dd{B}\qquad \dd{B} \sim \frac{1}{\sqrt{2\pi \dd{t}}} \exp\left(-\frac{(\dd{B})^2}{2\dd{t}} \right) 
+    \dot{\bm{r}}(t) = \exp\left(-\frac{t}{\tau_B} \right) \dot{\bm{r}}(0) \qquad \tau_B = \frac{m}{\gamma} 
 \end{align*}
-which is a \textit{stochastic differential equation}. But how to integrate it? 
-\end{comment}
+$\tau_B$ is in the scale of $\SI{e-3}{\s}$, and represents the timescale of reaching equilibrium, i.e. $0$ velocity. So, for Brownian motion to happen, $\bm{F}_{\mathrm{noise}}$ is necessary. Also, if we are interested in the motion on the scale of seconds, we can neglect the acceleration term. This is the \textbf{overdamped limit} (in analogy to a damped oscillator with high loss of energy due to attrition, so that it quickly reaches equilibrium without ever \q{overshooting}). Given that assumption, (\ref{eqn:N1}) becomes: 
+\begin{align*}
+    \dot{\bm{r}} = {\frac{\bm{F}_{\mathrm{ext} }}{\gamma}}  + \frac{\bm{F}_{\mathrm{noise} }}{\gamma}
+\end{align*}
+Which, for a particle moving in one dimension, reduces to:
+\begin{align*}
+    x(t) = \underbrace{\frac{F_{\mathrm{ext}}}{\gamma}}_{f(x,t)}  + \underbrace{\frac{F_{\mathrm{noise}}}{\gamma}}_{\sqrt{2 D(x,t)}\xi(t)}   
+\end{align*}
+Comparing with (\ref{eqn:L-eq}) gives the physical meaning of $f(x,t)$ and $D(x,t)$.
 
 \end{document}
