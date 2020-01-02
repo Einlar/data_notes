@@ -7,7 +7,7 @@
 \lesson{9}{14/11/19}
 Using the framework developed in the previous sections, we now tackle a more general setting, that of a particle moving in a \textit{harmonic potential} and subject to thermal noise. This will be useful to model the local behaviour about the minima of \textit{any} potential - as they are approximately harmonic.
 
-So, consider a particle of mass $m$ moving in one dimension through a \textit{viscous} medium and immersed in a \textit{harmonic} potential. If we add a noise term, modelling the random collisions with the other (much smaller) particles in the fluid, the equation of motion becomes:
+So, consider a particle of mass $m$ moving in one dimension through a \textit{viscous} medium and immersed in a \textit{harmonic} potential. To model the random collisions with the other (much smaller) particles in the fluid we add a \textit{stochastic term} $\sqrt{2D}\gamma\xi$. The equation of motion becomes:
 \begin{align}\label{eqn:motion-harmonic}
     m\ddot{x} = - \gamma \dot{x} - m \omega^2 x + \sqrt{2D} \gamma \xi
 \end{align}
@@ -16,55 +16,101 @@ As $m/\gamma$ is much smaller than the timescale we are interested in, we can ne
     \dot{x} = -\underbrace{\frac{m \omega^2}{\gamma}}_{k} x + \sqrt{2D} \xi  
 \end{align*} 
 And multiplying by $\dd{t}$:
-\begin{align*}
-    \dd{x(t)} = -kx(t) \dd{t} + \sqrt{2D} \dd{B(t)}
-\end{align*}
+\begin{align}
+    \dd{x(t)} = -kx(t) \dd{t} + \sqrt{2D} \dd{B(t)} \label{eqn:sde1}
+\end{align}
 
-To find a solution for $x(t)$ we introduce a time discretization $\{t_j\}_{j=1,\dots,n}$. Letting:
+As usual, we introduce a time discretization $\{t_j\}_{j=1,\dots,n}$. Letting:
 \begin{align*}
     x(t_i) \equiv x_i; \quad \Delta x_i \equiv x_{i} - x_{i-1}; \qquad B(t_i) \equiv B_i; \qquad \Delta t_i = t_{i} - t_{i-1}
 \end{align*}
 we arrive to:
-\begin{align*}
-    \Delta x_i = -k x_{i-1} \Delta t_i + \sqrt{2D} \Delta B_i
-\end{align*}
-where we used Ito's prescription to choose the \textit{mid-point} value of $x(t)$ in each discretized interval $[t_{i-1},t_i]$ to be evaluated at the smaller extremum $t_{i-1}$.
+\begin{align}
+    \Delta x_i = -k x_{i-1} \Delta t_i + \sqrt{2D} \Delta B_i \label{eqn:discrete-harmonic}
+\end{align}
+Note that we evaluated the potential term $-kx(\tau)$ at the \textit{left extremum} of the discretized interval $[t_{i-1},t_i]$, following Ito's prescription.
 
-Recall that the \textit{joint} pdf of the Brownian increments $\Delta B_i$ is:
+To solve (\ref{eqn:sde1}) the plan will be the following:
+\begin{enumerate}
+    \item Use the discretization to find the \textit{infinitesimal probability} $\mathbb{P}(\{\Delta x_i\}_{i=1,\dots,n})$ of a \textit{discretized path}, i.e. of a path traversing all \textit{gates} $[x_i, x_i + \dd{x_i}]$ at successive instants $0 \equiv t_1 < \dots < t_n \equiv t$.
+    \item Find the probability for a continuous path $\dd{P} \equiv \mathbb{P}(\{x(\tau)_{\tau \in [0,t]}\})$ by taking the limit $n \to \infty$.
+    \item Find the transition probabilities that solve (\ref{eqn:sde1}) by using a \textit{path integral} to evaluate:
+    \begin{align*}
+        W(x_t,t;x_0,0) = \langle \delta(x_t - x(\tau)) \rangle_W \equiv \int_{\mathbb{R}^T} \delta(x_t - x(\tau)) \dd{P}    
+    \end{align*}    
+    In other words, this is the \textit{fraction} of paths (from the set $\mathbb{R}^T$ of all continuous paths happening in the timeframe $[0,t]$) that start in $x_0$ at instant $0$, and reach $x_t$ at instant $t$.  
+\end{enumerate}
+
+To find $\mathbb{P}(\{\Delta x_i\}_{i=1,\dots,n})$ we start from the joint pdf $\mathbb{P}(\{\Delta B_i\}_{i=1, \dots, n})$ that we already know, and perform a change of random variables according to (\ref{eqn:discrete-harmonic}).
+
+In practice, start from:
 \begin{align*}
     \mathbb{P}(\Delta B_1, \dots, \Delta B_n) = \prod_{i=1}^n \frac{\dd{\Delta B_i}}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\sum_{i=1}^n \frac{\Delta B_i^2}{ 2 \Delta t_i} \right) 
 \end{align*} 
-Then the probability of a path $x(t)$ passing \q{close to} a set of points $x_1, x_2, \dots, x_n$ at instants $t_1 < t_2 < \dots < t_n$ is:
+Then insert $\Delta B_i$ in terms of $\Delta x_i$ from (\ref{eqn:discrete-harmonic}):
+\begin{align*}
+    \Delta B_i = \frac{\Delta x_i + k x_{i-1} \Delta t_i}{\sqrt{2D}} 
+\end{align*}
+and then multiply by the determinant $J$ of the jacobian of the change of variables to find the desired new pdf:
 \begin{align*}
     \mathbb{P}(x_1, x_2, \dots, x_n) &= \mathbb{P}(\Delta x_1) \mathbb{P}(\Delta x_2 | \Delta x_1) \mathbb{P}(\Delta x_3 | \Delta x_1, \Delta x_2) \cdots =\\
-    &= \prod_{i=1}^n \frac{\dd{\Delta x_i}}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\sum_{i=1}^n \frac{1}{2 \Delta t_i} \left(\frac{\Delta x_i + k x_{i-1} \Delta t_i}{\sqrt{2 D}} \right)^2 \right) J
-\end{align*}
-\begin{align*}
+    &= \prod_{i=1}^n \frac{\dd{\Delta x_i}}{\sqrt{2 \pi \Delta t_i}} \exp\left(-\sum_{i=1}^n \frac{1}{2 \Delta t_i} \left(\frac{\Delta x_i + k x_{i-1} \Delta t_i}{\sqrt{2 D}} \right)^2 \right) J\\
+    \span
     J = \operatorname{det}\Bigg| \pdv{(\Delta B_1, \dots, \Delta B_n)}{(\Delta x_1, \dots, \Delta x_n)}\Bigg| = \operatorname{det} \Bigg|\pdv{(\Delta x_1, \dots, \Delta x_n)}{(\Delta B_1, \dots, \Delta B_n)}\Bigg|^{-1} = \left|\begin{array}{cccc}
-    \sqrt{2D} & * & * & * \\ 
-    0 & \sqrt{2D} & * & \vdots \\ 
-    \vdots & \ddots & \ddots & \vdots \\ 
+    \sqrt{2D} & 0 & \cdots & 0 \\ 
+    0 & \sqrt{2D} & \ddots & \vdots \\ 
+    \vdots & \ddots & \ddots & 0 \\ 
     0 & \dots & 0 & \sqrt{2D}
-    \end{array}\right|^{-1} = (2 D)^{-n/2}
+    \end{array}\right|^{-1}_{n \times n} = \textcolor{Red}{(2 D)^{-n/2}}
 \end{align*}
-and so:
+And so:
 \begin{align} \label{eqn:H1}
-    \mathbb{P}(\Delta x_1, \dots, \Delta x_n) = \prod_{i=1}^n \left(\frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}}\right) \exp\left(-\sum_{i=1}^n \frac{1}{2 \Delta t_i} \left(\frac{\Delta x_i + k x_{i-1} \Delta t_i}{\sqrt{2D}} \right)^2 \right) 
+    \mathbb{P}(\Delta x_1, \dots, \Delta x_n) = \prod_{i=1}^n \left(\frac{\dd{\Delta x_i}}{\sqrt{\textcolor{Red}{4} \pi \textcolor{Red}{D} \Delta t_i}}\right) \exp\left(-\sum_{i=1}^n \frac{1}{2 \Delta t_i} \left(\frac{\Delta x_i + k x_{i-1} \Delta t_i}{\textcolor{Blue}{\sqrt{2D}}} \right)^2 \right) 
 \end{align}
 Taking the limit $n \to \infty$:
 \begin{align*}
-    \mathbb{P}(x(\tau)) = \prod_{\tau = 0^+}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau}}} \exp\left(-\frac{1}{4 D} \int_0^t (\dot{x} + k x)^2 \dd{\tau} \right) 
+    \dd{P} \equiv 
+    \mathbb{P}(x(\tau)) = \prod_{\tau = 0^+}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau}}} \exp\left(-\frac{1}{\textcolor{Blue}{4 D}} \int_0^t (\dot{x} + k x)^2 \dd{\tau} \right) 
 \end{align*}
+where we used:
+\begin{align*}
+    \frac{1}{\Delta t_i} (\Delta x_i + k x_{i-1} \Delta t_i)^2 = \frac{\textcolor{Red}{\Delta t_i^2}}{\Delta t_i} \left(\frac{\Delta x_i}{\textcolor{Red}{\Delta t_i}} + k x_{i-1} \frac{\Delta t_i}{\textcolor{Red}{\Delta t_i}}   \right)^2  \xrightarrow[n \to \infty]{}  (\dot{x} + kx)^2 \dd{t}
+\end{align*}
+
 Expanding the square in (\ref{eqn:H1}):
 \begin{align}
     \dd{P} = \prod_{i=1}^n \underbrace{\frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\sum_{i=1}^n \frac{\Delta x_i^2}{4 D \Delta t_i} \right) }_{\text{Wiener measure ($\dd{x_W}$)}} \underbrace{\exp\left(-\frac{k}{2D} \sum_{i=1}^n x_{i-1} \Delta x_i\right)}_{\text{stochastic integral}} \underbrace{\exp\left(-\frac{k^2}{4D} \sum_{i=1}^n \Delta t_i x_{i-1}^2 \right)}_{\text{normal integral}}   
     \label{eqn:dP}
 \end{align}
 
-Let's focus on the stochastic integral.
-According to Ito's rules:
+Let's focus on the stochastic integral. We already know that, for Ito's integrals, the usual rules of calculus do not apply. In particular, we can't just do:
 \begin{align*}
-    h(x(t)) - h(x(0)) = \sum_{i=1}^n \Delta h_i = \sum_{i=1}^n (h_i' \Delta x_i + \frac{1}{2} h'' \underbrace{\Delta x_i^2}_{2 D \Delta t_i}  ) + 0
+    \sum_{i=1}^n x_{i-1} \Delta x_i  \xrightarrow[n \to \infty]{}  \int_0^t x(\tau) \dd{x(\tau)} \neq \frac{x^2(t) - x^2(0)}{2}  
+\end{align*}
+So, more in general for a differentiable function $h(x)$:
+\begin{align}
+    \int_0^t h'(\tau) \dd{x(\tau)} \neq h(x(t)) - h(x(0)) \label{eqn:formula-int}
+\end{align}
+The idea is now to start from the right side and use Ito's rules to \textit{correct} the left side, so to have a usable identity for integration. As always, we start by discretizing time $\{t_i\}_{i=1,\dots,n}$:  
+\begin{align*}
+    h(x(t)) - h(x(0)) = \sum_{i=1}^n [h(x(t_{i})) - h(x(t_{i-1}))] \equiv  
+    \sum_{i=1}^n \Delta h_i
+\end{align*}
+In the limit, $t_{i} = t_{i-1} + \dd{t}$, and so the $\Delta h_i$ are \textit{differentials} of $h$:
+\begin{align*}
+    \Delta h_i = \dv{h}{x_i} \Delta x_i + \frac{1}{2} \dv[2]{h}{x_i} \Delta x_i^2 + O(\Delta x_i^3) 
+\end{align*}
+Now:
+\begin{align*}
+    \Delta x_i = \dv{\Delta B_i}{\Delta x_i} \Delta B_i + O(\Delta B_i^2) \approx \sqrt{2D} \Delta B_i
+\end{align*}
+And by Ito's rules, $\Delta B_i^2 = \Delta t_i$ and $\Delta B_i^n = 0$ for $n \geq 3$. So:
+\begin{align*}
+    \Delta h_i = h' \Delta x_i + \frac{1}{2} h'' \underbrace{\Delta x_i^2}_{2 D \Delta t_i}  
+\end{align*}
+And substituting back in (\ref{eqn:formula-int}) leads to:
+\begin{align*}
+    h(x(t)) - h(x(0)) = \sum_{i=1}^n (h_i' \Delta x_i + h'' D \Delta t_i)
 \end{align*}
 Rearranging:
 \begin{align*}
@@ -76,19 +122,16 @@ In the limit $n \to \infty$, the sums become integrals:
     \int_{0}^t h' \dd{x(\tau)} = h(x(t)) - h(x(0)) - D \int_0^t h'' \dd{\tau}
 \end{align}
 
-Now, choose:
+We can finally apply the result (\ref{eqn:stoc-int}) to our case, by setting $h'(x(\tau)) = x(\tau)$, so that:
 \begin{align*}
-    h(x(t)) = \frac{x(t)^2}{2} 
+    h(x(t)) = \int x(\tau) =  \frac{x(t)^2}{2}; \qquad h''(x(\tau)) = 1
 \end{align*}
-So that:
-\begin{align*}
-    h'(x(t)) = x(t) \qquad h''(x(t)) = 1
-\end{align*}
+
 Substituting in (\ref{eqn:stoc-int}) leads to:
 \begin{align*}
     \sum_{i=1}^n x_{i-1} \Delta x_i  \xrightarrow[n \to \infty]{}  \int_0^t x(\tau) \dd{x(\tau)} = \frac{x^2(t) - x^2(0)}{2} - D\underbrace{\int_0^t \dd{\tau}}_{t} = \frac{x^2(t) - x^2(0)}{2} - Dt   
 \end{align*}
-Substituting this result back in (\ref{eqn:dP}) leads to:
+And substituting this result back in (\ref{eqn:dP}) leads to:
 \begin{align*}
     \dd{P} \underset{n \to \infty}{=}   \dd{x_W} \exp\left(-\frac{k}{2D} \left[\frac{x_t^2 - x_0^2}{2} - Dt \right] \right) \exp\left(-\frac{k^2}{4D} \int_0^t x^2(\tau) \dd{\tau} \right) 
 \end{align*}
