@@ -3,9 +3,10 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\section{Introduction}
-\lesson{?}{18/11/19}
+%\section{Introduction}
+\lesson{14}{18/11/19}
 
+\begin{comment}
 We want to show that there are cases where the stochastic equation (or the resulting path integral) assume a particular form that is theoretically advantageous to be studied in an analytical way, leading to the \textit{Feynmann-Kac} formula, useful both in stochastic processes and in quantum mechanics (note that, in the latter, it needs to be generalized to complex numbers - which isn't rigorous, but still leads to exact results).
 
 During last lecture, when discussing the Harmonic Oscillator in the overdamped limit, we wrote that:
@@ -28,101 +29,153 @@ will reappear, i.e. we will observe how general problems have a similar formulat
 Note that $V(x)$ is \textit{proportional} to the original harmonic potential:
 \begin{align*}
     U(x) = \frac{1}{2} m \omega^2 x^2 
-\end{align*}  
+\end{align*} 
+\end{comment}
 
 \section{Particle in a conservative force-field}
-Let's consider a particle in a 3D space $\bm{r} = (x_1, x_2, x_3)^T$, immersed in a conservative force-field $F(\bm{r}) = -\bm{\nabla} U(\bm{r})$ with potential $U(\bm{r})$. Then:
+In last section, we examined a particle of radius $a$ immersed in a harmonic potential $U(x) = m \omega^2 x^2/2$, moving through a medium with viscosity $\eta$ and subject to thermal fluctuations of amplitude proportional to $\sqrt{2D}$, so that its dynamics are described by the following \textit{stochastic differential equation}: 
 \begin{align*}
-    \dd{\bm{r}} = \bm{f}(\bm{r})  \dd{t} + \sqrt{2D} \dd{\bm{B}}
-\end{align*}     
-with $B= (B_1, B_2 , B_3 )^T$ and:
-\begin{align*}
-    \Delta B_\alpha \sim \frac{1}{\sqrt{2 \pi \Delta t} } \exp\left(-\frac{\Delta B^2_\alpha}{2 \Delta t} \right)
+    \dd{x} = -k x \dd{t} + \sqrt{2D} \dd{B}    \qquad k = \frac{m \omega^2}{\gamma}\qquad \gamma = 6 \pi \eta a 
 \end{align*}
-with $\bm{f} = \bm{F}/\gamma$, and $\gamma = 6 \pi \eta a$. In vector notation:
+The solution, expressed as the \textit{transition probability} between any two given points, is a path integral:
+\begin{align}\label{eqn:harmonic-tprob}
+    W(x_t,t|x_0,0) = \exp\left(-\frac{x_t^2 - x_0^2}{4D}k + \frac{kt}{2}  \right) \hlc{Yellow}{\langle \exp\left(-\int_0^t V(x(\tau)) \dd{\tau}\right) \delta(x(t) - x_t) \rangle_W}  
+\end{align}
+with $V(x(\tau) = {k^2 x^2(\tau)}/({4D})$. The average is computed with the Wiener measure:
 \begin{align*}
-    \Delta \bm{B} \sim \exp\left(-\frac{(\Delta \bm{B})^2}{2 \Delta t} \right) \frac{1}{(2 \pi \Delta t)^{3/2}} 
-\end{align*}  
-If we now discretize the problem:
-\begin{align*}
-    \Delta \bm{r}_i = \bm{r} (t_i) - \bm{r}(t_i)
+    \langle f(x(\tau)) \rangle_W \equiv \int_{\mathbb{R}^T} \left(\prod_{\tau=0^+}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau}}} \right) \exp\left(-\frac{1}{4D} \int_0^t \dot{x}^2 (\tau) \dd{\tau} \right) f(x(\tau))
 \end{align*}
-we can rewrite that equation as:
-\begin{align*}
-    \Delta \bm{r}_i = \bm{f}_{i-1} \Delta t_i + \sqrt{2D} \Delta \bm{B}_i
-\end{align*}
-We can then repeat all the steps we've seen in the 1D case, leading to:
-\begin{align*}
-    \dd{P}(\Delta \bm{B}_1, \dots, \Delta \bm{B}_N) &= \prod_{i=1}^N \frac{\dd[3]{\Delta B}}{(2 \pi \Delta t)^{3/2}} \exp\left(-\sum_{i=1}^N \frac{\Delta \bm{B}_i^2}{2 \Delta t_i} \right)\\
-    \dd{P}(\Delta \bm{r}_1, \dots, \Delta \bm{r}_N) &= \prod_{i=1}^N \frac{\dd[3]{\Delta \bm{r}_i}}{(4 \pi D \Delta t_i)^{3/2}} \exp\left[-\frac{1}{4D} \sum_{i=1}^N \frac{(\Delta \bm{r}_i - \bm{f}_{i-1} \Delta t_i)^2}{\Delta t_i}  \right] 
-\end{align*}
-(Note that, in the textbook, instead of $\bm{f}_{i-1}$ they are using the Stratonovich prescription $(\bm{f}_i + \bm{f}_{i-1})/2$, complicating the jacobian for a change of variables, while we are using Ito's. In the end, however, the final result will not depend on this choice - at least for this case).
+with $\mathbb{R}^T$ being the set of continuous functions $T \to \mathbb{R}$, and $T=[0,t]$.
+\medskip
 
-Expanding the exponential:
+We want now to show that, in the more general case of a particle immersed in a generic potential $U(x)$, a path integral similar to the highlighted term in (\ref{eqn:harmonic-tprob}) will appear. Of course, the function $V(x(\tau))$ will be different, but it will be proportional to $U(x)$ - as it is evident in the harmonic case.
+
+\medskip
+
+So, let's consider a particle in a 3D space $\bm{r} = (x_1, x_2, x_3)^T$, immersed in a conservative force-field $\bm{F}(\bm{r}) = -\bm{\nabla} U(\bm{r})$ with potential $U(\bm{r})$, and subject to thermal noise. The Langevin equation becomes:
+\begin{align}\label{eqn:langevin-d3}
+    \dd{\bm{r}} = \bm{f}(\bm{r})  \dd{t} + \sqrt{2D} \dd{\bm{B}} \qquad \bm{f}(\bm{r}) = \frac{\bm{F}(\bm{r})}{\gamma} \quad \gamma= 6 \pi \eta a   
+\end{align}     
+with $\bm{B}= (B_1, B_2 , B_3 )^T$ being a $d=3$ vector with gaussian components:
+\begin{align}
+    \Delta B_\alpha \sim \frac{1}{\sqrt{2 \pi \Delta t} } \exp\left(-\frac{\Delta B^2_\alpha}{2 \Delta t} \right) \qquad \alpha =1,2,3
+    \label{eqn:deltaba}
+\end{align}
+As different components are independent, the joint pdf for the vector $\bm{\Delta B}$ is just the product of the three terms in (\ref{eqn:deltaba}):
 \begin{align*}
-    -\frac{1}{4D} \sum_{i=1}^N \left[\frac{\Delta \bm{r}_i^2}{\Delta t_i} + \bm{f}_{i-1}^2 \Delta t_i - 2 \Delta \bm{r_i} \cdot \bm{f}_{i-1} \right]
+    \bm{\Delta B} \sim \frac{1}{(2 \pi \Delta t)^{3/2}} \exp\left(-\frac{\norm{\Delta \bm{B}}^2}{2 \Delta t} \right) 
+\end{align*}  
+As before, we introduce a time discretization $\{t_j\}_{j=0,\dots,n}$ with $t_0 \equiv 0$ and $t_n \equiv t$ fixed, so that (\ref{eqn:langevin-d3}) becomes:
+\begin{align*}
+    \bm{\Delta r_i} = \bm{r} (t_i) - \bm{r}(t_{i-1}) = \bm{f_{i-1}} \Delta t_i + \sqrt{2D} \bm{\Delta B_i} 
 \end{align*}
-and substituting back:
+where the force $\bm{f}(\bm{r})$ is evaluated at the left side $t_{i-1}$ of each discrete interval $[t_{i-1}, t_i]$, following Ito's prescription.
+
+Then, starting from the joint pdf of the $\{\bm{\Delta B_i}\}$:
 \begin{align*}
-    \dd{P}(\{\Delta \bm{r}_i\}) = \underbrace{\prod_{i=1}^N \frac{\dd[3]{\Delta r_i}}{(4 \pi D \Delta t_i)^{3/2}} \exp\left[-\frac{1}{4D} \sum_{i=1}^N \frac{\Delta \bm{r}_i^2}{\Delta t_i}  \right] }_{\dd{_W r}}  \exp\left(-\frac{1}{4D} \underbrace{\sum_{i=1}^N \bm{f}_{i-1}^2 \Delta t_i}_{\displaystyle\int_0^t \bm{f}^2(\bm{r}(\tau)) \dd{\tau} }  + \frac{1}{2D} \underbrace{ \sum_{i=1}^N \bm{f}_{i-1} \cdot \Delta \bm{r}_i}_{\displaystyle \int_0^t \bm{f}(\bm{r}(\tau)) \dd{_J \bm{r}(\tau)}}  \right)
+    \dd{P}(\Delta \bm{B}_1, \dots, \Delta \bm{B}_n) &= \prod_{i=1}^n \frac{\dd[3]{\bm{\Delta B_i}}}{(2 \pi \Delta t)^{3/2}} \exp\left(-\sum_{i=1}^n \frac{\norm{\bm{ \Delta B_i}}^2}{2 \Delta t_i} \right)
 \end{align*}
-Note that, for a vector function $h(\bm{r})$, letting $\bm{r}_i = \bm{r}_{i-1} + \Delta \bm{r}_i \Rightarrow \Delta \bm{r}_i = (\Delta x^1_i, \Delta x^2_i, \Delta x_i^3)^T$ leads to the following expansion:
+we perform a change of variables by inverting (\ref{eqn:langevin-d3}):
 \begin{align*}
-    \Delta h_i = h(\bm{r}_i) - h(\bm{r}_{i-1}) = \sum_{\alpha =1}^3
- \Delta x_i^\alpha \pdv{x^\alpha} h(\bm{r}_{i-1}) + \frac{1}{2} \sum_{\alpha, \beta = 1}^3 \Delta x_i^\alpha \cdot \Delta x_i^\beta \pdv[2]{}{x^\alpha}{x^\beta} h(\bm{r}_{i-1}) + \dots \end{align*}  
-Taking the continuum limit we make the following substitution:
-\begin{align*}
-    \Delta x_i^\alpha \Delta x_i^\beta \to \Delta t_i 2 D \delta^{\alpha \beta}
+    \bm{\Delta B_i} = \frac{\bm{\Delta r_i} - \bm{f_{i-1}} \Delta t_i}{\sqrt{2 D}} \Rightarrow \left|\pdv{\{{\Delta B_i^\alpha}\}}{\{\Delta r_j^\beta\}}  \right| = \left|\pdv{\{\Delta r_j^\beta\}}{\{{\Delta B_i^\alpha}\}} \right|^{-1} = \textcolor{Red}{(2D)^{3/2}}
 \end{align*}
-Then, summing all the increments:
+This leads to the joint pdf for the increments $\{\bm{\Delta r_i}\}$:
+\begin{align}
+    \dd{P}(\bm{\Delta r_1}, \dots, \bm{\Delta r_n}) &= \left(\prod_{i=1}^n \frac{\dd[3]{\bm{ \Delta r_i}}}{(\textcolor{Red}{4} \pi \textcolor{Red}{D} \Delta t_i)^{3/2}}\right) \exp\left[-\frac{1}{4D} \sum_{i=1}^n \frac{\norm{\bm{ \Delta r_i} - \bm{f_{i-1}} \Delta t_i}^2}{\Delta t_i}  \right] 
+    \label{eqn:dP3}
+\end{align}
+
+\begin{comment}
+(Note that, in the textbook, instead of $\bm{f}_{i-1}$ they are using the Stratonovich prescription $(\bm{f}_i + \bm{f}_{i-1})/2$, complicating the jacobian for a change of variables, while we are using Ito's. In the end, however, the final result will not depend on this choice - at least for this case).
+\end{comment}
+
+Expanding the square in the exponential:
 \begin{align*}
-    h(\bm{r}_N) - h(\bm{r}_0) = \sum_{i=1}^N \Delta h_i = \sum_{\alpha = 1}^3 \sum_i \pdv{x^\alpha} h_{i-1} \Delta x_i^\alpha + D \sum_{\alpha =1}^3 \pdv[2]{{x^\alpha}} h_{i-1} \Delta t_i
+    -\frac{1}{4D} \sum_{i=1}^n \left[\frac{\norm{\bm{\Delta r_i}}^2}{\Delta t_i} + \norm{\bm{f_{i-1}}}^2 \Delta t_i - 2 \bm{\Delta r_i} \cdot \bm{f}_{i-1} \right]
+\end{align*}
+allows to recognize the $d=3$ Wiener measure in (\ref{eqn:dP3}):
+\begin{align} \nonumber
+    \dd{P}(\{\bm{\Delta r_i}\}) &= \Bigg(\underbrace{\prod_{i=1}^n \frac{\dd[3]{\bm{\Delta r_i}}}{(4 \pi D \Delta t_i)^{3/2}} \exp\left[-\frac{1}{4D} \sum_{i=1}^n \frac{\norm{\bm{\Delta r_i}}^2}{\Delta t_i}  \right] }_{\dd[3]{_W \bm{r}}}\Bigg) \cdot\\
+    &\quad \> \cdot \label{eqn:dP-int3}
+    \exp\Bigg(-\frac{1}{4D} \underbrace{\sum_{i=1}^n \norm{\bm{f_{i-1}}}^2 \Delta t_i}_{\displaystyle\int_0^t \norm{\bm{f}(\bm{r}(\tau))}^2 \dd{\tau} }  + \frac{1}{2D} \underbrace{ \sum_{i=1}^n \bm{f_{i-1}} \cdot \bm{\Delta r_i}}_{\displaystyle \int_0^t \bm{f}(\bm{r}(\tau)) \cdot \dd{\bm{r}(\tau)}}  \Bigg)
+\end{align}
+
+Let's focus on the \textit{stochastic integral} (the one in $\dd{\bm{r}(\tau)}$). For this we need to generalize to $d=3$ the integration formula we found in the previous section.
+
+Consider a multi-variable scalar function $h(\bm{r}) \colon \mathbb{R}^3 \to \mathbb{R}$, $\bm{r} \mapsto h(\bm{r})$. As before, we start from the difference:
+\begin{align} \nonumber
+    h(\bm{r}_n) - h(\bm{r}_0) &= h(\bm{r}_n) - h(\bm{r}_{n-1}) + h(\bm{r}_{n-1}) -h(\bm{r}_{n-2}) + \dots + h(\bm{r}_1) - h(\bm{r}_0) =\\
+    &= \sum_{i=1}^n (h(\bm{r}_i) - h(\bm{r}_{i-1})) = \sum_{i=1}^n \Delta h_i \label{eqn:increments3} 
+\end{align}
+In the discretization, $\bm{r}_i = \bm{r}_{i-1} + \bm{\Delta x}$, with $\bm{\Delta x} = (\Delta x_i^1, \Delta x_i^2, \Delta x_i^3)$. Each differential $\Delta h_i$ is then:
+\begin{align}\nonumber
+    \Delta h_i &= h(\bm{r}_i) - h(\bm{r}_{i-1}) \equiv h_i - h_{i-1} =\\
+    \nonumber&\underset{(a)}{=} \cancel{h(\bm{r}_{i-1})} + \sum_{\alpha =1}^3 \left[\pdv{x^\alpha}h(\bm{r}_{i-1})\right] \Delta x_i^\alpha + \hlc{Yellow}{\frac{1}{2}} \sum_{\alpha, \beta = 1}^3 \left[\pdv[2]{}{x^\alpha}{x^\beta}h(\bm{r}_{i-1})\right] \hlc{Yellow}{\Delta x_i^\alpha \Delta x_i^\beta }+ \dots - \cancel{h(\bm{r}_{i-1})} =\\
+    &\underset{(b)}{=}  \sum_{\alpha =1}^3 \left[\pdv{x^\alpha}h(\bm{r}_{i-1})\right] \Delta x_i^\alpha + \hlc{Yellow}{D} \sum_{\alpha, \beta = 1}^3 \left[\pdv[2]{}{x^\alpha}{x^\beta}h(\bm{r}_{i-1})\right] \hlc{Yellow}{\Delta t}_i 
+    \label{eqn:increments4}
+\end{align}
+where in (a) we expanded the first term in Taylor series about $\bm{r}_{i-1}$, and in (b) we used Ito's rules, and in particular the fact that:
+\begin{align*}
+    \Delta x_i^\alpha \Delta x_i^\beta = \Delta t_i 2 D \delta_{\alpha \beta}
+\end{align*}
+Substituting (\ref{eqn:increments4}) back in (\ref{eqn:increments3}) leads to:
+\begin{align*}
+    h(\bm{r}_n) - h(\bm{r}_0) = \sum_{i=1}^n \Delta h_i = \sum_{i=1}^n\sum_{\alpha = 1}^3  \pdv{x^\alpha} h_{i-1} \Delta x_i^\alpha + D \sum_{\alpha =1}^3 \pdv[2]{{x^\alpha}} h_{i-1} \Delta t_i
  \end{align*}
  and then, in the continuum limit:
  \begin{align*}
-     h(\bm{r}(t))- h(\bm{r}(0)) = \int_0^t \bm{\nabla} h \cdot \dd{_J \bm{r}} + D \int_0^t \nabla^2 h \dd{t}
+     h(\bm{r}(t))- h(\bm{r}(0)) = \int_0^t \bm{\nabla} h(\bm{r}) \cdot \dd[3]{\bm{r}} + D \int_0^t \nabla^2 h(\bm{r}(\tau)) \dd{\tau}
  \end{align*}
- Note that now, by rearranging, we find a formula for the integral we needed:
+ Rearranging we arrive at the desired formula for integration:
+ \begin{align}
+     \int_0^t \bm{\nabla} h(\bm{r}) \cdot \dd[3]{\bm{r}} = h(\bm{r}(t)) - h(\bm{r}(0)) - D\int_0^t \nabla^2 h(\bm{r}(\tau)) \dd{\tau}
+     \label{eqn:multivariate-integration}
+ \end{align}
+
+ Thanks to (\ref{eqn:multivariate-integration}) we can solve the stochastic integral in (\ref{eqn:dP-int3}):
  \begin{align*}
-     \int_0^t \bm{\nabla} h \cdot \dd{_J \bm{r}} = h(\bm{r}(t)) - h(\bm{r}(0)) - D\int_0^t \nabla^2 h \dd{t}
+     \int_0^t \bm{f}(\bm{r}(\tau)) \cdot \dd[3]{\bm{r}(\tau)}
  \end{align*}
- In fact, we can use it for solving:
+ Inserting $\bm{f}(\bm{r}) = -\bm{\nabla} U(\bm{r})/\gamma$ and applying the formula leads to:
  \begin{align*}
-     \int_0^t \bm{f}(\bm{r}(\tau)) \dd{_J \bm{r}(\tau)}
- \end{align*}
- as we know that the force $\bm{f}$ comes from a potential:
- \begin{align*}
-     \int_0^t \bm{f} \cdot \dd{_J \bm{r}} = -\frac{1}{\gamma} \int \bm{\nabla} U \cdot \dd{_I} \bm{r} = -\frac{1}{\gamma} \left[U(\bm{r}(t)) - U(\bm{r}(0)) - D \int_0^t \nabla^2 U \cdot \dd{\tau}\right] 
+     \int_0^t \bm{f}(\bm{r}(\tau)) \cdot \dd[3]{\bm{r}(\tau)} = -\frac{1}{\gamma} \int_0^t \bm{\nabla} U(\bm{r}(\tau)) \cdot \dd[3]{\bm{r}(\tau)}  = -\frac{1}{\gamma} \left[U(\bm{r}(t)) - U(\bm{r}(0)) - D \int_0^t \nabla^2 U(\bm{r}(\tau)) \dd{\tau}\right] 
  \end{align*} 
- Substituting back in the first formula:
- \begin{align*}
-     \dd{P}(\{\Delta \bm{r}_i\}) \to \dd{_W} \bm{r} \exp\left(-\frac{1}{4 D } \int_0^t V(\bm{r}(\tau))\dd{\tau} \right) \exp\left(-\frac{1}{2D \gamma} [U(\bm{r}(t)) - U(\bm{r}(0))]\right)
- \end{align*}
- where:\marginpar{There may be missing factors}
+ Substituting back in (\ref{eqn:dP-int3}):
+\begin{align*}
+    \dd{P} &= \dd[3]{_W \bm{r}} \exp\left(-\frac{1}{4D} \int_0^t \norm{\bm{f}}^2 \dd{\tau} + \frac{1}{2D} \left[-\frac{1}{\gamma} [U(\bm{r}(t)) - U(\bm{r}(0))] + \frac{D}{\gamma} \int_0^t \nabla^2 U(\bm{r}(\tau)) \dd{\tau} \right]  \right) =\\
+    &= \dd[3]{_W \bm{r}} \exp \Bigg(-\frac{1}{4D} \int_0^t \dd{\tau} \underbrace{\left[\norm{\bm{f}}^2 - \frac{2D}{\gamma} \nabla^2 U \right]}_{V(\bm{r})}  \Bigg) \exp\left(-\frac{1}{2 D \gamma} [U(\bm{r}(t)) - U(\bm{r}(0))] \right)
+\end{align*}
+where:
  \begin{align*}
      V= \bm{f}^2 - \frac{2D}{\gamma}  \nabla^2 U = \bm{f}^2 - 2D \bm{\nabla} \cdot \bm{f}
  \end{align*}
- (recalling that $\bm{\nabla}U/\gamma = - \bm{f}$).
-
- Now:
+ 
+Using the just found measure $\dd{P}$ we can compute path integrals, and in particular \textit{transition probabilities}: 
  \begin{align*}
-     W(\bm{r},t | \bm{r}_0, 0) &= \int \dd{P} \delta(\bm{r}(t) - \bm{r}) = \langle \delta(\bm{r}(t)- \bm{r}(0)) \rangle = \\
-     &= \int \dd{_W \bm{r}} \exp\left(-\frac{1}{4D} \int_0^t V(\bm{r}(\tau)) \dd{\tau} \right) \delta(\bm{r}(t) - \bm{r}) \exp\left(-\frac{1}{2D \gamma} (U(\bm{r}) - U(\bm{r}_0))\right) =\\
-     &= \langle \exp\left(-\frac{1}{4D} \int_0^t V \dd{\tau} \right)  \delta (\bm{r}(t) - \bm{r})\rangle_W \exp\left(-\frac{1}{2D \gamma} (U(\bm{r})- U(\bm{r}_0))\right)
+     W(\bm{r},t | \bm{r}_0, 0) &= \int_{\mathbb{R}^T} \dd{P} \delta(\bm{r}(t) - \bm{r}) \equiv \langle \delta(\bm{r}(t)- \bm{r}(0)) \rangle_W = \\
+     &= \int_{\mathbb{R}^T} \dd[3]{_W \bm{r}} \exp\left(-\frac{1}{4D} \int_0^t V(\bm{r}(\tau)) \dd{\tau} \right) \delta(\bm{r}(t) - \bm{r}) \exp\left(-\frac{1}{2D \gamma} (U(\bm{r}) - U(\bm{r}_0))\right) =\\
+     &= \langle \exp\left(-\frac{1}{4D} \int_0^t V(\bm{r}(\tau)) \dd{\tau} \right)  \delta (\bm{r}(t) - \bm{r})\rangle_W \exp\left(-\frac{1}{2D \gamma} (U(\bm{r})- U(\bm{r}_0))\right)
  \end{align*}
- which is the general expression we were searching for.
+ This expression is indeed similar to that derived in the specific case of the harmonic oscillator (\ref{eqn:harmonic-tprob}), meaning that the techniques we used to evaluate previous path integrals can be useful in much more general cases.
 
-\subsection{Correspondence with Quantum Mechanics}
-An important result (here stated for the 1D case, for notational simplicity) is the following. Define:
+\section{Feynman-Kac formula}
+It is possible to use the machinery of stochastic processes and path integrals to solve certain partial differential equations, which - as we will see - are of fundamental importance in Quantum Mechanics.
+
+In this regard, a very important result is offered by the \textbf{Feynman-Kac formula}. The main idea is to use a Brownian process to \textit{simulate many paths}, and express the solution of the differential equation as the \textit{average} of a certain functional computed over all these paths. 
+
+More precisely, consider the following \textit{partial differential equation} (Bloch's equation): 
+\begin{align}
+    \partial_t W_B(x,t) = D \partial_x^2 W_B(x,t) - V(x) W_B(x,t) \qquad D \in \mathbb{R}, V\colon \mathbb{R} \to \mathbb{R}  
+    \label{eqn:bloch}
+\end{align}
+The \textbf{Feynman-Kac} formula states that the function $W_B(x,t)$ that solves (\ref{eqn:bloch}) can be found by computing a Wiener path integral: 
 \begin{align}
     W_B(x,t) \equiv \langle \exp\left(-\int_0^t V(x(\tau)) \dd{\tau}\right) \delta(x(t) - x) \rangle_W
     \label{eqn:Wb}
 \end{align}
+
+\begin{comment}
 (the $4D$ constant has been absorbed by $V$). Then the following holds:
-\begin{align}
-    \partial_t W_B(x,t) = D \partial_x^2 W_B(x,t) - V(x) W_B(x,t)
-    \label{eqn:diffusion}
-\end{align}
 Recall the Schr\"odinger equation:
 \begin{align*}
     i\hbar \partial_t \psi(x,t) = -\frac{\hbar^2}{2m} \partial_x^2 \psi(x,t) + v(x) \psi(x,t) 
@@ -132,71 +185,106 @@ So by mapping $t \to -it$ (passing to \q{imaginary time}), and $\psi(-it, x) \eq
     \hbar \pdv{t} \hat{\psi} = \underbrace{\frac{\hbar^2}{2 m}}_{D} \partial_x^2 \hat{\psi} - \underbrace{\frac{v(x)}{\hbar}}_{V}  \hat{\psi}  
 \end{align*}
 which is equivalent to the Bloch equation.
+\end{comment}
 
-We want now to prove that (\ref{eqn:Wb}) satisfies (\ref{eqn:diffusion}). To do this, we discretize once again:
+Note that this result can be generalized to more dimensions - but we will limit ourselves to the $d=1$ case for simplicity.
+
+\medskip
+
+\textbf{Proof}. We now show that (\ref{eqn:Wb}) indeed satisfies (\ref{eqn:bloch}). As usual, we start by defining a time discretization, $\{t_i\}_{i=0,\dots,n+1}$, so that $t_0 \equiv 0$ and $t_{n+1} \equiv \bar{t}$ is the instant at which we wish to evaluate the solution $W_B(x,t)$. Then (\ref{eqn:Wb}) at that instant will be obtained by the \textit{continuum limit} of the discretized average $\psi_{n+1}(x)$:
 \begin{align}
-     \psi_{N+1}(x) = \int \prod_{i=1}^{N+1} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i} } \exp\left(-\sum_{i=1}^{N+1} \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} - \sum_{i=1}^{N+1} \Delta t_i V(x_i)\right) \delta(x_{N+1}-x)
+    W_B(x, \bar{t}) &= \lim_{n \to \infty} \psi_{n+1}(x) \nonumber\\
+    \psi_{n+1}(x) &= \int_{\mathbb{R}^{n+1}} \left(\prod_{i=1}^{n+1} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i} }\right) \exp\left(-\sum_{i=1}^{n+1} \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} - \sum_{i=1}^{n+1} \Delta t_i V(x_i)\right) \delta(x_{n+1}-x)
      \label{eqn:psix}
 \end{align} 
-Choose $\Delta t_i \equiv \epsilon$, such that $t_{N+1} = (N+1) \epsilon = t \Rightarrow \epsilon = t/(N+1)$. Then:
-\begin{align*}
-    W_B(x,t) = \lim_{N \to \infty} \psi_{N+1}(x)
-\end{align*}  
-Integrating over $x_{N+1}$:
-\begin{align*}
-    (\ref{eqn:psix}) = \frac{1}{\sqrt{4 \pi D \epsilon}}\int \prod_{i=1}^N \frac{\dd{x_i}}{\sqrt{4 \pi D \epsilon}} \exp\left(-\sum_{i=1}^N \frac{(x_i - x_{i-1}^2)}{4 D \epsilon} - \sum_{i=1}^N \epsilon V(x_i)\right) \exp\left(\frac{-(x_{N+1} - x_N)^2}{4 D \epsilon } - \epsilon V(x_{N+1}) \right) =
-\end{align*} 
-Then $x_{N+1} \equiv x$ and:
-\begin{align*}
-    = \int \frac{\dd{x_N}}{\sqrt{4 \pi D \epsilon }} \exp\left(-\frac{(x-x_N)^2}{4 D \epsilon} - \epsilon V(x) \right) \hlc{Yellow}{\frac{1}{\sqrt{4 \pi D \epsilon}}  \int \prod_{i=1}^{N-1} \frac{\dd{x_i}}{\sqrt{4 \pi D \epsilon }} \exp\left(
-    -\sum_{i=1}^{N} \frac{(x_i - x_{i-1})^2}{4 D \epsilon} - \epsilon\sum_{i=1}^{N} V(x_i)    
-    \right)}
-\end{align*}
-The highlighted part is equal to:
-\begin{align*}
-    = \int \prod_{i=1}^N \frac{\dd{y_i}}{\sqrt{4 \pi D \epsilon}}\exp\left(-\sum_{i=1}^N \left[\frac{(y_i - y_{i-1})^2}{4 D \epsilon} + \epsilon V(y_i)\right]\right) \delta(y_N - x_N) = \psi_N(x_N) 
-\end{align*}
-and so:
-\begin{align*}
-    \psi_{N+1}(x) = e^{-\epsilon V(x) }\int \frac{\dd{x_N}}{\sqrt{4 \pi D \epsilon }} \exp\left(-\frac{(x-x_N)^2}{4 D \epsilon} \right) \psi_N(x_N)
-\end{align*}
-which looks like an evolution equation for $\psi$.
+Note that $\psi_{n+1}(x)$ is the average of a functional over \textit{all paths} that arrive in $x$ at the instant $\bar{t}$, making exactly $n+1$ steps from their starting point $0$. In the following, the intuition is to see these paths as \textit{being generated}, i.e. evolving \textit{step} after \textit{step} from $0$ to $x$. For example, suppose we want to approximate (\ref{eqn:psix}). We would start by choosing an \textit{ensemble} of paths arriving to $x$ after $n+1$ timesteps, compute the functional on each of them, and average the results.
+However, we could also do it in another  - a bit stranger - way. Consider the same ensemble of paths we already (supposedly) generated. From each of them, remove the last step. We now have a set of paths that arrive \textit{close} to $x$, and will arrive exactly there if we let another timestep pass. However, we decide to compute the functional on each of these paths and then average the results, before letting them arrive at their destination. So, in a certain sense, we will estimate the value of the functional \q{a timestep in the past}. Of course, we can repeat this process, removing more and more timesteps at every iteration. At the end, we will have a sequence of numbers detailing the \q{evolution} of the functional from the start to the end. Turns out that the \textit{rule} for such an evolution is exactly (\ref{eqn:bloch}). So, to prove Feynman-Kac, we just have to find that rule - meaning how to relate $\psi_{n+1}$ to its \q{past} $\psi_n$ (in the continuum limit $n \to\infty$).
 
-If we now change variables:
+This is just an informal intuition, that will only be useful as a guide for the rest of the proof. So, let's go on.
+
+\medskip
+
+For simplicity, we choose the time discretization as \textbf{uniform}, so that $\Delta t_i \equiv \epsilon$ $\forall i$, and:
 \begin{align*}
-    z \equiv \frac{x - x_N}{\sqrt{2 D \epsilon}} 
+    t_{n+1} = (n+1) \epsilon \equiv \bar{t} \Rightarrow \epsilon = \frac{\bar{t}}{n+1}   
+\end{align*}  
+We then rewrite (\ref{eqn:psix}), highlight the last term (the one with the $x_{n+1}$) and integrate to remove the $\delta$:
+\begin{align} \nonumber
+    \psi_{n+1}(x) &= \int_{\mathbb{R}^n} \left(\prod_{i=1}^{n} \frac{\dd{x_i}}{\sqrt{4 \pi D \epsilon}} \right) \exp\left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{4 D \epsilon} - \sum_{i=1}^{n} \epsilon V(x_i)\right) \cdot \\ \nonumber
+    &\quad \> \cdot \int_{\mathbb{R}} \frac{\dd{x_{n+1}}}{\sqrt{4 \pi D \epsilon }} \exp\left(-\frac{(x_{n+1} - x_n)^2}{4 D \epsilon} - \epsilon V(x_{n+1})   \right) \delta(x_{n+1} - x) =\\ \nonumber
+    &= \int_{\mathbb{R}^n} \left(\prod_{i=1}^{n} \frac{\dd{x_i}}{\sqrt{4 \pi D \epsilon}} \right) \exp\left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{4 D \epsilon} - \sum_{i=1}^{n} \epsilon V(x_i)\right) \cdot \\ 
+    &\quad \> \cdot \frac{1}{\sqrt{4 \pi D \epsilon }} \exp\left(-\frac{(x - x_n)^2}{4 D \epsilon} - \epsilon V(x)   \right) \label{eqn:psix1}
+\end{align}
+Now, with some algebra, we recognize in these integrals a term $\psi_n(x_n)$, indicating the expected value of the functional over all paths reaching $x_n$ (which is close to the end-point $x$) at timestep $t_n = t - \epsilon$. We start by rearranging, putting the integration over $\dd{x_n}$ at the front:
+\begin{align} \nonumber
+    (\ref{eqn:psix1}) &= \int_{\mathbb{R}} \frac{\dd{x_n}}{\sqrt{4 \pi D \epsilon} } \exp\left(-\frac{(x- x_n)^2}{4 D \epsilon} - \epsilon V(x) \right) \cdot \\
+    &\quad \> \cdot \frac{1}{\sqrt{4 \pi D \epsilon}}  \int_{\mathbb{R}^{n-1}} \left(\prod_{i=1}^{n-1} \frac{\dd{x_i}}{\sqrt{4 \pi D \epsilon}} \right) \exp\left(-\sum_{i=1}^{\textcolor{Red}{n}} \frac{(x_i - x_{i-1})^2}{4 D \epsilon}  - \epsilon\sum_{i=1}^{\textcolor{Red}{n}} V(x_i) \right)
+    \label{eqn:psix2}
+\end{align}
+Now we \textit{change} all the $x_i$ in the second line to $y_i$, and then add a $\delta$ (with its integral) to \textit{connect} $y_n$ to $x_n$, which appears in the integral in the first line. In this way we will highlight the desired $\psi_n(x_n)$:
+\begin{align}
+    (\ref{eqn:psix2}) \nonumber
+ &= \int_{\mathbb{R}} \frac{\dd{x_n}}{\sqrt{4 \pi D \epsilon} } \exp\left(-\frac{(x- x_n)^2}{4 D \epsilon} - \epsilon V(x) \right) \cdot \\
+    &\quad \> \cdot \underbrace{\int_{\mathbb{R}^{n}} \left(\prod_{i=1}^{\textcolor{Red}{n}} \frac{\dd{y_i}}{\sqrt{4 \pi D \epsilon}} \right) \exp\left(-\sum_{i=1}^{\textcolor{Red}{n}} \frac{(y_i - y_{i-1})^2}{4 D \epsilon}  - \epsilon\sum_{i=1}^{\textcolor{Red}{n}} V(y_i) \right) \delta(x_n - y_n)}_{\psi_n(x_n)} 
+    \label{eqn:psix3}
+\end{align} 
+And so:
+\begin{align}
+    \psi_{n+1}(x) = e^{-\epsilon V(x)} \int_{\mathbb{R}} \frac{\dd{x_n}}{\sqrt{4 \pi D \epsilon }} \exp\left(-\frac{(x - x_n)^2}{4 D \epsilon} \right) \psi_n(x_n) 
+    \label{eqn:psix4}
+\end{align}
+This is relation between $\psi_{n+1}(x)$ and its \q{past} $\psi_n(x)$ that we were searching for. Now, to retrieve (\ref{eqn:bloch}), all that's left is to put (\ref{eqn:psix4}) in differential form. 
+
+We start by simplifying the integral, making it similar to a gaussian with a change of variables:
+\begin{align*}
+    - \frac{(x- x_n)^2}{4 D \epsilon} \overset{!}{=} - \frac{z^2}{2} \Rightarrow z = - \frac{x - x_n}{\sqrt{2 D \epsilon}}; \quad x_n = x + \sqrt{2 D \epsilon}z; \quad \dd{x_n} = \sqrt{2 D \epsilon} \dd{z}  
 \end{align*}
-we arrive at:
+which leads to:
+\begin{align}
+    \psi_{n+1}(x) = e^{-\epsilon V(x)} \int_{-\infty}^{+\infty} \frac{\dd{z}}{\sqrt{2 \pi}} \exp\left(-\frac{z^2}{2} \right) \psi_n(x_n + z \sqrt{2 D \epsilon})
+    \label{eqn:psix5}
+\end{align}
+As $n \to \infty$, $z \to 0$. We will not prove this, but note that:
 \begin{align*}
-    \psi_{N+1}(x) = e^{-\epsilon V(x)} \int \frac{\dd{z}}{\sqrt{2 \pi}}\exp\left(-\frac{z^2}{2} \right)  \psi_N(x- z\sqrt{2 D \epsilon})
+    z = - \frac{x-x_n}{\epsilon} \frac{\sqrt{\epsilon}}{\sqrt{2 D}}  
 \end{align*}
-$z$ is small, and so we can Taylor expand:
+where the first factor is a \textit{velocity}, which must be physically limited, and so $n \to \infty \Rightarrow \epsilon \to 0 \Rightarrow z \to 0$.
+
+This means that we can expand $\psi_n$ in Taylor series about $x$:
 \begin{align*}
-    &= e^{-\epsilon V(x)} \int \frac{\dd{z}}{\sqrt{2 \pi}} \exp\left(-\frac{z^2}{2} \right)  \left[\psi_N(x)  - z \sqrt{2 D \epsilon} \psi_N'(x) + z^2 D \epsilon \psi_N'' (x) + O(z^3 \epsilon^{3/2})\right] =\\
-    &=e^{-\epsilon V(x)}[\psi_N(x) + D \epsilon \psi_N''(x) + O(\epsilon^2) ]
-\end{align*} 
-expanding also the exponential:
-\begin{align*}
-    e^{-\epsilon V(x)} = \left(1- \epsilon V(x) + \frac{\epsilon^2 V(x)^2}{2}  + \dots \right)
+    \psi_n(x_n + z \sqrt{2 D \epsilon}) = \psi_n(x) + z \sqrt{2 D \epsilon} \psi_n'(x) + z^2 D \epsilon\psi_n''(x) + O(z^3 \epsilon^{3/2})  
 \end{align*}
-we arrive at:
+Substituting back in (\ref{eqn:psix5}):
+\begin{align} \nonumber
+    \psi_{n+1}(x) &= e^{-\epsilon V(x)} \Bigg[ \psi_n(x) \underbrace{\int_{\mathbb{R}} \frac{\dd{z}}{\sqrt{2 \pi}} \exp\left(-\frac{z^2}{2} \right)}_{1} + \sqrt{2 D \epsilon} \psi_n'(x) \underbrace{\int_{\mathbb{R}} \frac{\dd{z}}{\sqrt{2 \pi}} z\exp\left(-\frac{z^2}{2} \right)}_{0} + \\
+    &\quad  \>
+    + D \epsilon \psi_n''(x) \underbrace{\int_{\mathbb{R}} \frac{\dd{z}}{\sqrt{2 \pi}} z^2 \exp\left(-\frac{z^2}{2} \right)}_{1}
+    + O(\epsilon^2) \Bigg] \label{eqn:psix6}
+\end{align}
+as the integrand is just a standard gaussian ($\mu= 0$, $\sigma = 1$). Note how the error term is of order $e^2$, as the first non-null integral in the series will be that with $z^4$:
 \begin{align*}
-    = \psi_N(x) + D \epsilon \psi_N''(x) - \epsilon V(x) \psi_N(x) + O(\epsilon^2)
+    \int_{\mathbb{R}} \frac{\dd{z}}{\sqrt{2 \pi}} z^k \frac{({2 D \epsilon})^{k/2}}{k!} \psi_n^{(k)} = \begin{cases}
+        0 & \text{$k$ odd}\\
+        1^k (k-1)!! & \text{$k$ even}
+    \end{cases} 
+\end{align*}
+Expanding also the $e^{-\epsilon V(x)}$ term:
+\begin{align*}
+    e^{-\epsilon V(x)} = 1 - \epsilon V(x) + \frac{\epsilon^2 V^2(x)}{2} + O(\epsilon^3) 
+\end{align*}
+Finally, substituting back in (\ref{eqn:psix6}), expanding the product and ignoring all terms of order $2$ or higher in $\epsilon$:
+\begin{align*}
+    \psi_{n+1}(x) = \psi_n(x) + D \epsilon \psi_n''(x) - \epsilon V(x) \psi_n(x) + O(\epsilon^2)
 \end{align*}
 Rearranging:
 \begin{align*}
-    \frac{\psi_{N+1} - \psi_N}{\epsilon} = D \psi_N'' - V \psi_N 
+    \frac{\psi_{n+1} - \psi_n}{\epsilon} = D \psi_n'' - V \psi_n 
 \end{align*}
-And when $\epsilon \to 0$:
+
+And when $\epsilon \to 0$ the first term becomes a time derivative, leading to Bloch's equation, and proving Feynman-Kac formula:
 \begin{align*}
     \partial_t W_B(x,t) = D \partial_x^2 W_B(x,t) - V(x) W_B(x,t)
 \end{align*} 
-which is Bloch's equation. 
-
-So we can \textit{solve} this partial differential equation by simply generating random \textit{paths} going from $x_0$ at time $0$ to $x$ at time $t$, computing the exponential of the integral $\int_0^t V(x(\tau)) \dd{\tau}$ and averaging the results:
-\begin{align*}
-    W_B(x,t) \equiv \langle \exp\left(-\int_0^t V(x(\tau))\dd{\tau}\right) \delta(x(t)-x)\rangle_W
-\end{align*}
 
 \section{Variational methods}
 One powerful technique to solve Wiener integral is through \textit{variational methods}. 
@@ -271,4 +359,4 @@ and $\mathcal{N}(t)$ is just a normalization constant that can be determined by 
 \begin{align*}
     \mathcal{N}(t) = \frac{1}{\sqrt{4 D \pi t}} 
 \end{align*} 
- \end{document}
+\end{document}
