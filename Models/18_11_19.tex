@@ -141,10 +141,11 @@ Substituting (\ref{eqn:increments4}) back in (\ref{eqn:increments3}) leads to:
      \int_0^t \bm{f}(\bm{r}(\tau)) \cdot \dd[3]{\bm{r}(\tau)} = -\frac{1}{\gamma} \int_0^t \bm{\nabla} U(\bm{r}(\tau)) \cdot \dd[3]{\bm{r}(\tau)}  = -\frac{1}{\gamma} \left[U(\bm{r}(t)) - U(\bm{r}(0)) - D \int_0^t \nabla^2 U(\bm{r}(\tau)) \dd{\tau}\right] 
  \end{align*} 
  Substituting back in (\ref{eqn:dP-int3}):
-\begin{align*}
+\begin{align} \nonumber
     \dd{P} &= \dd[3]{_W \bm{r}} \exp\left(-\frac{1}{4D} \int_0^t \norm{\bm{f}}^2 \dd{\tau} + \frac{1}{2D} \left[-\frac{1}{\gamma} [U(\bm{r}(t)) - U(\bm{r}(0))] + \frac{D}{\gamma} \int_0^t \nabla^2 U(\bm{r}(\tau)) \dd{\tau} \right]  \right) =\\
     &= \dd[3]{_W \bm{r}} \exp \Bigg(-\frac{1}{4D} \int_0^t \dd{\tau} \underbrace{\left[\norm{\bm{f}}^2 - \frac{2D}{\gamma} \nabla^2 U \right]}_{V(\bm{r})}  \Bigg) \exp\left(-\frac{1}{2 D \gamma} [U(\bm{r}(t)) - U(\bm{r}(0))] \right)
-\end{align*}
+    \label{eqn:dP-potential}
+\end{align}
 where:
  \begin{align*}
      V= \bm{f}^2 - \frac{2D}{\gamma}  \nabla^2 U = \bm{f}^2 - 2D \bm{\nabla} \cdot \bm{f}
@@ -157,6 +158,10 @@ Using the just found measure $\dd{P}$ we can compute path integrals, and in part
      &= \langle \exp\left(-\frac{1}{4D} \int_0^t V(\bm{r}(\tau)) \dd{\tau} \right)  \delta (\bm{r}(t) - \bm{r})\rangle_W \exp\left(-\frac{1}{2D \gamma} (U(\bm{r})- U(\bm{r}_0))\right)
  \end{align*}
  This expression is indeed similar to that derived in the specific case of the harmonic oscillator (\ref{eqn:harmonic-tprob}), meaning that the techniques we used to evaluate previous path integrals can be useful in much more general cases.
+
+ \medskip
+
+ This observation has indeed a deeper meaning, as we found a way to describe the dynamics of conservative systems with a path integral. We already know that the behaviour of these systems can be also described with partial differential equations (e.g. the Fokker-Planck equation). So, there should be a link between path integrals and PDEs, that will be explored in the next section.
 
 \section{Feynman-Kac formula}
 It is possible to use the machinery of stochastic processes and path integrals to solve certain partial differential equations, which - as we will see - are of fundamental importance in Quantum Mechanics.
@@ -173,19 +178,6 @@ The \textbf{Feynman-Kac} formula states that the function $W_B(x,t)$ that solves
     W_B(x,t) \equiv \langle \exp\left(-\int_0^t V(x(\tau)) \dd{\tau}\right) \delta(x(t) - x) \rangle_W
     \label{eqn:Wb}
 \end{align}
-
-\begin{comment}
-(the $4D$ constant has been absorbed by $V$). Then the following holds:
-Recall the Schr\"odinger equation:
-\begin{align*}
-    i\hbar \partial_t \psi(x,t) = -\frac{\hbar^2}{2m} \partial_x^2 \psi(x,t) + v(x) \psi(x,t) 
-\end{align*}
-So by mapping $t \to -it$ (passing to \q{imaginary time}), and $\psi(-it, x) \equiv \hat{\psi}(t,x)$  we can cancel the $i$ the Schr\"odinger equation, leading to:
-\begin{align*}
-    \hbar \pdv{t} \hat{\psi} = \underbrace{\frac{\hbar^2}{2 m}}_{D} \partial_x^2 \hat{\psi} - \underbrace{\frac{v(x)}{\hbar}}_{V}  \hat{\psi}  
-\end{align*}
-which is equivalent to the Bloch equation.
-\end{comment}
 
 Note that this result can be generalized to more dimensions - but we will limit ourselves to the $d=1$ case for simplicity.
 
@@ -286,77 +278,203 @@ And when $\epsilon \to 0$ the first term becomes a time derivative, leading to B
     \partial_t W_B(x,t) = D \partial_x^2 W_B(x,t) - V(x) W_B(x,t)
 \end{align*} 
 
+\subsection{Application to Quantum Mechanics}
+It is possible to map the Schr\"odinger equation to the Bloch equation (\ref{eqn:bloch}), and then use Feynman-Kac formula to solve it.
+
+Recall the time-dependent Schr\"odinger equation for a particle immersed in a $d=1$ potential $v(x)$ and described by a wavefunction $\psi(x,t)$:
+    \begin{align*}
+        i\hbar \partial_t \psi(x,t) = -\frac{\hbar^2}{2m} \partial_x^2 \psi(x,t) + v(x) \psi(x,t) 
+    \end{align*}
+This is already similar to (\ref{eqn:bloch}), except for the presence of a complex coefficient $i$. We can remove it with a change of variable $t \mapsto it$, leading to:
+\begin{align*}
+    i \hbar (i) \pdv{t} \psi(x,it) = - \hbar \pdv{t} \psi(x,it) = - \frac{\hbar^2}{2m} \partial_x^2 \psi(x,it) + v(x) \psi(x,it) 
+\end{align*}
+Defining $\psi(x,it) \equiv \hat{\psi}(x,t)$ and multiplying both sides by $-\hbar^{-1}$ leads to:
+\begin{align*}
+    \pdv{t} \hat{\psi}(x,t) = \frac{\hbar}{2 m} \pdv[2]{x} \hat{\psi}(x,t)  - \frac{v(x)}{\hbar} \hat{\psi}(x,t) 
+\end{align*}
+which has the form of Bloch's equation:
+\begin{align*}
+    \pdv{t} \hat{\psi}(x,t) = D \pdv[2]{x} \hat{\psi}(x,t) - V(x) \hat{\psi}(x,t) \qquad D = \frac{\hbar}{2m}; \quad V(x) = \frac{v(x)}{\hbar} 
+\end{align*}
+
 \section{Variational methods}
-One powerful technique to solve Wiener integral is through \textit{variational methods}. 
+Consider a particle subject to an external conservative force $\bm{F}(\bm{r}) = -\bm{\nabla} U(\bm{r})$, moving through a viscous medium and subject to thermal noise. The probability density for a path $x(\tau)$ can be derived from (\ref{eqn:dP-potential}), after \q{dividing by the volume element} and taking the limit $n \to \infty$:
+\begin{align}\nonumber
+    \Omega[\bm{r}(\tau)] &\equiv \frac{\dd{P}}{\dd{V}} =\\ \nonumber
+    &= \exp \Bigg(-\frac{1}{4D}\int_0^t \dd{\tau} \dot{\bm{r}}^2(\tau)  + \int_0^t \dd{\tau} \underbrace{\left(-\frac{1}{4D} \right)\left[\norm{\bm{f}}^2 - \frac{2D}{\gamma} \nabla^2 U \right]}_{V(\bm{r})} -\frac{1}{2 D \gamma} [U(\bm{r}(t)) - U(\bm{r}(0))] \Bigg) =\\
+    &=\exp \Bigg(-\frac{1}{4D}\int_0^t \dd{\tau} \dot{\bm{r}}^2(\tau)  -\frac{1}{4D} \int_0^t \dd{\tau} \underbrace{\left[\norm{\frac{\bm{F}}{\gamma} }^2 + \frac{2D}{\gamma} \bm{\nabla}\cdot \bm{F} \right]}_{V(\bm{r})} +\frac{1}{2 D \gamma} \int_{\bm{r}(0)}^{\bm{r}(t)} \dd[3]{\bm{r}} \cdot \bm{F}(\bm{r}) \Bigg)
+    \label{eqn:omega1}
+\end{align}
+with $\bm{f}(\bm{r}) = \bm{F}/\gamma$, and $\gamma = 6 \pi \eta a$ ($\eta$ being the medium viscosity, and $a$ the particle radius). If we change variables in the last integral:
+\begin{align*}
+    \int_{\bm{r}(0)}^{\bm{r}(t)} \dd[3]{\bm{r}} \cdot \bm{F}(\bm{r}) = \int_{0}^t \dd{\tau} \bm{F}(\bm{r}) \cdot \dv{\bm{r}(\tau)}{\tau}
+\end{align*}
+we can rewrite (\ref{eqn:omega1}) as a single integral:
+\begin{align}\label{eqn:omega2}
+    \Omega[\bm{r}(\tau)] = \exp\left(-\frac{1}{4D} \int_0^t \dd{\tau} L(\bm{r}(\tau)) \right)
+\end{align}
+with the function $L\colon \mathbb{R} \to \mathbb{R}$, $\bm{r}(\tau) \mapsto L(\bm{r}(\tau))$ defined as:
+\begin{align}\nonumber
+    L(\bm{r}(\tau)) &\equiv \bm{r}^2(\tau) + \norm{\frac{\bm{F}(\bm{r}(\tau))}{\gamma}}^2 + \frac{2D}{\gamma} \bm{\nabla}\cdot \bm{F}(\bm{r}(\tau)) - \frac{2}{\gamma} \bm{F}(\bm{r}(\tau)) \cdot \dot{\bm{r}}(\tau) =\\
+    &= \norm{\dot{\bm{r}}(\tau) - \frac{\bm{F}(\bm{r}(\tau))}{\gamma} }^2 + \frac{2D}{\gamma} \bm{\nabla}\cdot \bm{F}(\bm{r}(\tau)) \label{eqn:Lagrangian}
+\end{align}
 
-Consider a symmetric $N\times N$ matrix $A$ ($A = A^T$) and the following gaussian integral:
-\begin{align*}
-    \int \prod_{i=1}^N \exp\left(-\frac{1}{2} \bm{x}^T A \bm{x} + \bm{b}^T \bm{x}  \right) = \frac{(2 \pi)^{N/2}}{|A|^{1/2}} \exp\left(\frac{1}{2} \bm{b}^T A^{-1} \bm{b} \right) = \frac{(2\pi)^{N/2}}{|A|^{1/2}} \exp\left(\operatorname{Stat}_{\bm{x}} \left[-\frac{1}{2} \bm{x}^T A \bm{x} + \bm{b} \cdot \bm{x} \right] \right) 
-\end{align*}
-where:
-\begin{align*}
-    \operatorname{Stat}_{\bm{x}} F(\bm{x}) = F(\bm{x}_c); \qquad \bm{x_c} \text{ such that } \forall i \pdv{F(\bm{x})}{x_i} \Big|_{\bm{x} = \bm{x}_c} = 0
-\end{align*}
-In this case:
-\begin{align*}
-    \bm{F} = -\frac{\bm{x}^T A \bm{x}}{2} + \bm{b}^T \bm{x} \Rightarrow \partial_i F = - \sum_{j} A_{ij} x_j + b_i = - A\bm{x} + \bm{b} \overset{!}{=}  0 \Rightarrow\bm{x}_c = A^{-1}\bm{b}  
-\end{align*}
-Then, substituting in the original expression:
-\begin{align*}
-    F(\bm{x}_c) = - \bm{x}_c^T A \bm{x}_c + \bm{b} \cdot \bm{x}_c = \frac{1}{2} \bm{b}^T A^{-1} \bm{b}
-\end{align*}
-gives back the correct exponent for the integral's result.
+\begin{expl} \textbf{Classical path}.
 
-This interesting idea can be applied also to Wiener integrals:
+Consider the \textbf{classical limit} $D \to 0$. Then the $\bm{\nabla}\cdot \bm{F}$ term in (\ref{eqn:Lagrangian}) vanishes, and as $-1/(4D) \to \infty$, there will be only \textit{one path} with \textit{non-zero} probability, i.e. the one $\bm{r_c}(\tau)$ for which the functional vanishes:
 \begin{align*}
-    W(x,t|x_0,0) &= \int \prod_{\tau = 0}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau}}} \exp\left(-\frac{1}{4D} \int_0^t \dot{x}^2 (\tau) \dd{\tau} \right) \delta(x-x(t)) = \\
-    &=  "\lim_{N \to \infty}"  \int \prod_{i=1}^{N} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i }} \exp\left(- \sum_{i=1}^N \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right)  \delta(x- x_N)
+    \int_0^t \dd{\tau} L(\bm{r_c}(\tau)) = 0 \Rightarrow \int_0^t  \dd{\tau}  \norm{\dot{\bm{r}}_c(\tau) - \frac{\bm{F}(\bm{r}_c(\tau))}{\gamma} }^2 = 0
 \end{align*}
-Integrating over $x_N$:
+We can then compute that path. As the integrand is a non-negative function, for its integral to be $0$ it must be $0$ $\forall t$, leading to:
 \begin{align*}
-    &= \frac{1}{\sqrt{4 \pi D \Delta t_i}} \int \prod_{i=1}^{N-1} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\sum_{i=1}^N \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) \Big|_{x_N = x} 
+    \dv{\bm{r_c}}{\tau} = \frac{\bm{F}(\bm{r_c})}{\gamma} 
+\end{align*}
+which is just the equation of motion from classical mechanics.
+\end{expl}
+
+\medskip
+
+Let's now use the form (\ref{eqn:omega2}) to compute path integrals. For example,
+ consider a transition probability:
+\begin{align}\label{eqn:tproba}
+    W(\bm{r}_t, t|\bm{r}_0, 0) = \int_{\mathcal{C}\{\bm{r}_0,0;\bm{r}_t,t\}} \dd{\bm{r}(\tau)} \underbrace{\exp\left(-\frac{1}{4D} \int_0^t \dd{\tau} L(\bm{r}(\tau)) \right) }_{\Omega[\bm{r}(\tau)]}
+\end{align}
+Let's define the functional:
+\begin{align*}
+    S[\bm{r}(\tau)] = \int_0^t \dd{\tau} L(\bm{r}(\tau))
+\end{align*}
+Given the form of (\ref{eqn:tproba}), the path $\bm{r_c}(\tau)$ that \textit{minimizes} $S[\bm{r}(\tau)]$ will give the greatest contribution to the path integral. The parameter $D$ \textit{modulates} the relative contributions of paths. If $D \to 0$, $\bm{r}_c(\tau)$ will be the only contributing path, but if $D \gg 1$, many different paths will have a significant contribution. Suppose that $\bm{r_c}(\tau)$ is indeed important, meaning that $D$ is sufficiently small (more precisely, that $S[\bm{r}_c(\tau)])/D \gg 1$). Then, we write any generic path $\bm{x}(\tau)$ as the most important one $\bm{x_c}(\tau)$ plus a \q{deviation} $\bm{y}(\tau)$:
+\begin{align*}
+    \bm{x}(\tau) = \bm{x_c}(\tau) + \underbrace{(\bm{x}(\tau) - \bm{x_c}(\tau))}_{\bm{y}(\tau)} 
+\end{align*}
+Note that as the end-points of every path are fixed, $\bm{y}(0) = \bm{y}(t) = 0$. Then, we expand in series the functional:
+\begin{align*}
+    S[\bm{x}(\tau)] = S[\bm{x_c}(\tau) + y(\tau)] = S[\bm{x_c}] + \delta S[\bm{x_c}, \bm{y}] + \frac{1}{2!} \delta^2 S[\bm{x_c},\bm{y}] + \dots 
+\end{align*}
+where the $\delta$ terms are the \textit{variations} of the functional\footnote{See \url{www2.math.uconn.edu/~gordina/NelsonAaronHonorsThesis2012.pdf} for a refresher}. For example, the first variation $\delta S[\bm{x_c}, \bm{y}]$ is given by, measures how much $S$ \textit{varies} to first order when changing $\bm{y}(\tau)$. As $\bm{x_c}$ is a minimum of $S$, it is also a \textit{stationary point}, meaning that paths close to $\bm{x_c}$ do not change the value $S[\bm{x}_c]$ to first order. Applying the definition of the first variation, this leads to the Euler-Lagrange equations for determining $\bm{x_c}$:
+\begin{align*}
+    \delta S[\bm{x_c}, \bm{y}] = \pdv{L(\bm{r}(\tau))}{x_i} - \dv{\tau} \pdv{L(\bm{r}(\tau))}{\dot{x}_i} \overset{!}{=}  0 \qquad i=1,2,3
+\end{align*}
+Then, note how all other terms of the series involve integrals of $\bm{y}(\tau)$, which do not depend on $x$ - as $\bm{y}(\tau)$ starts from $0$ and returns to $0$ at $t$. So:
+\begin{align*}
+    S[\bm{x}(\tau)] = S[\bm{x_c}] + \underbrace{\frac{1}{2!} \delta^2 S[\bm{x_c},\bm{y}] + \dots}_{h(t)} 
 \end{align*} 
-and now the \textit{constraint} $\delta(x - x(t))$ is \textit{inducing} a \textit{linear term} in the exponential:
+Substituting back in (\ref{eqn:tproba}):
 \begin{align*}
-    \sum_{i=1}^{N-1} \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i}  - \underbrace{\frac{1}{4 D \Delta t_N} (x- x_{N-1})^2 }_{\displaystyle \frac{1}{4 D \Delta t_N} (x^2 - 2x x_{N-1} + x_{N-1}^2) } 
-\end{align*}    
-Passing to the continuum limit, we substitute the finite vector $\{x_i\}$ with the infinite one $\{x(\tau)\}$, so that:
-\begin{align*}
-    W(x,t|x_0,0) = N \exp\left( \operatorname{Stat}_{\{x(\tau)\}} -\frac{1}{4 D} \int \dot{x}^2 (\tau) \dd{\tau} \right)
-\end{align*}  
-where $x(0) = x_0$ and $x(t) = x$. Recall that:
-\begin{align*}
-    F(\bm{x}) = F(\bm{x}_c) + \sum_{i=1}^N X_i \pdv{x_i} F(\bm{x}_c) + \dots \qquad \bm{x} = \bm{x}_c + \bm{X}
-\end{align*}  
-and the stationarity conditions are $\partial_i F(\bm{x}_c) = 0$.
-Differentiating:
-\begin{align*}
-    \dot{x}(\tau) = \dot{x}_c(\tau) + \dot{X} (\tau) \qquad x_c(\tau) = \begin{cases}
-        x_0 & \tau = 0\\
-        x & \tau = t
-    \end{cases}
+    W(\bm{r}_t, t|\bm{r}_0, 0) = \underbrace{-\frac{1}{4D} \exp(h(t))}_{\Phi(t)} \exp(-\frac{1}{4D} S[\bm{x_c}]) = \Phi(t) \exp\left(-\frac{1}{4D} \int_0^t \dd{\tau} L[\bm{r_c}(\tau)] \right)
 \end{align*}
-Then, computing the integral $\bm{\dot{x}}^2$ with these coordinates \q{centered} on $\bm{x}_c$: 
+The function $\Phi(t)$ is called \textit{fluctuation factor}, and its computation is not trivial in the general case. However, if we are dealing with transition probabilities, we can use the \textit{normalization condition} to find it:
 \begin{align*}
-    \int_0^t (\dot{\bm{x}}_c + \dot{\bm{X}})^2 \dd{\tau} = \int_0^t \dot{\bm{x}_c}^2 \dd{\tau} + 2 \int_0^t \dot{\bm{x}_c} \dot{\bm{X}} \dd{\tau} + \int_0^t \dot{\bm{X}}^2 (\tau) \dd{\tau}
-\end{align*}
-Integrating by parts leads to:
-\begin{align*}
-    = \dot{\bm{x}_c}(\tau) \bm{X}(\tau) \Big|_0^t - \int_0^t \ddot{\bm{x}_c}(\tau) \bm{X}(\tau) \dd{\tau}
-\end{align*}
-then $X(\tau) = 0$ both at $\tau = 0,t$, and with the boundary conditions $\ddot{x}_c = 0$, $x_c(0) = x_0$ and $x_c(t) = x$ leads to the \textit{line solution}:
-\begin{align*}
-    x_c(\tau) = x_0 + \frac{\tau}{t}(x- x_0)   \quad \dot{x}_c(\tau) = \frac{x-x_0}{t} 
-\end{align*}     
-Note that $X$ does not depend on the boundary conditions, and so:
-\begin{align*}
-    W(x,t|x_0,0) &= \mathcal{N}(t) \exp\left(\operatorname{Stat}_{\{x(\tau)\}}  -\frac{1}{4D}\int \dot{x}^2 (\tau) \dd{\tau} \right) = \\
-    &= \mathcal{N}(t) \exp\left(-\frac{1}{4D} \int_0^t \dot{x_c}^2 (\tau) \dd{\tau} \right) = \mathcal{N}(t) \exp\left(-\frac{1}{4D} \int_0^t \left(\frac{x-x_0 }{t} \right)^2 \dd{\tau}\right) = 
-    \\
-    &= \mathcal{N}(t) \exp\left(-\frac{1}{4D} \frac{(x-x_0)^2}{t}  \right)
+    \int_{\mathbb{R}^3} \dd[3]{\bm{r}} W(\bm{r},t|\bm{r},0) \equiv 1
 \end{align*} 
-and $\mathcal{N}(t)$ is just a normalization constant that can be determined by integration:
+
+\begin{example}[Simple integral with variational methods]
+    An example will hopefully clarify the essence of the variational method. Let's start with a already known integral, in the $d=1$ case:
+    \begin{align} \label{eqn:Wsolita}
+        W(x,t|x_0,0) &= \int_{\mathbb{R}^T} \left(\prod_{\tau = 0^+}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau}}} \right) \exp\left(-\frac{1}{4D} \int_0^t \dot{x}^2(\tau) \dd{\tau} \right) \delta(x-x(t)) =\\\nonumber
+        &= \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{(x-x_0)^2}{4 D t} \right) 
+    \end{align}
+    Let's compute it again, this time using variations.
+    In this case we are interested in the functional:
+    \begin{align}\label{eqn:S1}
+        S[x(\tau)] = \int_0^t \dot{x}^2(\tau) \dd{\tau}
+    \end{align}
+    To minimize it, we solve the Euler-Lagrange equations:
+    \begin{align*}
+        \dv{\tau} \pdv{S(x_c)}{\dot{x}} - \pdv{S(x_c)}{x} = 0 \Rightarrow 0 - 2 \ddot{x_c} = 0 \Rightarrow \ddot{x}_c(\tau) = 0 
+    \end{align*}
+    Integrating two times:
+    \begin{align*}
+        \dot{x}_c(\tau) = a \Rightarrow x_c(\tau) = a \tau + b
+    \end{align*}
+    The boundary conditions are path's two extrema:
+    \begin{align*}
+        x_c(0) = b \overset{!}{=} 0; \quad x_c(t) = at + x_0 \overset{!}{=} x \Rightarrow a= \frac{x-x_0}{t} 
+    \end{align*}
+    leading to:
+    \begin{align*}
+        x_c(\tau) = x_0 + \frac{x-x_0}{t}\tau 
+    \end{align*}
+    So the path minimizing $S$ is just the straight line joining $x_0$ to $x$. We can now express any path $x(\tau)$ as a \textit{deviation} from the $x_c(\tau)$:
+    \begin{align}
+        x(\tau) = x_c(\tau) + y(\tau) \qquad y(0) = y(t) = 0 \label{eqn:xdef}
+    \end{align}
+    This is a change of variables for (\ref{eqn:Wsolita}), from $x(\tau)$ to $y(\tau)$ ($x_c(\tau)$ is a \textit{fixed} path). As this is just a translation, $\dd{x(\tau)} = \dd{y(\tau)}$ and the path integral becomes:
+    \begin{align} \nonumber
+        W(x,t|x_0,0) &= \int_{\mathbb{R}^T} \left(\prod_{\tau=0^+}^t \frac{\dd{y(\tau)}}{\sqrt{4 \pi D \dd{\tau} }} \right) \delta(y(t) - 0) S[x_c(\tau) + y(\tau)] =\\ \label{eqn:Wsolita1}
+        &= \int_{\mathcal{C}\{0,0;0,t\}} \left(\prod_{\tau=0^+}^t \frac{\dd{y(\tau)}}{\sqrt{4 \pi D \dd{\tau} }} \right) S[x_c(\tau)+y(\tau)]
+    \end{align}
+    To compute $S$, first we differentiate (\ref{eqn:xdef}):
+    \begin{align*}
+        \dot{x}(\tau) = \dot{x}_c(\tau) + \dot{y}(\tau)
+    \end{align*}
+    and substitute in (\ref{eqn:S1}), leading to:
+    \begin{align*}
+        S[x(\tau)] = \int_0^t \dd{\tau} (\dot{x}_c + \dot{y})^2 = \int_0^t \dot{x}_c^2(\tau) \dd{\tau} + 2\int_0^t \dot{x}_c(\tau) \dot{y}(\tau)\dd{\tau} + \int_0^t \dot{y}^2(\tau) \dd{\tau}
+    \end{align*}
+    Note that the middle term vanishes. We can see it by integrating by parts:
+    \begin{align*}
+        \int_0^t \dot{x}_c(\tau) \dot{y}(\tau)\dd{\tau} = \dot{x}_c(\tau) y(\tau)\Big|_0^t - \int_0^t \ddot{x}_c(\tau) y(\tau) \dd{\tau} = 0
+    \end{align*}
+    as $y(0) = y(t) = 0$ and $\ddot{x}_c(\tau) \equiv 0$. Going back to (\ref{eqn:Wsolita1}):
+    \begin{align*}
+        W(x,t|x_0,0) &= \int_{\mathbb{R}^T} \left(\prod_{\tau=0^+}^t \frac{\dd{y(\tau)}}{\sqrt{4 \pi D \dd{\tau} }} \right) \delta(y(t) - 0) \exp\left(-\frac{1}{4D} \left[\int_0^t \dot{x}_c^2(\tau) \dd{\tau} + \int_0^t \dot{y}^2(\tau) \dd{\tau}\right] \right)
+    \intertext{As $x_c(\tau)$ is fixed, we can bring it outside the integral:}
+        &= \exp\left(-\int_0^t \dot{x}_c^2(\tau) \dd{\tau}\right)  \underbrace{\int_{\mathbb{R}^T} \left(\prod_{\tau=0^+}^t \frac{\dd{y(\tau)}}{\sqrt{4 \pi D \dd{\tau} }} \right) \delta(y(t) - 0) \exp \left(-\frac{1}{4D}  \int_0^t \dot{y}^2(\tau) \dd{\tau} \right)}_{\Phi(t)} 
+    \end{align*}
+    We recognize the remaining path integral as a function $\Phi(t)$ of time only, and finally:
+    \begin{align*}
+        W(x,t|x_0,0) &= \Phi(t) \int_0^t \dd{\tau} \dot{x}_c^2(\tau) = \Phi(t) \exp\left[-\frac{1}{4D} \left(\frac{x^2-x_0^2}{t^2} \right)\underbrace{\int_0^t \dd{\tau}}_{t}\right]  =\\
+        &= \Phi(t) \exp\left(-\frac{(x-x_0)^2}{4Dt} \right) 
+    \end{align*}
+    To find the remaining $\Phi(t)$ we can now use the normalization condition:
+    \begin{align*}
+        \int_{-\infty}^{+\infty} \dd{x} W(x,t|x_0,0) \overset{!}{=}  1
+    \end{align*}
+    In this case, this is just a gaussian integral:
+    \begin{align*}
+        \int_{\mathbb{R}} \dd{x} \Phi(t) \exp\left(-\frac{(x-x_0)^2}{4 D t} \right) = \Phi(t) \sqrt{4 \pi D t} \overset{!}{=} 1 \Rightarrow \Phi(t) = \frac{1}{\sqrt{4 \pi D t}} 
+    \end{align*}
+    And so we retrieve the correct result:
+    \begin{align*}
+        W(x,t|x_0,0) = \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{(x-x_0)^2}{4Dt} \right)
+    \end{align*}
+\end{example}
+
+\begin{expl}
+\textbf{Gaussian integrals}. There is another, more specific, way to interpret the results we discussed in this section. Instead of working in the continuum, we could use a discretization, and see path integrals as (\ref{eqn:Wsolita}) as integrals of a highly dimensional gaussian. For example, in the case just examined, we have:
 \begin{align*}
-    \mathcal{N}(t) = \frac{1}{\sqrt{4 D \pi t}} 
+    W(x,t|x_0,0) &= ``\lim_{n \to\infty}" I_N\\
+    I_n &= \int_{\mathbb{R}^n} \left(\prod_{i=1}^n \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \right) \exp\left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{4D \Delta t_i } \right) \delta (x-x_n)
 \end{align*} 
+Performing the integration over the $\dd{x_n}$ we can remove the $\delta$, leaving only a multivariate gaussian:
+\begin{align*}
+    I_n = \int_{\mathbb{R}^{n-1}} \frac{1}{\sqrt{4 \pi D \Delta t_i }} \left(\prod_{i=1}^n \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}} \right) \exp\left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} \right) \Big|_{x_n = x}
+\end{align*}
+This is a gaussian in the form of:
+\begin{align}
+    \int_{\mathbb{R}^n} \dd[n]{\bm{x}} \exp\left(-\frac{1}{2} \bm{x}^T A \bm{x} + \bm{b}^T \bm{x} \right) \label{eqn:gausintstrano}
+\end{align}
+Note that removing the $\delta$ inserts a linear term in the exponential, here highlighted:
+\begin{align*}
+    \sum_{i=1}^{n} \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i}\Big|_{x = x_n} = \sum_{i=1}^{n-1} \frac{(x_i - x_{i-1})^2}{4 D \Delta t_i} +  \frac{x_n^2 + \hlc{Yellow}{2x_n x_{n-1}} + x_{n-1}^2}{4 D \Delta t_n} 
+\end{align*}
+and so $\bm{b} \neq \bm{0}$.
+
+Recall that to solve (\ref{eqn:gausintstrano}) we proceeded with a change of variables, $\bm{x} = \bm{x_c} + \bm{y}$, where $\bm{x_c}$ is the \textit{minimum} of the gaussian (see 10/10 notes). This leads to a result that is proportional to the exponential evaluated at $\bm{x_c}$:
+\begin{align*}
+    \int_{\mathbb{R}^n} \dd[n]{\bm{x}} \exp\left(-\frac{1}{2} \bm{x}^T A \bm{x} + \bm{b}^T \bm{x}  \right) &= \frac{(2 \pi)^{n/2}}{\sqrt{\operatorname{det}(A) }}\exp\left(\frac{1}{2} \bm{b}^T A^{-1} \bm{b} \right) =\\
+    &= \frac{(2 \pi)^{n/2}}{\sqrt{\operatorname{det}(A) }} \exp\left(\operatorname{Stat}_{\bm{x}} \left[-\frac{1}{2} \bm{x}^T A \bm{x} + \bm{b} \cdot \bm{x} \right] \right) \\ \span
+    \operatorname{Stat}_{\bm{x}} F(\bm{x}) = F(\bm{x}_c); \qquad \bm{x_c} \text{ such that } \pdv{F(\bm{x})}{x_i} \Big|_{\bm{x} = \bm{x}_c} = 0 \quad \forall i = 1,\dots, n
+\end{align*}
+So, in the discrete case, the same \textit{variational result} just derives from choosing the best set of coordinates to describe the multivariate gaussian. 
+
+\end{expl}
+
+
+
+
+
+ 
 \end{document}
