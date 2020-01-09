@@ -1,0 +1,403 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Gravitational Waves - part 2}
+\lesson{?}{09/01/20}
+
+Recall that we used a \textit{perturbed} metric:
+\begin{align*}
+    g_{\mu \nu} = \eta_{\mu \nu} + h_{\mu \nu}(x) \qquad h_{\mu \nu} \ll 1
+\end{align*}
+We are looking for a \textit{vacuum solution}, $R_{\mu \nu} = 0$, and so we are dealing only with the \textit{propagation} of a gravitational wave, and not its production. Expanding $R_{\mu \nu}$ to $O(h)$:
+\begin{align*}
+    R_{\mu \nu} = - \frac{1}{2} \square h_{\mu \nu} + \frac{1}{2} \partial_\mu (\partial_\lambda h^\lambda_\nu - \frac{1}{2} \partial_\nu h ) + (\mu \leftrightarrow \nu)  
+\end{align*}   
+Making a \textit{infinitesimal} change of coordinates: 
+\begin{align*}
+    x^\mu \to x^\mu + \epsilon^\mu(x)
+\end{align*}
+we have:
+\begin{align*}
+    h_{\mu \nu} \to \tilde{h}_{\mu \nu} = h_{\mu \nu} - \partial_\mu \epsilon_\nu - \partial_\nu \epsilon_\mu
+\end{align*}
+$h_{\mu \nu}$ and $\tilde{h}_{\mu \nu}$ are both describing the same wave, but with different expressions. To make them equal, we need to fix the gauge. Usually, this is done in such a way to simplify the equation. For example, consider the \textit{harmonic gauge}:
+\begin{align*}
+    \partial_\lambda h^\lambda_\nu - \frac{1}{2} \partial_\nu h =0 
+\end{align*} 
+leading to:
+\begin{align*}
+    \square h_{\mu \nu} =0
+\end{align*}
+One solution is the plane wave:
+\begin{align*}
+    h_{\mu \nu} = C_{\mu \nu} e^{i \bm{k} \cdot \bm{x}}
+\end{align*}
+with $\bm{k}\cdot \bm{k} = 0$, $k^\mu$ being the $4$-wave vector, and $P^\mu = \hbar k^\mu \Rightarrow P^2 = 0 \equiv m^2$. Note that gravitational waves propagate along \textit{null geodesics} (as does light).
+
+The harmonic gauge \textit{does not completely fix} the gauge, as there is still some freedom left. In fact, suppose that $h_{\mu \nu}$ satisfies the harmonic gauge, and $\epsilon_\mu$ satisfies $\square \epsilon_\mu = 0$, then:
+\begin{align*}
+    \tilde{h}_{\mu \nu} = h_{\mu \nu} - \partial_\mu \epsilon_\nu - \partial_\nu \epsilon_\mu
+\end{align*} 
+also satisfies the harmonic gauge.
+
+Let's prove it.
+\begin{align*}
+    0 \overset{?}{=} \partial_\lambda \tilde{h}^\lambda_\mu - \frac{1}{2} \partial_\mu \tilde{h} = \partial_\lambda [\cancel{h^\lambda_\mu }- \hlc{Yellow}{\partial^\lambda \epsilon_\mu }- \partial_\mu \epsilon^\lambda] - \frac{1}{2} \partial_\mu [\cancel{h} - 2 \partial \cdot \epsilon]  
+\end{align*}
+with $h = h^\mu_\mu$, $\partial = \partial^\mu_\mu$, and where we applied the harmonic gauge condition to cancel two terms. 
+Then:
+\begin{align*}
+    = -\hlc{Yellow}{ \square \epsilon_\mu} - \partial_\mu \partial \cdot \epsilon + \partial_\mu \partial \cdot \epsilon
+\end{align*}
+
+We want not to impose $4$ additional conditions that remove the residual freedom $x^\mu \to x^\mu + \epsilon^\mu$ with $\square \epsilon^\mu = 0$
+
+\begin{align*}
+    \square h_\mu \nu = 0 & \to h_{\mu \nu} = C_{\mu \nu} e^{i \bm{k}\cdot \bm{x}} \qquad k^2 = 0, \quad C_{\mu \nu} = \text{Const.}\\
+    \square \epsilon_{\mu \nu} = 0 & \to \epsilon_\mu = \gamma_\mu e^{i \bm{k}\cdot \bm{x}}, \qquad k^2 = 0 \quad \gamma_\mu = \text{const}
+\end{align*}
+Applying the coordinate change to the plane wave $h_{\mu \nu} \to \tilde{h}_{\mu \nu} - \partial_\mu \epsilon_\nu - \partial_\nu \epsilon_\mu$ we get:
+\begin{align*}
+    \tilde{C}_{\mu \nu} e^{i \bm{k}\cdot \bm{x}} = C_{\mu \nu} e^{ikx} - \partial_\mu [\gamma_\nu e^{ikx}] - \partial_\nu [\gamma_\mu e^{ikx}]
+\end{align*}
+Computing the derivatives:
+\begin{align*}
+    \tilde{C}_{\mu \nu} e^{ikx} = C_{\mu \nu} e^{ikx} - ik_\mu \gamma_\nu e^{ikx} - ik_\nu \gamma_\mu e^{ikx}  
+\end{align*}
+Removing the phases $e^{ikx}$ we have found that, under a change of coordinates $x^\mu \to x^\mu + \epsilon^\mu$ the constants transform as:
+\begin{align*}
+    C_{\mu \nu} \to \tilde{C}_{\mu \nu} - ik_\mu \gamma_\nu - ik_\nu \gamma_\mu
+\end{align*}
+So the plane wave remains a plane wave:
+\begin{align*}
+    h_{\mu \nu} = C_{\mu \nu} e^{ikx} \to \tilde{h}_{\mu \nu} = \tilde{C}_{\mu \nu} e^{ikx}
+\end{align*}
+but the coefficients are now different. However, $C_{\mu \nu}$ and $\tilde{C}_{\mu \nu}$ both describe the same physical situations, as $x^\mu \to x^\mu + \epsilon^\mu$ is just a change of coordinates. 
+
+This is because the gauge is not completely fixed - we need additional conditions. As before, we choose them so that the problem become simpler:
+\begin{align*}
+    \tilde{C}_{00} = \tilde{C}_{0i} = 0
+\end{align*}
+These fix completely the residual gauge freedom.
+
+\medskip
+
+We need to verify that we \textit{can} impose these conditions. 
+\textbf{Goal}: show that, starting from a generic $C_{\mu \nu}$, we can always find $\gamma_\mu$ (i.e. find $\epsilon_\mu$, that is \textit{an appropriate change of variables}) such that $\tilde{C}_{00} = \tilde{C}_{0i} = 0$ $(i=1,2,3)$.
+We start from the transformation rule we found earlier:
+\begin{align*}
+    C_{\mu \nu} \to \tilde{C}_{\mu \nu} - ik_\mu \gamma_\nu - ik_\nu \gamma_\mu
+\end{align*}
+Setting $\mu = \nu = 0$:
+\begin{align*}
+    \tilde{C}_{00} = C_{00} - 2i k_0 \gamma_0 \Rightarrow \gamma_0 = \frac{C_{00} }{2 i k_0} \Rightarrow \tilde{C}_{00} = 0 
+\end{align*}
+Note that there is \textit{only one possible choice} for the change of coordinates, i.e. only one value for $\gamma_0$.
+
+If $\mu = 0$, $\nu=i$:
+\begin{align*}
+    \tilde{C}_{0i} &= C_{0i} - i k_0 \gamma_i - ik_i \gamma_0 = C_{0i} - ik_0 \gamma_i - \cancel{i} k_i \frac{C_{00}}{2\cancel{i} k_0} \overset{!}{=}  0
+\end{align*}
+leading to:
+\begin{align*}
+    i k_0 \gamma_i = C_{0i} - \frac{k_i}{2 k_0} C_{00} \Rightarrow \gamma_i = \frac{1}{i k_0} \left(C_{0i} - \frac{k_i}{2 k_0} C_{00}  \right)  
+\end{align*}
+Note $\gamma_\mu$ is completely fixed by the need to get $\tilde{C}_{00} = 0$, $\tilde{C}_{0i} = 0$.
+Here we assume $k_\mu \neq 0$. As we will show, this amount on assuming that the gravitational wave has a non-zero frequency. The degenerate case of a $0$ frequency wave - which means to \q{have nothing} - generates diverging terms in this gauge. This is \textit{a gauge artefact}, that can be fixed by just making a different gauge choice. 
+
+\medskip
+
+Summarizing, the gravitational wave equation in the harmonic gauge with the additional constraints to fix completely the gauge is:
+\begin{align*}
+    \begin{cases}
+        \square h_{\mu \nu} = 0\\
+        \partial_\lambda  h^\lambda_\mu - \frac{1}{2} \partial_\mu h = 0\\
+        h_{00} = h_{0i} = 0 
+    \end{cases}
+\end{align*}
+$h_{\mu \nu}$ has $10$ degrees of freedom (because of symmetry), these ones:
+\begin{align*}
+    h_{\mu \nu} = \left(\begin{array}{cccc}
+    \cdot & \cdot & \cdot & \cdot \\ 
+     & \cdot & \cdot & \cdot \\ 
+     &  & \cdot & \cdot \\ 
+     &  &  & \cdot
+    \end{array}\right)
+\end{align*}
+The harmonic gauge is a set of $4$ differential equations ($4$ constraints), and then we have another $4$ constraints from the residual gauge fixing. So a gravitational wave will have $10-4-4=2$ degrees of freedom (physically, they are $2$ polarizations).
+
+\medskip
+
+Let's see this concretely (assuring that all $8$ constraints are independent) for the plane-wave solution:
+\begin{align*}
+    h_{\mu \nu} = C_{\mu \nu} e^{i\bm{k}\cdot \bm{x}}
+\end{align*}
+We start from the harmonic gauge (H.G.) condition for $\mu=0$:
+\begin{align*}
+    \partial_\lambda h^\lambda_0 - \frac{1}{2} \partial_0 h = 0 
+\end{align*}
+Recall that $h^\alpha_\beta= \eta^{\alpha \gamma} h_{\gamma \beta}$, and so:
+\begin{align*}
+    \partial_0 h^0_{0} + \partial_i h^i_0 - \frac{1}{2} \partial_0 h = 0 
+\end{align*} 
+As $\eta^{00} = -1$ and $\eta^{ij} = \delta_{ij}$ we have, because $h_{00} = h_{0i} = 0$:
+\begin{align*}
+    -\cancel{\partial_0 h_{00}} +\bcancel{ \partial_i h_{i0}} - \frac{1}{2} \partial_0 h = 0 \Rightarrow \partial_0 h = 0 \Rightarrow \partial_0 (C e^{ikx}) = 0 \Rightarrow ik_0 C e^{ikx} = 0
+\end{align*}
+This means that:
+\begin{align*}
+    C \equiv C^\mu_\mu = 0 = C^0_0 + C^i_i =-C_{00} + C_{i i} = 0
+\end{align*}
+So: $h=0$ and $h_{i i} = 0$. This means that the gravitational wave is \textit{traceless} (this can be proved in the general case of a \textit{non-planar} wave).
+
+\medskip
+
+Now, if $\mu = i$ the harmonic-gauge condition, as $h=0$, reduces to:
+\begin{align*}
+    \partial_\lambda h^\lambda_i = 0 \Rightarrow -\partial_0 h_{0j} + \partial_i h_{ij} = 0 \Rightarrow \partial_i h_{ij} = 0
+\end{align*}
+This means, as we will see, that the G.W. is \textit{transverse} (oscillates in the direction perpendicular to its propagation).
+
+\medskip
+
+So, we are left to solve:
+\begin{align*}
+    \begin{cases}
+        \square h_{\mu \nu} = 0 \Rightarrow h_{\mu \nu} = C_{\mu \nu} e^{i\bm{k}\cdot \bm{x}} \> \bm{k}^2 = 0\\
+        h_{00} = h_{0i} = 0\\
+        h_{i i} =  0\\
+        \partial_i h_{ij} = 0
+    \end{cases}
+\end{align*}
+Applying these conditions, we get new expressions for the matrix $C_{\mu \nu}$:
+\begin{align*}
+    \begin{dcases}
+        C_{00} = C_{0i} = 0\\
+        C_{i i} = 0\\
+        i k_i C_{ij} e^{i\bm{k} \cdot \bm{x}} = 0 \Rightarrow k_i C_{ij} = 0
+    \end{dcases}
+\end{align*}
+Let's fix $\bm{k}$ along the $\hat{z}$ axis: $\bm{k} = (0,0,k)$. Then the third condition becomes:
+\begin{align*}
+    C_{3j} = 0 \Rightarrow C_{31} = C_{32} = C_{33} = 0
+\end{align*}
+As $C_{\mu \nu}$ is symmetric, we can rewrite this as:
+\begin{align*}
+    C_{13} = C_{23} = C_{33} = 0
+\end{align*}
+As $C_{i i} = 0$:
+\begin{align*}
+    C_{11} + C_{22} + \cancel{C_{33}} = 0
+\end{align*}
+Summarizing:
+\begin{align*}
+    \begin{cases}
+        C_{00} = C_{01} = C_{02} = C_{03} = 0\\
+        C_{11} + C_{22} = 0\\
+        C_{13} = C_{23} = C_{33} = 0
+    \end{cases}
+\end{align*}
+We have two independent solutions:
+\begin{align*}
+    C_{12} = C_{21} \neq 0 \lor C_{22} = -C_{11} \neq 0
+\end{align*}
+As the wave equation is linear, also any linear combination of these solutions will be a solution. In particular, it will be a matrix $C_{\mu \nu}$ that is a linear combination of the following two basis elements:
+\begin{align*}
+    e_{ij,+} \equiv \left(\begin{array}{ccc}
+    1 & 0 & 0 \\ 
+    0 & -1 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right) \qquad e_{ij,\times} \equiv \left(\begin{array}{ccc}
+    0 & 1 & 0 \\ 
+    1 & 0 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)
+\end{align*}
+We need to normalize them:
+\begin{align*}
+    e_{ij,+} e_{ij,+} &= e_{ij,+} e_{ji,+} = \operatorname{trace}(e_+ e_+) = \operatorname{Tr} \left[\left(\begin{array}{ccc}
+    1 & 0 & 0 \\ 
+    0 & -1 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right) \left(\begin{array}{ccc}
+    1 & 0 & 0 \\ 
+    0 & -1 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)\right]   =\\
+    &= \operatorname{Tr} \left(\begin{array}{ccc}
+    1 & 0 & 0 \\ 
+    0 & 1 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right) = 2\\ 
+    e_{ij,+} e_{ij,\times} &= \operatorname{Tr} (e_+ e_\times) = \operatorname{Tr}\left[\left(\begin{array}{ccc}
+    1 & 0 & 0 \\ 
+    0 & -1 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right) \left(\begin{array}{ccc}
+    0 & 1 & 0 \\ 
+    1 & 0 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)\right]  = \operatorname{Tr} \left(\begin{array}{ccc}
+    0 & 1 & 0 \\ 
+    -1 & 0 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)  = 0\\
+    e_{ij,\times}e_{ij,\times} &= \operatorname{Tr} (e_\times e_\times) = \operatorname{Tr}\left[\left(\begin{array}{ccc}
+    0 & 1 & 0 \\ 
+    1 & 0 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right) \left(\begin{array}{ccc}
+    0 & 1 & 0 \\ 
+    1 & 0 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)\right] = \operatorname{Tr}\left(\begin{array}{ccc}
+    1 & 0 & 0 \\ 
+    0 & 1 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)   = 2
+\end{align*}
+And so:
+\begin{align*}
+    \operatorname{Tr}(e_r e_s) = 2 \delta_{rs} \qquad \{r,s\} \in \{+,x\} 
+\end{align*}
+A G.W. can be decomposed as:
+\begin{align*}
+    h_{ij} (x) = (h_+ e_{ij,+} + h_\times e_{ij,\times}) e^{i\bm{k} \cdot \bm{x}} \quad \bm{k}^2 = 0
+\end{align*}
+where $h_+$ and $h_x$ are the \textit{amplitudes} of the two polarizations. 
+
+\medskip
+Let's now try to get a better understanding of this solution. First of all, note that the metric is real $g_{\mu \nu} = \eta_{\mu \nu} + h_{\mu \nu}(x)$, but the solution we have is complex. However, as the differential equation has real coefficients, then if $h_{\mu \nu}$ solves it, also its complex conjugate $h^*_{\mu \nu}$ solves it. Then also their linear combinations will be solutions, and so we can combine them to write a solution that is manifestly real:
+\begin{align*}
+    C_{ij} e^{ikx} = C_{ij} [\cos(kx) + i\sin(kx)] \> \text{is a solution}\\
+    C_{ij} e^{-ikx} = C_{ij} [\cos(kx) - i \sin(kx)] \> \text{is a solution}\\
+    \Rightarrow C_{ij}[C_1 \cos(kx) + C_2 \sin(kx)]\> \text{is a solution}
+\end{align*}
+Absorbing the constants:
+\begin{align*}
+    C_{ij} \cos(kx + \varphi) \> \text{is a solution}
+\end{align*}
+where $\varphi$ is an arbitrary phase.
+
+So, we can rewrite a generic plane wave solution as:
+\begin{align*}
+    h_{ij}(z) = \sum_{r = +,\times} h_r e_{ij,r} \cos(kt - kz + \varphi_r)
+\end{align*}
+where we used $\bm{k} \cdot \bm{x} + \varphi = -kt + kz + \varphi$ and changed the overall sign and renamed $-\varphi \to \varphi$. Note that it is periodic in time with period $T= 2\pi/k$. We then define the frequency as:
+\begin{align*}
+    f = \frac{1}{T} = \frac{k}{2 \pi}  
+\end{align*}
+
+Let's now focus on getting a geometric interpretation for the polarizations.
+\begin{align*}
+    e_{ij,+} \equiv \left(\begin{array}{ccc}
+    1 & 0 & 0 \\ 
+    0 & -1 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)
+\end{align*}
+Recall that $g_{\mu \nu} = \eta_{\mu \nu} + h_{\mu \nu}$ tells us how to measure \textit{distances}. Suppose we have two objects with a fixed comoving distance:
+\begin{align*}
+    \int \dd{x} \sqrt{g_{x x}}
+\end{align*}
+In presence of a gravitational wave, the non-zero $h_{\mu \nu}$ will \textit{vary} their distance. 
+For the $+$ polarization, at $t=0$, distances along $\hat{x}$ \textit{rise} and along $\hat{y}$ lower. These two directions exchange after half a period (as the wave will have travelled $\lambda/2$). Note that changes happen only in directions $\perp$ to that of motion (transverse wave).  %See fig (1)
+
+Now, consider a $45^\circ$ rotation:a
+\begin{align*}
+    \left(\begin{array}{c}
+    \tilde{x} \\ 
+    \tilde{y} \\ 
+    \tilde{z}
+    \end{array}\right) = \left(\begin{array}{ccc}
+    \cos(45^\circ) & \sin(45^\circ) & 0 \\ 
+    -\sin(45^\circ) & \cos(45^\circ) & 0 \\ 
+    0 & 0 & 1
+    \end{array}\right) \left(\begin{array}{c}
+    x \\ 
+    y \\ 
+    z
+    \end{array}\right)
+\end{align*}
+\begin{align*}
+    \left(\begin{array}{c}
+        \tilde{x} \\ 
+        \tilde{y} \\ 
+        \tilde{z}
+        \end{array}\right) = \left(\begin{array}{ccc}
+        1/\sqrt{2} & 1/\sqrt{2} & 0 \\ 
+        -1/\sqrt{2} & 1/\sqrt{2} & 0 \\ 
+        0 & 0 & 1
+        \end{array}\right) \left(\begin{array}{c}
+        x \\ 
+        y \\ 
+        z
+        \end{array}\right)
+\end{align*}
+For a vector along the diagonal, such as $(1,1,0)$, we get:
+\begin{align*}
+    \left(\begin{array}{ccc}
+        1/\sqrt{2} & 1/\sqrt{2} & 0 \\ 
+        -1/\sqrt{2} & 1/\sqrt{2} & 0 \\ 
+        0 & 0 & 1
+        \end{array}\right) \left(\begin{array}{c}
+        1 \\ 
+        1 \\ 
+        0
+        \end{array}\right) = \left(\begin{array}{c}
+        \sqrt{2} \\ 
+        0 \\ 
+        0
+        \end{array}\right)
+\end{align*}
+We can write this relation as $\tilde{x}^i = R^i_j x^j$, or more compactly as $\bm{\tilde{x}} = R \bm{x}$. Recall that $R^T R = \mathbb{I}$ for rotation matrices (as they are orthogonal). The line element does not change:
+\begin{align*}
+    \dd{l^2} = \dd{x^i} g_{ij} \dd{x^j} = \dd{\tilde{x}^i} \tilde{g}_{ij} \dd{\tilde{x}^j} = \dd{x^T} g \dd{x} = \dd{\tilde{x}^T} \tilde{g} \dd{x} = \dd{x^T} R^T \tilde{g} R \dd{x}
+\end{align*}
+as $\dd{\tilde{x}} = R \dd{x}$. This means that $R^T \tilde{g} R = g \Rightarrow \tilde{g} = R g R^T$, which is the formal way for writing:
+\begin{align*}
+    \tilde{g}_{ij} = \pdv{x^m}{\tilde{x}^i} g_{mn} \pdv{x^n}{\tilde{x}^j}
+\end{align*}
+
+If we focus on the space coordinates $g_{ij} = \delta_{ij} + h_{ij}$:
+\begin{align*}
+    \mathbb{I} + \tilde{h} = R(\mathbb{I} + h) R^T = R \mathbb{I}R^T + R h R^T = \mathbb{I} + R h R^T 
+\end{align*}
+and so: $\tilde{h} = R h R^T$. We can now tackle the $\times$ polarization. 
+\begin{align*}
+    h = e_\times = \left(\begin{array}{ccc}
+    0 & 1 & 0 \\ 
+    1 & 0 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)
+\end{align*}
+Then:
+\begin{align*}
+    \tilde{h} = \left(\begin{array}{ccc}
+        1/\sqrt{2} & 1/\sqrt{2} & 0 \\ 
+        -1/\sqrt{2} & 1/\sqrt{2} & 0 \\ 
+        0 & 0 & 1
+        \end{array}\right) \left(\begin{array}{ccc}
+        0 & 1 & 0 \\ 
+        1 & 0 & 0 \\ 
+        0 & 0 & 0
+        \end{array}\right) \left(\begin{array}{ccc}
+            1/\sqrt{2} & -1/\sqrt{2} & 0 \\ 
+            1/\sqrt{2} & 1/\sqrt{2} & 0 \\ 
+            0 & 0 & 1
+            \end{array}\right) = \left(\begin{array}{ccc}
+            1 & 0 & 0 \\ 
+            0 & -1 & 0 \\ 
+            0 & 0 & 0
+            \end{array}\right) = e_+
+\end{align*}
+So $e_+$ is just $e_\times$ rotated by $45^\circ$.
+
+A generic case will have the effect of $e_+$ \textit{superimposed} to that of $e_\times$, with possibly different amplitudes:
+\begin{align*}
+    h_{ij} = \sum_{r=+,\times} h_r e_{ij,r} \cos(kt - kz + \varphi_r)
+\end{align*} 
+
+\end{document}
