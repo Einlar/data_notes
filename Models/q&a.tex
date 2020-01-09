@@ -1,0 +1,38 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\lesson{?}{09/01/20}
+\section{Q\&A}
+
+\begin{itemize}
+\item \textit{How to compute the average number of collisions in an ideal gas?}\\
+Recall that $\bm{J}(\bm{v}) = \bm{v} \rho(\bm{v})$, where the particle density can be retrieved from the Maxwell-Boltzmann distribution:
+\begin{align*}
+    \rho(\bm{v}) = \frac{N}{V} \frac{\exp\left(-\frac{\beta m v^2}{2} \right)}{Z}  
+\end{align*}
+Then, the number of particles per unit time hitting an infinitesimal surface $\dd{\Sigma}$ with normal $\bm{\hat{n}}$ is given by:
+\begin{align*}
+    \dd{\Sigma} \bm{J} (\bm{v}) \cdot \bm{\hat{n}} \dd[3]{\bm{v}}
+\end{align*}
+And integrating it over the desired surface $A$ and the velocities going \textit{to it}, we get the total number of collisions. 
+
+\item There is a typo in the handwritten notes (Lecture 12, last formula):
+\begin{align*}
+    \langle T(c \to d) \rangle \approx \frac{\pi \beta \gamma}{\sqrt{\beta U''(c) \beta |U''(d)|}} e^{\textcolor{Red}{+} [U(d) - U(c)]} 
+\end{align*}
+Of course, if the barrier is higher, meaning that $U(d) - U(c)$ is greater, then the mean average time of arrival at $d$ will be higher, because it will be much more difficult to reach.
+
+\item In exercise 2.6, the survival probability arises from the fact that the system $[a,b]$ here defined is not closed - meaning that the particle can escape. In particular:
+\begin{align*}
+P_{\mathrm{surv}}(t|x_0) = \int_b^a P(x,t) \dd{x} < 1    
+\end{align*}
+\item There is a new easier derivation of the backward F-P equation in the newest notes.
+\item \textit{Exercises 4.8 or 4.9 ask the same question?} \\
+Yes, they are the same exercise - so only do one of them. 
+\item Regarding the exam (about 45 minutes long): you need to bring all the exercises done. There will be 2-3 questions about exercises (to solve without looking at the notes), and questions about theory in the parts where are no exercises. If the calculations are very long, it will not be asked to perform them in their entirety (maybe stop before the end, or start from a printed result). It is important to clearly present the \textit{idea of the calculation} at the start, proving to have understood the process and not just memorized it.
+
+
+\end{itemize}
+\end{document}

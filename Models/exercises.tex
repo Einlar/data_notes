@@ -8,13 +8,55 @@
 
 \begin{exo}[Stirling's approximation]
     Use the $\Gamma$ function definition:
-    \begin{align*}
-        \Gamma(n) \equiv \int_0^\infty x^{n-1} e^{-x} \dd{x} \quad n > 0\qquad \Gamma(n+1) = n!
-    \end{align*}
+    \begin{align}
+        \Gamma(n) \equiv \int_0^\infty x^{n-1} e^{-x} \dd{x} \quad n > 0\qquad \Gamma(n+1) = n! \label{eqn:gamma-func}
+    \end{align}
     together with the saddle point approximation to derive the result used in chapter $2$ of Lecture Notes:
+    \begin{align}
+        \ln n! = n\ln n - n + \frac{1}{2} \ln(2 \pi n) + O\left(\frac{1}{n} \right) \label{eqn:stirling}
+    \end{align} 
+
+    \medskip
+
+    \textbf{Solution}. To use the saddle-point approximation we need to rewrite (\ref{eqn:gamma-func}) in the following form:
+    \begin{align}
+        I(\lambda) = \int_S \dd{x} \exp\left(-\frac{F(x)}{\lambda} \right)
+    \end{align}
+    So that:
+    \begin{align}
+        I(\lambda) \underset{\lambda \to 0}{\approx}  \sqrt{2 \pi \lambda} \left(\pdv{F}{x} (x) \Big|_{x=x_0}\right)^{-1/2} \exp\left(-\frac{F(x_0)}{\lambda} \right)
+        \label{eqn:saddle-formula}
+    \end{align}
+    where $x_0$ is a global minimum of $F(x)$.  
+
+    First, we evaluate $\Gamma$ at $n+1$, and express the integrand as a single exponential:
     \begin{align*}
-        \ln n! = n\ln n - n + \frac{1}{2} \ln(2 \pi n) + O\left(\frac{1}{n} \right) 
-    \end{align*} 
+        \Gamma(n+1) = n! = \int_0^{+\infty} \dd{x} x^n e^{-x}  = \int_{0}^{+\infty} \dd{x} e^{-x + n \log x} 
+    \end{align*}
+    We want to collect a $n$ in the exponential, and then define $\lambda = 1/n$, so that the saddle-point approximation $\lambda \to 0$ corresponds to the case of a large factorial $n \to \infty$. To do this, we perform a change of variables $x \mapsto s$, so that $x = n s$, with $\dd{x} = n \dd{s}$:
+    \begin{align*}
+        \Gamma(n+1) &= \int_0^{+\infty} \dd{s} n \exp(-ns + n \log(ns))= \\
+        &= n^{n+1} \int_0^{+\infty} \dd{s} \exp(n[\log s - s])
+    \end{align*}
+    In the last step we split the logarithm $n\log(ns) = n\log n + n\log s = n^n + n\log s$, extracted from the integral all terms not depending on $s$, and then collected the $n$ as desired. Now, letting $\lambda = 1/n$ we have:
+    \begin{align*}
+        = n^{n+1} \int_0^{+\infty} \dd{s} \exp\left(\frac{\log s - s}{\lambda} \right)
+    \end{align*}
+    which is in the desired form (\ref{eqn:saddle}).
+
+    So, we compute the minimum of $F(s) = \log s - s$:
+    \begin{align*}
+        F'(s) &= \dv{s} (s - \log s) = 1 - \frac{1}{s} \overset{!}{=} 0 \Rightarrow s_0 = 1\\
+        F''(s) &= \frac{1}{s^2} \Rightarrow F''(s_0) = 1 > 0 
+    \end{align*}
+    And applying formula (\ref{eqn:saddle-formula}):
+    \begin{align*}
+        n! \underset{n \to \infty}{\approx} \sqrt{\frac{2\pi}{n} } \cdot 1 \cdot e^{-n} = \sqrt{2 \pi} n^{n+\frac{1}{2}} e^{-n}  
+    \end{align*}
+    Finally, taking the logarithm leads to the result (\ref{eqn:stirling}):
+    \begin{align*}
+        \log n! \underset{n \to \infty}{\approx} n \log n -n +\frac{1}{2} \log (2 \pi n) 
+    \end{align*}
 \end{exo}
 
 \begin{exo}[Random walk tends to a Gaussian]
@@ -23,17 +65,55 @@
 
 \begin{exo}[Non symmetrical motion]
     Write the analogous of:
-    \begin{align*}
+    \begin{align}
         W(x,t+\epsilon) = \frac{1}{2}[W(x-l, t) + W(x+l,t)] 
-    \end{align*}
+        \label{eqn:ME}
+    \end{align}
     in the LN for the case with $p_+ = 1-p_- \neq p_-$ and determine:
     \begin{enumerate}
-        \item how they depend on $l$ and $\epsilon$ in order to have a meaningful continuum limit
-        \item the resulting continuum equation and how to map it in the diffusion equation:
+        \item How they depend on $l$ and $\epsilon$ in order to have a meaningful continuum limit
+        \item The resulting continuum equation and how to map it in the diffusion equation:
         \begin{align*}
             \partial_t W(x,t) = D \partial_x^2 W(x,t)
         \end{align*}  
     \end{enumerate} 
+
+    \medskip
+
+    \textbf{Solution}. Consider a Brownian particle moving on a uniform lattice $\{x_i = i \cdot l\}_{i \in \mathbb{N}}$, making exactly one \textit{step} at each \textit{discrete instant} $\{t_n = n \cdot \epsilon\}_{n \in \mathbb{N}}$, with $l, \epsilon \in \mathbb{R}$ fixed. Denoting with $p_+$ the probability of a \textit{step to the right}, and with $p_-$ that of a \textit{step to the left}, the Master Equation for the particle becomes:
+    \begin{align} \label{eqn:ME2}
+        W(x,t+\epsilon) = p_+ W(x-l,t) + p_- W(x+l,t)
+    \end{align}  
+    
+    \begin{enumerate}
+        \item We already derived (see 7/10) the expected position $n$ at timestep $n$ in that case:
+        \begin{align}
+            \langle x \rangle_{t_n} = n l (p_+ - p_-) = t\frac{l}{\epsilon} (p_+ - p_-) \label{eqn:pref-motion}
+        \end{align}
+        Intuitively, an unbalance $p_+ \neq p_-$ will result in a \textit{preferred motion} proportional to that unbalance. Thus we can rewrite (\ref{eqn:pref-motion}) as: 
+        \begin{align*}
+            \langle x \rangle_{t_n} = vt \qquad v = \frac{l}{\epsilon}(p_+ - p_-) 
+        \end{align*}
+        $v$ is the \textit{physical} parameter that needs to be fixed when performing the continuum limit. So, as $p_+ - p_- = 2p_+ -1$ by normalization, we can find the desired relation between $p_+$ and $v$:
+        \begin{align*}
+            (2p_+ - 1) \frac{l}{\epsilon} \equiv v \Rightarrow p_+ = \frac{1}{2} \left[\frac{v \epsilon}{l} + 1 \right]  
+        \end{align*}
+        As before, we also need to fix $l^2/(2\epsilon) \equiv D$.
+        \item Expanding each term of (\ref{eqn:ME2}) in a Taylor series we get:
+        \begin{align*}
+            \cancel{W(x,t)} + \epsilon \dot{W}(x,t) + \frac{\epsilon^2}{2} \ddot{W}(x,t) + O(\epsilon^3) &= p_+ \left[\cancel{W(x,t)} + l W'(x,t) + \frac{1}{2} l^2 W''(x,t) + O(l^3) \right]\\
+            &\> + p_- \left[\cancel{W(x,t)} - lW'(x,t) + \frac{1}{2} l^2 W''(x,t) + O(l^3)  \right]      
+        \end{align*}
+        Using the normalization $p_+ + p_- = 1$ and dividing by $\epsilon$ leads to:
+        \begin{align*}
+            \dot{W}(x,t) + \frac{\epsilon}{2} \ddot{W}(x,t) + O(\epsilon^2) = (p_+-p_-) \frac{l}{\epsilon} W'(x,t) + \frac{l^2}{2 \epsilon} W''(x,t) + O\left(\frac{l^3}{\epsilon} \right)   
+        \end{align*}
+        In the continuum limit $l, \epsilon \to 0$, with fixed $v$ and $D$, we get the diffusion equation:
+        \begin{align*}
+            \dot{W}(x,t) = v W'(x,t) + D W''(x,t)
+        \end{align*}
+        which leads back to the usual diffusion equation if we set $v = 0$. Note that $p_+ = p_- \Rightarrow v = 0$, as it should be. 
+    \end{enumerate}
 \end{exo}
 
 \begin{exo}[Multiple steps at once]
@@ -51,7 +131,6 @@
         \item what is the condition to have a meaningful continuum limit, discussing why the neglected terms do not contribute to such limit
         \item which equation you get in the continuum limit 
     \end{enumerate}
-    
 \end{exo}
 
 \begin{exo}[Expected values]
@@ -80,10 +159,6 @@
            
 \end{exo}
 
-\begin{exo}[]
-    
-\end{exo}
 \listoftheorems
-
 
 \end{document}

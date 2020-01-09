@@ -1,0 +1,36 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+Consider a potential $U(x)$ with a local minimum at $x=c$, and a local maximum at $x=d$, with $c < d$. Consider a particle starting at $x=c$. We wish to compute the average first visit time of $d$, denoted with $\langle T(c \to d) \rangle$. 
+This can be done by redefining the system as the half-line $[-\infty,d]$, with $x=-\infty$ being a \textit{reflective} boundary, and $x=d$ an \textit{absorbing} one. We can do this because we are not interested in the behaviour \textit{after} passing $d$, but just in the mean arrival times.
+
+So $A(x) = - \partial_x U(x)/\gamma$. Supposing to be at equilibrium, $D(x) \equiv D = 1/(\gamma B)$. Letting $a=-\infty$ and $b=d$ leads to:
+\begin{align*}
+    T_d(x) &= \int_x^d \dd{y} \int_{-\infty}^y \beta \gamma \dd{z} \exp\left(-\int_z^y -\dd{v}\frac{\partial_v U(v)}{\gamma} \gamma \beta \right) =\\
+    &= \beta \gamma \int_x^d \dd{y} \int_{-\infty}^{y} \dd{z} \exp(\beta [U(y) - U(z)]) =\\
+    &= \beta \gamma \int_x^d \dd{y} e^{\beta U(y)} \underbrace{\int_{-\infty}^{y} \dd{z} e^{- \beta U(z)}}_{e^{F(y)}}  = \beta \gamma \int_x^{d} \dd{y} e^{\beta U(y) + F(y)}
+\end{align*}
+It is not possible to evaluate this integral in the general case. However, in the limit $\beta \to \infty$ ($T \to 0$) we can use the saddle-point approximation. 
+
+Recall Laplace's formula:
+\begin{align*}
+    \int_a^b e^{M f(x)} \dd{x} \underset{M \to +\infty}{\approx}  \sqrt{\frac{2 \pi}{M|f''(x_0)|} } e^{Mf(x_0)}
+\end{align*}
+where $f'(x_0) = 0$ and $f''(x_0) < 0$.
+
+For the integral in $\dd{z}$, $f(z) = -U(z)$. We search for a maximum of $f(z)$, i.e. a minimum of $U(z)$, which is $z=c$. So:
+\begin{align*}
+    \int_{-\infty}^y e^{- \beta U(z) }\dd{z} = \sqrt{\frac{2 \pi}{\beta U''(c)}} e^{-\beta U(c)}  
+\end{align*}
+This is a constant, and can be brought outside the integral over $\dd{y}$. Then, by applying Laplace's formula once again:
+\begin{align*}
+    \int_c^d \dd{y} e^{\beta U(y)} = \sqrt{\frac{2 \pi}{\beta |U''(d)|} } e^{\beta U(d)}
+\end{align*}
+as now $f(y) = U(y)$, and $U$ has a local maximum in $y = d$. Finally, this leads to:
+\begin{align*}
+    T_d(c) \underset{T \to 0}{\approx}  \frac{2 \pi \gamma}{\sqrt{U''(c) |U''(d)|}}  \exp\left(\beta[U(d) - U(c)]\right)
+\end{align*}
+Note that the mean transition time from $c$ to $d$ diverges exponentially as the barrier's height $U(d) - U(c)$ rises. Equivalently, the \textit{escape transition rate} $1/T_d(c) \to 0$.
+\end{document}
