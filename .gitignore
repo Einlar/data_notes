@@ -10,3 +10,5 @@
 *.log
 *.out
 *.aux
+*.fdb*
+*.fls
