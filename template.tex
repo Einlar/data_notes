@@ -216,7 +216,16 @@ prefoothook = \endmyleftbar]{example}
 \newcommand{\greendot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[green,fill=green] (0,0) circle (.5ex);}}
 \newcommand{\orangedot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[orange,fill=orange] (0,0) circle (.5ex);}}
 
-
+%---Geometry (Normal pages)---%
+\usepackage[a4paper]{geometry}
+\newgeometry{inner=20mm,
+            outer=49mm,% = marginparsep + marginparwidth 
+                       %   + 5mm (between marginpar and page border)
+            top=20mm,
+            bottom=25mm,
+            marginparsep=6mm,
+            marginparwidth=30mm}
+            
 %---Fancy stuff---%
 \usepackage[Bjornstrup]{fncychap}
 \usepackage{fancyhdr}
@@ -243,15 +252,7 @@ prefoothook = \endmyleftbar]{example}
 \newenvironment{expl}{\begin{mdframed}[hidealllines=true,backgroundcolor=green!20,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt]}{\end{mdframed}} %Box di colore verde
 \newenvironment{appr}{\begin{mdframed}[hidealllines=true,backgroundcolor=blue!10,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt]}{\end{mdframed}} %Approfondimenti matematici (box di colore blu)
 
-%---Geometry (Normal pages)---%
-\usepackage[a4paper]{geometry}
-\newgeometry{inner=20mm,
-            outer=49mm,% = marginparsep + marginparwidth 
-                       %   + 5mm (between marginpar and page border)
-            top=20mm,
-            bottom=25mm,
-            marginparsep=6mm,
-            marginparwidth=30mm}
+
 
 %Raggedright marginpar
 \makeatletter
@@ -267,7 +268,7 @@ prefoothook = \endmyleftbar]{example}
 \begin{document}
 %---Frontpage---%
 %Custom geometry for the frontpage
-\newgeometry{total={170mm,257mm}, left=20mm, top=20mm}
+%\newgeometry{total={170mm,257mm}, left=20mm, top=20mm}
 
 \begin{center}
                 \line (1,0){350} \\
