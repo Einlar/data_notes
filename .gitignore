@@ -11,3 +11,5 @@
 *.out
 *.aux
 **/.ipynb_checkpoints/
+*.fdb*
+*.fls
