@@ -1,6 +1,8 @@
 %&latex
 %
 \documentclass[../template.tex]{subfiles}
+\usepackage{amsbsy}
+
 \begin{document}
 
 \chapter{MoTP Exercises 2019/20}
@@ -159,6 +161,374 @@
            
 \end{exo}
 
+
+\section{Particles in a thermal bath} %sec 5
+\begin{exo}[Harmonic oscillator with general initial condition]
+    The propagator for a stochastic harmonic oscillator is given by:
+    \begin{align*}
+        W(x,t|0,0) = \sqrt{\dfrac{k}{2 \pi D (1- e^{-2kt})} } \exp\left(-\frac{k}{2D} \frac{x^2}{1-e^{-2kt}}  \right)
+    \end{align*}
+    Derive the analogous result for $W(x,t|x_0,t_0)$.
+    \medskip
+
+    \textbf{Solution}. Consider a particle of mass $m$, experiencing a drag force $F_d = -\gamma v$, an elastic force $F=-kx = -m \omega^2 x$ and thermal fluctuations with amplitude $\sqrt{2 D} \gamma$. The equation of motion is given by:
+    \begin{align*}
+        m \ddot{x} = - \gamma \dot{x} - m \omega^2 x + \sqrt{2D} \gamma \xi
+    \end{align*}
+    where $\xi(t)$ is a white noise \textit{function}, meaning that $\langle \xi(t) \xi(t') \rangle = \delta(t-t')$ (infinite variance). Dividing by $\gamma$ and taking the overdamped limit $m/\gamma \ll 0$ we can ignore the $\ddot{x}$ term, leading to a first order SDE:
+    \begin{align}
+        \dot{x} = -\underbrace{\frac{m \omega^2}{\gamma}}_{k}x + \sqrt{2D} x+ \sqrt{2D} \xi \Rightarrow \dd{x(t)} = - kx(t)\dd{t} + \sqrt{2D} \underbrace{\xi \dd{t}}_{\dd{B(t)}}  \label{eqn:SDE1}
+    \end{align}
+    Consider a time discretization $\{t_j\}_{j=1,\dots,n}$, with $t_n \equiv t$ and the usual notation $x(t_i) \equiv x_i$, $\Delta x_i \equiv x_i - x_{i-1}$. In the Ito prescription, equation (\ref{eqn:SDE1}) becomes:
+    \begin{align*}
+        \Delta x_i = - kx_{i-1} \Delta t_i + \sqrt{2D} \Delta B_i
+    \end{align*}
+    The probability associated with a sequence $\{\Delta B_j\}_{j=1,\dots,n}$ independent increments is a product of gaussians:
+    \begin{align} \label{eqn:prob-increments}
+        \mathbb{P}(\{\Delta B_j\}_{j=1,\dots,n}) = \left( \prod_{i=1}^n \frac{\dd{\Delta B_i}}{\sqrt{2 \pi \Delta t_i}} \right) \exp\left(-\sum_{i=1}^n \frac{\Delta B_i^2}{2 \Delta t_i} \right) 
+    \end{align}
+    From (\ref{eqn:prob-increments}), we can find the probability of the path-increments $\{ \Delta x_i\}_{i=1,\dots,n}$ with a change of random variable:
+    \begin{align*}
+        \Delta B_i = \frac{\Delta x_i + k x_{i-1} \Delta t_i}{\sqrt{2D}}
+    \end{align*}
+    With the jacobian:
+    \begin{align*}
+        J = \operatorname{det} \left|\pdv{\{\Delta B_i\}}{\{\Delta x_j\}} \right| = \left|\pdv{\{\Delta x_i\}}{\{\Delta B_j\}} \right|^{-1} = \left|\begin{array}{cccc}
+        \sqrt{2D} & 0 & \cdots & 0 \\ 
+        * & \sqrt{2D} & \ddots & \vdots \\ 
+        \vdots & \ddots & \ddots & 0 \\ 
+        * & \cdots & * & \sqrt{2D}
+        \end{array}\right|^{-1} = (2D)^{-n/2}
+    \end{align*}
+    The starred terms $*$ are generally non-zero (they are due to the presence of $x_{i-1}$ in the $\Delta x_i$ formula, which depends on $\Delta B_j$ with $j < i-1$), but the matrix is still lower triangular, meaning that its determinant is just the product of the diagonal terms.
+
+    Performing the change of variables leads to:
+    \begin{align} %\nonumber
+        \mathbb{P}(\{\Delta x_i\}_{i=1,\dots,n}) &=\left( \prod_{i=1}^n  \frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}}  \right) \exp\left(-\sum_{i=1}^n \frac{1}{2 \Delta t_i} \left(\frac{\Delta x_i + k x_{i-1} \Delta t_i}{\sqrt{2D}} \right)^2 \right)
+        \label{eqn:dP1}
+    \end{align}
+    Taking the continuum limit $n \to \infty$:
+    \begin{align*}
+        \dd{P} \equiv \mathbb{P}(\{x(\tau)\}_{t_0 \leq \tau \leq t}) = \left(\prod_{\tau = t_0^+}^t \frac{\dd{x(\tau)}}{\sqrt{4 \pi D \dd{\tau}}} \right) \exp\left(-\frac{1}{4D} \int_{t_0}^t (\dot{x} + kx)^2 \dd{\tau} \right)
+    \end{align*}
+We can finally consider the path integral for the propagator:
+\begin{align*}
+    W(x_t,t|x_0,t_0) &= \langle \delta(x_t - x) \rangle_W = \int_{\mathbb{R}^T} \delta(x_t - x) \dd{P} =\\
+    &= \int_{\mathbb{R}^T} \dd{x_W} \delta(x_t - x) \exp\left(-\frac{1}{4D} \int_{t_0}^t (\dot{x} + kx)^2 \dd{\tau} \right)
+\end{align*}
+The quickest way to compute this integral is to use variational methods. So, consider the functional:
+\begin{align*}
+    S[x(\tau)] = \int_{t_0}^t [\dot{x}(\tau) + kx(\tau)]^2 \dd{\tau}
+\end{align*}
+The path $x_c(\tau)$ that stationarizes $S[x(\tau)]$ is the solution of the Euler-Lagrange equations:
+\begin{align*}
+    \dv{\tau} \pdv{S}{\dot{x}} (x_c) - \pdv{S}{x} (x_c) = 0 \Rightarrow \ddot{x}_c(\tau) = k^2 x(\tau)
+\end{align*}
+Leading to:
+\begin{align*}
+    x_c(\tau) = A e^{k \tau} + B e^{-k \tau}
+\end{align*}
+The boundary conditions are $x_c(t_0) = x_0$ and $x_c(t) = x_t$ (this last one is given by the $\delta$). So:
+\begin{align*}
+    \begin{dcases}
+        x_0 = A e^{kt_0} + B e^{-k t_0 }\\
+        x_t = A e^{kt} + B e^{-kt}
+    \end{dcases} \Rightarrow \begin{dcases}
+        A = \frac{x_t e^{kt} - x_0 e^{k t_0 }}{e^{2kt} - e^{2k t_0}}\\
+        B = -A e^{2k t_0} + x_0 e^{k t_0} 
+    \end{dcases}
+\end{align*}
+The integral is then:
+\begin{align*}
+    W(x_t,t|x_0,t_0) = \Phi(t) \exp\left(-\frac{1}{4D} \int_{t_0}^t (\dot{x}_c + kx)^2 \dd{\tau} \right)
+\end{align*}
+Note that:
+\begin{align*}
+    \dot{x_c} + kx = 2k A e^{k \tau}
+\end{align*}
+And so the integral becomes:
+\begin{align*}
+    \int_{t_0}^t (2k A e^{k \tau})^2 \dd{\tau} = 2k  A^2 (e^{2kt} - e^{2kt_0}) = 2k \frac{[x_t e^{kt} - x_0 e^{k t_0}]^2}{e^{2kt} - e^{2k t_0}} = 2k \frac{[x_t - x_0 e^{-k(t-t_0)}]^2}{1 - e^{-2k(t-t_0)}} 
+\end{align*}
+To compute $\Phi(t)$ we impose the normalization:
+\begin{align*}
+    \int_{\mathbb{R}} \dd{x} W(x, t|x_0,t_0) \overset{!}{=} 1 \Rightarrow \Phi(t) = \left[\int_{\mathbb{R}} \dd{x} \exp\left(-\frac{k}{2D} \frac{[x e^{kt} - x_0 e^{k t_0}]^2}{e^{2kt} - e^{2k t_0}} \right)\right]^{-1}
+\end{align*}
+With the substitution $s = x e^{kt} - x_0 e^{k t_0}$ this is just a gaussian integral, evaluating to:
+\begin{align*}
+    \Phi(t) = \sqrt{\frac{k}{2 \pi D (1 - e^{-2k (t -t_0)})} }
+\end{align*}
+And so the full propagator is:
+\begin{align}
+    W(x_t, t|x_0, t_0) =  \sqrt{\frac{k}{2 \pi D (1 - e^{-2k (t -t_0)})} } \exp\left(-\frac{k}{2D} \frac{[x_t - x_0 e^{-k(t-t_0)}]^2}{1 - e^{-2k(t-t_0)}}\right)
+    \label{eqn:harmonic-propagator-sol}
+\end{align}
+
+\end{exo}
+
+
+\begin{exo}[Stationary harmonic oscillator]
+    Derive the stationary solution $W^*(x)$ of the Fokker Planck equation for the harmonic oscillator, which obeys the following equation:
+    \begin{align*}
+        \partial_x [k x W^*(x) + D\partial_x W^*(x)] = 0
+    \end{align*}
+    Explain the hypothesis underlying the derivation and the validity of the derived solution.
+    \medskip
+
+    \textbf{Solution}. Recall the Fokker-Planck equation for the distribution $W(x,t)$ of a diffusing particle in a medium with diffusion coefficient $D(x,t)$, and in the presence of an external \textbf{conservative} force $F(x,t)$ with potential $V(x,t)$ and a drag force $F_d = - \gamma v$:
+    \begin{align*}
+        \pdv{t} W(x,t) = -\pdv{x} \left[f(x,t) W(x,t) - \pdv{x} [ D(x,t) W(x,t)]\right]
+    \end{align*}
+    where:
+    \begin{align*}
+        f(x,t) = \frac{F_{\mathrm{ext} }}{\gamma} = -\frac{1}{\gamma} \pdv{V}{x} (x)   \qquad \gamma = 6 \pi \eta a
+    \end{align*}
+    At equilibrium, we expect a time independent solution $W^*(x)$, so that $\partial_t W^*(x) \equiv 0$. We assume, for simplicity, that $\bm{\gamma = 1}$ and $D(x,t) \equiv D$ \textbf{constant}. Letting $F(x,t) = -kx$ be an elastic force, we arrive to:
+    \begin{align*}
+        0 &= - \partial_x [-kx W^* - D \partial_x W^*] = kx W^*(x) + D \partial_x W^*(x)
+    \end{align*}
+    This is a first order ODE that can be solved by separating variables:
+    \begin{align*}
+        \dv{x} W^* = -\frac{kx}{D}W^* \Rightarrow  \frac{\dd{W^*}}{W^*} = -\frac{kx}{D} \dd{x} \Rightarrow W^*(x) = A \exp\left(-\frac{k x^2}{2D} \right) 
+    \end{align*}
+    To be valid, this solution must be \textbf{consistent} with the Boltzmann distribution:
+    \begin{align*}
+        W^*(x)_{\mathrm{Boltz}} = \frac{1}{Z} \exp(- \beta V(x)) = \frac{1}{Z} \exp\left(-\beta \frac{kx^2}{2}\right )  
+    \end{align*} 
+    Meaning that $D = 1/\beta = k_B T$.
+\end{exo}
+
+\begin{exo}[Harmonic propagator with Fourier transforms]
+    Use Fourier transforms to derive the full time dependent propagator $W(x,t|x_0,t_0)$ from the FP equation of the harmonic oscillator:
+    \begin{align} 
+        \partial_t W(x,t |x_0,t_0) = \partial_x [kx W(x,t|x_0,t_0)] + D\partial_x W(x,t|x_0,t_0) \label{eqn:FPharm}
+    \end{align}
+    \medskip
+    
+    \textbf{Solution}. The idea is to use the Fourier transform to \textit{reduce} the equation to a simpler one, that can be hopefully solved. 
+
+    First, we expand the first derivative:
+    \begin{align*}
+        \partial_t W(x,t|x_0,t_0) = k W(x,t|x_0,t_0) + kx \partial_x W(x,t|x_0,t_0) + D \partial_x^2 W(x,t|x_0,t_0)
+    \end{align*}
+    For simplicity, let $W\equiv W(x,t|x_0,t_0)$. Its Fourier transform is given by:
+    \begin{align*}
+        \mathcal{F}[W](\omega) \equiv \tilde{W} = \int_{\mathbb{R}} \dd{x} e^{-i \omega x} W(x,t|x_0,t_0)
+    \end{align*}
+    The Fourier transforms of the derivatives become:
+    \begin{align*}
+        \mathcal{F}[\partial_x W](\omega) &= i \omega \tilde{W}; \qquad \mathcal{F}[\partial_x^2 W](\omega) = (i \omega)^2 \tilde{W} = -\omega^2 \tilde{W}
+    \end{align*}
+    (These formulas can be proven by repeated integration by parts). All that's left is to transform the remaining term:
+    \begin{align*}
+        \mathcal{F}[x \partial_x W](\omega) &= \int_{\mathbb{R}} \dd{x} e^{-i \omega x} x \partial_x W = \int_{\mathbb{R}} \dd{x} \textcolor{Red}{i} \partial_\omega [e^{-i \omega x} \partial_x W] = i \dv{\omega} \underbrace{\int_{\mathbb{R}} \dd{x} e^{-i \omega x} \partial_x W}_{i \omega \tilde{W}} =\\
+        &= - \tilde{W} - \omega \partial_\omega \tilde{W}
+    \end{align*}
+    So (\ref{eqn:FPharm}) becomes:
+    \begin{align*}
+        \partial_t \tilde{W}(\omega, t) = \cancel{k \tilde{W}} -\cancel{ k \tilde{W}} - k \omega \tilde{W}' - D \omega^2 \tilde{W} = -k \omega \tilde{W}'(\omega, t) - D \omega^2 \tilde{W}(\omega, t)
+    \end{align*}
+    Rearranging:
+    \begin{align} \label{eqn:pde-h1}
+        k w \partial_w \tilde{W}(\omega, t) + \partial_t \tilde{W}(\omega , t) = - k \omega \tilde{W}(\omega ,t)
+    \end{align}
+    This is a \textit{linear} first order partial differential equation. One way to solve it is by using the \textit{method of characteristics}.   
+
+    \begin{expl}
+        \textbf{Method of charactersitics}. Consider a general \textit{quasilinear} PDE:
+        \begin{align}
+            a(x,y,z) \pdv{z}{x} + b(x,y,z) \pdv{z}{y} = c(x,y,z) \label{eqn:pde-quasilinear}
+        \end{align}
+        \textit{Quasilinear} means that $a$ and $b$ can depend also on the dependent variable $z$, and not only on the independent variables $x,y$. A solution $z=z(x,y)$ is, geometrically, a \textit{surface graph} immersed in $\mathbb{R}^3$. Note that the normal at any point is the gradient of $f(x,y,z) = z(x,y) - z$, that is:
+        \begin{align*}
+            \bm{\nabla} f(x,y,z) = \left(\pdv{z}{x} (x,y), \pdv{z}{y} (x,y), -1\right)
+        \end{align*}  
+        Rearranging (\ref{eqn:pde-quasilinear}) we can rewrite it as a dot product:
+        \begin{align}\label{eqn:pde-h}
+            \bm{v} \cdot \bm{\nabla}f = 0 \qquad \bm{v} = \left(a(x,y,z), b(x,y,z), c(x,y,z)\right)^T
+        \end{align}
+        This means that, at any point $(x,y,z)$, the graph $f(x,y,z)$ is \textit{tangent} to the vector field $\bm{v} \colon \mathbb{R}^3 \to \mathbb{R}^3$, $(x,y,z) \mapsto \bm{v}(x,y,z)$.
+        
+        So, we can consider a set of parametric curves $t \mapsto (x(t), y(t), z(t))$, and \textit{impose} the tangency condition:
+        \begin{align*}
+            \begin{dcases}
+                \dv{x}{t} = a(x,y,z)\\
+                \dv{y}{t} = b(x,y,z)\\
+                \dv{z}{t} = c(x,y,z)
+            \end{dcases}
+        \end{align*} 
+        This will result in $3$ parametric equations in $t$. If we are able to solve one of the first two for $t$, we can substitute it and get the desired cartesian form $z=z(x,y)$.
+    \end{expl}
+    Let $u(\omega,t)$ be a solution. Consider a parameterization $s \mapsto (\omega(s),t(s))$.
+    \begin{align} \label{eqn:ode-construct}
+        \dv{u}{s} (\omega(s), t(s)) = \pdv{u}{w} \dv{\omega}{s} + \pdv{u}{t}\dv{t}{s}
+    \end{align}
+    By confronting (\ref{eqn:ode-construct}) with (\ref{eqn:pde-h1}) we get:
+    \begin{align}
+        \dv{\omega}{s} = k \omega; \qquad \dv{t}{s} = 1 \label{eqn:aux-diff}
+    \end{align}
+    Note that now $\dd{\omega}/\dd{s}$ is exactly the left side of (\ref{eqn:pde-h1}), so:
+    \begin{align} \label{eqn:du}
+        \dv{u}{s} (\omega(s), t(s)) = -D \omega(s)^2 u( \omega(s),t(s))
+    \end{align}
+    For the boundary condition, we suppose $W(x,0) = \delta(x-x_0)$, meaning that:
+    \begin{align*}
+        \tilde{W}(\omega,0) = \int_{\mathbb{R}} \dd{x} e^{-i \omega x} \delta(x-x_0) = e^{-i \omega x_0} = u(\omega, 0)
+    \end{align*}
+    Let's fix $\omega = \omega_0$, and choose the parameterization so that $\omega(s=0) = \omega_0$ and $t(s=0)=0$ (meaning that $u(s=0) = u(\omega_0,0)$). We can now solve (\ref{eqn:aux-diff}):
+    \begin{align}
+        \begin{dcases}
+            \dv{\omega}{s} = k \omega\\
+            \omega(0) = \omega_0
+        \end{dcases} \Rightarrow \omega(s) = \omega_0 e^{ks} \qquad \begin{dcases}
+            \dv{t}{s} = 1 \\ t(0) = 0
+        \end{dcases}
+    \Rightarrow t(s) = s \label{eqn:aux-sol}
+    \end{align}
+    Finally we can substitute in (\ref{eqn:du}) and solve it:
+    \begin{align*}
+        \dv{u}{s} = -D \omega_0^2 e^{2ks} u \Rightarrow \ln|u| = - D \omega_0^2 \int e^{2ks} \dd{s} \Rightarrow u(s) = A \exp\left(-\frac{D \omega_0^2}{2k} e^{2ks} \right)
+    \end{align*}
+    And imposing the boundary condition $u(0) = u(\omega_0, s)$ we get:
+    \begin{align*}
+        A = u(\omega_0,s) \exp\left(\frac{D \omega_0^2}{2k} \right) \Rightarrow u(\omega(s), t(s)) = u(\omega_0,s) \exp \left[\frac{D \omega_0^2}{2k} (1- e^{2 k s}) \right]
+    \end{align*}
+    Note that this solution is expressed as a function of the parameter $s$, and a starting point $\omega_0$. By expressing these two as a function of $\omega$ and $t$, we can recover the desired $u(\omega,t)$. To do this, we can simply invert the two solutions (\ref{eqn:aux-sol}), obtaining:
+    \begin{align*}
+        \begin{cases}
+            \omega_0 = \omega e^{-ks} \\
+            s = t
+        \end{cases} \Rightarrow \begin{cases}
+            \omega_0 = \omega e^{-kt}\\
+            s = t
+        \end{cases} 
+    \end{align*}
+    So that:
+    \begin{align*}
+        u(\omega,t) \equiv \tilde{W}(\omega,t) &= \exp(-i x_0 \omega e^{-kt}) \exp \left[\frac{D \omega^2 e^{-2kt}}{2k} (1-e^{2kt}) \right] =\\
+        &= \exp(-i x_0 \omega e^{-kt}) \exp \left[-\frac{D \omega^2}{2k}(1-e^{-2kt}) \right]
+    \end{align*}
+    All that's left is to perform a Fourier anti-transform to obtain $W(\omega,t)$:
+    \begin{align*}
+        W(\omega,t) &= \mathcal{F}^{-1}[\tilde{W}] = \frac{1}{2\pi} \int_{\mathbb{R}} \dd{\omega} e^{i \omega x} \exp(-i x_0 \omega e^{-kt}) \exp \left[-\frac{D \omega^2}{2k}(1-e^{-2kt}) \right] =\\
+        &= \frac{1}{2\pi} \int_{\mathbb{R}} \dd{\omega} \exp\left(-\underbrace{\frac{D}{2k}(1-e^{-2kt})}_{a}  \omega^2 + \underbrace{i(x-x_0 e^{-kt})}_{b} \omega \right)  =\\
+        &= \frac{1}{2 \pi} \sqrt{\frac{\pi}{a} } \exp(\frac{b^2}{4a} ) = \sqrt{\frac{k}{2 \pi D (1-e^{-2kt})} } \exp\left(-\frac{k}{2D} \frac{[x-x_0 e^{-kt}]^2}{1-e^{-2kt}} \right)
+    \end{align*}
+    Which is exactly the same solution found in (\ref{eqn:harmonic-propagator-sol}).
+\end{exo}
+
+\begin{exo}[Multidimensional Fokker-Planck]
+    Derive the multidimensional Fokker-Planck equation associated to the Langevin equation:
+    \begin{align} \label{eqn:Langevin-d}
+        \dd{x^\alpha(t)} = f^\alpha(\bm{x}(t),t) \dd{t} + \sqrt{2 D_\alpha (\bm{x}(t),t)} \dd{B^\alpha(t)} \qquad 1 \leq \alpha \leq n
+    \end{align}
+
+    \medskip
+
+    \textbf{Solution}. We wish to derive from (\ref{eqn:Langevin-d}) a PDE involving the multi-dimensional pdf $W(\bm{x},t)$. To do this, we consider an \textit{ensemble} of paths generated by (\ref{eqn:Langevin-d}), from which we can compute average values, that we can compare with the analogues obtained using $W(\bm{x},t)$, thus reaching the desired relation.
+
+    First, we consider a generic non-anticipating \textit{test function} $h(\bm{x}(t)) \colon \mathbb{R}^n \to \mathbb{R}$ to be averaged. It's average is, by definition:
+    \begin{align*}
+        \langle h(\bm{x}(t)) \rangle = \int_{\mathbb{R}} \dd[n]{\bm{x}} W(\bm{x},t) h(\bm{x})
+    \end{align*} 
+    To construct the ODE, we need the time derivative:
+    \begin{align}
+        \dv{t} {\langle h(\bm{x}(t)) \rangle} = \int_{\mathbb{R}} \dd[n]{\bm{x}} \dot{W}(\bm{x},t) h(\bm{x}) \label{eqn:dt-1}
+    \end{align}
+    We can construct this same derivative starting from (\ref{eqn:Langevin-d}). First consider the differential, i.e. the first order \textit{change} of $h(\bm{x}(t))$ after a change of the argument $t \to t+\dd{t}$. We start by considering a change in $\bm{x} \to \bm{x}+\dd{\bm{x}}$, and then use (\ref{eqn:Langevin-d}) to express $\dd{\bm{x}}$ in terms of $\dd{t}$. Note that Ito's rules imply that $\dd{x^\alpha}\dd{x^\beta} = \dd{t} \delta_{\alpha \beta}$ which is linear in $\dd{t}$ and needs to be considered - meaning that we need to expand the $\bm{x}$ differential up to \textit{second} order:  
+    \begin{align*}
+        \dd{h(\bm{x}(t))} &= h(\bm{x}(t) + \dd{\bm{x}(t)}) - h(\bm{x}(t)) = \\
+        &= \cancel{h(\bm{x}(t))} + \sum_{\alpha=1}^n \pdv{h(\bm{x})}{x^\alpha} \dd{x^\alpha} + \frac{1}{2} \sum_{\alpha, \beta=1}^n \pdv{h(\bm{x})}{x^\alpha}{x^\beta} \dd{x^\alpha}\dd{x^\beta}  - \cancel{h(\bm{x}(t))} + O([\dd{x}]^3)
+    \end{align*}
+    Note that:
+    \begin{align*}
+        \dd{x^\alpha}\dd{x^\beta} &= (f^\alpha \dd{t} + \sqrt{2D_\alpha} \dd{B^\alpha})(f^\beta \dd{t} + \sqrt{2 D_\beta} \dd{B^\beta}) =\\
+        &= 2 D_\alpha D_\beta\dd{t} \delta_{\alpha \beta}+ O(\dd{t}^2) + O(\dd{t} \dd{B}) = 2 D_\alpha^2 \dd{t} \delta_{\alpha \beta} + O(\dd{t}^{3/2})
+    \end{align*}
+    And so:
+    \begin{align*}
+        \dd{h(\bm{x}(t))} &= \sum_{\alpha=1}^n \pdv{h(\bm{x})}{x^\alpha} (f^\alpha \dd{t} + \sqrt{2 D_\alpha} \dd{B}^\alpha) + \frac{1}{\cancel{2}} \sum_{\alpha=1}^n \pdv[2]{h(\bm{x})}{(x^\alpha)} \cancel{2} D_\alpha^2 \dd{t} = \\
+        &= \dd{t} \left[\sum_{\alpha=1}^n \pdv{h(\bm{x})}{x^\alpha} f^\alpha + D_\alpha^2 \pdv[2]{h(\bm{x})}{(x^\alpha)} \right] + \sum_{\alpha=1}^n \sqrt{2 D_\alpha}\pdv{h(\bm{x})}{x^\alpha} \dd{B^\alpha}
+    \end{align*}
+    Taking the expected value:
+    \begin{align*}
+        \dd{\langle h(\bm{x}(t)) \rangle} &= \langle \dd{t} \left[\sum_{\alpha=1}^n \pdv{h(\bm{x})}{x^\alpha} f^\alpha + D_\alpha^2 \pdv[2]{h(\bm{x})}{(x^\alpha)} \right]  \rangle + \langle  \sum_{\alpha=1}^n \sqrt{2 D_\alpha}\pdv{h(\bm{x})}{x^\alpha} \dd{B^\alpha} \rangle =\\
+        &\underset{(a)}{=}  \dd{t} \langle \left[\sum_{\alpha=1}^n \pdv{h(\bm{x})}{x^\alpha} f^\alpha + D_\alpha^2 \pdv[2]{h(\bm{x})}{(x^\alpha)} \right]  \rangle  + \sum_{\alpha=1}^n \langle \sqrt{2 D_\alpha}\pdv{h(\bm{x})}{x^\alpha} \rangle\underbrace{ \langle \dd{B^\alpha} \rangle}_{0} =\\
+        &=\dd{t} \langle \left[\sum_{\alpha=1}^n \pdv{h(\bm{x})}{x^\alpha} f^\alpha + D_\alpha^2 \pdv[2]{h(\bm{x})}{(x^\alpha)} \right]  \rangle   
+    \end{align*}
+where in (a) we applied the linearity of the expected value, and then used the fact that $h$ and $D_\alpha$ are non-anticipating, meaning that they are independent of $\dd{B^\alpha}$, leading to a factorization. 
+
+Finally, dividing by $\dd{t}$ and writing explicitly the averages leads to the desired time derivative:
+\begin{align*}
+    \dv{\langle h(\bm{x}(t)) \rangle}{t} =  \int_{\mathbb{R}^n} \dd[n]{\bm{x}} 
+    W(\bm{x},t) \left(\sum_{\alpha=1}^n f^\alpha \pdv{h(\bm{x})}{x^\alpha}\right) + \int_{\mathbb{R}^n} \dd[n]{\bm{x}} W(\bm{x},t) \left(\sum_{\alpha=1}^n D_\alpha^2 \pdv[2]{h(\bm{x})}{(x^\alpha)}
+    \right )
+\end{align*}
+With a repeated integration by parts we can \textit{move} the derivatives on the $W(x,t)$, allowing to factorize $h(\bm{x})$. This is done by exploiting the fact that $h(\bm{x})$ has compact support (as it is a test function), and so:
+\begin{align*}
+    \int_{\mathbb{R}^n} \dd[n]{\bm{x}} W(\bm{x},t) \left(\sum_{\alpha=1}^n f^\alpha \pdv{h(\bm{x})}{x^\alpha}\right) &= -\int_{\mathbb{R}^n} \dd[n]{\bm{x}} h(\bm{x})\left[ \sum_{\alpha=1}^n \pdv{x^\alpha}\left(W(\bm{x},t) f^\alpha\right) \right] +\\
+    &\quad \> \int_{\mathbb{R}^{n-1}} \dd[n-1]{\bm{x}} h(\bm{x}) W(\bm{x},t) \sum_{\alpha=1}^n f^\alpha \Big|_{x^\alpha = -\infty}^{x^\alpha = +\infty}
+\end{align*}
+and the boundary term vanishes. A similar procedure holds for the second integral:
+\begin{align*}
+    \int_{\mathbb{R}^n} \dd[n]{\bm{x}} W(\bm{x},t) \left(\sum_{\alpha=1}^n D_\alpha^2 \pdv[2]{h(\bm{x})}{(x^\alpha)} 
+    \right ) = \int_{\mathbb{R}^n} \dd[n]{\bm{x}} h(\bm{x}) \sum_{\alpha=1}^n \pdv[2]{(x^\alpha)}[D_\alpha^2 W(\bm{x},t)]
+\end{align*}
+This leads to:
+\begin{align} \nonumber
+    \dv{\langle h(\bm{x}(t)) \rangle}{t} &= -\int_{\mathbb{R}^n} \dd[n]{\bm{x}} h(\bm{x})\left[ \sum_{\alpha=1}^n \pdv{x^\alpha}\left(W(\bm{x},t) f^\alpha\right) \right]  +\\
+    &\quad \> \int_{\mathbb{R}^n} \dd[n]{\bm{x}} h(\bm{x}) \sum_{\alpha=1}^n \pdv[2]{(x^\alpha)}[D_\alpha^2 W(\bm{x},t)]\label{eqn:dt-2}
+\end{align}
+Then we equate (\ref{eqn:dt-1}) and (\ref{eqn:dt-2}):
+\begin{align*}
+    \int_{\mathbb{R}} \dd[n]{\bm{x}} \dot{W}(\bm{x},t) h(\bm{x}) = \int_{\mathbb{R}^n} \dd[n]{\bm{x}} h(\bm{x}) \sum_{\alpha=1}^n \Big[\pdv[2]{(x^\alpha)}[D_\alpha^2 W(\bm{x},t)] -  \pdv{x^\alpha}\left(W(\bm{x},t) f^\alpha\right)\Big]
+\end{align*}
+This equality holds for \textit{any} $h(\bm{x})$, meaning that the integrands themselves (without the test function) must be everywhere equal:
+\begin{align*}
+    \dot{W}(\bm{x},t) = \sum_{\alpha=1}^n \Big[\pdv[2]{(x^\alpha)}[D_\alpha^2 W(\bm{x},t)] -  \pdv{x^\alpha}\left(W(\bm{x},t) f^\alpha\right)\Big]
+\end{align*}
+If we suppose $D_\alpha$ to be independent of $\bm{x}$, we could rewrite this relation in a nicer vector form:
+\begin{align*}
+    \dot{W}(\bm{x},t) = \norm{\bm{D}}^2 \nabla^2 W(\bm{x},t) - \bm{\nabla} \cdot (W(\bm{x},t) \cdot \bm{f})
+\end{align*}
+where $\bm{D} = (D_1, \dots, D_n)^T$.
+    
+\end{exo}
+
+\begin{exo}[Underdamped Wiener measure]
+    Derive the discretized Wiener measure for the underdamped Langevin equation:
+    \begin{align*}
+        m \dd{\bm{v}(t)} = (-\gamma \bm{v} + \bm{F}(\bm{r}))\dd{t} + \gamma \sqrt{2 D} \dd{\bm{B}}
+    \end{align*}
+    and discuss the formal continuum limit.
+
+    \medskip
+
+    \textbf{Solution}. The equation can be rewritten as a system of two first order SDE:
+    \begin{align*}
+        \begin{dcases}
+            \dd{\bm{x}(t)} = \bm{v}(t) \dd{t}\\
+            \dd{\bm{v}(t)} = \left[-\frac{\gamma}{m} \bm{v}(t) + \bm{f}(\bm{r})\right] \dd{t} + \sqrt{2D} \dd{\bm{B}} 
+        \end{dcases}
+    \end{align*}
+    with $\bm{f}(\bm{r}) = \bm{F}(\bm{r})/\gamma$.
+\end{exo}
+
+\begin{exo}[Maxwell-Boltzmann consistency]
+    Verify that the Maxwell-Boltzmann distribution eq. (5.44) satisfies the Kramers equation (5.43) if the noise amplitude $D$ is given by the Einstein relation.
+\end{exo}
+
+\begin{exo}
+    Let $P_i(t)$ be the probability that a system is found in the (discrete) state $i$ at time $t$. If $\dd{t} W_{ij}(t)$ represents the transition probability to go from state $j$ to state $i$ during the time interval $(t, t+ \dd{t})$, prove that the Master Equation governing the time evolution of the system is:
+    \begin{align*}
+        \dot{P}_i(t) = \sum_j (W_{ij}(t) P_j(t) - W_{ji}(t)P_i(t)) \equiv (H(t)P(t))_i 
+    \end{align*}
+    where $H_{ij}(t) = W_{ij}(t) - \delta_{ij} \sum_k W_{ki}(t)$.
+
+    \begin{itemize}
+        \item Finish to copy
+    \end{itemize}
+\end{exo}
 \listoftheorems
 
 \end{document}
