@@ -102,6 +102,8 @@ separate-uncertainty = true
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage{lipsum}  
 
+\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+
 %---Additional symbols---%
 %\bigcdot
 \makeatletter
@@ -154,7 +156,7 @@ bodyfont=\normalfont,
 ]{exobreak}
 
 \declaretheorem[style=exobreak, name=Exercise,%
-numberwithin = section, %
+numberwithin = chapter, %
 postheadhook=\leavevmode\myleftbar, %
 prefoothook = \endmyleftbar]{exo}
 

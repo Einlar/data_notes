@@ -5,8 +5,26 @@
 
 \begin{document}
 
-\chapter{MoTP Exercises 2019/20}
-\section{Stochastic Processes and Path Integrals}
+\title{ \normalsize \textsc{Models of Theoretical Physics}
+                \\ [2.0cm]
+                \HRule{0.5pt} \\
+                \LARGE \textbf{{Maritan's Exercises}}
+                \HRule{2pt} \\ [0.5cm]
+                \normalsize \today \vspace*{5\baselineskip}}
+
+\date{}
+
+\author{
+    Francesco Manzali, 1234428\\
+    Master's degree in Physics of Data \\ 
+    Università degli Studi di Padova}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\setcounter{chapter}{1}
+\chapter{Stochastic Processes and Path Integrals}
 
 \begin{exo}[Stirling's approximation]
     Use the $\Gamma$ function definition:
@@ -88,7 +106,7 @@
     \end{align}  
     
     \begin{enumerate}
-        \item We already derived (see 7/10) the expected position $n$ at timestep $n$ in that case:
+        \item We already derived (see notes of 7/10) the expected position $n$ at timestep $n$ in that case:
         \begin{align}
             \langle x \rangle_{t_n} = n l (p_+ - p_-) = t\frac{l}{\epsilon} (p_+ - p_-) \label{eqn:pref-motion}
         \end{align}
@@ -103,7 +121,8 @@
         As before, we also need to fix $l^2/(2\epsilon) \equiv D$.
         \item Expanding each term of (\ref{eqn:ME2}) in a Taylor series we get:
         \begin{align*}
-            \cancel{W(x,t)} + \epsilon \dot{W}(x,t) + \frac{\epsilon^2}{2} \ddot{W}(x,t) + O(\epsilon^3) &= p_+ \left[\cancel{W(x,t)} + l W'(x,t) + \frac{1}{2} l^2 W''(x,t) + O(l^3) \right]\\
+            \cancel{W(x,t)} + \epsilon \dot{W}(x,t) + \frac{\epsilon^2}{2} \ddot{W}(x,t) + O(\epsilon^3) = \span\\
+            &= p_+ \left[\cancel{W(x,t)} + l W'(x,t) + \frac{1}{2} l^2 W''(x,t) + O(l^3) \right]\\
             &\> + p_- \left[\cancel{W(x,t)} - lW'(x,t) + \frac{1}{2} l^2 W''(x,t) + O(l^3)  \right]      
         \end{align*}
         Using the normalization $p_+ + p_- = 1$ and dividing by $\epsilon$ leads to:
@@ -121,7 +140,7 @@
 \begin{exo}[Multiple steps at once]
     Write the analogous of:
     \begin{align*}
-        W(x,t+\epsilon) = \frac{1}{2}[W(x-l),t + W(x+l,t)] 
+        W(x,t+\epsilon) = \frac{1}{2}[W(x-l,t) + W(x+l,t)] 
     \end{align*}
     for the case where the probability to make a step of length $sl \in \{\pm nl \colon n \in \mathbb{Z} \land n > 0\}$ is:
     \begin{align*}
@@ -133,6 +152,60 @@
         \item what is the condition to have a meaningful continuum limit, discussing why the neglected terms do not contribute to such limit
         \item which equation you get in the continuum limit 
     \end{enumerate}
+
+    \medskip
+
+    \textbf{Solution}. Consider a uniform lattice $\{x_i = i \cdot l\}_{i \in \mathbb{N}}$, and a time discretization $\{t_n = n \cdot \epsilon\}_{n \in \mathbb{N}}$. Let $W(x_i, t_n)$ be the probability that a particle is in $x_i$ at time $t_n$.
+
+    At each timestep, the particle can make \textit{jumps} of size $sl$, with $s \in \mathbb{N} \setminus \{0\}$, with probability $p(s)$. So, to get the probability of finding it at $x_i$ at the next timestep $t_{n+1}$ we sum over all possible jump sizes:
+    \begin{align} \nonumber
+        W(x_i, t_{n+1}) &= \sum_{s=1}^{+\infty} p(s) W(x_i-sl, t_n) + \sum_{s=1}^{+\infty} p(s) W(x_i+sl,t_n) =\\
+        &= \frac{1}{Z} \sum_{s=1}^{+\infty} e^{-s \alpha} \left[ W(x_i-sl, t_n) +  W(x_i+sl,t_n) \right] \label{eqn:ME-multiple}
+    \end{align} 
+    The first sum is relative to jumps \textit{to the right}, while the latter is for jumps \textit{to the left}. Note that the particle always moves.
+
+    \begin{enumerate}
+        \item For the normalization, as the jumps can be in both directions, we have two sums:
+        \begin{align*}
+            Z &\overset{!}{=}  \sum_{s = 1}^{+\infty} e^{-|s| \alpha} + \sum_{s=-1}^{-\infty} e^{-|s| \alpha} = 2 \sum_{s=1}^{+\infty} e^{-s \alpha} =\\
+            &= 2\left(\sum_{s=\textcolor{Red}{0}}^{+\infty} e^{-s \alpha} \textcolor{Red}{- 1}\right) \underset{(a)}{=} 2 \left(\frac{1}{1-e^{-\alpha}}  - 1\right) = \frac{2 e^{-\alpha}}{1 - e^{-\alpha}} 
+        \end{align*}
+        where in (a) we used the limit of a geometric series:
+        \begin{align*}
+            \sum_{n = 0}^{+\infty} r^{n} = \frac{1}{1-r} \qquad |r| < 1 
+        \end{align*}
+        \item We start from the master equation (\ref{eqn:ME-multiple}) and Taylor expand:
+        \begin{align} \nonumber
+            W(x,t) + \epsilon \dot{W}(x,t) + O(\epsilon^2) = \span \\ \nonumber &= \frac{1}{Z} \sum_{s=1}^{+\infty} e^{-s \alpha}\Big[W(x,t) -\cancel{sl W'(x,t)} + \frac{1}{2} (sl)^2 W''(x,t) + O(l^3) \\ \nonumber
+            &\phantom{\> = \frac{1}{Z} \sum_{s=1}^{+\infty} e^{-s \alpha} \Big[}W(x,t) + \cancel{sl W'(x,t)} +\frac{1}{2}(sl)^2 W''(x,t) + O(l^3) \Big] =\\
+            &= \frac{2}{Z} W(x,t) \underbrace{\sum_{s=1}^{+\infty} e^{-s \alpha}}_{Z/2}  + \frac{l^2}{\hlc{Yellow}{Z} } W''(x,t) \sum_{s=1}^{+\infty} s^2 e^{-s \alpha} \label{eqn:continuum-multiple}
+        \end{align}
+        Note that we can neglect the sum of the infinite $O(l^3)$, because they are weighted by a decreasing exponential $e^{-s \alpha}$, meaning that they quickly vanish for $s \to \infty$.
+
+        To evaluate the second sum we start from:
+        \begin{align*}
+            \sum_{s=1}^{+\infty} e^{-s \alpha} = \frac{Z}{2} 
+        \end{align*}
+        Differentiating with respect to $\alpha$ two times we arrive to the desired formula:
+        \begin{align*}
+            \underset{\dd{\alpha}}{\to}  -\sum_{s=1}^{+\infty} s e^{-s \alpha} \underset{\dd{\alpha}}{\to} \sum_{s=1}^{+\infty} s^2 e^{-s \alpha} = \dv[2]{\alpha} \frac{Z}{2} = \frac{e^\alpha (1+e^\alpha)}{(e^\alpha- 1 )^3}   
+        \end{align*}
+        Substituting back in (\ref{eqn:continuum-multiple}):
+        \begin{align*}
+            \bcancel{W(x,t)} + \epsilon \dot{W}(x,t) + O(\epsilon^2) =\span \\ &= W(x,t) + \frac{l^2 \hlc{Yellow}{(e^{\alpha}-1)}}{\hlc{Yellow}{2}}  W''(x,t)\frac{e^\alpha (1+e^\alpha)}{(e^\alpha- 1 )^3} + O(l^3)=\\
+            &= \bcancel{W(x,t)} + \frac{l^2}{2 } W''(x,t) \frac{e^\alpha (1+ e^{\alpha})}{(e^\alpha -1)^2} + O(l^3)
+        \end{align*}
+        Dividing by $\epsilon$:
+        \begin{align*}
+            \dot{W}(x,t) + O(\epsilon) = \frac{l^2}{2 \epsilon} W''(x,t) \frac{e^\alpha (1+ e^{\alpha})}{(e^\alpha -1)^2} + O(l^3 \epsilon^{-1})
+        \end{align*}
+        So to get the correct continuum limit for $\epsilon, l \to 0$ we need to fix $l^2/(2 \epsilon) \equiv D$.
+        \item The final continuum limit is given by:
+        \begin{align*}
+            \dot{W}(x,t) = D  \frac{e^\alpha (1+ e^{\alpha})}{(e^\alpha -1)^2} W''(x,t)
+        \end{align*}
+    \end{enumerate}
+    
 \end{exo}
 
 \begin{exo}[Expected values]
@@ -141,6 +214,17 @@
         W(x,t) \equiv W(x,t|x_0, t_0) = \frac{1}{\sqrt{4 \pi D t}} \exp\left(-\frac{(x-x_0)^2}{4 D (t-t_0)} \right) \qquad t\geq t_0  
     \end{align*}
     to determine $\langle x \rangle_t$, $\langle x^2 \rangle_t$ and $\operatorname{Var}_t(x)$.   
+    
+    \medskip
+
+    \textbf{Solution}. $W(x,t)$ is a gaussian with mean $x_0$ and standard deviation $\sqrt{2D(t-t_0)}$. So from standard gaussian integrals we immediately know that:
+    \begin{align*}
+        \langle x \rangle_t = x_0; \qquad \operatorname{Var}_t(x) = \sigma^2 = 2D(t-t_0) 
+    \end{align*}
+    Then:
+    \begin{align*}
+        \operatorname{Var}(x) = \langle x^2 \rangle  - \langle x \rangle^2 \Rightarrow \langle x^2 \rangle = \operatorname{Var}(x) + \langle x \rangle^2 = 2D(t-t_0) + x_0^2
+    \end{align*}
 \end{exo}
 
 \begin{exo}[Diffusion with boundaries]
@@ -158,11 +242,145 @@
         that decreases with $t$. Calculate it and determine its behavior in the two regimes $t \ll x_0^2/D$ and $t \gg x_0^2/D$. Why $x_0^2/D$ is a relevant time scale?\\
         (Hint: use the fact that $e^{\pm ikx}$ are eigenfunctions of $\partial_x^2$ corresponding to the same eigenvalue and choose an appropriate linear combination of them so to satisfy the bc for the two cases. Be aware to ensure that the eigenfunctions so determined are orthonormal. Use also the fact that $\int_{\mathbb{R}} e^{iqx} \dd{x} = \delta(q)$  )
     \end{enumerate}
-           
+    
+    \medskip
+
+    \textbf{Solution}.  
 \end{exo}
 
+\begin{exo}
+    For a Brownian motion $X(s)$, $0\leq s \leq t$, with diffusion coefficient $D$ and initial condition $X(0) = 0$, show that:
+    \begin{align*}
+        \operatorname{Prob}\left(\sup_{0 \leq s \leq t} X(s) \geq a \right) = \frac{2}{\sqrt{4 \pi D t }} \int_a^{\infty} \exp\left(-\frac{z^2}{4 Dt } \right) \dd{z} = \operatorname{erfc}\left(\frac{a}{\sqrt{4 D t}} \right) 
+    \end{align*}  
+    (Hint: some of the results of previous exercises are useful to derive the above result.)
+\end{exo}
 
-\section{Particles in a thermal bath} %sec 5
+\begin{exo}
+    Solve the diffusion equation:
+    \begin{align*}
+        \pdv{t} W(\bm{x},t) = D \nabla^2 W(\bm{x},t) \qquad \bm{x} \in \mathbb{R}^d
+    \end{align*}
+    \begin{enumerate}
+        \item Determine the propagator $W(\bm{x},t|\bm{x_0},t_0)$
+        \item The averages $\langle \bm{x} \rangle$ and $\langle \norm{\bm{x}}^2 \rangle$
+        \item The general solution for a generic initial condition $W(\bm{x_0},t_0)$
+    \end{enumerate}
+    
+\end{exo}
+
+\begin{exo}
+    Deduce the analogous of the following equation:
+    \begin{align*}
+        W(x,t|0,0) = \lambda W(\lambda x, \lambda^2 t|0,0)
+    \end{align*}
+    for the $d$-dimensional case of the previous exercise.
+\end{exo}
+
+\begin{exo}
+    Prove by a direct calculation that the propagator:
+    \begin{align}
+        W(x,t|x_0,t_0) = \frac{1}{\sqrt{4 \pi D (t-t_0)}}  \exp\left(-\frac{(x - x_0)^2}{4D (t-t_0)} \right) \qquad t> t_0 \label{eqn:propagator1}
+    \end{align}
+    satisfies the ESCK relation:
+    \begin{align} \label{eqn:esck}
+        W(x,t|x_0,t_0) = \int_{\mathbb{R}} \dd{x'} W(x,t|x',t') W(x',t'|x_0,t_0) \qquad t_0 < t' < t  
+    \end{align}
+    \medskip
+
+    \textbf{Solution}. Substituting (\ref{eqn:propagator1}) in (\ref{eqn:esck}) leads to:
+    \begin{align*}
+        W(x,t|x_0,t_0) &= \underbrace{\frac{1}{\sqrt{4 \pi D (t-t')}} \frac{1}{\sqrt{4 \pi D(t'-t_0) }}}_{\mathcal{N}} \cdot \\
+        &\quad \> \cdot \int_{\mathbb{R}} \dd{x'}    \exp\left(-\frac{(x'-x_0)^2}{4 D (t'-t_0)} -\frac{(x-x')^2}{4D(t-t')} \right)
+    \end{align*}
+    To make notation easier, let $t-t' \equiv \Delta t$ and $t'-t_0 \equiv \Delta t'$, with $\Delta t + \Delta t' = t-t_0$. Merging the fractions:
+    \begin{align*}
+        W(x,t|x_0,t_0) = \mathcal{N} \int_{\mathbb{R}} \dd{x'} \exp\left(-\frac{\Delta t (x'-x_0)^2 + \Delta t'(x-x')^2}{4 D \Delta t \Delta t'} \right) = \span\\
+        &= \mathcal{N} \int_{\mathbb{R}} \dd{x'} \exp\left(-\frac{(x')^2[\Delta t + \Delta t'] + x'[-2 \Delta t x_0 - 2 \Delta t' x ] + \Delta t x_0^2 + \Delta t' x^2}{4 D \Delta t \Delta t'} \right) =\\
+        &= \mathcal{N} \int_{\mathbb{R}} \dd{x'} \exp\left(-ax^2 + bx + c\right) = \mathcal{N} \sqrt{\frac{\pi}{a} } \exp\left(-\frac{b^2}{4a} + c \right)
+    \end{align*}
+    with:
+    \begin{align*}
+        a = \frac{t-t_0}{4 D \Delta t \Delta t'}; \quad b = 2\frac{x_0 \Delta t + x \Delta t'}{4D \Delta t \Delta t'}; \qquad c = -\frac{\Delta t x_0^2 + \Delta t' x^2 }{4D \Delta t \Delta t'}   
+    \end{align*}
+    The normalization term is:
+    \begin{align*}
+        \mathcal{N} \sqrt{\frac{\pi}{a} } = \frac{1}{\sqrt{4 \pi D(t-t_0) }} 
+    \end{align*}
+    While the exponential argument becomes:
+    \begin{align*}
+        -\frac{4 [x_0 \Delta t + x \Delta t']^2}{(4D \Delta t \Delta t' )^2} \frac{4D \Delta t \Delta t'}{4 (t-t_0)}  - \frac{\Delta t x_0^2 + \Delta t' x^2}{4D \Delta t \Delta t'} = \span \\
+        &= -\frac{x_0^2 \Delta t^2 + x^2 (\Delta t')^2 + 2x x_0 \Delta t \Delta t' - \overbrace{(t-t_0)}^{\Delta t+ \Delta t'}[\Delta t x_0^2 + \Delta t' x^2]  }{4D \Delta t \Delta t' (t-t_0)} =\\
+        &=-\frac{2x x_0 \cancel{\Delta t \Delta t' }- \cancel{\Delta t \Delta t' }x^2 - \cancel{\Delta t' \Delta t} x_0^2  }{4D \cancel{\Delta t \Delta t'} (t-t_0)} = - \frac{(x-x_0)^2}{4D (t-t_0)} 
+    \end{align*}
+    And so the complete solution is indeed:
+    \begin{align*}
+        W(x,t|x_0,t_0) = \frac{1}{\sqrt{4 \pi D (t-t_0)}}  \exp\left(-\frac{(x - x_0)^2}{4D (t-t_0)} \right) \qquad 
+    \end{align*}
+\end{exo}
+
+\begin{exo}
+    Compute the expected value for the functional:
+    \begin{align*}
+        F\left(\int_0^t a(\tau) x(\tau) \dd{\tau }\right)
+    \end{align*}
+    with $a(\tau) = \delta(\tau - t')$ for $0<t'<t$ and $F(z) = \delta (z-x)$. Is this a known result?
+\end{exo}
+
+\begin{exo}
+    Using the Wiener measure explain what the following average means:
+    \begin{align*}
+       C= \langle \delta(x_1 - x(t_1)) \delta(x_2 - x(t_2)) \cdots \delta(x_n - x(t_n)) \rangle_W \quad 0<t_1 <t_2 < \cdots < t_n < t
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. This is the $n$-point correlator for a Brownian path. Expanding the notation:
+    \begin{align*}
+        C = \int_{\mathbb{R}^T} \frac{1}{\sqrt{4 \pi D \dd{\tau}}} 
+    \end{align*} 
+\end{exo}
+
+\begin{exo}
+    Determine the following average:
+    \begin{align*}
+        J(x) = \langle \exp\left(-ik^2 \int_0^t x^2(\tau) \dd{\tau} \delta(x-x(t))\right) \rangle_W
+    \end{align*}
+    by using the results from the Gelfand-Yoglom method with the initial condition $x(0)=0$. Determine also the normalization:
+    \begin{align*}
+       \mathcal{N} = \int_{\mathbb{R}} J(x) \dd{x}
+    \end{align*}
+\end{exo}
+
+\begin{exo}
+    Determine the average:
+    \begin{align*}
+        K(a,k) = \langle \exp\left(-\int_0^t [a(\dot{x}(\tau))^2 + ik \dot{x}(\tau)]\dd{\tau}\right) \rangle_W 
+    \end{align*}
+    where $a$ and $k$ are arbitrary (real) constants. How this result can be used to determine $\langle \delta(x-x(t)) \rangle_W$?
+\end{exo}
+
+\begin{exo}
+    Show that:
+    \begin{align*}
+        \mathbb{P}(|\Delta x| < \epsilon) = \lim_{\Delta t \to 0^+} \int_{|\Delta x| < \epsilon } \frac{\dd{\Delta x}}{\sqrt{4 \pi D \Delta t }} \exp\left(-\frac{(\Delta x)^2}{4D \Delta t} \right)=1 \qquad \forall \epsilon> 0 
+    \end{align*}
+    We have used this result to argue that Brownian trajectories are continuous with probability $1$.
+\end{exo}
+
+\begin{exo}
+    Show that:
+    \begin{align*}
+        \mathbb{P}\left(\left|\frac{\Delta x}{\Delta t}  \right| > k\right) = \lim_{\Delta t \to 0^+} \int_{|\Delta x| > k \Delta t} \frac{\dd{\Delta x }}{\sqrt{4 \pi D \Delta t}}\exp\left(-\frac{(\Delta x)^2}{4 D \Delta t} \right) = 1 \qquad \forall k > 0
+    \end{align*}
+    We have used this result to argue that Brownian trajectories are never differentiable with probability $1$.
+\end{exo}
+
+\setcounter{chapter}{3}
+\chapter{Fokker-Planck Equation and Stochastic Processes}
+To be copied from handwritten notes
+
+\chapter{Particles in a thermal bath} %sec 5
 \begin{exo}[Harmonic oscillator with general initial condition]
     The propagator for a stochastic harmonic oscillator is given by:
     \begin{align*}
@@ -508,14 +726,95 @@ where $\bm{D} = (D_1, \dots, D_n)^T$.
     \begin{align*}
         \begin{dcases}
             \dd{\bm{x}(t)} = \bm{v}(t) \dd{t}\\
-            \dd{\bm{v}(t)} = \left[-\frac{\gamma}{m} \bm{v}(t) + \bm{f}(\bm{r})\right] \dd{t} + \sqrt{2D} \dd{\bm{B}} 
+            \dd{\bm{v}(t)} = \left[-\frac{\gamma}{m} \bm{v}(t) + \bm{f}(\bm{r})\right] \dd{t} + \frac{\gamma}{m} \sqrt{2D} \dd{\bm{B}} 
         \end{dcases}
     \end{align*}
-    with $\bm{f}(\bm{r}) = \bm{F}(\bm{r})/\gamma$.
+    with $\bm{f}(\bm{r}) = \bm{F}(\bm{r})/m$.
+
+    It is convenient to \q{symmetrize} the system, by adding an \textit{independent} stochastic term in the first equation:
+    \begin{align*}
+        \begin{dcases}
+            \dd{\bm{x}(t)} = \bm{v}(t) \dd{t}+ \sqrt{2\hat{D}} \dd{\bm{\hat{B}}}\\
+            \dd{\bm{v}(t)} = \left[-\frac{\gamma}{m} \bm{v}(t) + \bm{f}(\bm{r})\right] \dd{t} +\frac{\gamma}{m} \sqrt{2D} \dd{\bm{B}} 
+        \end{dcases}
+    \end{align*} 
+    In this way, we can write a joint pdf for both the position and velocity increments, and then take the limit $\hat{D} \to 0$. As the $\dd{\bm{x}}$ are \textit{deterministic}, we expect them to follow a $\delta$ distribution.
+    
+    Explicitly, we introduce a discretization $\{t_{i}\}_{i=0,\dots,n}$, with fixed endpoints $t_0 \equiv 0$, $t_n \equiv t$. Following Ito's prescription, the equations become:
+    \begin{align}
+        \begin{dcases}
+            \bm{\Delta x_i} = \bm{v_{i-1}} \Delta t + \sqrt{2 \hat{D}} \bm{\Delta \hat{B_i}}\\
+            \bm{\Delta v_i} = \left[-\frac{\gamma}{m} \bm{v_{i-1}} + \bm{f}(\bm{x_{i-1}}) \right] \dd{t} +\frac{\gamma}{m} \sqrt{2 D} \bm{\Delta B_i}
+        \end{dcases} \label{eqn:system1}
+    \end{align}
+    With the usual notation $\bm{x}_j \equiv \bm{x}(t_j)$. The joint pdf for all the increments is:
+    \begin{align*}
+        \dd{P}(\bm{\Delta B_1}, \bm{\Delta \hat{B}_1}, \dots, \bm{\Delta B_n}, \bm{\Delta \hat{B}_n}) &= \left(\prod_{i=1}^n \frac{\dd[3]{ \bm{\Delta B_i}}}{(2 \pi \Delta t_i)^{3/2}} \frac{\dd[3]{\bm{\Delta \hat{B}_i}}}{(2 \pi \Delta t_i )^{3/2}}  \right) \cdot\\
+        &\quad \> \cdot \exp\left(-\frac{1}{2} \sum_{i=1}^n \frac{\norm{\bm{\Delta B_i}}^2 + \norm{\bm{\Delta \hat{B}_i}}^2}{\Delta t_i}  \right)
+    \end{align*}
+    where $\dd[3]{\bm{\Delta B_i}} \equiv \prod_{\alpha = 1}^3 \dd{\Delta B_i^\alpha}$ (product of the differential of each component of the $d=3$ vector $\bm{\Delta B_i}$).
+
+    To get the distribution of the position and velocity increments we perform a change of random variables, inverting (\ref{eqn:system1}):
+    \begin{align*}
+        \bm{\Delta \hat{B_i}} &= \frac{\bm{\Delta x_i} - \bm{v_{i-1} } \Delta t}{\sqrt{2 \hat{D}}} \\
+        \bm{\Delta {B}_i} &= \frac{m}{\gamma \sqrt{2 D}} \left(\bm{\Delta v_i } + \left[\frac{\gamma}{m} \bm{v_{i-1}} - \bm{f}(\bm{x_{i-1}}) \right] \Delta t_i \right)
+    \end{align*}
+    with jacobian:
+    \begin{align*}
+        \operatorname{det}\left |\frac{\partial \{ \Delta \hat{B}_i^\alpha \}}{ \partial \{ \Delta x_j^\beta \}}  \right| &= (2 \hat{D})^{-3n/2} \\
+        \operatorname{det}\left |\frac{\partial \{ \Delta {B}_i^\alpha \}}{ \partial \{ \Delta x_j^\beta \}}  \right| &= \operatorname{det}\left |\frac{\partial \{ \Delta x_j^\beta \}}{ \partial \{ \Delta {B}_i^\alpha  \}}  \right|^{-1} = \left(\frac{\gamma^2}{m^2} 2 D \right)^{-3n/2}
+    \end{align*}
+    And so the final joint distribution is:
+    \begin{align*}
+        \dd{P(\{\bm{\Delta x_i}, \bm{\Delta v_i}\})} &= \left(\prod_{i=1}^n \hlc{Yellow}{\frac{\dd[3]\bm{\Delta x_i}}{(4 \pi \hat{D}\Delta t_i)^{3/2}}} \frac{\dd[3]{\bm{\Delta v_i}}}{(4 \pi D \Delta t_i \gamma^2/m^2)^{3/2}} \right)  \cdot\\
+        &\quad \> \cdot \exp\left(-\frac{m^2}{4 D \gamma^2} \sum_{i=1}^n \norm{\frac{\bm{\Delta v_i}}{\Delta t_i} + \frac{\gamma}{m} \bm{v_{i-1}} - \bm{f}(\bm{x_{i-1}})}^2 \Delta t_i \right) \cdot \\
+        &\quad \> \cdot \hlc{Yellow}{\exp\left(-\frac{1}{4 \hat{D}} \sum_{i=1}^n \norm{\frac{\bm{\Delta x_i}}{\Delta t_i} - \bm{v_{i-1}} }^2 \Delta t_i \right)}
+    \end{align*}
+    The highlighted terms become a $\delta(\bm{\Delta x_i} - \bm{v_{i-1}}\Delta t_i)$ in the limit $\hat{D} \to 0$ (according to the $\delta$ definition as the limit of a normalized gaussian with $\sigma \to 0$). Then, taking the continuum limit leads to:
+    \begin{align*}
+        \dd{P}(\{\bm{x}(\tau), \bm{v}(\tau)\}) &= \left(\prod_{\tau=0^+}^t  \dd[3]{\bm{x}(\tau)} \frac{\delta^3(\dot{\bm{x}}(\tau) - \bm{v}(\tau))}{(\dd{\tau})^3}\frac{\dd[3]{\bm{v}(\tau)}}{(4 \pi D \dd{\tau} \gamma^2/m^2)^{3/2}} \right) \cdot\\
+        &\quad \> \cdot \exp \left(-\frac{m^2}{4D \gamma^2} \int_{0^+}^t \dd{\tau} \norm{\dot{\bm{v}}(\tau) + \frac{\gamma}{m} \bm{v}(\tau) - \bm{f}(\bm{x}(\tau))  }^2 \right)
+    \end{align*} 
 \end{exo}
 
 \begin{exo}[Maxwell-Boltzmann consistency]
-    Verify that the Maxwell-Boltzmann distribution eq. (5.44) satisfies the Kramers equation (5.43) if the noise amplitude $D$ is given by the Einstein relation.
+    Verify that the Maxwell-Boltzmann distribution:
+    \begin{align} \label{eqn:Wstar}
+        W^*(\bm{x},\bm{v}) &= \frac{1}{Z^*} \exp\left(-\beta \left[\frac{m \norm{\bm{v}}^2}{2} + V(\bm{x}) \right]\right)\\ Z^* &= \int_{\mathbb{R}^3} \dd[3]{\bm{v}} \int_{\mathcal{V}} \dd[3]{\bm{x}} \exp\left(-\beta \left[\frac{m \norm{\bm{v}}^2}{2} + V(\bm{x}) \right]\right) \nonumber
+    \end{align}
+    satisfies the Kramers equation:
+    \begin{align} \label{eqn:Kramer}
+        0 = \bm{\nabla}_{\bm{v}} \cdot \left[\left(\frac{\gamma \bm{v}}{m} - \frac{\bm{F}(\bm{x})}{m}  \right) W(\bm{x},\bm{v}) + \frac{\gamma^2 D}{m^2} \bm{\nabla}_{\bm{v}} W(\bm{x},\bm{v}) \right] - \bm{\nabla}_{\bm{x}} \cdot (\bm{v} W(\bm{x},\bm{v}))
+    \end{align}
+    if the noise amplitude $D$ is given by the Einstein relation:
+    \begin{align*}
+        D = \frac{k_B T}{\gamma} = \frac{1}{\beta \gamma} 
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. The idea is to just substitute (\ref{eqn:Wstar}) in (\ref{eqn:Kramer}). First we compute the relevant \textit{blocks}: 
+    \begin{align*}
+        \grad_{\bm{v}} W^*(\bm{x},\bm{v}) &= - \beta m \bm{v} W^*(\bm{x},\bm{v})\\
+        \grad_{\bm{x}} \cdot (\bm{v} W^*) &\underset{(a)}{=}  \bm{v} \cdot \grad_{\bm{x}} W^* = -\bm{v} \cdot W^* \beta \grad_{\bm{x}} V = \beta W^* \bm{v} \cdot \bm{F}
+    \end{align*}
+    where in (a) we used:
+\begin{align*}
+    \grad \cdot \bm{a} f(\bm{x}) = \sum_{i=1}^d \pdv{x_i} [a_i f(\bm{x})] = \sum_{i=1}^d a_i \pdv{f}{x_i} (\bm{x}) = \bm{a} \cdot \grad f \qquad \bm{a} \in \mathbb{R}^d \text{ constant}
+\end{align*}
+
+    Substituting in (\ref{eqn:Kramer}):
+    \begin{align*}
+        \grad_{\bm{v}} \cdot  \left( \left[\frac{\gamma \bm{v}}{m} - \frac{\bm{F}(\bm{x})}{m} - \frac{\gamma^2 D}{m^2} \beta m \bm{v} \right] W^*(\bm{x},\bm{y}) \right) - \beta W^* \bm{v} \cdot \bm{F} = \span \\
+        &= \grad_{\bm{v}} \cdot \left[ W^*\left(\frac{\gamma}{m} - \frac{\gamma^2 D \beta}{m}  \right) \bm{v}\right ] - \hlc{Yellow}{\grad_{\bm{v}} \cdot \frac{\bm{F}}{m}W^*}  - \beta W^* \bm{v} \cdot \bm{F} = \\
+        &=  \grad_{\bm{v}} \cdot \left[ W^*\left(\frac{\gamma}{m} - \frac{\gamma^2 D \beta}{m}  \right) \bm{v}\right ] - \hlc{Yellow}{\frac{\bm{F}}{m} \cdot \grad_{\bm{v}} W^*}  - \beta W^* \bm{v} \cdot \bm{F} = \\
+        &= \grad_{\bm{v}} \cdot \left[ W^*\hlc{SkyBlue}{\left(\frac{\gamma}{m} - \frac{\gamma^2 D \beta}{m}  \right) }\bm{v}\right ] + \cancel{\frac{\bm{F} \cdot \bm{v}}{m} \beta m W^*} - \cancel{\beta W^* \bm{v} \cdot \bm{F}}
+    \end{align*}
+    Note that the first term vanishes when the expression highlighted in blue is $0$, i.e. when:
+    \begin{align*}
+        \frac{\gamma}{m} - \frac{\gamma^2 D \beta}{m} = 0 \Leftrightarrow D = \frac{1}{\beta \gamma}
+    \end{align*}
+    which is Einstein's relation for the diffusion coefficient.
 \end{exo}
 
 \begin{exo}
@@ -525,10 +824,286 @@ where $\bm{D} = (D_1, \dots, D_n)^T$.
     \end{align*}
     where $H_{ij}(t) = W_{ij}(t) - \delta_{ij} \sum_k W_{ki}(t)$.
 
-    \begin{itemize}
-        \item Finish to copy
-    \end{itemize}
+    \begin{enumerate}
+        \item If $a_i$ is an observable quantity (not explicitly dependent on time) of the system when it is in state $i$, show that:
+        \begin{align*}
+            \dv{\langle a \rangle_t}{t} = \langle H^T a \rangle_t
+        \end{align*}
+        where $\langle a \rangle_t = \sum_i P_i(t) a_i$
+        \item If the initial condition is $P_i(t_0) = \delta_{i,i_0}$, the corresponding solution of the Master Equation is called propagator and it will be denoted $P_{i, i_0}(t|t_0)$. Thus $P(t|t_0)$ is a matrix satisfying:
+        \begin{align*}
+            \pdv{P(t|t_0)}{t} = H(t) P(t|t_0)
+        \end{align*}
+        Show that:
+        \begin{align*}
+            \pdv{P(t|t_0)}{t_0} = -P(t|t_0) H(t_0)
+        \end{align*}
+        \item Assume now that the transition rates do not depend on time and that an equilibrium stationary state exists. A stationary state $P^*$ satisfies the stationary condition $HP^* = 0$. An equilibrium stationary state, $P^{\mathrm{eq}}$, besides to the stationary condition, satisfies also the so called \textit{detailed balance} (DB) condition $W_{ij} P_j^{\mathrm{eq}} = W_{ji} P_i^{\mathrm{eq}}$ (explain what this means). 
+        
+        If $S$ is the diagonal matrix $S_{ij} = \delta_{ij} \sqrt{P_i^{\mathrm{eq}}}$ show that, as a consequence of the DB condition, the matrix $\hat{H} = S^{-1} H S$ is symmetric and semi-negative definite. Under the hypothesis that each state $i$ can be reached through a path of non-zero transition rates from any state $j$ show that the equilibrium state is unique.
+    \end{enumerate}
+
+    \textbf{Solution}. Consider a uniform time discretization $\{t_n\}_{n\in \mathbb{N}}$, with $t_n - t_{n-1} \equiv \Delta t$.
+    
+    Suppose we know all the probabilities $\{P_j(t_n)\}$ of the system being in any state $j \in J$ at the present time $t_n$. The probability $P_{j \to i}$ of a particle transiting from $j \to i$ at time $t_n$ is the product of the probability of the particle \textit{being} initially at $j$ ($P_j(t_n)$) and the transition probability $W_{ij}(t_n) \Delta t$:
+    \begin{align*}
+        P_{j \to i}(t_n) = W_{ij}(t_n)P_j(t_n) \Delta t 
+    \end{align*}
+    Then the probability of the system being in a certain state $i$ at the next timestep $t_{n+1}$ is just the total probability of the system arriving to $i$ at $t_{n+1}$, that is: 
+    \begin{align*}
+        P_i(t_{n+1}) = \sum_{j \in J} P_{j \to i}(t_n)  = \sum_{j\in J} W_{ij}(t_n)P_j(t_n) \Delta t 
+    \end{align*}
+    We can split the sum to highlight the probability $P_{i \to i}$ of \textit{remaining} in $i$, leading to:
+    \begin{align*}
+        P_{i}(t_{n+1}) = \sum_{j \in J\setminus\{i\}}W_{ij} P_j \Delta t + P_{i \to i}
+    \end{align*}
+    The probability of remaining is just the probability of being in $i$ and \textit{not} transitioning to any other state from $i$:
+    \begin{align*}
+        P_{i \to i} = P_i \left( 1- \sum_{j \in J\setminus\{i\}} W_{ji} \Delta t \right)
+    \end{align*} 
+    Substituting back:
+    \begin{align*}
+        P_{i}(t_{n+1}) = \Delta t \sum_{j \in J\setminus\{i\}} \left( W_{ij} P_j - W_{ji} P_i \right) + P_i(t_n)
+    \end{align*}
+    Rearranging and dividing by $\Delta t$ leads to a Newton's different quotient, which becomes a time derivative in the continuum limit $\Delta t \to 0$:
+    \begin{align} \nonumber
+        \frac{P_{i}(t_{n} + \Delta t)-P_i(t_n)}{\Delta t} = \sum_{j \in J\setminus\{i\}} \left(W_{ij} P_j(t_n) - W_{ji} P_i(t_n)\right) \\ \xrightarrow[\Delta t \to 0]{}  \dot{P}_i =\sum_{j \in J\setminus\{i\}} \left(W_{ij} P_j - W_{ji} P_i\right) \span   \label{eqn:dot-P}
+    \end{align}
+    Before continuing, we wish to rewrite $\dot{P}_i$ as a \textit{matrix multiplication}, i.e. in the form:
+    \begin{align*}
+        \dot{P}_i(t) = (H(t)\bm{P}(t))_i
+    \end{align*} 
+    for a certain $|J| \times |J|$ matrix $H$, with $\bm{P}$ being the vector with the probabilities of each state $(P_j)^T_{j \in J}$. First, notice that we can extend the sum in (\ref{eqn:dotP}) over the entire $J$, as the term where $j=i$ vanishes:
+    \begin{align*}
+        \dot{P}_i = \sum_{j \in J} (W_{ij}P_j - W_{ji} P_i)
+    \end{align*}
+    Then we rewrite the second term as the following:
+    \begin{align*}
+        \sum_{j \in J} W_{ji} P_i =  \sum_{\textcolor{Red}{k} \in J} W_{\textcolor{Red}{k}i}P_i = \sum_{j \in J} \sum_{k \in J} W_{kj} P_j \delta_{ij}
+    \end{align*}
+    Now we can collect the $P_j$:
+    \begin{align} \label{eqn:evolution-formula}
+        \dot{P}_i = \sum_{j \in J} \left(W_{ij} - \delta_{ij} \sum_{k \in J} W_{kj}\right) P_j = \sum_{j \in J} H_{ij} P_j = (H(t)\bm{P}(t))_i
+    \end{align}
+    with:
+    \begin{align*}
+        H_{ij}(t) = W_{ij}(t) - \delta_{ij} \sum_{k \in J} W_{kj}(t)
+    \end{align*}
+    Note that $H_{ij}(t)$ differs from $W_{ij}(t)$ only on the diagonal elements, which are equal to (minus) the probability of \textit{escape} from that state:
+    \begin{align*}
+        H_{j j} = W_{j j} - W_{jj} - \sum_{k \neq j} W_{k j} = -\sum_{k \neq j} W_{kj}
+    \end{align*} 
+
+    \begin{enumerate}
+        \item Let $A$ be an observable of the system, assuming values $a_i$ in each state $i$.
+        At a fixed time $t$, the system state is described by the discrete probability distribution (or \textit{probability mass function}) $P_i(t)$. So, the average of $A$ at time $t$ is:
+        \begin{align*}
+            \langle a \rangle_t = \sum_{i \in J} P_i(t) a_i
+        \end{align*}
+        Suppose that $a_i$ does not depend on time. Differentiating:
+        \begin{align*}
+            \dv{\langle a \rangle_t}{t} &= \sum_{i \in J} \dot{P}_i(t) a_i \underset{(\ref{eqn:evolution-formula})}{=}  \sum_{i \in J} \sum_{j \in J} H_{ij} P_j(t) a_i =\\&= \sum_{j \in J} P_j(t) \left(\sum_{i \in J} H_{ij} a_i\right) = \sum_{j \in J} P_j (t)(H^T \bm{a})_j = \langle H^T \bm{a} \rangle_t
+        \end{align*}
+        where $\bm{a}$ is the vector  $(a_j)_{j \in J}^T$.
+        \item The propagator $P(i,t|i_0,t_0) \equiv P_{i,i_0}(t|t_0)$ is just the transition probability from an initial defined state $i_0$ at $t_0$ to a generic state $i$ at $t$.
+        
+        Consider now a uniform time discretization, and construct the desired time derivative:
+        \begin{align*}
+            \pdv{t_0} P(i,t|i_0, t_0) = \lim_{\Delta t \to 0} \frac{P(i,t|i_0,t_0) - P(i,t|i_0, t_0 - \Delta t)}{\Delta t} 
+        \end{align*}
+        We choose this definition so that $t_0 - \Delta t < t_0 < t$, and we can apply the Chapman-Kolmogorov equation (that holds as the system is Markovian):
+        \begin{align} \label{eqn:esck1}
+            P(i,t|i_0, t_0 - \Delta t) = \sum_{i' \in J} P(i,t|i',t_0) P(i',t_0|i_0,t_0 - \Delta t)
+        \end{align}
+        That is, the transition probability $(i_0,t_0 - \Delta t) \to (i,t)$ can be obtained by \textit{splitting} the path into two steps $(i_0,t_0 - \Delta t) \to (i_0,t_0)$ and $(i_0,t_0) \to (i, t)$, multiplying the two transition probabilities, and summing over all the possible intermediate states $i'$.
+        
+        Note now that $P(i',t_0|i_0,t_0 - \Delta t)$ is a transition probability over \textit{a single timestep}, and so can be computed using the transition probability matrix:
+        \begin{align*}
+            P(i',t_0|i_0,t_0 - \Delta t) &= W_{i'i_0} \Delta t
+        \end{align*} 
+        Substituting back in (\ref{eqn:esck1}):
+        \begin{align*}
+            P(i,t|i_0, t_0 - \Delta t) &=  \sum_{i' \in J} P(i,t|i',t_0) W_{i' i_0}
+        \end{align*}
+        As before, we highlight the case of the system remaining in the same state $i_0$:
+        \begin{align*}
+            &= \sum_{i' \neq i_0} P(i,t|i',t_0) W_{i' i_0} \Delta t + P(i,t|i_0,t_0) \left(1-\sum_{k \neq i_0} W_{k i_0} \Delta t\right)
+        \end{align*}
+        where the probability of remaining in $i_0$ is equal to the probability of \textit{not} going to any other state $k$.
+        
+        We can know construct the difference quotient:
+        \begin{align*}
+            \frac{P(i,t|i_0,t_0) - P(i,t|i_0,t_0-\Delta t)}{\Delta t} = \span\\
+            &=- \sum_{i' \neq i_0} P(i,t|i',t_0) W_{i' i_0} + P(i,t|i_0,t_0) \sum_{k \neq i_0} W_{k i_0} =\\
+            &=- \sum_{i' \neq i_0} P(i,t|i',t_0) W_{i' t_0} + \textcolor{Red}{\sum_{i' \neq i_0} \delta_{i' i_0}} P(i,t|\textcolor{Red}{i'},t_0) \sum_{k \neq i_0} W_{k i_0} =\\
+            &=- \sum_{i' \neq i_0} P(i,t|i',t_0) \underbrace{\left[W_{i' i_0} - \delta_{i'i_0} \sum_{k \neq i_0} W_{k i_0}\right]}_{H_{i' i_0}} =\\
+            &= -\sum_{i' \neq j} P_{i i'}(t|t_0) H_{i' i_0}(t_0)
+        \end{align*} %Can the sum be extended over all i'?
+        And so, taking the continuum limit $\Delta t \to 0$:
+        \begin{align*}
+            \pdv{P_{i i_0}(t|t_0)}{t_0} = - \sum_{i' \neq j} P_{i i'}(t|t_0) H_{i' i_0}(t_0) \Rightarrow \pdv{P(t|t_0)}{t_0} = - P(t|t_0) H(t_0)
+        \end{align*}
+
+        Where $P(t|t_0)$ is the $|J| \times |J|$ matrix with entries $P_{ij}(t|t_0)$.
+        
+        \item The detailed balance (DB) condition is:
+        \begin{align*}
+            W_{ij} P_j^{\mathrm{eq}} = W_{ji} P_i^{\mathrm{eq}}
+        \end{align*}
+        This means that the probability of a transition $j \to i$ is, at equilibrium, exactly the same as the probability of the inverse transition $i \to j$. In other words, every process that would change the state is \textit{exactly balanced} by its inverse process.  
+
+        We consider now a time-independent $W_{ij}$, and the diagonal matrix $S_{ij} = \delta_{ij} \sqrt{P_i^{\mathrm{eq}}}$. Then:
+        \begin{align*}
+            \hat{H} = S^{-1} H S \Rightarrow 
+            \hat{H}_{ij} = \sum_{ks}  \frac{1}{\sqrt{P_i^{\mathrm{eq.}} }} \delta_{ik}H_{ks} \delta_{sj} \sqrt{P_j^{\mathrm{eq.}}} = \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq}}} } H_{ij}
+        \end{align*} 
+        To prove that $\hat{H}$ is symmetric, we need to show that the off-diagonal elements remain the same after inverting $j \leftrightarrow i$. That is:
+        \begin{align*}
+            (\hat{H}^T)_{ij} = \hat{H}_{ji} = \sqrt{\frac{P_i^{\mathrm{eq} }}{P_j^{\mathrm{eq}}} } H_{ji} \overset{?}{=}  \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq}}} } H_{ij}
+        \end{align*}
+        Recall that:
+        \begin{align*}
+            H_{ij} = W_{ij} - \delta_{ij} \sum_k W_{ki}
+        \end{align*}
+        meaning that for $i \neq j$, $H_{ij} = W_{ij}$. So:
+        \begin{align*}
+            \sqrt{\frac{P_i^{\mathrm{eq} }}{P_j^{\mathrm{eq}}} } W_{ji} \overset{?}{=}  \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq}}} } W_{ij} \Leftrightarrow  W_{ji} P_i^{\mathrm{eq}} \overset{?}{=} W_{ij} P_{j}^{\mathrm{eq}}
+        \end{align*}
+        And the latter is exactly the DB condition, and so DB implies $\hat{H}$ symmetric.
+
+        To check if $\hat{H}$ is negative definite, we need to show that:
+        \begin{align*}
+            \sum_{ij} x_i \hat{H}_{ij} x_j \leq 0 \qquad \forall \bm{x} \in \mathbb{R}^{|J|} \setminus \{\bm{0}\} 
+        \end{align*}
+        Expanding:
+        \begin{align*}
+            \sum_{ij} x_i \hat{H}_{ij} x_j &= \sum_{ij} x_i \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq} }} } H_{ij} x_j = \sum_{ij} x_i \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq} }} } W_{ij} x_j - \sum_{i} x_i^2  \sqrt{\cancel{\frac{P_i^{\mathrm{eq} }}{P_i^{\mathrm{eq} }}} } \sum_k W_{ki} =\\
+            &= \sum_{ij} \left( \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq} }} } W_{ij} x_i x_j - x_i^2 W_{ji}\right)
+        \end{align*}
+        As $\hat{H}$ is symmetric:
+        \begin{align*}
+            \sum_{ij} x_i \hat{H}_{ij} x_j &= \sum_{ij} x_j \hat{H}_{ji} x_i = \sum_{ij} \left( \sqrt{\frac{P_i^{\mathrm{eq} }}{P_j^{\mathrm{eq} }} } W_{ji} x_i x_j - x_j^2 W_{ij}\right) =\\
+            & \underset{(a)}{=} \sum_{ij} \left( \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq} }} } W_{ij} x_i x_j -  x_j^2 W_{ij}\right)
+        \end{align*}
+        where in (a) we used (DB), or more precisely:
+        
+        \begin{align}
+            \label{eqn:Db-conv}
+            W_{ji} = W_{ij} \frac{P_j^{\mathrm{eq}}}{P_i^{\mathrm{eq} }}
+        \end{align}
+
+        So the sum of the \q{two versions} of the product will be exactly two times the original sum:
+        \begin{align*}
+            \sum_{ij} x_i \hat{H}_{ij} x_j &= \frac{1}{2} \sum_{ij} \left[x_i \hat{H}_{ij} x_j +  \sum_{ij} x_j \hat{H}_{ji} x_i \right] =\\
+            &= \frac{1}{2} \sum_{ij} \left[2 \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq} }} } W_{ij} x_i x_j - x_i^2 W_{ji} - x_j^2 W_{ij}\right] =\\
+            &\underset{(\ref{eqn:Db-conv})}{=} \frac{1}{2} \sum_{ij} \left[ 2 \sqrt{\frac{P_j^{\mathrm{eq} }}{P_i^{\mathrm{eq} }} } W_{ij} x_i x_j - x_i^2 \frac{P_j^{\mathrm{eq}}}{P_i^{\mathrm{eq} }} W_{ij} - x_j^2 W_{ij} \right] =\\
+            &= -\frac{1}{2} \sum_{ij} \left [x_i \sqrt{\frac{P_j^{\mathrm{eq}}}{P_i^{\mathrm{eq} }}} + x_j \right ]^2 W_{ij} \leq 0
+        \end{align*}
+        As $W_{ij} \geq 0$. \\
+
+
+        All that's left is to show that the equilibrium state is unique, under the hypothesis that each state $i$ can be reached through a path of non-zero transition rates from any state $j$.
+        The idea is to get an explicit formula for the equilibrium $\bm{P^*}$ distribution, depending only on the transition matrix $W$, meaning that $\bm{P^*}$ is uniquely determined from the start.
+
+        Recall the detailed balance relation:
+        \begin{align*}
+            W_{ij} P_{j}^* = W_{ji} P_i^*
+        \end{align*}
+        Supposing that $W_{ij} \neq 0$, we can rewrite it as:
+        \begin{align*}
+            P_j^* = \frac{W_{ji}}{W_{ij}} P_i^* \equiv \frac{W(i \to j)}{W(j \to i)} P_i^*
+        \end{align*}
+        So the probability of the system being at $j$ at equilibrium is proportional to a \textit{rate of transition flows}, i.e. the ratio between the \textit{arriving} flow $W(i \to j)$ and the \textit{leaving} flow $W(j \to i)$.
+        
+        In general, not all states have $W_{ij} \neq 0$, i.e. there's no direct transition from $i$ to $j$ or viceversa. Suppose, however, that $j$ is connected to $i$ by an intermediate state $a_1$. So, by reiterating the detailed balance condition:
+        \begin{align*}
+            P_j^* = \frac{W(a_1 \to j )}{W(j \to a_1)} P_{a_1}^* = \frac{W(a_1 \to j )}{W(j \to a_1)} \frac{W(i \to a_1)}{W(a_1 \to i)} P_i^* 
+        \end{align*}
+        We can generalize this to $n$ intermediate steps, i.e. a path that connects $j$ to $i$ by first going through $a_1, a_2, \dots, a_n$:
+        \begin{align*}
+            P_j^* = \underbrace{\frac{W(i \to a_1 ) W(a_1 \to a_2 ) \cdots W(a_n \to j)}{W(j \to a_n) W(a_n \to a_{n-1} ) \cdots W(a_1 \to i)}}_{f_j} P_i^*
+        \end{align*}
+        By hypothesis, every state $i$ is connected to every other $j$ by some path with a finite number of steps and all \textit{non-zero} transition probabilities. So, if we choose the right intermediate states, the denominator in the previous expression is $\neq 0$.
+        Summing over all states $j$:
+        \begin{align*}
+            1 \underset{(a)}{=}  \sum_{j \in J} P_j^* = \underbrace{\sum_{j \in J} f_j}_{F_j}  P_i^* \Rightarrow P_i^* = \frac{1}{F_j} 
+        \end{align*}
+        where in (a) we used the normalization. This is a explicit relation between the transition matrix $W$ and $\bm{P}^*$, meaning that the equilibrium distribution must be unique.
+    \end{enumerate}
 \end{exo}
+
+\begin{exo}[Semi-positive definite matrix]
+    Show that the matrix $D^{\omega \nu} = \sum_{\alpha =1}^d g_\alpha^\omega g^\nu_\alpha$ is semi-positive definite ($\omega, \nu = 1, \dots, k$, with $k$ and $d$ arbitrary).
+    
+    \medskip
+
+    \textbf{Solution}. Let $\bm{x} \in \mathbb{R}^d \setminus \{0\}$. Then:
+    \begin{align*}
+        x_\omega D^{\omega \nu} x_\nu &= \sum_{\omega, \nu, \alpha = 1}^d x_{\omega} g_\alpha^\omega g_\alpha^\nu  x_\nu =\\
+        &= \sum_{\alpha=1}^d \sum_{\omega = 1}^d x_\omega g_\alpha^\omega \sum_{\nu =1}^d x_\nu g^\nu_{\alpha} =\\
+        &\underset{(a)}{=}  \sum_{\alpha = 1}^d \left(\sum_{\omega= 1}^d x_{\omega} g_\alpha^\omega\right)^2 \geq 0 
+    \end{align*} 
+    where in (a) we changed the index $\nu \to \omega$. 
+\end{exo}
+
+\begin{exo}[Discretized measure from Langevin]
+    Consider the following Langevin equation:
+    \begin{align*}
+        \dd{x^\omega}(t) = f^\omega(\bm{x},t) \dd{t} + \sum_{\alpha= 1}^d g_{\alpha}^\omega(\bm{x},t) \dd{B^\alpha(t)} \qquad \omega=1, \dots, k
+    \end{align*}
+    For $k = d$ and an invertible $d\times d$ matrix $g(\bm{x},t)$, determine the discretized measure $\dd{P}_{t_1, \dots, t_n}(\bm{x}_1, \dots, \bm{x}_n|\bm{x}_0, t_0)$ and its formal continuum limit.
+
+    \medskip
+
+    \textbf{Solution}.  Consider a discretization $\{t_i\}_{i=1,\dots, n}$. The discretized Langevin equation in the Ito prescription becomes:
+    \begin{align*}
+        \Delta x^\omega_i = f^\omega(\bm{x_{i-1}}, t_{i-1}) \Delta t_i + \sum_{\alpha = 1}^d g_\alpha^\omega(\bm{x_{i-1}}, t_{i-1}) \Delta B^\alpha_i
+    \end{align*}
+    This can be rewritten in vector notation as:
+    \begin{align} \label{eqn:vector-langevin}
+        \bm{\Delta x_i} = \bm{f_{i-1}} \Delta t_i+ g_{i-1} \bm{\Delta B_i}
+    \end{align}
+
+    The joint distribution of the increments is given by:
+    \begin{align*}
+        \dd{P}(\bm{\Delta B_1}, \dots,\bm{\Delta B_n}) &= \left(\prod_{i=1}^n \frac{\dd[d]{ \bm{\Delta B_i}}}{(2 \pi \Delta t_i)^{d/2}}   \right) \cdot\\
+        &\quad \> \cdot \exp\left(-\frac{1}{2} \sum_{i=1}^n \frac{\norm{\bm{\Delta B_i}}^2 }{\Delta t_i}  \right)
+    \end{align*}
+    To get the distribution of the position increments $\bm{\Delta x_i}$ we make a change of random variable by inverting (\ref{eqn:vector-langevin}), which is possible because $g$ is invertible by hypothesis:
+    \begin{align*}
+        \bm{\Delta B_i} = (g_{i-1})^{-1}(\bm{\Delta x_i} - \bm{f_{i-1}}\Delta t_i)
+    \end{align*} 
+    with jacobian:
+    \begin{align*}
+        \operatorname{det}\left|\pdv{\{\Delta B_i^\alpha \}}{\{ \Delta x_j^\beta \}} \right| = \prod_{i=1}^n \left|\operatorname{det}(g_{i-1})\right|^{-1} 
+    \end{align*}
+    (This is the determinant of a lower triangular block matrix, where each diagonal block is $g_{i-1}$ for a different $i$).
+
+    This leads to:
+    \begin{align*}
+        \dd{P}(\bm{\Delta x_1}, \dots,\bm{\Delta x_n}) &= \left(\prod_{i=1}^n \frac{\dd[d]{ \bm{\Delta x_i}}}{(2 \pi \Delta t_i)^{d/2} \operatorname{det}|g_{i-1}| }   \right) \cdot\\
+        &\quad \> \cdot \exp\left(-\frac{1}{2} \sum_{i=1}^n \frac{\norm{(g_{i-1})^{-1} [ \bm{\Delta x_i} - \bm{f_{i-1}}\Delta t_i]}^2 }{\Delta t_i}  \right)
+    \end{align*}
+    Multiplying by $\Delta t_i / \Delta t_i$ inside the exponent sum and taking the continuum limit leads to:
+    \begin{align*}
+        \dd{P}(\bm{x}(\tau)) &= \left(\prod_{\tau=t_0^+}^t \frac{\dd[d]{\bm{x}(\tau)}}{(2 \pi \dd{\tau} )^{d/2} \operatorname{det}|g(\bm{x}(\tau), \tau)| } \right) \cdot \\
+        &\quad \> \exp\left(-\frac{1}{2} \int_{t_0}^t \dd{\tau} \norm{g(\bm{x}(\tau), \tau)^{-1} [\dot{\bm{x}}(\tau)] - {\bm{f}(\bm{x}(\tau), \tau)} }^2 \right)
+    \end{align*}
+\end{exo}
+
+\begin{exo}
+    Derive the Fokker-Planck equation from the Langevin equation.
+    \medskip
+
+    \textbf{Solution}. See ex. 5.4. %Add correct reference  
+\end{exo}
+
+
+\chapter{The Bloch Equation and the Feynman-Kac formula}
+\begin{exo}
+    
+\end{exo}
+
 \listoftheorems
 
 \end{document}
