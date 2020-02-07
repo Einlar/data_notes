@@ -1,4 +1,4 @@
-%&latex
+e%&latex
 %
 \documentclass[../template.tex]{subfiles}
 \usepackage{amsbsy}
@@ -321,10 +321,54 @@
 
 \begin{exo}
     Compute the expected value for the functional:
-    \begin{align*}
-        F\left(\int_0^t a(\tau) x(\tau) \dd{\tau }\right)
-    \end{align*}
+    \begin{align}
+        F\left(\int_0^t a(\tau) x(\tau) \dd{\tau }\right) \label{eqn:func1}
+    \end{align}
     with $a(\tau) = \delta(\tau - t')$ for $0<t'<t$ and $F(z) = \delta (z-x)$. Is this a known result?
+
+    \medskip
+
+    \textbf{Solution}. Substituting $a(\tau) = \delta(\tau - t')$ and $F(z) = \delta(z-x)$ in (\ref{eqn:func1}) we get:
+    \begin{align*}
+        F\left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right) &= \delta\left(\int_0^t \delta(\tau - t') x(\tau) \dd{\tau} -x\right) = \qquad 0<t'<t\\
+        &= \delta(x(t') - x)
+    \end{align*}
+    So the expected value is just the transition probability after $t'$, which is a known result:
+    \begin{align*}
+        W(x,t'|0,0) = \langle \delta(x - x(t')) \rangle_W = \frac{1}{\sqrt{4 \pi D t'}} \exp\left(-\frac{x^2}{4D t'} \right) 
+    \end{align*}
+
+    Let's confirm this by doing the full calculation. We already evaluated $\langle F \rangle$ in the general case (with $D=1/4$), obtaining:
+
+    \begin{align} \label{eqn:formula-func}
+        \langle F\left(\int_0^t a(\tau) x(\tau) \dd{\tau}\right) \rangle_W &= \sqrt{\frac{1}{\pi R(t)} } \int_{\mathbb{R}} \dd{z} F(z) \exp\left(-\frac{z^2}{R(t)} \right);\\ \nonumber
+         \quad R(t) &\equiv \int_0^t \dd{\tau} \left(\int_\tau^t a(s) \dd{s}\right)^2
+    \end{align}
+    Substituting the values for $a$ and $F$ we get:
+    \begin{align*}
+        R(t) = \int_0^t \dd{\tau} \left(\int_\tau^t \delta(s-t') \dd{s}\right)^2 \qquad 0<t'<t
+    \end{align*}
+    Note that:
+    \begin{align*}
+        \int_\tau^t \delta(s-t')\dd{s} = \begin{cases}
+            1 & \tau < t' < t\\
+            0 & \text{otherwise}
+        \end{cases}
+    \end{align*}
+    So it is convenient to split the \textit{outer} integral at $t'$:
+    \begin{align*}
+        R(t) &= \int_0^{t'} \dd{\tau} \underbrace{\left(\int_\tau^t \delta(s-t') \dd{s}\right)^2}_{0<\tau<t'}  + \int_{t'}^t \dd{\tau} \underbrace{\left(\int_\tau^t \delta(s-t') \dd{s}\right)^2}_{t'<\tau<t} =\\
+        &=\int_0^{t'} \dd{\tau} 1^2 + \int_{t'}^t \dd{\tau} 0^2 = t'
+    \end{align*} 
+    And substituting back in (\ref{eqn:formula-func}):
+    \begin{align*}
+        \langle \delta(x-x(t')) \rangle_W &= \frac{1}{\sqrt{\pi t'}}  \int_{\mathbb{R}} \dd{z} \delta(z-x) \exp\left(-\frac{z^2}{t'} \right) =\\
+        &= \frac{1}{\sqrt{ \pi t' }}  \exp\left(-\frac{x^2}{t'} \right)
+    \end{align*} 
+    To retrieve $D$ we substitute $t' \to 4 D t'$, leading to the same result as before:
+    \begin{align*}
+        \langle \delta(x-x(t')) \rangle_W = \frac{1}{\sqrt{4 \pi D t'}}  \exp\left(-\frac{x^2}{4 D t'} \right)
+    \end{align*}
 \end{exo}
 
 \begin{exo}
@@ -335,29 +379,169 @@
 
     \medskip
 
-    \textbf{Solution}. This is the $n$-point correlator for a Brownian path. Expanding the notation:
+    \textbf{Solution}. $C$ represents the probability for a path starting in $x=0$ at $t=0$ to pass trough all $x_i$ at the consecutive instants $t_i$.
+
+    To see this, we expand the average using the Wiener measure:
     \begin{align*}
-        C = \int_{\mathbb{R}^T} \frac{1}{\sqrt{4 \pi D \dd{\tau}}} 
+        C = \int_{\mathcal{C}\{0,0;t\}} \dd{_Wx(\tau)} \prod_{i=1}^n\delta(x_i-x(t_i)) 
     \end{align*} 
+    where the integral is over all the paths with fixed starting point $(0,0)$ reaching any point $\in \mathbb{R}$ at $t$. Each delta \q{fixes} a point in a path, in the sense that it nullifies the integral for every path that does not traverse $x_i$ at time $t_i$. So we can rewrite $C$ as a product of transition probabilities:
+    \begin{align*}
+        C&=\int_{\mathcal{C}\{0,0;x_1,t_1\}} \dd{_Wx(\tau)} \int_{\mathcal{C}\{x_1,t_1;x_2,t_2\}} \dd{_Wx(\tau)} \cdots \int_{\mathcal{C}\{x_{n-1},t_{n-1};x_n,t_n\}}\dd{_Wx(\tau)} =\\
+        &= W(x_1,t_1|x_0,t_0) W(x_2,t_2|x_1,t_1) \cdots W(x_{n-1},t_{n-1}|x_n,t_n)
+    \end{align*}
+    Which is, in fact, the probability of a path traversing all these points.
 \end{exo}
 
 \begin{exo}
     Determine the following average:
     \begin{align*}
-        J(x) = \langle \exp\left(-ik^2 \int_0^t x^2(\tau) \dd{\tau} \delta(x-x(t))\right) \rangle_W
+        J(x) = \langle \exp\left(-ik^2 \int_0^t  \dd{\tau} x^2(\tau)\delta(x-x(t))\right) \rangle_W
     \end{align*}
     by using the results from the Gelfand-Yoglom method with the initial condition $x(0)=0$. Determine also the normalization:
     \begin{align*}
        \mathcal{N} = \int_{\mathbb{R}} J(x) \dd{x}
     \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. We already computed the average of the exponential functional with fixed endpoint:
+    \begin{align*}
+        \langle \exp\left(-\int_0^t P(\tau) x^2(\tau) \dd{\tau}\right) \delta(x-x(t)) \rangle_W = \frac{1}{\sqrt{\pi \tilde{D}(0)}} \exp\left(-x^2 \frac{D(0)}{\tilde{D}(0)} \right)
+    \end{align*}
+    where $D(t)$ and $\tilde{D}(t)$ are solutions of the following differential equations:
+    \begin{align*}
+        \tilde{D}''(\tau) &= P(\tau) \tilde{D}(\tau) \qquad \begin{dcases}
+            \tilde{D}(t) = 0\\
+            \dv{\tilde{D}(\tau)}{\tau}\Big|_{\tau = t} = -1
+        \end{dcases}\\
+        D''(\tau) &= P(\tau) D(\tau) \qquad \begin{dcases}
+            {D}(t) = 1\\
+            \dv{{D}(\tau)}{\tau}\Big|_{\tau = t} = 0
+        \end{dcases}
+    \end{align*}
+
+    In this case $P(\tau) = ik^2$ and so we need to solve:
+    \begin{align}
+        D''(\tau) = ik^2 D(\tau) \label{eqn:diff-eq1}
+    \end{align}
+    with the two different sets of initial conditions. Note that this equation is really similar to that of the harmonic repulsor, and so we search a solution as a linear combination of exponentials:
+    \begin{align*}
+        D(\tau) = A e^{\alpha k \tau } + B e^{-\alpha k \tau}
+    \end{align*}
+    Substituting in (\ref{eqn:diff-eq1}) leads to:
+    \begin{align*}
+        \alpha^2 k^2 (A e^{\alpha k \tau} + B e^{-\alpha k \tau}) = ik^2(A e^{\alpha k \tau} + B e^{-\alpha k \tau})
+    \end{align*}
+    And so $\alpha^2 = i \Rightarrow \alpha = \sqrt{i} = \exp(i \pi/4)$.
+
+    Now it's just a matter of applying the two sets of initial conditions. Instead of re-doing all the computations, recall the solutions we got for the case $P(\tau) = k^2$:
+    \begin{align*}
+        \tilde{D}(\tau) = \frac{1}{k} \sinh(k(t-\tau)) \qquad D(\tau) = \cosh(k(t-\tau))
+    \end{align*}
+    We can get the ones for the case $P(\tau) = ik^2$ by substituting $k \to \alpha k$:
+    \begin{align*}
+        \tilde{D}(\tau) = \frac{1}{\alpha k} \sinh(\alpha k(t- \tau)) \qquad D(\tau) = \cosh(\alpha k(t-\tau)) 
+    \end{align*}
+
+    And substituting back we arrive at the desired solution:
+    \begin{align*}
+        J(x) = \sqrt{\frac{\alpha k}{\pi \sinh(\alpha k t)}} \exp\left(-\alpha k x^2 \coth (\alpha k t) \right)
+    \end{align*}
+
+    All that's left is to compute the normalization, which is just a gaussian integral:
+    \begin{align*}
+        \mathcal{N}&=\sqrt{\frac{\alpha k}{\pi \sinh(\alpha k t)}} \int_{\mathbb{R}} \dd{x}    \exp(-\alpha k \coth(\alpha k t) x^2) = \sqrt{\frac{\alpha k}{\pi \sinh(\alpha k t)}} \sqrt{\frac{\pi}{\alpha k \coth(\alpha k t) } } =\\
+        &= \frac{1}{\sqrt{\sinh(\alpha k t )}} \sqrt{\frac{\sinh(\alpha k t)}{\cosh(\alpha k t )} } = \frac{1}{\sqrt{\cosh (\alpha k t)}} 
+    \end{align*}
 \end{exo}
 
 \begin{exo}
     Determine the average:
-    \begin{align*}
-        K(a,k) = \langle \exp\left(-\int_0^t [a(\dot{x}(\tau))^2 + ik \dot{x}(\tau)]\dd{\tau}\right) \rangle_W 
-    \end{align*}
+    \begin{align}
+        K(a,k) = \langle \exp\left(-\int_0^t [a[\dot{x}(\tau)]^2 + ik \dot{x}(\tau)]\dd{\tau}\right) \rangle_W  \label{eqn:Kdef}
+    \end{align}
     where $a$ and $k$ are arbitrary (real) constants. How this result can be used to determine $\langle \delta(x-x(t)) \rangle_W$?
+
+    \medskip
+
+    \textbf{Solution}. Let's introduce a discretization $\{t_j\}_{j=1,\dots,n}$, and the usual notation $f_i \equiv f(t_i)$ and $\Delta f = f_{i} - f_{i-1}$. Let also $D=1/4$ to simplify notation.
+
+    For a fixed $a, k \in \mathbb{R}$, $K(a,k)$ is the \textit{continuum} limit of the discretized integral:
+    \begin{align*}
+        K(a,k) &= \lim_{n \to \infty} K_n(a,k)\\
+        K_n(a,k) &= \int_{\mathbb{R}^n} \left(\prod_{i=1}^n \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} \right) \exp \left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{\Delta t_i} \right) \cdot \\
+        &\quad \> \cdot \exp\left(-\sum_{i=1}^n \left[ \frac{a(x_i - x_{i-1})^2}{\Delta t_i^2}  + \frac{ik \Delta x_i}{\Delta t_i} \right] \Delta t_i\right)
+    \end{align*} 
+    Note that:
+    \begin{align*}
+        \sum_{i=1}^n \Delta x_i = x_n - x_0 = x_n
+    \end{align*}
+    where we assume $x_0 = 0$ for simplicity. This leads to:
+    \begin{align*}
+        K_n(a,k) &= \int_{\mathbb{R}^n} \left(\prod_{i=1}^n \frac{\dd{x_i}}{\sqrt{\pi \Delta t_i}} \right) \exp \left(-\sum_{i=1}^n \frac{(x_i - x_{i-1})^2}{\Delta t_i} \right) \cdot\\
+        &\quad \> \cdot \exp \left(-\sum_{i=1}^n \frac{a (x_i - x_{i-1})^2}{\Delta t_i} + \hlc{Yellow}{i k x_n}\right)
+    \end{align*}
+    This \textit{is} a multivariate gaussian integral. We can \textit{decouple} all the $n$ gaussian with a change of variables, that is suggested by the most immediate simplification $(x_i - x_{i-1})^2 = y_i^2$:
+    \begin{align*}
+        x_i - x_{i-1} = y_i
+    \end{align*} 
+    Note that:
+    \begin{align*}
+        \sum_{j=1}^i y_j = y_1+\dots + y_i = \cancel{x_1}-\underbrace{x_0 }_{0}+ \bcancel{x_2}-\cancel{x_1 }+ \dots + x_i - \cancel{x_{i-1}} = x_i \quad 1 \leq i \leq n
+    \end{align*}
+    This allows to compute the jacobian:
+    \begin{align*}
+        \operatorname{det}\left|\pdv{\{x_i\}}{\{y_j\}} \right| = \operatorname{det} \left|\left(\begin{array}{cccc}
+        1 & 0 & \cdots & 0 \\ 
+        1 & \ddots & \ddots & \vdots \\ 
+        \vdots & \ddots & \ddots & 0 \\ 
+        1 & \cdots & 1 & 1
+        \end{array}\right) \right|_{n\times n} = 1
+    \end{align*}
+    Leading to:
+    \begin{align*}
+        K_n(a,k) &= \int_{\mathbb{R}^n}  \left(\prod_{i=1}^n \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}} \right) \exp\left(-\sum_{i=1}^n \frac{y_i^2 (1+a)}{\Delta t_i}  + \hlc{Yellow}{ik \sum_{i=1}^n y_i}\right)
+    \end{align*}
+    Now the gaussians are decoupled, and we can move the product outside the integral:
+    \begin{align}
+        K_n(a,k) &= \prod_{i=1}^n \int_{\mathbb{R}} \frac{\dd{y_i}}{\sqrt{\pi \Delta t_i}} \exp\Bigg(-\underbrace{\frac{(1+a)}{\Delta t_i} }_{A}y_i^2 + \underbrace{ik}_{b}y_i \Bigg) \label{eqn:orig} \\ \nonumber
+        &= \prod_{i=1}^n \sqrt{\frac{\pi}{A} } \exp\left(\frac{b^2}{4A} \right) = \prod_{i=1}^n \frac{1}{\sqrt{1+a}}  \exp\left(-\frac{k^2}{4(1+a)}\Delta t_i\right) =\\ \nonumber
+        &= \left(\frac{1}{\sqrt{1+a}} \right)^n \exp\left(-\frac{k^2}{4(1+a) } \sum_{i=1}^n \Delta t_i \right) =\\ \label{eqn:final}
+        &= \left(\frac{1}{\sqrt{1+a}} \right)^n \exp\left(-\frac{k^2 t}{4(1+a)} \right)
+    \end{align}
+    Taking the continuum limit $n \to \infty$ leads to different results depending on the value of $a$. 
+    
+    Note that (\ref{eqn:final}) works only for $a > -1$, and for the other cases we need to resort to a previous step (\ref{eqn:orig}). If $a < -1$, the integral diverges, and if $a = -1$ it is a product of $\delta(k)$. We omit an extended discussion of these degenerate cases.
+
+
+    For $a > -1$, by inspecting (\ref{eqn:final}) we arrive to:
+    \begin{align*}
+        K(a,k) = \begin{cases}
+            \infty & -1 < a < 0\\
+            \exp\left(-\frac{k^2 t}{4} \right) & a = 0\\
+            0 & a > 0
+        \end{cases}
+    \end{align*}
+
+    We can use (\ref{eqn:final}) to evaluate $\langle \delta(x-x(t)) \rangle_W$. Recall the Dirac $\delta$ definition:
+    \begin{align*}
+        \delta(x) = \mathbb{F}^{-1}[1](x) = \frac{1}{2 \pi} \int_{\mathbb{R}} e^{ikx} \dd{k}  
+    \end{align*}
+    Then:
+    \begin{align}
+        \langle \delta(x-x(t)) \rangle_W = \langle \frac{1}{2\pi} \int_{\mathbb{R}} \dd{k} e^{ik(x-x(t))}  \rangle \label{eqn:delta1}
+    \end{align}
+    Compare this last expression with the starting integral (\ref{eqn:Kdef}). Note that, if we set $a=0$, we get:
+    \begin{align*}
+        K(0,k) = \langle- \int_0^t ik \dot{x}(\tau) \dd{\tau} \rangle = \langle \exp(-ik x(\tau)) \rangle \overset{(\ref{eqn:final})}{=} \exp\left(-\frac{k^2 t}{4} \right)
+    \end{align*}
+    Substituting in (\ref{eqn:delta1}) and exchanging the integral on $\dd{k}$ with the average (thanks to linearity):
+    \begin{align*}
+        \langle \delta(x-x(t)) \rangle_W &= \frac{1}{2 \pi} \int_{\mathbb{R}} \dd{k} e^{ikx} \underbrace{\langle e^{-ikx(t)} \rangle_W}_{K(0,k)} = \frac{1}{2 \pi} \int_{\mathbb{R}} \dd{k} \exp\Bigg(-\underbrace{\frac{t}{4}}_{A} k^2 +\underbrace{ix}_{b}k\Bigg) =\\
+        &= \frac{1}{2 \pi} \sqrt{\frac{\pi}{A} }\exp\left(\frac{b^2}{4A}  \right) = \frac{1}{2\pi} \sqrt{\frac{4\pi}{t} } \exp\left(-\frac{4x^2}{4t} \right) =\frac{1}{\sqrt{\pi t}} \exp\left(-\frac{x^2}{t} \right)
+    \end{align*}
+    Which is the same result as previously derived.
 \end{exo}
 
 \begin{exo}
@@ -366,6 +550,30 @@
         \mathbb{P}(|\Delta x| < \epsilon) = \lim_{\Delta t \to 0^+} \int_{|\Delta x| < \epsilon } \frac{\dd{\Delta x}}{\sqrt{4 \pi D \Delta t }} \exp\left(-\frac{(\Delta x)^2}{4D \Delta t} \right)=1 \qquad \forall \epsilon> 0 
     \end{align*}
     We have used this result to argue that Brownian trajectories are continuous with probability $1$.
+
+    \medskip
+
+    \textbf{Solution}.
+    Consider a discretization $\{t_j\}_{j=1,\dots,n}$, with $\Delta t_i = t_i - t_{i-1}$ and $x_i \equiv x(t_i)$. Then, for every $i$:
+    \begin{align*}
+        \mathbb{P}(|\Delta x_i| < \epsilon) &= \mathbb{P}(x_{i-1} - \epsilon < x_i < x_{i-1}+\epsilon|x(t_{i-1}) = x_{i-1}) =\\
+        &= \int_{x_{i-1} - \epsilon}^{x_{i-1} + \epsilon} \frac{\dd{x_i}}{\sqrt{4 \pi D \Delta t_i}}  \exp\left(-\frac{(x_i - x_{i-1})^2}{4D \Delta t_i} \right) =\\
+        &\underset{(a)}{=}  \int_{-\epsilon}^{+\epsilon} \frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}}  \exp\left(-\frac{[\Delta x_i]^2}{4 D \Delta t_i} \right) 
+    \end{align*}
+    where in (a) we translated the variable of integration $\Delta x_i = x_i - x_{i-1}$.
+
+    To compute the final integral, we perform another change of variable:
+    \begin{align*}
+        \frac{[\Delta x_i]^2}{\Delta t_i} = z^2 \Rightarrow z = \frac{\Delta x_i }{\sqrt{ \Delta t_i}}    \Rightarrow \dd{\Delta x_i} = \dd{z} \sqrt{\Delta t_i}
+    \end{align*} 
+    Leading to:
+    \begin{align*}
+        \mathbb{P}(|\Delta x_i| < \epsilon) = \int_{-\epsilon/\sqrt{\Delta t_i}}^{+\epsilon/\sqrt{\Delta t_i}} \dd{z} \frac{\cancel{\sqrt{\Delta t_i}}}{\sqrt{4 \pi D \cancel{\Delta t_i}}} \exp\left(-\frac{z^2}{4D} \right) 
+    \end{align*}
+    In the continuum limit $\Delta t_i \to 0^+$ we get:
+    \begin{align*}
+        \lim_{\Delta t_i \to 0^+} \mathbb{P}(|\Delta x_i| < \epsilon) = \int_{-\infty}^{+\infty} \frac{\dd{z}}{\sqrt{4 \pi D}}  \exp\left(-\frac{z^2}{4 D} \right) = 1
+    \end{align*}
 \end{exo}
 
 \begin{exo}
@@ -373,7 +581,28 @@
     \begin{align*}
         \mathbb{P}\left(\left|\frac{\Delta x}{\Delta t}  \right| > k\right) = \lim_{\Delta t \to 0^+} \int_{|\Delta x| > k \Delta t} \frac{\dd{\Delta x }}{\sqrt{4 \pi D \Delta t}}\exp\left(-\frac{(\Delta x)^2}{4 D \Delta t} \right) = 1 \qquad \forall k > 0
     \end{align*}
-    We have used this result to argue that Brownian trajectories are never differentiable with probability $1$.
+    We have used this result to argue that Brownian trajectories are never differentiable with probability $1$. 
+
+    \medskip
+
+    \textbf{Solution}. As in the previous exercise, consider a time discretization $\{t_j\}_{j=1,\dots,n}$ and the usual notation. 
+    We then consider the related probability in the discretized path. First, to have a unique integration domain we rewrite the probability in terms of the converse event:
+    \begin{align*}
+        \mathbb{P}\left(\left|\frac{\Delta x_i}{\Delta t_i }  \right| > k\right) = 1- \mathbb{P}\left(\left|\frac{\Delta x_i}{\Delta t_i }  \right| \leq k\right) = 1-\int_{-k \Delta t_i}^{+k \Delta t_i} \frac{\dd{\Delta x_i}}{\sqrt{4 \pi D \Delta t_i}} \exp\left(-\frac{\Delta x_i^2}{4 D \Delta t_i} \right)
+    \end{align*}
+
+    Consider again the change of variable:
+    \begin{align*}
+        \frac{[\Delta x_i]^2}{\Delta t_i} = z^2 \Rightarrow z = \frac{\Delta x_i }{\sqrt{ \Delta t_i}}    \Rightarrow \dd{\Delta x_i} = \dd{z} \sqrt{\Delta t_i}
+    \end{align*}
+    leading to:
+    \begin{align*}
+        \mathbb{P}\left(\left|\frac{\Delta x_i}{\Delta t_i }  \right| > k\right) = 1 - \int_{-k\sqrt{\Delta t_i}}^{+k \sqrt{\Delta t_i}} \frac{\dd{z}}{\sqrt{4 \pi D}}  \exp\left(-\frac{z^2}{4 D} \right) 
+    \end{align*}
+    Note that in the continuum limit $\Delta t_i \to 0^+$ the integral domain vanishes, while the integrand remains the same, meaning that the whole integral will go to $0$. So:
+    \begin{align*}
+        \lim_{\Delta t_i \to 0^+} \mathbb{P}\left(\left|\frac{\Delta x_i}{\Delta t_i }  \right| > k\right)  = 1 -0 = 1
+    \end{align*}
 \end{exo}
 
 \setcounter{chapter}{3}
