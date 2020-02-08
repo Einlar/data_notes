@@ -5,6 +5,7 @@ e%&latex
 
 \begin{document}
 
+\newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
 \title{ \normalsize \textsc{Models of Theoretical Physics}
                 \\ [2.0cm]
                 \HRule{0.5pt} \\
@@ -20,6 +21,7 @@ e%&latex
     Università degli Studi di Padova}
 
 \maketitle
+\restoregeometry
 \tableofcontents
 \newpage
 
@@ -245,15 +247,201 @@ e%&latex
     
     \medskip
 
-    \textbf{Solution}.  
+    \textbf{Solution}. The idea is to extend this equation to the \textit{entire real line} (a case that we already tackled) by exploiting \textit{symmetries}.   
+
+    So, consider the diffusion equation on $\mathbb{R}$:
+    \begin{align*}
+        \partial_t \tilde{W}(x,t) = D\partial_x^2 \tilde{W}(x,t) \qquad x \in \mathbb{R}
+    \end{align*}
+    We note that if $\tilde{W}(x,0)$ is even/odd, then $\tilde{W}(x,t)$ is even/odd $\forall t$, that is the diffusion \textit{preserves} the initial symmetry.
+    
+    This can be seen directly. For example, suppose $\tilde{W}(x,0)$ is odd. Then the solution at time $t$ is:
+    \begin{align*}
+        \tilde{W}(x,t) = \int_{\mathbb{R}} \dd{x_0} W(x,t|x_0,0) W(x_0,0)
+    \end{align*}
+    Let's evaluate $\tilde{W}(-x,t)$:
+    \begin{align*}
+        \tilde{W}(-x,t) = \int_{-\infty}^{+\infty} \dd{x_0} \frac{1}{\sqrt{4 \pi Dt}}  \exp\left(-\frac{(-x -x_0)^2}{4Dt} \right) \tilde{W}(x_0,0)
+    \end{align*}
+    Changing variables to $x_0' = -x_0$:
+    \begin{align*}
+        \tilde{W}(-x,t) = -\int_{+\infty}^{-\infty} \dd{x_0'} \frac{1}{\sqrt{4 \pi Dt}}  \exp\left(-\frac{(-x +x_0')^2}{4Dt} \right) \tilde{W}(-x_0',0)
+    \end{align*}
+    Then inverting the integration path, renaming $x_0' \to x_0$ and using the $W(x_0,0) = -W(-x_0,0)$ leads to:
+    \begin{align*}
+        \tilde{W}(-x,t) = -\int_{-\infty}^{+\infty} \dd{x_0} \frac{1}{\sqrt{4 \pi Dt}} \exp\left(-\frac{(x-x_0)^2}{4Dt} \right) \tilde{W}(x_0,0) = - \tilde{W}(x,t)
+    \end{align*} 
+    
+    Assuming $\tilde{W}(x,0)$ even, with similar calculations it is possible to see that also $\tilde{W}(x,t)$ is even.
+
+    \begin{expl}
+        \textbf{Alternative method}. We could prove the same \textit{symmetry preserving property} without knowing the explicit solution formula. Just start from the diffusion equation:
+        \begin{align} \label{eqn:d1}
+            \partial_t W(x,t) = D\partial_x^2 W(x,t)
+        \end{align}  
+        Note that it is \textit{linear}, meaning that if $W_1(x,t)$ and $W_2(x,t)$ are solutions, then also $a W_1(x,t) + bW_2(x,t)$ is a solution.
+
+        So, let $W(x,t)$ be \textit{any} solution. We can construct an \textit{odd} solution as follows:
+        \begin{align*}
+            W_{\mathrm{odd}}(x,t) = \frac{W(x,t) - W(-x,t)}{2} 
+        \end{align*}  
+        To prove that this is indeed a solution, we need to show that $W(-x,t)$ is a solution, and the rest follows from linearity. So, by direct substitution:
+        \begin{align*}
+            \partial_t W(-x,t) = D \partial_x^2 [W(-x,t)] = D \partial_x[-W'(-x,t)] = D W''(-x,t)
+        \end{align*}
+        This is possible because the $x$-derivative is of \textit{even} order. 
+    \end{expl}
+
+    \begin{expl}
+        Now, by \textit{uniqueness} of solutions, the same initial condition cannot \textit{evolve} to different solutions. So, as $W_{\mathrm{odd}}(x,t)$ is odd by construction $\forall t$, we have showed that any solution of (\ref{eqn:d1}) that starts \textit{odd} will remain \textit{odd}.  
+    \end{expl}
+
+    We can finally tackle the half-line problem. Note that any solution $\tilde{W}(x,t)$ on the full line, when evaluated on $x>0$, will be a solution on the half-line (because the differential equation remains the same). The only thing that needs to be checked is the boundary condition - and that's why we needed the excursus on symmetry. We note that:
+
+    \begin{itemize}
+        \item \textbf{Absorbing boundary}. Any $\tilde{W}(x,t)$ \textbf{odd} satisfies the absorbing boundary condition $\tilde{W}(0,t) = 0$ (if the particle disappears upon reaching $x=0$, then the probability of finding it there must be always $0$).
+        \item \textbf{Reflecting boundary}. Recall the definition of flux:
+        \begin{align*}
+            \partial_t W(x,t) \equiv - \pdv{x} J(x,t)
+        \end{align*}
+        Comparing with (\ref{eqn:d1}) we have:
+        \begin{align*}
+            J(x,t) = -D \pdv{x}W(x,t)
+        \end{align*}
+        So the reflective boundary condition becomes:
+        \begin{align*}
+            J(0,t) \overset{!}{=} 0 \Rightarrow \pdv{x} W(0,t) = 0
+        \end{align*}
+        Now note that this condition is automatically satisfied by any solution $\tilde{W}(x,t)$ on the whole line that is \textbf{even}. In fact:
+        \begin{align*}
+            \pdv{x} \tilde{W}(0,t) = \lim_{\Delta x \to 0} \frac{\tilde{W}(\Delta x,t) - \tilde{W}(0,t)}{\Delta t} = \lim_{\Delta x \to 0} \frac{\tilde{W}(0,t) - \tilde{W}(-\Delta x,t)}{\Delta x}  
+        \end{align*} 
+        And inserting $\tilde{W}(-\Delta x,t) = \tilde{W}(\Delta x,t)$ by symmetry:
+        \begin{align*}
+            \pdv{x} \tilde{W}(0,t) =  \underbrace{\lim_{\Delta x \to 0} \frac{\tilde{W}(\Delta x,t) - \tilde{W}(0,t)}{\Delta t} }_{a}= \underbrace{\lim_{\Delta x \to 0} \frac{\tilde{W}(0,t) - \tilde{W}(\hlc{Yellow}{\Delta x},t)}{\Delta x} }_{-a}= 0
+        \end{align*}
+        As $a=-a$ only if $a=0$.
+    \end{itemize}
+    Summarizing, by choosing the initial condition $\tilde{W}(x,0)$ with the right symmetry on the whole line, we get \q{for free} the solution on the half-line with an absorbing/reflective boundary at $x=0$. Let's do just that.
+
+    \begin{itemize}
+        \item \textbf{Absorbing boundary}. We need to \textit{reflect} the half-line initial condition so to have an \textit{odd} initial condition on the full line. So:
+        \begin{align*}
+            \tilde{W}(x,0) = \delta(x-x_0)-\delta(x+x_0)
+        \end{align*}   
+        The full solution is then:
+        \begin{align*}
+            \tilde{W}(x,t) &= \int_\mathbb{R} \frac{\dd{x'}}{\sqrt{4 \pi Dt}} \exp\left(-\frac{(x-x')^2}{4Dt} \right) \tilde{W}(x',0) =\\
+            &= \int_{\mathbb{R}} \frac{\dd{x'}}{\sqrt{4 \pi D t}} \exp\left(-\frac{(x-x')^2}{4Dt} \right) (\delta(x'-x_0) - \delta(x+x_0)) =\\
+            &=\frac{1}{\sqrt{4 \pi D t}} \left[\exp\left(-\frac{(x-x_0)^2}{4Dt} \right) - \exp\left(-\frac{(x+x_0)^2}{4Dt} \right)\right] \qquad x>0
+        \end{align*}
+        The survival probability $\mathcal{P}(t)$ is the integral over the half-line:
+        \begin{align}\nonumber
+            \mathcal{P}(t) &= \int_{\mathbb{R}^+} \tilde{W}(x,t) =\frac{1}{\sqrt{4 \pi D t}} \int_0^{+\infty} \dd{x} \left[\exp\left(-\frac{(x-x_0)^2}{4Dt} \right) - \exp\left(-\frac{(x+x_0)^2}{4Dt} \right)\right] =\\ \nonumber
+            &\underset{(a)}{=\frac{1}{\sqrt{4 \pi D t}}}  \int_{-x_0}^{+\infty} \dd{y} \exp\left(-\frac{y^2}{4Dt} \right) -\frac{1}{\sqrt{4 \pi D t}} \int_{x_0}^{+\infty} \dd{y} \exp\left(-\frac{y^2}{4Dt} \right) =\\ \label{eqn:Psurv}
+            &=\frac{1}{\sqrt{4 \pi D t}} \int_{-x_0}^{+x_0} \dd{y} \exp\left(-\frac{y^2}{4Dt} \right) \underset{(b)}{=} \frac{1}{\sqrt{\pi}} \int_{-x_0/\sqrt{4Dt}}^{x_0/\sqrt{4Dt}} \dd{t} e^{-t^2}   \equiv \operatorname{erf}\left(\frac{x_0}{\sqrt{4Dt}} \right) 
+        \end{align}
+        where in (a) we changed variables $y=x-x_0$ (first integral) and $y=x+x_0$ (second integral). The in (b) we performed another change of variable $t=y/\sqrt{4 Dt}$. The $\operatorname{erf}(x)$ is the gaussian \textit{error function} (used mainly in statistics), defined as the integral:
+        \begin{align*}
+            \operatorname{erf}(x) = \frac{1}{\sqrt{\pi}}\int_{-x}^{+x} e^{-t^2} \dd{t}  
+        \end{align*}  
+        which has no analytical form (except for $x=\infty$) and must be computed numerically.
+
+        Looking at (\ref{eqn:Psurv}) we see that $\mathcal{P}(t)$ is, \textit{graphically}, the area under a center slice - with width $2x_0/\sqrt{4 D t}$ - of the unit gaussian.
+        
+        As $D$ has units of $[\si{\m^2\per\s}]$, $x_0^2/D$ has units of time, and so can be interpreted as the \textit{scale} of the \textit{first arrival time} at $x=0$ from $x_0$ for a diffusing particle. In fact:
+        \begin{itemize}
+            \item For $t \ll x_0^2/D$, or equivalently $x_0^2/(Dt) \gg 1$, $\mathcal{P}(t) \to 1$, as the integral in (\ref{eqn:Psurv}) is over most of the \textit{support} of the gaussian. Physically, this means that the particle \textit{did not have enough time} to reach the absorbing boundary $x=0$ from its starting position at $x_0$.
+            \item  For $t \gg x_0^2/D$, i.e. $x_0^2/(Dt) \ll 1$, $\mathcal{P}(t) \to 0$, as the integral limits in (\ref{eqn:Psurv}) are almost the same. Physically, given a \textit{sufficiently long time}, a particle will reach $x=0$ through random motion, independently of its starting position. 
+        \end{itemize}
+        
+
+        
+        
+        
+        \item \textbf{Reflective boundary}. This time we need an \textit{even} extension:
+        \begin{align*}
+            \tilde{W}(x,0) = \delta(x-x_0) + \delta(x+x_0)
+        \end{align*}  
+        Leading to:
+        \begin{align*}
+            \tilde{W}(x,t) &= \int_\mathbb{R} \frac{\dd{x'}}{\sqrt{4 \pi Dt}} \exp\left(-\frac{(x-x')^2}{4Dt} \right) \tilde{W}(x',0) =\\
+            &= \int_{\mathbb{R}} \frac{\dd{x'}}{\sqrt{4 \pi D t}} \exp\left(-\frac{(x-x')^2}{4Dt} \right) (\delta(x'-x_0) + \delta(x+x_0)) =\\
+            &=\frac{1}{\sqrt{4 \pi D t}} \left[\exp\left(-\frac{(x-x_0)^2}{4Dt} \right) + \exp\left(-\frac{(x+x_0)^2}{4Dt} \right)\right] \qquad x>0
+        \end{align*}
+    \end{itemize}
+    
 \end{exo}
 
-\begin{exo}
-    For a Brownian motion $X(s)$, $0\leq s \leq t$, with diffusion coefficient $D$ and initial condition $X(0) = 0$, show that:
+\begin{comment}
+The idea is to rewrite $W(x,t)$ as a (infinite) linear combination of eigenfunctions $\varphi_k(x)$ of the operator $\partial_x^2$, with coefficients $c_k$ that can depend on time:
+    \begin{align} \label{eqn:eigen-decomp}
+        W(x,t) = \int_{\mathbb{R}} c_k (t)\varphi_k(x) \dd{k} \qquad \partial_x^2 \varphi_k(x) = \lambda_k \varphi_k(x)
+    \end{align}
+    So that the second derivative can be computed as follows:
     \begin{align*}
-        \operatorname{Prob}\left(\sup_{0 \leq s \leq t} X(s) \geq a \right) = \frac{2}{\sqrt{4 \pi D t }} \int_a^{\infty} \exp\left(-\frac{z^2}{4 Dt } \right) \dd{z} = \operatorname{erfc}\left(\frac{a}{\sqrt{4 D t}} \right) 
+        \partial_x^2 W(x,t) = \int_{\mathbb{R}} c_k (t)\partial_x^2 \varphi_k(x) \dd{k} = \int_{\mathbb{R}} c_k(t) \lambda_k \varphi_k(x) \dd{k}
+    \end{align*}
+    And substituting back in the differential equation:
+    \begin{align*}
+        \partial_t \int_{\mathbb{R}} \dd{k} c_k (t)\varphi_k(x) = D\int_\mathbb{R} \dd{k} \lambda_k c_k(t) \varphi_k(x)
+    \end{align*}
+    As the $\varphi_k(x)$ are orthonormal, the two sums are equal if and only if each term is equal, and so:
+    \begin{align*}
+        \dot{c}_k (t)= D \lambda_k c_k(t)
+    \end{align*}
+    This is a differential equation that can be solved, for example by separation of variables.
+
+    \medskip
+    
+    To find the $\varphi_k(x)$ we solve the eigenvalue equation:
+    \begin{align}
+        \partial_x^2 \varphi_k(x) = \lambda_k \varphi_k(x) \label{eqn:eigenvalue-eq}
+    \end{align}
+    If we let $\lambda_k = -k^2$, (\ref{eqn:eigenvalue-eq}) becomes the harmonic oscillator ODE, and so:
+    \begin{align*}
+        \varphi_k(x) = A e^{ikx} + B e^{-ikx} \qquad A,B \in \mathbb{C}
+    \end{align*}
+    We discover that $e^{\pm ikx}$ are both eigenfunctions of $\partial_x^2$ corresponding to the same eigenvalue, and so it is any linear combination of them. As $\partial_x^2$ is a \textit{hermitian} operator, $\varphi_k(x)$ and $\varphi_{k'}(x)$ with $k \neq k'$ must be orthogonal, as they are eigenfunctions of different eigenvalue. 
+
+    Let's consider now the boundary conditions.
+    Substituting in (\ref{eqn:eigen-decomp}) and setting $W(0,t) = 0$ (\textbf{absorbing boundary}):
+    \begin{align*}
+        0 \overset{!}{=}  W(0,t) = \int_{\mathbb{R}} \dd{k} c_k(t) [A+B]
+    \end{align*}
+    So the boundary condition is automatically satisfied by setting $A = -B$. For example, let $A=1/(2i)$ and $B=-1/(2i)$, so that:
+    \begin{align*}
+        \varphi_k(x) = \frac{e^{ikx} - e^{-ikx}}{2i} = \sin(kx)
+    \end{align*}
+\end{comment}
+\begin{exo}
+    For a Brownian motion $x(s)$, $0\leq s \leq t$, with diffusion coefficient $D$ and initial condition $x(0) = 0$, show that:
+    \begin{align*}
+        \operatorname{Prob}\left(\sup_{0 \leq s \leq t} x(s) \geq a \right) = \frac{2}{\sqrt{4 \pi D t }} \int_a^{\infty} \exp\left(-\frac{z^2}{4 Dt } \right) \dd{z} = \operatorname{erfc}\left(\frac{a}{\sqrt{4 D t}} \right) 
     \end{align*}  
     (Hint: some of the results of previous exercises are useful to derive the above result.)
+
+    \medskip
+
+    \textbf{Solution}. We wish to compute the probability that a Brownian path starting in $0$ at $t=0$ arrives \textit{past} $x=a$ in a time window $[0,t]$. In other words, generate $N=100$ paths in $[0,t]$, and count how many of them go further thatn $x=a$. We are interested in the fraction of \q{successes} as $N \to \infty$. 
+    
+    \medskip
+
+    Note that it does not matter the final point of each path, but just if it reaches $x=a$ at least one time or not. So, let $x=a$ be an absorbing boundary, and let's study the Brownian motion in the half-line $(-\infty,a)$. As the particle is free, there is no preferred direction, and by symmetry we can \textit{reverse} the interval, studying $x \in (-a,+\infty)$ with absorbing boundary at $x=a$. Formally:
+    \begin{align*}
+        \operatorname{Prob}\left(\sup_{0 \leq s \leq t} x(s) \geq a \Big| x(0) = 0\right) = \operatorname{Prob}\left(\inf_{0 \leq s \leq t} x(s)\leq -a\Big| x(0) = 0\right) \equiv p
+    \end{align*}
+    Finally, the system is translationally invariant: the only \textit{physical} parameter that matters for the final probability is the distance between the starting position ($0$) and the absorbing boundary ($-a$). So we can consider the particle starting at $a$ with an absorbing boundary at $0$, retrieving the case $x \in (0,\infty)$ that we studied in the last exercise.
+    
+    The probability of \textit{crossing} the boundary is the probability of \textit{not surviving}:
+    \begin{align*}
+        p = \operatorname{Prob}\left(\inf_{0 \leq s \leq t}x(s) \leq 0\Big|x(0) = a\right)  = 1-\mathcal{P}(t) &\underset{(\ref{eqn:Psurv})}{=} 1-\operatorname{erf}\left(\frac{a}{\sqrt{4 D t}} \right)\\
+        & \equiv \operatorname{erfc}\left(\frac{a}{\sqrt{4Dt}} \right) 
+    \end{align*}  
+    Where $\operatorname{erfc}$ is the \textit{complementary error function}, defined as:
+    \begin{align*}
+        \operatorname{erfc}(x) = 1-\operatorname{erf}(x)  
+    \end{align*}  
 \end{exo}
 
 \begin{exo}
@@ -1329,8 +1517,49 @@ where $\bm{D} = (D_1, \dots, D_n)^T$.
 
 
 \chapter{The Bloch Equation and the Feynman-Kac formula}
+\begin{exo} Prove that:
+    \begin{align*}
+        \int_{t_0}^t \dd{\tau} \langle V(x(\tau), \tau) \exp\left(-\int_{t_0}^\tau \dd{s} V(x(s),s)\right) \rangle_W =\\
+        = \int_{t_0}^t \dd{\tau} \int_{\mathbb{R}} \dd{x'} W_B(x',\tau|x_0,t_0) V(x',\tau)W(x,t|x',\tau) \span
+    \end{align*}
+    where:
+    \begin{align*}
+        W_B(x,t|x_0,t_0) = \langle \delta(x-x(t)) \exp\left(-\int_{t_0}^t \dd{\tau} V(x(\tau), \tau)\right) \rangle_W
+    \end{align*}
+    and $V(x(\tau),\tau)$ is a potential.
+\end{exo}
+
 \begin{exo}
+    Prove the \textit{backward Fokker-Planck} equation:
+    \begin{align*}
+        \partial_{t_0} W_B(x,t|x_0,t_0) = -D(\partial_{x_0}^2 - V(x_0,t_0)) W_B(x,t|x_0,t_0) 
+    \end{align*} 
+    in two ways:
+    \begin{enumerate}
+        \item Using the Bloch equation:
+        \begin{align*}
+            \partial_t W_B(x,t|x_0,t_0) = (D\partial_x^2 - V(x,t)) W_B(x,t|x_0,t_0)
+        \end{align*}
+        and defining a $\mathcal{U}$ operator so that $\partial_t W_B(t) = \mathcal{U} W_B(t)$ and repeated integrations over intermediate times.
+        \item Using the path integral formulation
+    \end{enumerate}    
     
+\end{exo}
+
+\begin{exo}
+    Prove that eq. (6.38) satisfies the backward Bloch eq. (6.37) for the simplest case $k=d=1$ and $D(x,t) > 0$ generic. (Hint: use the discrete measure eq. (5.37) for $d=1$). Notice that it is easier to prove the backward Bloch eq. (6.37) rather than (6.36) since a change of variable involved in the derivation does not need complicated derivations).
+\end{exo}
+
+\setcounter{exo}{4} %Optional!
+
+\begin{exo} Derive the analogous of the Bloch equation and of the backward Bloch equation for the Master Equation of exercise 5.7.
+
+    \textit{Hint}: The trajectory $i(t)$ stays constant and suddenly jumps 
+    at random times. Thus $\int_{t_0}^t V_{i(s)} \dd{s}$ is well defined. When evaluating the average:
+    \begin{align*}
+        W_B(i,t|i_0,t_0) = \langle \exp\left(-\int_{t_0}^t V_{i(s)} \dd{s} \delta_{i(t),i}\right) \rangle
+    \end{align*}w
+    where $W_B(i,t_0|i_0,t_0) = \delta_{i,i_0}$ and $\delta_{i,i_0}$ is the Kronecker delta, at time $t+\dd{t}$ one has to consider two contributions: one from no change of state and the other from the change of state.
 \end{exo}
 
 \listoftheorems

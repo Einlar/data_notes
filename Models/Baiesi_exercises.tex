@@ -3,9 +3,142 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-\chapter{MoTP Baiesi Exercises 2019/20}
+\newgeometry{top=2cm, bottom=2cm, left=2cm, right=2cm}
+\title{ \normalsize \textsc{Models of Theoretical Physics}
+                \\ [2.0cm]
+                \HRule{0.5pt} \\
+                \LARGE \textbf{{Baiesi's Exercises}}
+                \HRule{2pt} \\ [0.5cm]
+                \normalsize \today \vspace*{5\baselineskip}}
 
-\section{Lesson 2}
+\date{}
+
+\author{
+    Francesco Manzali, 1234428\\
+    Master's degree in Physics of Data \\ 
+    Università degli Studi di Padova}
+
+\maketitle
+\restoregeometry
+\newpage
+
+\chapter{Lesson 1}
+\begin{exo}[Multivariate Gaussian Integral]
+    Given $\bm{x} = (x_1,x_2)^T$, $\bm{b} = (1,0)^T$ and the matrix $A$:
+    \begin{align*}
+        A = \left(\begin{array}{cc}
+        3 & -1 \\ 
+        -1 & 3
+        \end{array}\right)
+    \end{align*}   
+    compute the Gaussian integrals:
+    \begin{align*}
+        Z(A) &= \int_{\mathbb{R}^2} \dd[2]{\bm{x}} \exp\left(-\frac{1}{2} \bm{x}^T A \bm{x} \right) \\
+        Z(A,\bm{b}) &= \int_{\mathbb{R}^2} \dd[2]{\bm{x}} \exp\left(-\frac{1}{2} \bm{x}^T A \bm{x} + \bm{b}\cdot \bm{x} \right)
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. We use the following formulas:
+    \begin{align*}
+        Z(A) &= \sqrt{\frac{(2 \pi)^n}{\operatorname{det}(A)}}\\
+        Z(A,\bm{b}) &= \sqrt{\frac{(2 \pi)^n}{\operatorname{det}(A)}} \exp\left(\frac{1}{2} \bm{b}\cdot (A^{-1}\bm{b}) \right)
+    \end{align*}
+   
+    Note that $\operatorname{det}A = 8$, and:
+    \begin{align*}
+        A^{-1} = \frac{1}{8} \left(\begin{array}{cc}
+        3 & 1 \\ 
+        1 & 3
+        \end{array}\right) 
+    \end{align*} 
+    So, by simply using (\ref{eqn:ZA}) and (\ref{eqn:ZAb}):
+    \begin{align*}
+        Z(A,0) &= \frac{(2\pi)^{2/2}}{\sqrt{8}} = \frac{\pi}{\sqrt{2}} \\
+        \frac{1}{2} \bm{b}\cdot (A^{-1}\bm{b}) &=  \frac{1}{2} \left(\begin{array}{cc}
+        1 & 0
+        \end{array}\right) \frac{1}{8} \left(\begin{array}{cc}
+        3 & 1 \\ 
+        1 & 3
+        \end{array}\right) \left(\begin{array}{c}
+        1 \\ 
+        0
+        \end{array}\right) = \frac{3}{16} \\
+        Z(A, \bm{b}) &= \frac{\pi}{\sqrt{2}} \exp\left(\frac{3}{16} \right)   
+    \end{align*}
+\end{exo}
+
+\begin{exo}[Steepest Descent Approximation] 
+    With the saddle-point strategy, compute the approximation for large $s$ of the following integral:
+    \begin{align} \label{eqn:I1}
+        I(s) = \int_{-\infty}^{\infty} e^{sx - \cosh x} dx
+    \end{align} 
+
+    \medskip
+
+    \textbf{Solution}. Since the integral is over the real line, we can use Laplace's formula. Let $f(x)$ be a twice-differentiable function with a unique global maximum at $x_0 \in (a,b)$. Then:
+    \begin{align} \label{eqn:Laplace-formula}
+        \int_a^b e^{n f(x)} \dd{x} \underset{n \to \infty}{\approx} \sqrt{\frac{2\pi}{n |f''(x_0)|} } e^{n f(x_0)}
+    \end{align}
+    This comes by expanding $f$ to second order about the maximum:
+    \begin{align*}
+        f(x) \approx f(x_0) - \frac{1}{2}|f''(x_0)|(x-x_0)^2 
+    \end{align*}
+    So that:
+    \begin{align*}
+        \int_a^b e^{n f(x)} \dd{x} &\approx e^{n f(x_0)} \int_a^b \exp\left(-\frac{1}{2} n |f''(x_0)| (x-x_0)^2 \right)\\ &\underset{n \to \infty}{\approx}  e^{n f(x_0)} \int_{\textcolor{Red}{\mathbb{R}}} \exp\left(-\frac{1}{2} n |f''(x_0)| (x-x_0)^2 \right)
+    \end{align*}
+    Because $x_0$ is not an end-point, for $n \to \infty$ the gaussian becomes very \q{peaked} inside $(a,b)$, allowing to compute its integral as if it was on $\mathbb{R}$. Then, computing the gaussian integral leads back to (\ref{eqn:Laplace-formula}).
+
+    \medskip
+
+    In our case we start by collecting a $s$ in the exponential argument:
+    \begin{align*}
+        I(s) = \int_{-\infty}^{\infty} \exp\Bigg(s\underbrace{\left(x-\frac{\cosh x}{s} \right)}_{f(x)}\Bigg)
+    \end{align*}
+    Now $I(s)$ is in the form needed for (\ref{eqn:Laplace-formula}).
+    We find the maximum of $f(x)$ by differentiating:
+    \begin{align*}
+        f'(x) &=1- \frac{\sinh x}{s}  \overset{!}{=} 0 \Rightarrow x_0 = \sinh^{-1} s\\
+        f''(x) &=-  \frac{\cosh x}{s} \Rightarrow f''(x_0) =- \frac{\cosh \sinh^{-1} s}{s} =- \frac{\sqrt{1+s^2}}{s} < 0 
+    \end{align*}   
+    Finally, by applying (\ref{eqn:Laplace-formula}) we obtain the result:
+    \begin{align*}
+        I(s) &\underset{s \to \infty}{\approx} \sqrt{\frac{2 \pi}{s} } \sqrt{\frac{s}{\sqrt{1+s^2}} } \exp\left(s \sinh^{-1} s-\cosh\sinh^{-1}s\right) =\\
+        &= \frac{\sqrt{2\pi}}{(1+s^2)^{1/4}} \exp\left(s \sinh^{-1}s-\sqrt{1+s^2} \right) 
+    \end{align*}
+    
+        \end{exo}
+
+\begin{exo}[Laplace's formula]
+    With the saddle-point strategy, compute the approximation for large $N$ of the following integral:
+\begin{align*}
+    I(N) = \int_{0}^{\infty} \underbrace{\cos(x)}_{g(x)} \exp \Big(-N\underbrace{ \left[\left(x-\frac{\pi}{3} \right)^2 + \left(x-\frac{\pi}{3} \right)^4\right]\Big)}_{f(x)}dx
+\end{align*} 
+
+\medskip
+
+\textbf{Solution}. 
+
+For this exercise we can use Laplace's formula (\ref{eqn:Laplace-formula}) with:
+\begin{align*}
+    f(x) = -\left[\left(x-\frac{\pi}{3} \right)^2 + \left(x-\frac{\pi}{3} \right)^4\right]
+\end{align*} 
+As this follows by approximating the integral with its most important value at the \textit{maximum}, the exponential prefactor $g(x)$ will appear as a prefactor of the solution evaluated at the maximum $x_0$: $g(x_0)$.
+\medskip
+
+By looking at $f(x)$ one can see directly that it has a global maximum in $x_0 = \pi/3$. In fact:  
+\begin{align*}
+    f'(x) &= -\left[2\left(x-\frac{\pi}{3} \right) + 4\left(x-\frac{\pi}{3} \right)^3 \right] \overset{!}{=} 0 \Leftrightarrow x_0 = \frac{\pi}{3}\\
+    f''(x) &= -\left[2+12\left(x-\frac{\pi}{3} \right)^2\right]  \Rightarrow f''(x_0) = -2 < 0
+\end{align*} 
+And so we arrive at:
+\begin{align*}
+    I(N) \underset{N \to \infty}{\approx}  \hlc{Yellow}{\cos(\pi/3)} \sqrt{\frac{2\pi}{N|-2|} } = \hlc{Yellow}{\frac{1}{2}} \sqrt{\frac{\pi}{N}}  
+\end{align*}
+\end{exo}
+
+\chapter{Lesson 2}
 \begin{exo}[Fourier transform of derivative]
     Show that the following formula holds for the Fourier transform ($\mathcal{F}(f) = \tilde{f}(k)$) of a derivative of the function $f(x)$ (under the usual mathematical assumptions for having a Fourier transform and its derivative):
     \begin{align*}
@@ -115,12 +248,13 @@
     \end{align*}
     Consider now the closed path shown in fig. \ref{fig:residue2}. In the limit where $\gamma_r$ goes from $-\infty$ to $+\infty$, the integrals over $\gamma_+$ and $\gamma_-$ vanish, as $\exp(-az^2+bz) \to 0$ for $|z| \to \infty$. Then, as the closed path does not contain any singularity, by Cauchy's integral theorem we have that the integral along $\gamma$ is the same as the integral on the real line (assuming the same orientation). This allows us to evaluate $I$ on the real line:
     \begin{align*}
-        I = \int_{\mathbb{R}} \dd{x} \exp(-ax^2 + x \beta) \exp\left(-\frac{\nu^2}{2a} + i\frac{\beta \nu}{2a}  \right) &= \sqrt{\frac{\pi}{a}} \exp\left(\frac{\beta^2}{4a} - \frac{\nu^2}{4a} + i\frac{\beta \nu}{2a}   \right) =\\
+        I &= \int_{\mathbb{R}} \dd{x} \exp(-ax^2 + x \beta) \exp\left(-\frac{\nu^2}{2a} + i\frac{\beta \nu}{2a}  \right) =\\
+        &= \sqrt{\frac{\pi}{a}} \exp\left(\frac{\beta^2}{4a} - \frac{\nu^2}{4a} + i\frac{\beta \nu}{2a}   \right) =\\
         &= \sqrt{\frac{\pi}{a} } \exp\left(\frac{(\beta + i \nu)^2}{4a}  \right)= \sqrt{\frac{\pi}{a} } \exp\left(\frac{b^2}{4a} \right)
     \end{align*}
 \end{exo}
 
-\section{Lesson 3}
+\chapter{Lesson 3}
 \begin{exo}[Cauchy distribution]
     Expand the details of these passages:
     \begin{align*}
@@ -210,4 +344,136 @@ after a suitable rescaling $Y_{n}=\gamma S_{n} / n^{\beta} .$ What are $\gamma$ 
 \end{exo}
 
 See the Jupyter notebook at this link: \url{https://github.com/Einlar/data_notes/blob/revision/Models/Plots/Baiesi3_3-simulation.ipynb}.
+
+\chapter{Lesson 4}
+Consider the two-state model with states at position $x_1 = -c$ and $x_2 = +c$ and probability $p$ to be in state $-c$, which evolves according to:
+\begin{align*}
+    \dot{p} = -W p + \frac{W}{2} + \epsilon \sin(\omega_s t) 
+\end{align*}
+
+\begin{exo}
+    For $\epsilon=0$, show that the correlation time function is:
+    \begin{align*}
+        C(t) = \langle x(t) x(0) \rangle = c^2 e^{-W|t|}    
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. 
+    
+\end{exo}
+
+\begin{exo}
+    For $\epsilon=0$, use the Wiener-Kintchine Theorem:
+    \begin{align*}
+        P(\omega) = 4 \int_0^\infty C(t)\cos(\omega t) \dd{\omega}
+    \end{align*}
+    tho show that the power spectrum in this case is:
+    \begin{align*}
+        P^{(0)}(\omega) = 4c^2 \frac{W}{W^2+ \omega^2} 
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}
+    For $\epsilon \neq 0$, show that the \textit{signal-to-noise ratio} is maximum at $\kappa^* = \Delta V$ if the rates follow the Kramers formula:
+    \begin{align*}
+        W_{1,2} = \exp\left[-\frac{2 \Delta V}{\kappa} \mp \frac{2V_1}{\kappa} \sin(\omega_s t)  \right] = \frac{W}{2} \exp\left[\mp \frac{2V_1}{\kappa} \sin(\omega_s t) \right] 
+    \end{align*} 
+    with $V_1 \ll \Delta V$ and using the correct identification for $\epsilon$ in this case.
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\chapter{Lessons 5-6}
+
+\begin{exo}
+    Consider the Random Field Ising Model (RFIM), in which the disorder has variance $\delta^2$. Proceed to arrive at the formula where the number $n$ of replicas appears explicitly in the magnetization $m$:
+    \begin{align*}
+        m = \frac{1}{Z_1(m)} \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(\frac{1}{2} \nu^2 + n\ln 2 \cosh(2 \beta J m + \beta \delta \nu)  \right)   \tanh(2 \beta Jm + \beta \delta \nu)
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}
+    With the self-consistent solution $m_{\mathrm{SC} }(m) = m$ of the RFIM, by using the condition $\partial m_{\mathrm{SC} }/\partial m=1$ for the critical point, show that the phase transition between paramagnetic phase and ferromagnetic phase takes place where this condition is satisfied:
+    \begin{align*}
+        2 \beta J \int_{\mathbb{R}} \dd{h} p(h) \frac{1}{[\cosh(\beta h)]^2} = 1 
+    \end{align*}
+    
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}
+    Show that at zero temperature in the RFIM there is a disorder-driven para-ferromagnetic transition where the random field standard deviation $\delta$ and the coupling $J$ satisfy $2J/\delta = \sqrt{\pi/2}$. For simplicity one may take $\delta=1$.
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\chapter{Lesson 7}
+For the one-dimensional stochastic motion:
+\begin{align*}
+    \dot{x} = F(x) + \sqrt{\epsilon} \xi
+\end{align*}
+with white noise $\xi$ and drift $F$, the instantons ($\epsilon \to 0$ limit) follow the equation:
+\begin{align*}
+    \ddot{x} = -\dv{V_{\mathrm{eff} }}{x}\quad \text{ with } \quad V_{\mathrm{eff} }(x) = -\frac{F^2(x)}{2} 
+\end{align*}
+which implies a conservation of the \q{energy}:
+\begin{align*}
+    E = \frac{1}{2} \dot{x}^2 + V_{\mathrm{eff} }(x) 
+\end{align*}
+
+\begin{exo}
+    Find the instanton for $F = - \kappa x$ by using the conservation of energy, for initial condition $t_i = 0$, $x_i=0$, $\dot{x}_i = 0$ and final condition $x_0$ at $t=0$.
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}
+    For $F=-\kappa \sin x$ show that the instanton:
+    \begin{align*}
+        x^*(t) = 2\arctan (e^{\kappa t})
+    \end{align*}
+    has \q{energy} $E=0$ at every instant $t$.
+\end{exo}
+
+\begin{exo}
+    Consider a $N$-dimensional system with $i \leq N$ components. Each component of $\bm{x} = (x_i)$ follows a stochastic motion:
+    \begin{align*}
+        \dot{x}_i = F_i(\bm{x}) + \sqrt{\epsilon} \xi_i
+    \end{align*}
+    with independent white noises $\langle \xi_i(t) \xi_j (t')\rangle = \delta_{ij} \delta(t-t')$.
+
+    By starting from the Euler-Lagrange equation per component, show that the instanton equations become:
+    \begin{align} \label{eqn:instantons}
+        \ddot{x}_i = \pdv{x_i} \frac{\norm{\bm{F}}^2}{2} + \sum_{j=1}^N \left(\pdv{F_i}{x_j} - \pdv{F_j}{x_i}\right)  \dot{x}_j
+    \end{align}
+    where:
+    \begin{align*}
+        \norm{\bm{F}}^2 = \sum_{j=1}^N F_i^2
+    \end{align*}
+\end{exo}
+
+\begin{exo}
+    Show that:
+    \begin{align*}
+        \mathcal{E}= \frac{1}{2} \norm{\dot{\bm{x}}}^2 + V_{\mathrm{eff} }(\bm{x}) \qquad V_{\mathrm{eff} }(\bm{x}) = -\frac{1}{2} \norm{\bm{F}}^2   
+    \end{align*}
+    is a constant for the solution of the instanton equations (\ref{eqn:instantons}).
+\end{exo}
 \end{document}
