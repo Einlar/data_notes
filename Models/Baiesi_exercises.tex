@@ -52,7 +52,7 @@
         1 & 3
         \end{array}\right) 
     \end{align*} 
-    So, by simply using (\ref{eqn:ZA}) and (\ref{eqn:ZAb}):
+    Then:
     \begin{align*}
         Z(A,0) &= \frac{(2\pi)^{2/2}}{\sqrt{8}} = \frac{\pi}{\sqrt{2}} \\
         \frac{1}{2} \bm{b}\cdot (A^{-1}\bm{b}) &=  \frac{1}{2} \left(\begin{array}{cc}
@@ -360,14 +360,65 @@ Consider the two-state model with states at position $x_1 = -c$ and $x_2 = +c$ a
     \medskip
 
     \textbf{Solution}. 
-    
+    The evolution equation for $\epsilon = 0$ reads:
+    \begin{align*}
+        \dot{p} = - Wp + \frac{W}{2} = -W\left(p-\frac{1}{2} \right) = -W \Delta p
+    \end{align*}
+    With $\Delta p = p-1/2$. As $\dot{\Delta p} = \dot{p}$ we get an equivalent ODE that can be solved by separation of variables:
+    \begin{align*}
+        \dot{\Delta p} = - W \Delta p \Rightarrow \Delta p(t) = \Delta p(0) e^{-Wt}
+    \end{align*}
+    Substituting back:
+    \begin{align*}
+        p(t) - \frac{1}{2} = \left(p(0) - \frac{1}{2} \right)  e^{-Wt} \Rightarrow p(t) = \left(p(0)-\frac{1}{2} \right)e^{-Wt} + \frac{1}{2} 
+    \end{align*}
+    and:
+    \begin{align*}
+        1-p(t) = \frac{1}{2}  - \left(p(0)-\frac{1}{2} \right)e^{-Wt}
+    \end{align*}
+    We can now compute the correlator:
+    \begin{align*}
+        \langle x(t) x(0) \rangle = \int_{\mathbb{R}^2} \dd{x} x \mathbb{P}(x,t) x \mathbb{P}(x,0) = \int_{\mathbb{R}^2} x^2 \mathbb{P}(x,t) \mathbb{P}(x,0) \qquad t>0
+    \end{align*}
+    There are only two possible values for $x$: $c$ and $-c$. $p(t)$ is the probability of $x_t = -c$, i.e. $P(-c,t)$. By conservation of probability:
+    \begin{align*}
+        \mathbb{P}(c,t) = 1-\mathbb{P}(-c,t) = 1-p(t)
+    \end{align*}
+    Substituting in the expression for the correlator:
+    \begin{align*}
+        \langle x(t) x(0) \rangle &= (-c)^2 p(t)p(0) + c^2(1-p(t))(1-p(0)) +\\
+        &\quad \> + c(-c)p(t)(1-p(0)) + (-c)c(1-p(t))p(0)
+    \end{align*}
+    For simplicity of notation, let:
+    \begin{align*}
+        p(t) \equiv p_t; \qquad p(0) \equiv p_0; \qquad p_t=\left(p_0-\frac{1}{2} \right)A + \frac{1}{2}; \qquad A\equiv e^{-Wt} 
+    \end{align*}
+    Then:
+    \begin{align*}
+        \langle x(t) x(0) \rangle &= c^2[p_t p_0 + (1-p_t)(1-p_0) -p_t(1-p_0) - p_0(1-p_t)]=\\
+        &= c^2[\hlc{Yellow}{p_t p_0} + 1 + \hlc{Yellow}{p_tp_0 }\hlc{SkyBlue}{- p_t }\hlc{ForestGreen}{-p_0} \hlc{SkyBlue}{-p_t }+ \hlc{Yellow}{p_0 p_t} \hlc{ForestGreen}{-p_0} + \hlc{Yellow}{p_0p_t}] =\\
+        &= c^2 [\hlc{Yellow}{4 p_t p_0 }\hlc{SkyBlue}{- 2p_t} \hlc{ForestGreen}{- 2p_0 }+1] =\\
+        &= c^2[4p_0^2 A + 4p_0 (-A/2) + 4p_0 /2 - 2p_0A + A -1 - 2p_0 +1] =\\
+        &=c^2[4 p_0^2 A - 2p_0 A + 2p_0 - 2p_0A + A - 2p_0] =\\
+        &= c^2[4p_0^2 A - 4p_0 A + A] = e^{-Wt}c^2 (4p_0^2 - 4p_0 + 1) =\\
+        &= e^{-Wt} c^2 (2p_0-1)^2
+    \end{align*}
+    For $p_0 = 1$ (system initially in $-c$): 
+    \begin{align*}
+        \langle x(t) x(0) \rangle = c^2e^{-Wt}  \qquad t>0
+    \end{align*}
+    The same argument works for $t < 0$, with the only difference being a sign. So, in the general case:
+    \begin{align*}
+        \langle x(t) x(0)\rangle = c^2e^{-W|t|}
+    \end{align*}
+
 \end{exo}
 
 \begin{exo}
     For $\epsilon=0$, use the Wiener-Kintchine Theorem:
-    \begin{align*}
+    \begin{align} \label{eqn:wk-thm}
         P(\omega) = 4 \int_0^\infty C(t)\cos(\omega t) \dd{\omega}
-    \end{align*}
+    \end{align}
     tho show that the power spectrum in this case is:
     \begin{align*}
         P^{(0)}(\omega) = 4c^2 \frac{W}{W^2+ \omega^2} 
@@ -375,7 +426,26 @@ Consider the two-state model with states at position $x_1 = -c$ and $x_2 = +c$ a
 
     \medskip
 
-    \textbf{Solution}. 
+    \textbf{Solution}. For $\epsilon = 0$ we derived in the previous exercise that:
+    \begin{align*}
+        C(t) = \langle x(t) x(0) \rangle = c^2 e^{-W|t|}
+    \end{align*}
+    Inserting in the Wiener-Kintchine theorem (\ref{eqn:wk-thm}):
+    \begin{align*}
+        P(\omega) &= 4 \int_0^{+\infty} c^2 e^{-W|t|}\cos(\omega t) \dd{t} = \\
+        &= 4c^2 \int_0^{+\infty} e^{-W\textcolor{Red}{t}} \cos(\omega t) \dd{t} =\\
+        &= \textcolor{Red}{2} c^2 \int_0^{+\infty} e^{-Wt} (e^{i \omega t} - e^{-i \omega t}) \dd{t} = \\
+        &= 2 c^2 \int_0^{+\infty} [e^{it(\omega - W/i)} - e^{-it(\omega + W/i)}] \dd{t} =\\
+        &= 2c^2 \int_0^{+\infty} [e^{it(\omega + iW)} - e^{-it(\omega - iW)}]\dd{t} =\\
+        &\underset{(a)}{=} 2c^2 \left[-\frac{1}{i \omega - W}  + \frac{1}{i \omega + W} \right] = 2c^2 \left[\frac{1}{W - i \omega} + \frac{1}{W + i \omega}  \right] =\\
+        &= 2c^2 \left[\frac{W +\cancel{ i \omega} + W - \cancel{i \omega}}{W^2 + \omega^2} \right] = 4c^2 \frac{W}{W^2 + \omega^2} 
+    \end{align*}
+
+    To compute the integral in (a) we used the following Fourier transform:
+    \begin{align*}
+        \int_0^{+\infty} e^{-it (\omega - i \omega_0)} \dd{t} &= \int_{\mathbb{R}} \theta(t)e^{-it (\omega - i \omega_0)} = \tilde{\theta}(\omega - i \omega_0) = \frac{1}{i(\omega - i \omega_0)} =\\
+        &= \frac{1}{i \omega + \omega_0}   
+    \end{align*}
 \end{exo}
 
 \begin{exo}
@@ -387,7 +457,16 @@ Consider the two-state model with states at position $x_1 = -c$ and $x_2 = +c$ a
 
     \medskip
 
-    \textbf{Solution}. 
+    \textbf{Solution}. The expression of the \textit{signal-to-noise ratio} is:
+    \begin{align*}
+        \operatorname{SNR}_{\omega_s} \sim \frac{1}{k^2} \exp\left(-\frac{2}{k} \Delta V\right)  
+    \end{align*} 
+    To find its maximum, we set its derivative with respect to $k$ to $0$:
+    \begin{align*}
+        -\frac{2}{k^3} \exp\left(-\frac{2}{k} \Delta V \right) +\frac{1}{k^2}\frac{2\Delta V}{k^2} \exp\left(-\frac{2}{k} \Delta V \right)  \overset{!}{=} 0 \span\\
+        &\Rightarrow -\frac{2}{k^3} \exp\left(-\frac{2}{k} \Delta V \right)  + \frac{2 \Delta V}{k^4}  \exp\left(-\frac{2}{k} \Delta V \right) \overset{!}{=} 0\\
+        &\Rightarrow \exp\left(-\frac{2}{k} \Delta V \right) \left[-1 + \frac{\Delta V}{k} \right] = 0 \Rightarrow \frac{\Delta V}{k} = 1 \Rightarrow k = \Delta V 
+    \end{align*}
 \end{exo}
 
 \chapter{Lessons 5-6}

@@ -1,0 +1,130 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\chapter{Integrals of complex variables}
+In this chapter we discuss several techniques for computing integrals on the complex plane.
+
+\section{Fourier Transform}
+One of the most frequent kind of complex integral is given by the \textit{Fourier Transform} (FT) \index{Fourier transform}. Let $f(x) \in L_2(\mathbb{R})$ be a square-integrable function. Then the Fourier transform maps $f(x)$ to another function $\tilde{f}(k)$ defined as follows: \marginpar{Fourier transform}
+\begin{align*}
+    \mathcal{F}[f(x)](k) = \tilde{f}(k) \equiv \int_{\mathbb{R}} e^{-ikx} f(x) \dd{x}
+\end{align*}
+Similarly, it is possible to define the \textit{inverse Fourier transform}, linking $\tilde{f}(k)$ back to $f(x)$: \marginpar{Inverse Fourier transform}
+\begin{align*}
+    \mathcal{F}^{-1}[\tilde{f}(k)](x) = f(x) = \frac{1}{2\pi} \int_{\mathbb{R}} e^{ikx} \tilde{f}(k) \dd{k} 
+\end{align*} 
+The $2 \pi$ factor is needed for normalization, so that:
+\begin{align}
+    \mathcal{F}^{-1}[\mathcal{F}[f(x)](k)](x) = f(x) \label{eqn:inverse-property}
+\end{align}
+As long as (\ref{eqn:inverse-property}) is satisfied, any different \marginpar{Conventions} definition of the Fourier transforms is acceptable. For example, it is possible to \textit{switch} the signs in the $e^{ikx}$, of split differently the normalization factor between $\mathcal{F}$ and $\mathcal{F}^{-1}$. 
+
+\subsection{Dirac's Delta $\delta(x)$}
+With a bit of work it is possible to extend the Fourier Transform to \textit{distributions}, also known as \textit{generalized functions}.
+
+The idea is to define a space $S(\mathbb{R})$ (Schwartz space)\marginpar{Schwartz space} containing all functions $\varphi \in C^{\infty}(\mathbb{R})$ that are \textit{rapidly decreasing}, i.e. such that $\sup_{x \in \mathbb{R}} |x^\alpha \varphi^{(\beta)}(x)| < \infty$ $\forall \alpha, \beta \in \mathbb{N}$. These are also called \textit{test functions}. 
+
+Then a (tempered) \textbf{distribution}\marginpar{Tempered distributions} $T$ is a linear mapping $S(\mathbb{R}) \to \mathbb{R}$. So it is possible to \q{apply} a distribution $T$ to any test function $\varphi \in S(\mathbb{R})$, resulting in a real number, denoted with $\langle T, \varphi \rangle$.
+
+In general, if $f\colon \mathbb{R} \to \mathbb{R}$ is a locally integrable function (i.e. integrable on any compact) we can use it to define a (regular) distribution by using the inner product:
+\begin{align*}
+    \langle T_f, \varphi \rangle \equiv \int_{\mathbb{R}} \dd{x} f(x)\varphi(x) \qquad \forall \varphi \in S(\mathbb{R})
+\end{align*}
+
+\begin{expl}In the \textbf{complex} case, we instead use the Hermitian inner product:
+    \begin{align*}
+        \langle T_f, \varphi \rangle = \int_{\mathbb{R}} \dd{x} f(x)^* \varphi(x)
+    \end{align*} 
+    where $f(x)^*$ is the complex conjugate of $f(x)$. The choice of the \textit{position} of this conjugate (on the first or second entry) is a convention. Physicist tend to use the first position (due to Dirac notation), while mathematicians the second one.
+\end{expl}
+
+In general, the converse is not true: it is not possible to find a function $f(x)$ for a generic distribution $T$ such that the above identity is satisfied. The distributions for which this is not possible are called \textit{singular}. One of the most important example is the Dirac Delta\marginpar{Dirac Delta}\index{Dirac Delta} $\delta(x)$, defined as follows:
+\begin{align*}
+    \langle \delta, \varphi \rangle \equiv \varphi(0) \qquad \varphi \in S(\mathbb{R})
+\end{align*} 
+In other words, applying the $\delta$ to any test function $\varphi$ returns the value of $\varphi$ at $0$.
+
+In practice, we often write \textit{formally}:
+\begin{align*}
+    \langle \delta, \varphi \rangle = \int_{\mathbb{R}} \delta(x) \varphi(x) \dd{x}
+\end{align*}
+\textit{as if} $\delta(x)$ were a function (it isn't).   
+
+\medskip
+
+The point of defining \textit{distributions} is that they provide a way to extend rigorously may operations that cannot be done on normal functions. \marginpar{Distributional derivative} One such example is differentiation. Given a distribution $T$, its \textbf{distributional derivative} is defined as:
+\begin{align} \label{eqn:dist-derivative}
+    \langle T', \varphi \rangle \equiv - \langle T, \varphi' \rangle \qquad \forall \varphi \in S(\mathbb{R})
+\end{align}  
+This is done so that, for a \textit{regular} distribution $T_f$, that result comes from integration by parts:
+\begin{align} \label{eqn:construction}
+    \langle T'_f, \varphi \rangle = \int_{\mathbb{R}} f'(x) \varphi(x) \dd{x} = \cancel{f(x) \varphi(x) \Big|_{-\infty}^{+\infty}} - \int_{\mathbb{R}} f(x) \varphi'(x) = - \langle T_f, \varphi' \rangle
+\end{align} 
+For a singular distribution we use directly the definition (\ref{eqn:dist-derivative}), as the construction in (\ref{eqn:construction}) has no meaning (but still, sometimes we will write it nonetheless, as a merely \textit{formal} expression).
+
+\medskip
+
+In the distributional sense, it is possible to differentiate the \textbf{Heaviside function}\index{Heaviside function}\marginpar{Heaviside step function} $\theta(x)$:
+\begin{align*}
+    \theta(x) \equiv \begin{cases}
+        1 & x > 0\\
+        \frac{1}{2} & x=0\\
+        0 & x < 0 
+    \end{cases}
+\end{align*}
+As $\theta(x)$ is locally integrable, we can define a corresponding distribution - that we denote with the same symbol $\theta$. Then:
+\begin{align*}
+    \langle \theta', \varphi \rangle &= - \langle \theta, \varphi' \rangle = -\int_{\mathbb{R}} \theta(x) \varphi'(x) \dd{x} = -\int_0^{+\infty} \varphi'(x) \dd{x} = -[\cancel{\varphi(+\infty)}-\varphi(0)] =\\
+    &= \varphi(0) = \langle \delta | \varphi \rangle
+\end{align*}
+So $\theta' = \delta$ \textit{in the distributional sense} - i.e. applying $\theta'$ or $\delta$ to any test function $\varphi$ leads to the same result.
+
+\medskip
+
+Another operation that can be extended is the \textbf{Fourier Transform}. \marginpar{Fourier Transform of distributions} $S(\mathbb{R})$ has been chosen, in fact, such that any $\varphi(x) \in S(\mathbb{R})$ has a well-defined transform $\tilde{\varphi}(k)$. Then we define the Fourier transform of a distribution as follows:
+\begin{align*}
+    \langle \mathcal{F}[T], \varphi \rangle \equiv 2\pi\langle T, \mathcal{F}^{-1}[\varphi] \rangle
+\end{align*}
+Again, this comes from the expression for regular distributions:
+\begin{align*}
+    \langle \mathcal{F}[T_f], \varphi \rangle &= \int_{\mathbb{R}} \dd{k} \{\mathcal{F}[f(x)](k)\}^* \varphi(k) = \int_{\mathbb{R}} \dd{k} \int_{\mathbb{R}} \dd{x} \left[e^{-ikx} f(x)\right]^* \varphi(x) =\\
+    &= \int_{\mathbb{R}} \dd{x} f(x) \int_{\mathbb{R}} \dd{k} e^{ikx}  \varphi(k) = \int_{\mathbb{R}} 2\pi f(x) \mathcal{F}^{-1}[\varphi(k)](x) = 2 \pi\langle T, \mathcal{F}^{-1}[\varphi]  \rangle
+\end{align*}
+
+All properties of the Fourier Transform can be immediately generalized to distributions. In particular:
+\begin{align*}
+    \mathcal{F}[T'] = ik \tilde{T}
+\end{align*}
+
+So, for example, we can compute the Fourier Transform of the $\theta(x)$: 
+\begin{align} \label{eqn:theta-transf1}
+    \mathcal{F}[\theta'] = 2 \mathcal{F}[\delta] = ik \tilde{\theta}
+\end{align}
+where: \marginpar{Fourier Transform of $\delta(x)$}
+\begin{align*}
+    \langle \mathcal{F}[\delta], \varphi \rangle = 2 \pi\langle \delta, \mathcal{F}^{-1}[\varphi]\rangle = 2\pi\mathcal{F}^{-1}[\varphi(x)](0)
+\end{align*}
+and:
+\begin{align*}
+    \mathcal{F}^{-1}[\varphi(x)](k) = \frac{1}{2\pi} \int_{\mathbb{R}} \dd{x} e^{ikx} \varphi(x) \Rightarrow 2 \pi\mathcal{F}^{-1}[\varphi(x)](0) = \int_{\mathbb{R}} \dd{x} \varphi(x) = \langle 1, \varphi \rangle 
+\end{align*}
+And so $\mathcal{F}[\delta] = 1$. 
+
+Note that the same result could be obtained in a simpler way by treating $\delta$ as a \q{formal function}:
+\begin{align*}
+    \mathcal{F}[\delta] = \int_{\mathbb{R}} e^{-ikx} \delta(x) = 1
+\end{align*}
+Equivalently:
+\begin{align*}
+    \delta(x) = \mathcal{F}^{-1}[1](x) = \frac{1}{2\pi} \int_{\mathbb{R}} e^{ikx} \dd{k}
+\end{align*}
+
+However, (\ref{eqn:theta-transf1}) cannot be used to reconstruct $\tilde{\theta}$ by itself. In fact, consider a different $\theta^*(x) \equiv \theta(x) + c$, with $c \in \mathbb{R}$ constant. Their derivatives coincide, and so formula (\ref{eqn:theta-transf1}) would give the same result for both of them. However:
+\begin{align*}
+    \mathcal{F}[\theta^*(x)](k) = \mathcal{F}[\theta(x)](k) + \mathcal{F}[c](k) = \tilde{\theta}(k) + c \delta(k) \neq \tilde{\theta}(k)
+\end{align*}
+So we are missing a $\delta$ term.
+
+\end{document}
