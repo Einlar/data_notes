@@ -480,17 +480,62 @@ Consider the two-state model with states at position $x_1 = -c$ and $x_2 = +c$ a
     \medskip
 
     \textbf{Solution}. 
+    We start from the expression for $\overline{Z^n}$ after the $2$ Hubbard-Stratonovich transformations:
+    \begin{align}\label{eqn:stat}
+        \overline{Z^m} = \left(\frac{N}{2\pi} \right)^{n/2} \left[\int_{\mathbb{R}} \dd{x} \exp\left(N \left[-\frac{1}{2} n x^2 + \log Z_1(x) \right]\right)\right]^n
+    \end{align}
+    This integral is evaluated in the saddle-point approximation. Minimizing the exponential argument leads to:
+    \begin{align}\label{eqn:mag}
+        \pdv{x} \left(-\frac{1}{2} n x^2 + \log Z_1(x) \right) = 0 \Rightarrow n x = \pdv{x} \log Z_1(x)
+    \end{align}
+    Recall that we define the magnetization $m$ as:
+    \begin{align*}
+        \frac{x}{\sqrt{2 \beta J}} = m
+    \end{align*}
+    So we can change variables in (\ref{eqn:stat}) through (\ref{eqn:mag}). In particular, note that:
+    \begin{align*}
+        \pdv{x} = \pdv{m} \pdv{m}{x} = \frac{1}{\sqrt{2 \beta J}}  \pdv{m}
+    \end{align*}
+    And so (\ref{eqn:stat}) becomes:
+    \begin{align} \label{eqn:stat2}
+        n m \sqrt{2 \beta J} = \frac{1}{\sqrt{2 \beta J}}  \pdv{m} \log Z_1(m) \Rightarrow m = \frac{1}{n} \frac{1}{2 \beta J} \pdv{m} \log Z_1(m)  
+    \end{align}
+    We have already found that:
+    \begin{align*}
+        Z_1(m) = \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}}  \exp\left(-\frac{1}{2} \nu^2 + n\log[2 \cosh(2 \beta J m + \beta \delta \nu)] \right)
+    \end{align*}
+    Substituting in (\ref{eqn:stat2}):
+    \begin{align*}
+        m &= \frac{1}{n} \frac{1}{2 \beta J}   \pdv{m} \log Z_1(m) = \\
+          &= \frac{1}{n} \frac{1}{2 \beta J} \frac{1}{Z_1(m)} \pdv{m} \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}}  \exp\left(-\frac{1}{2} \nu^2 + n\log[2 \cosh(2 \beta J m + \beta \delta \nu)] \right) =  \\
+          &= \frac{1}{\cancel{n}} \frac{1}{\cancel{2 \beta J}} \frac{1}{Z_1(m)}  \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}}  \exp\left(-\frac{1}{2} \nu^2 + n\log[2 \cosh(2 \beta J m + \beta \delta \nu)] \right) \cdot \\
+          &\quad \> \cdot \frac{\cancel{n}}{\bcancel{2} \cosh(2 \beta J m + \delta \beta \nu)} \bcancel{2} \sinh(2 \beta J m + \delta \beta \nu)\cancel{ 2 \beta J} =\\
+         &= \frac{1}{Z_1(m)} \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 + n \log [2 \cosh(2 \beta J m + \delta \beta \nu)] \right) \cdot\\
+        &\quad \> \cdot \tanh(2 \beta J m + \delta \beta \nu )
+    \end{align*}
 \end{exo}
 
 \begin{exo}
     With the self-consistent solution $m_{\mathrm{SC} }(m) = m$ of the RFIM, by using the condition $\partial m_{\mathrm{SC} }/\partial m=1$ for the critical point, show that the phase transition between paramagnetic phase and ferromagnetic phase takes place where this condition is satisfied:
-    \begin{align*}
+    \begin{align} \label{eqn:condition}
         2 \beta J \int_{\mathbb{R}} \dd{h} p(h) \frac{1}{[\cosh(\beta h)]^2} = 1 
-    \end{align*}
+    \end{align}
     
     \medskip
 
-    \textbf{Solution}. 
+    \textbf{Solution}. The self-consistent equation for the RFIM is:
+    \begin{align*}
+        m = \overline{\tanh(\beta [2Jm+h])}
+    \end{align*}
+    Criticality is reached when the lhs and rhs are \textit{tangent} at the origin, meaning that:
+    \begin{align*}
+        \pdv{m} \overline{\tanh(\beta[2 Jm+h])}\Big|_{m=0} \overset{!}{=}  1
+    \end{align*} 
+    Expanding the average leads to:
+    \begin{align*}
+        \int_{\mathbb{R}} \dd{h} p(h) \pdv{m} \tanh(2 \beta J m + \beta h) \Big|_{m=0} =\span \\
+        = \int_{\mathbb{R}} \dd{h} p(h) \frac{1}{\cosh^2(2\beta J m + \beta h)} \Big|_{m=0} (2 \beta J) = 2 \beta J \int_{\mathbb{R}} \dd{h} p(h) \frac{1}{\cosh^2(\beta h)} \overset{!}{=}  1
+    \end{align*}
 \end{exo}
 
 \begin{exo}
@@ -498,7 +543,30 @@ Consider the two-state model with states at position $x_1 = -c$ and $x_2 = +c$ a
 
     \medskip
 
-    \textbf{Solution}. 
+    \textbf{Solution}. We start from the criticality condition (\ref{eqn:condition}), inserting the distribution $p(h)$:
+    \begin{align*}
+        1 = 2\beta J \int_{\mathbb{R}} \frac{1}{\sqrt{2 \pi \delta^2}} \exp\left(-\frac{h^2}{2 \delta^2} \right) \frac{1}{\cosh^2 (\beta h)}\dd{h} 
+    \end{align*}
+    We introduce \textit{reduced dimensionless variables}:
+    \begin{align*}
+        J' = \frac{J}{\delta}; \qquad \beta' = \beta \delta; \qquad \tilde{h} = \beta h \Rightarrow \dd{\tilde{h}} = \beta\dd{h}  
+    \end{align*}  
+    leading to:
+    \begin{align*}
+        1 = 2\cancel{ \beta} J' \cancel{\delta} \int_{\mathbb{R}} \frac{\dd{\tilde{h}}}{\cancel{\beta \delta}} \frac{1}{\sqrt{2 \pi}}   \exp\left(-\frac{\tilde{h}^2}{2 \beta'^2} \right) \frac{1}{\cosh^2(\tilde{h})} 
+    \end{align*}
+    In the low temperature limit $\beta \to \infty$ the exponential tends to unity:
+    \begin{align} \label{eqn:stat3}
+        2 J' \int_{\mathbb{R}} \frac{\dd{\tilde{h}}}{\sqrt{2 \pi}} \frac{1}{(\cosh \tilde{h})^2}   = 1
+    \end{align}
+    Note that:
+    \begin{align*}
+        \dv{\tilde{h}} \tanh(\tilde{h}) = \frac{1}{(\cosh\tilde{h})^2} 
+    \end{align*}
+    And so we can evaluate (\ref{eqn:stat3}):
+    \begin{align*}
+        \frac{2J'}{\sqrt{2\pi}}  \tanh \tilde{h} \Big|_{-\infty}^{+\infty} = \frac{2J'}{\sqrt{2 \pi}}  (1-(-1)) = 2J' \frac{2}{\sqrt{2 \pi}}  \overset{!}{=}  1 \Rightarrow 2 J' = \frac{2J}{\delta} = \sqrt{\frac{\pi}{2} } 
+    \end{align*}
 \end{exo}
 
 \chapter{Lesson 7}
@@ -520,7 +588,14 @@ which implies a conservation of the \q{energy}:
 
     \medskip
 
-    \textbf{Solution}. 
+    \textbf{Solution}. By conservation of energy:
+    \begin{align*}
+        \mathcal{E}= \frac{1}{2} \dot{x}^2 + V_{\mathrm{eff} }(x) \qquad V_{\mathrm{eff}}(x) = -\frac{x^2 \kappa}{2} 
+    \end{align*}
+    So we have:
+    \begin{align*}
+        \frac{1}{2} \dot{x}^2 = \frac{x^2 \kappa^2}{2} \Rightarrow \dot{x} = xk \Rightarrow \dv{x}{t} = x \kappa \Rightarrow x(t) = x_0 e^{\kappa t}  
+    \end{align*}
 \end{exo}
 
 \begin{exo}
@@ -528,7 +603,36 @@ which implies a conservation of the \q{energy}:
     \begin{align*}
         x^*(t) = 2\arctan (e^{\kappa t})
     \end{align*}
-    has \q{energy} $E=0$ at every instant $t$.
+    has \q{energy} $\mathcal{E}=0$ at every instant $t$.
+
+    \medskip
+
+    \textbf{Solution}. The energy is given by:
+    \begin{align*}
+        \mathcal{E}= \frac{1}{2} \dot{x}^2 + V_{\mathrm{eff}}(x) = \frac{1}{2} \dot{x}^2 - \frac{\kappa^2 \sin^2(x)}{2}   
+    \end{align*}
+    We substitute the expression for $x^*$ inside $\mathcal{E}$, to compute the energy of the given solution at any instant. We start by computing the $\sin^2$:
+    \begin{align} \nonumber
+        \sin^2 x^*(t) &= \sin^2 (2 \arctan e^{\kappa t}) = [2 \sin(\arctan e^{\kappa t})\cos(\arctan e^{\kappa t})]^2 =\\
+        &= 4 (\sin^2 \arctan e^{\kappa t})(1-\sin^2 \arctan e^{\kappa t}) \label{eqn:sin}
+    \end{align}
+    Recall from goniometry:
+    \begin{align*}
+        \sin\arctan x = \frac{x}{\sqrt{1+x^2}} 
+    \end{align*}
+    And so:
+    \begin{align*}
+        \sin^2 \arctan e^{\kappa t} = \frac{e^{2\kappa t}}{1 + e^{2 \kappa t}} 
+    \end{align*}
+    Substituting in (\ref{eqn:sin}) we get:
+    \begin{align*}
+        \sin^2 x^*(t) &= \frac{4 e^{2\kappa t}}{1 + e^{2 \kappa t}}  \left(1-\frac{e^{2 \kappa t}}{1 + e^{2 \kappa t}} \right) = \frac{4 e^{2 \kappa t}}{1 + e^{2 \kappa t}} \frac{1 + \cancel{e^{2 \kappa t} }-\cancel{ e^{2\kappa t}}}{1+ e^{2 \kappa t}} =\\
+        &= \frac{4 e^{2\kappa t}}{(1+e^{2 \kappa t})^2}   
+    \end{align*}
+    Then:
+    \begin{align*}
+        \mathcal{E}=\frac{1}{2} (\dot{x}^*)^2 - \frac{k^2 \sin^2 x^*}{2} = \frac{1}{2} \left[\frac{4 \kappa^2 e^{2 \kappa t}}{(1+e^{2 \kappa t})^2} - \frac{4 \kappa^2 e^{2 \kappa t}}{(1+e^{2 \kappa t})^2}  \right] = 0
+    \end{align*}
 \end{exo}
 
 \begin{exo}
@@ -546,6 +650,24 @@ which implies a conservation of the \q{energy}:
     \begin{align*}
         \norm{\bm{F}}^2 = \sum_{j=1}^N F_i^2
     \end{align*}
+
+    \medskip
+
+    \textbf{Solution} We want to minimize the action functional:
+    \begin{align*}
+        S[\bm{x}] = \int_{t_i}^{t_f} L(\bm{x}, \dot{\bm{x}}) \dd{\tau} \qquad L(\bm{x}, \dot{\bm{x}}) = \frac{1}{2} \norm{\dot{\bm{x}} - \bm{F}(\bm{x})}^2  
+    \end{align*} 
+    The Euler-Lagrange equations are:
+    \begin{align*}
+        \dv{t} \pdv{L}{\dot{x}_i} - \pdv{L}{x_i} = 0 \qquad 1 \leq i \leq N
+    \end{align*}
+    Inserting the expression for $L$:
+    \begin{align} \nonumber
+        \dv{t} \frac{1}{\cancel{2}} \cdot \cancel{2 }(\dot{x}_i - F_i(\bm{x})) - \frac{1}{\cancel{2}}\cdot\cancel{ 2} \sum_{j=1}^N (\dot{x}_j - F_j(\bm{x})) \left(- \pdv{F_j}{x_i} (\bm{x})\right) = \span \\ \nonumber
+        &=\ddot{x}_i - \sum_{j=1}^N \pdv{F_i}{x_j} (\bm{x}) \dot{x}_j + \sum_{j=1}^N \pdv{F_j}{x_i} (\bm{x}) \dot{x}_j - \sum_{j=1}^N F_j(\bm{x}) \pdv{F_j}{x_i} (\bm{x}) = 0\\ 
+        \Rightarrow \ddot{x}_i &=  \underbrace{\sum_{j=1}^N F_j(\bm{x}) \pdv{F_j}{x_i} (\bm{x}) }_{\partial_{x_i} \norm{\bm{F}}^2/2*69}+ \sum_{j=1}^N \left( \pdv{F_i}{x_j} (\bm{x}) - \pdv{F_j}{x_i} (\bm{x}) \right) \dot{x}_j 
+        \label{eqn:full-form}
+    \end{align}
 \end{exo}
 
 \begin{exo}
@@ -554,5 +676,20 @@ which implies a conservation of the \q{energy}:
         \mathcal{E}= \frac{1}{2} \norm{\dot{\bm{x}}}^2 + V_{\mathrm{eff} }(\bm{x}) \qquad V_{\mathrm{eff} }(\bm{x}) = -\frac{1}{2} \norm{\bm{F}}^2   
     \end{align*}
     is a constant for the solution of the instanton equations (\ref{eqn:instantons}).
-\end{exo}
+
+    \medskip
+
+    \textbf{Solution}. Differentiating $\mathcal{E}$ wrt time:
+    \begin{align*}
+        \dv{t} \mathcal{E}&= \frac{1}{2} 2 \dot{\bm{x}} \cdot \ddot{\bm{x}} -\frac{1}{2} 2 \bm{F} \cdot \dot{\bm{F}} =\\
+        &= \sum_{i=1}^N \dot{x}_i \hlc{Yellow}{\ddot{x}_i }- \sum_{i=1}^N F_i \sum_{j=1}^N \pdv{F_i}{x_j} \dot{x}_j =\\
+        &\underset{(\ref{eqn:full-form})}{=}  \sum_{i=1}^N \dot{x}_i \hlc{Yellow}{\sum_{j=1}^N \left(\pdv{F_i}{x_j} - \pdv{F_j}{x_i}\right) \dot{x}_j }+ \sum_{{\textcolor{Red}{i}}=1}^N \dot{x}_{\textcolor{Red}{i}} \hlc{Yellow}{\sum_{{\textcolor{Blue}{j}}=1}^N F_{\textcolor{Blue}{j}} \pdv{F_{\textcolor{Blue}{j}}}{x_{\textcolor{Red}{i}}}} - \sum_{{\textcolor{Blue}{i}}=1}^N F_{\textcolor{Blue}{i}} \sum_{{\textcolor{Red}{j}}=1}^N \pdv{F_{\textcolor{Blue}{i}}}{x_{\textcolor{Red}{j}}} \dot{x}_{\textcolor{Red}{j}}
+    \end{align*}  
+    Note that the last two terms cancel out, by exchanging $i \leftrightarrow j$ in the last one. Then we are left with:
+    \begin{align*}
+        \dv{t}\mathcal{E}&= \sum_{ij=1}^N \dot{x}_i \dot{x}_j \left(\pdv{F_i}{x_j} - \pdv{F_j}{x_i}\right) =\\
+        &= \sum_{ij=1}^n \dot{x}_i \dot{x}_j \pdv{F_i}{x_j} - \sum_{ij=1}^N \dot{x}_j \dot{x}_i \pdv{F_j}{x_i} = 0
+    \end{align*}
+    Again these last two terms cancel out after substituting $i\leftrightarrow j$ in the last one.
+\end{exo} 
 \end{document}

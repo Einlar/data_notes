@@ -161,11 +161,16 @@ headformat={\cornersize*{2pt}\ovalbox{\NAME~\NUMBER\ifstrequal{\NOTE}{}{\relax}{
 bodyfont=\normalfont,
 ]{exobreak}
 
+
 \declaretheorem[style=exobreak, name=Exercise,%
 numberwithin = chapter, %
 postheadhook=\leavevmode\myleftbar, %
 prefoothook = \endmyleftbar]{exo}
 
+\usepackage{etoolbox}
+\usepackage{needspace}
+\AtBeginEnvironment{exo}{\Needspace{10\baselineskip}}% Impedisce l'inserimento di una domanda a fondo pagina e la risposta alla pagina successiva
+%\AtEndEnvironment{domanda}{\nopagebreak}
 %show just the name in theorem list
 \makeatletter
 %\show\ll@problem gives default definition:
@@ -226,14 +231,16 @@ prefoothook = \endmyleftbar]{example}
 
 %---Geometry (Normal pages)---%
 \usepackage[a4paper]{geometry}
-\newgeometry{inner=20mm,
-            outer=49mm,% = marginparsep + marginparwidth 
-                       %   + 5mm (between marginpar and page border)
-            top=20mm,
-            bottom=25mm,
-            marginparsep=6mm,
-            marginparwidth=30mm}
-            
+%\newgeometry{inner=20mm,
+%            outer=49mm,% = marginparsep + marginparwidth 
+%                       %   + 5mm (between marginpar and page border)
+%            top=20mm,
+%            bottom=25mm,
+%            marginparsep=6mm,
+%            marginparwidth=30mm}
+ 
+\newgeometry{top=20mm, bottom=25mm, inner=20mm, outer=30mm}
+
 %---Fancy stuff---%
 \usepackage[Bjornstrup]{fncychap}
 \usepackage{fancyhdr}

@@ -64,7 +64,7 @@
     \begin{align*}
         = n^{n+1} \int_0^{+\infty} \dd{s} \exp\left(\frac{\log s - s}{\lambda} \right)
     \end{align*}
-    which is in the desired form (\ref{eqn:saddle}).
+    which is in the desired form for (\ref{eqn:saddle-formula}).
 
     So, we compute the minimum of $F(s) = \log s - s$:
     \begin{align*}
@@ -994,7 +994,51 @@ where in (a) we performed the change of variables:
 
     \medskip
 
-    \textbf{Solution}. 
+    \textbf{Solution}. Consider an infinitesimal surface $\dd{\Sigma}$ with normal $\hat{\bm{n}}$. Suppose that $\dd{\Sigma}$ is immersed in a fluid, and that \textit{locally} around that surface, the particles are travelling with velocity $\bm{v}$. Then the particles are approaching $\dd{\Sigma}$ with the \textit{perpendicular} component of their velocity, i.e. $\bm{\bm{v}}\cdot\hat{\bm{n}}$. So, in a small time interval $\dd{t}$, all the particles that traverse $\dd{\Sigma}$ are contained in the volume $\bm{v} \cdot \hat{\bm{n}} \dd{t} \dd{\Sigma}$. Multiplying by the local density $\rho$ of particles, we obtain:
+    \begin{align*}
+        \dd{N} = \bm{v} \cdot \hat{\bm{n}} \dd{t} \dd{\Sigma} \rho
+    \end{align*}
+    The \textbf{flux}, i.e. the rate of traversing particles per unit time and unit area, is:
+    \begin{align*}
+        j_{\bm{v}}(\bm{r}) = \frac{\dd{N}}{\dd{t}\dd{\Sigma}} = \bm{v}\cdot \hat{\bm{n}} \rho (\bm{r})
+    \end{align*}
+    This relation is valid \textit{locally} around a point $\bm{r} \in \mathbb{R}^3$.
+    
+    Now, consider a sphere $S$ of radius $r$. Let $\hat{\bm{n}}(\bm{r})$ be the (outward) unit normal vector at a point $\bm{r}$ of the sphere. $S$ is immersed in an ideal gas at temperature $T$. In any point $\bm{r}$ we will then have particles moving in \textit{every direction}, with a velocity distribution given at equilibrium by the Maxwell-Boltzmann distribution:
+    \begin{align*}
+        f(v_x,v_y,v_z) = \left(\frac{m}{2 \pi k_B T} \right)^{3/2} \exp\left(-\frac{m(v_x^2 + v_y^2 + v_z^2)}{2 k_B T} \right)
+    \end{align*}
+    where $m$ is the mass of the gas particles. 
+    
+    The rate of particles \textit{colliding} with the spherical surface will be the integral of $j_{\bm{v}}(\bm{r})$ over all the velocities \q{towards $S$} (i.e. with $\bm{v} \cdot \hat{\bm{n}}(\bm{r}) < 0$) and all points of $S$:
+    \begin{align*}
+        \langle \dv{N}{t}  \rangle = \int_{\bm{v} \cdot \hat{\bm{n}} < 0} \dd[3]{\bm{v}} \int_{S}  \dd{\Sigma}\rho |\bm{v} \cdot \hat{\bm{n}}| f(\bm{v}) 
+    \end{align*}
+    By symmetry, the rate of hits on a tiny surface $\dd{\Sigma}$ on the sphere will be the same at any point of the sphere. So, we can choose any point, compute the rate there, and then multiply the result by the spherical surface $4 \pi r^2$.
+
+    For example, let's choose the \textit{south pole}. From there, all the velocities \textit{directed towards the sphere} are the ones \q{pointing up}, i.e. on any point of the upper hemisphere. So, moving to spherical coordinates in velocity $\dd[3]{\bm{v}} = v^2 \sin \theta \dd{v} \dd{\theta} \dd{\varphi}$, with:
+    \begin{align*}
+        \bm{v} = v (\sin\theta \cos \varphi, \sin \theta \sin \varphi, \cos \theta)
+    \end{align*}
+    and $\hat{n}(\text{South Pole}) = (0,0,1)^T$, we have:
+    \begin{align*}
+        \langle \dv{N}{t}  \rangle &= 4 \pi r^2 \underbrace{\rho}_{N/V} \left(\frac{m}{2 \pi k_B T} \right)^{3/2} \cdot \\
+        &\quad \> \cdot \int_0^{+\infty} \dd{v} \int_0^{\pi/2} \dd{\theta} \int_0^{2 \pi} \dd{\varphi} \underbrace{v \cos \theta}_{\bm{v} \cdot (0,0,1)^T}  \sin \theta v^2 \exp\left(-\frac{mv^2}{2 k_B T} \right) =\\
+        &= 4 \pi r^2 \frac{N}{V} \left(\frac{m}{2 \pi k_B T} \right)^{3/2} (2 \pi) \underbrace{\int_0^{\pi/2} \sin \theta \cos \theta \dd{\theta}}_{1/2} \underbrace{\int_0^{+\infty} v^3 \exp\left(-\frac{mv^2}{2k_B T} \right)}_{2k_B^2 T^2 / m^2} =\\
+        &= 4 \pi r^2 \frac{N}{V} \left(\frac{m}{2\pi k_B T} \right)^{3/2} \pi \frac{2 k_B^2 T^2}{m^2} = 4 \pi r^2 \frac{N}{V} \sqrt{\frac{k_B T}{2 \pi m}}
+    \end{align*}
+    For the second moment, we square everything except $f(\bm{v})$, leading to:
+    \begin{align*}
+        \langle \left(\dv{N}{t}\right)^2  \rangle &= \left(4 \pi r^2 \frac{N}{V} \right)^2 \left(\frac{m}{2 \pi k_B T} \right)^{3/2} \cdot\\
+        &\quad\>\cdot \int_0^{2\pi} \dd{\varphi} \underbrace{\int_0^{\pi/2} \sin \theta \cos^2 \theta \dd{\theta}}_{1/3} \underbrace{\int_{0}^{+\infty} \dd{v} v^4 \exp\left(-\frac{mv^2}{2k_BT} \right)}_{3\sqrt{\pi/2} (k_B T/m)^{5/2}} =\\
+        &= \left(4 \pi r^2 \frac{N}{V} \right)^2 \left(\frac{m}{2 \pi k_B T} \right)^{3/2} (2\pi) \frac{1}{3} 3 \sqrt{\frac{\pi}{2} } \left(\frac{k_B T}{m} \right)^{5/2} = \\
+        &= \left(4 \pi r^2 \frac{N}{V} \right)^2 \frac{k_B T}{2m} 
+    \end{align*}
+    Finally, the variance is given by:
+    \begin{align*}
+        \operatorname{Var} \left(\dv{N}{t}\right) &= \langle \left(\dv{N}{t}\right)^2  \rangle - \left(\langle \dv{N}{t}  \rangle\right)^2 = \left(4 \pi r^2 \frac{N}{V} \right)^2 \left(\frac{k_B T}{2m} - \frac{k_B T}{2 \pi m}  \right) =\\
+        &= \left(4 \pi r^2 \frac{N}{V} \right)^2\frac{k_B T}{2m}\left(1-\frac{1}{\pi} \right) 
+    \end{align*}
 \end{exo}
 
 \begin{exo}
