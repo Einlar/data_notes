@@ -7,10 +7,10 @@
 In this chapter we discuss several techniques for computing integrals on the complex plane.
 
 \section{Fourier Transform}
-One of the most frequent kind of complex integral is given by the \textit{Fourier Transform} (FT) \index{Fourier transform}. Let $f(x) \in L_2(\mathbb{R})$ be a square-integrable function. Then the Fourier transform maps $f(x)$ to another function $\tilde{f}(k)$ defined as follows: \marginpar{Fourier transform}
-\begin{align*}
-    \mathcal{F}[f(x)](k) = \tilde{f}(k) \equiv \int_{\mathbb{R}} e^{-ikx} f(x) \dd{x}
-\end{align*}
+One of the most frequent kind of complex integral is given by the \textit{Fourier Transform} (FT). Let $f(x) \in L_2(\mathbb{R})$ be a square-integrable function. Then the Fourier transform maps $f(x)$ to another function $\tilde{f}(k)$ defined as follows: \marginpar{Fourier transform}
+\begin{align} \label{eqn:fourier-def}
+    \mathcal{F}[f(x)](k) = \tilde{f}(k) \equiv \int_{\mathbb{R}} e^{-ikx} f(x) \dd{x} \qquad f \in L_2(\mathbb{R})
+\end{align}
 Similarly, it is possible to define the \textit{inverse Fourier transform}, linking $\tilde{f}(k)$ back to $f(x)$: \marginpar{Inverse Fourier transform}
 \begin{align*}
     \mathcal{F}^{-1}[\tilde{f}(k)](x) = f(x) = \frac{1}{2\pi} \int_{\mathbb{R}} e^{ikx} \tilde{f}(k) \dd{k} 
@@ -19,12 +19,15 @@ The $2 \pi$ factor is needed for normalization, so that:
 \begin{align}
     \mathcal{F}^{-1}[\mathcal{F}[f(x)](k)](x) = f(x) \label{eqn:inverse-property}
 \end{align}
-As long as (\ref{eqn:inverse-property}) is satisfied, any different \marginpar{Conventions} definition of the Fourier transforms is acceptable. For example, it is possible to \textit{switch} the signs in the $e^{ikx}$, of split differently the normalization factor between $\mathcal{F}$ and $\mathcal{F}^{-1}$. 
+As long as (\ref{eqn:inverse-property}) is satisfied, any different \marginpar{Conventions} definition of the Fourier transforms is acceptable. For example, it is possible to \textit{switch} the signs in the $e^{ikx}$, or split differently the normalization factor between $\mathcal{F}$ and $\mathcal{F}^{-1}$. 
 
-\subsection{Dirac's Delta $\delta(x)$}
-With a bit of work it is possible to extend the Fourier Transform to \textit{distributions}, also known as \textit{generalized functions}.
+\subsection{Refresher on functional analysis}
+The definition (\ref{eqn:fourier-def}) is quite limited, as several interesting functions are not in $L_2(\mathbb{R})$ - for example $\sin(x)$, $\cos(x)$, $\theta(x)$. Fortunately, it is possible to extend the Fourier transform by considering \textit{generalized functions} (\textbf{distributions}).   
 
-The idea is to define a space $S(\mathbb{R})$ (Schwartz space)\marginpar{Schwartz space} containing all functions $\varphi \in C^{\infty}(\mathbb{R})$ that are \textit{rapidly decreasing}, i.e. such that $\sup_{x \in \mathbb{R}} |x^\alpha \varphi^{(\beta)}(x)| < \infty$ $\forall \alpha, \beta \in \mathbb{N}$. These are also called \textit{test functions}. 
+\medskip
+
+
+We start by defining a space $\mathcal{S}(\mathbb{R})$ (Schwartz space)\marginpar{Schwartz space} containing all functions $\varphi \in C^{\infty}(\mathbb{R})$ that are \textit{rapidly decreasing}, i.e. such that $\sup_{x \in \mathbb{R}} |x^\alpha \varphi^{(\beta)}(x)| < \infty$ $\forall \alpha, \beta \in \mathbb{N}$. These are also called \textit{test functions}. 
 
 Then a (tempered) \textbf{distribution}\marginpar{Tempered distributions} $T$ is a linear mapping $S(\mathbb{R}) \to \mathbb{R}$. So it is possible to \q{apply} a distribution $T$ to any test function $\varphi \in S(\mathbb{R})$, resulting in a real number, denoted with $\langle T, \varphi \rangle$.
 
@@ -75,10 +78,10 @@ In the distributional sense, it is possible to differentiate the \textbf{Heavisi
     \end{cases}
 \end{align*}
 As $\theta(x)$ is locally integrable, we can define a corresponding distribution - that we denote with the same symbol $\theta$. Then:
-\begin{align*}
+\begin{align}\nonumber
     \langle \theta', \varphi \rangle &= - \langle \theta, \varphi' \rangle = -\int_{\mathbb{R}} \theta(x) \varphi'(x) \dd{x} = -\int_0^{+\infty} \varphi'(x) \dd{x} = -[\cancel{\varphi(+\infty)}-\varphi(0)] =\\
-    &= \varphi(0) = \langle \delta | \varphi \rangle
-\end{align*}
+    &= \varphi(0) = \langle \delta | \varphi \rangle \label{eqn:theta-deriv}
+\end{align}
 So $\theta' = \delta$ \textit{in the distributional sense} - i.e. applying $\theta'$ or $\delta$ to any test function $\varphi$ leads to the same result.
 
 \medskip
@@ -100,7 +103,7 @@ All properties of the Fourier Transform can be immediately generalized to distri
 
 So, for example, we can compute the Fourier Transform of the $\theta(x)$: 
 \begin{align} \label{eqn:theta-transf1}
-    \mathcal{F}[\theta'] = 2 \mathcal{F}[\delta] = ik \tilde{\theta}
+    \mathcal{F}[\theta'] \underset{(\ref{eqn:theta-deriv})}{=}  \mathcal{F}[\delta] = ik \tilde{\theta}
 \end{align}
 where: \marginpar{Fourier Transform of $\delta(x)$}
 \begin{align*}
@@ -121,10 +124,31 @@ Equivalently:
     \delta(x) = \mathcal{F}^{-1}[1](x) = \frac{1}{2\pi} \int_{\mathbb{R}} e^{ikx} \dd{k}
 \end{align*}
 
-However, (\ref{eqn:theta-transf1}) cannot be used to reconstruct $\tilde{\theta}$ by itself. In fact, consider a different $\theta^*(x) \equiv \theta(x) + c$, with $c \in \mathbb{R}$ constant. Their derivatives coincide, and so formula (\ref{eqn:theta-transf1}) would give the same result for both of them. However:
+However, (\ref{eqn:theta-transf1}) cannot be used to reconstruct $\tilde{\theta}$ by itself, that is we cannot just \q{solve by $\tilde{\theta}$} and write:
+\begin{align} \label{eqn:wrong-theta-transform}
+    \tilde{\theta}(k) = \frac{1}{ik} 
+\end{align}
+
+In fact, consider a different $\theta^*(x) \equiv \theta(x) + c$, with $c \in \mathbb{R}$ constant. Their derivatives coincide, and so formula (\ref{eqn:theta-transf1}) would give the same result for both of them. However:
 \begin{align*}
     \mathcal{F}[\theta^*(x)](k) = \mathcal{F}[\theta(x)](k) + \mathcal{F}[c](k) = \tilde{\theta}(k) + c \delta(k) \neq \tilde{\theta}(k)
 \end{align*}
 So we are missing a $\delta$ term.
 
+\begin{expl}\textbf{Why is (\ref{eqn:wrong-theta-transform}) wrong?} There are two main reasons:
+\begin{itemize}
+    \item $1/(ik)$ is not locally integrable, so it cannot be used to define a distribution, such as $\tilde{\theta}$. This can be solved by using the \textit{principal part} of $1/(ik)$ instead. 
+    \item %Not the most general solution of xT = 1
+\end{itemize}
+
+%Show solution xT = 0. From https://see.stanford.edu/materials/lsoftaee261/book-fall-07.pdf in 4.13.1 sec. and https://math.stackexchange.com/questions/678457/distribution-solution-to-xt-0-in-schwartz-space
+%Extend to xT = 1 with https://math.stackexchange.com/questions/2962209/solve-the-distribution-equation-xt-1 (introducing Cauchy principal part)
+     
+    
+\end{expl}
+
+
+%Use sign, and the fact that is odd (so there is no delta term appearing, because delta is even), to find the fourier transform of heaviside
+
+%Show full argument from notes
 \end{document}

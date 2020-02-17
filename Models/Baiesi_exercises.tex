@@ -450,14 +450,31 @@ Consider the two-state model with states at position $x_1 = -c$ and $x_2 = +c$ a
 
 \begin{exo}
     For $\epsilon \neq 0$, show that the \textit{signal-to-noise ratio} is maximum at $\kappa^* = \Delta V$ if the rates follow the Kramers formula:
-    \begin{align*}
+    \begin{align} \label{eqn:full-prob}
         W_{1,2} = \exp\left[-\frac{2 \Delta V}{\kappa} \mp \frac{2V_1}{\kappa} \sin(\omega_s t)  \right] = \frac{W}{2} \exp\left[\mp \frac{2V_1}{\kappa} \sin(\omega_s t) \right] 
-    \end{align*} 
+    \end{align} 
     with $V_1 \ll \Delta V$ and using the correct identification for $\epsilon$ in this case.
 
     \medskip
 
-    \textbf{Solution}. The expression of the \textit{signal-to-noise ratio} is:
+    \textbf{Solution}. 
+    In the \textit{reduced} model we started from:
+    \begin{align} \label{eqn:reduced-prob}
+        W_{1,2} = \frac{W}{2} \mp \epsilon \sin(\omega_s t) = \frac{W}{2} \left(1 \mp \frac{2\epsilon}{W} \sin(\omega_s t) \right)  
+    \end{align}
+    We confront this expression with the one from (\ref{eqn:full-prob}), where we expand the exponential in the limit $V_1 / \Delta V \ll 1$ (as the sinusoidal term is just a \textit{perturbation}):
+    \begin{align*}
+        W_{1,2} \approx \exp\left(-\frac{2\Delta V}{\kappa} \right) \left(1\mp \frac{2V_1}{\kappa} \sin(\omega_s t)\right)
+    \end{align*}
+    By comparison:
+    \begin{align}
+        \frac{W}{2} \sim \exp\left(-\frac{2}{k} \Delta V \right); \qquad \frac{2 \epsilon}{W} \sim \frac{2V_1}{\kappa} \Rightarrow \epsilon \sim W \frac{V_1}{\kappa}    \label{eqn:comparisons}
+    \end{align}
+    From previous calculations, we arrived at the following expression for the \textit{signal to noise ratio}:
+    \begin{align*}
+        \operatorname{SNR}_{\omega_s} \sim \frac{\pi^2 \epsilon^2}{W} 
+    \end{align*} 
+    Substituting in the right terms (\ref{eqn:comparisons}) and ignoring all prefactors (as we are interested just in the position of the maximum), we arrive to:
     \begin{align*}
         \operatorname{SNR}_{\omega_s} \sim \frac{1}{k^2} \exp\left(-\frac{2}{k} \Delta V\right)  
     \end{align*} 
@@ -480,7 +497,7 @@ Consider the two-state model with states at position $x_1 = -c$ and $x_2 = +c$ a
     \medskip
 
     \textbf{Solution}. 
-    We start from the expression for $\overline{Z^n}$ after the $2$ Hubbard-Stratonovich transformations:
+    We start from the expression for $\overline{Z^n}$ after the first Hubbard-Stratonovich transformation:
     \begin{align}\label{eqn:stat}
         \overline{Z^m} = \left(\frac{N}{2\pi} \right)^{n/2} \left[\int_{\mathbb{R}} \dd{x} \exp\left(N \left[-\frac{1}{2} n x^2 + \log Z_1(x) \right]\right)\right]^n
     \end{align}
