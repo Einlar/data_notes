@@ -142,7 +142,7 @@ Also, note that:
 \end{align}
 
 \subsubsection{Heaviside transform}
-We can use the result for the $\delta$ to aid the computation of $\mathcal{F}[\theta]$, where $\theta(x)$ is the regular distribution defined from (\ref{eqn:heaviside-def}). We have already seen in (\ref{eqn:theta-deriv}) that $\theta' = \delta$. So, we can use the formula for the Fourier transform of a derivative (which naturally generalizes to distributions):
+We can use the result for the $\delta$ to aid the computation of $\mathcal{F}[\theta]$, where $\theta(x)$ is the regular distribution defined from (\ref{eqn:heaviside-def}). We have already seen in (\ref{eqn:theta-deriv}) that $\theta' = \delta$. So, we can use the formula for the Fourier transform of a derivative\marginpar{\vspace{2em}Fourier transform of a derivative} (which naturally generalizes to distributions):
 \begin{align} \label{eqn:derivative-property}
     \mathcal{F}[T'] = ik \tilde{T}
 \end{align}
@@ -161,11 +161,56 @@ In fact, consider a different $\theta^*(x) \equiv \theta(x) + c$, with $c \in \m
 \begin{align*}
     \mathcal{F}[\theta^*(x)](k) = \mathcal{F}[\theta(x)](k) + \mathcal{F}[c](k) = \tilde{\theta}(k) + c \delta(k) \neq \tilde{\theta}(k)
 \end{align*}
-So we are missing a $\delta$ term, meaning that the correct Fourier transform should be:
+So we are missing a $\delta$ term, meaning that the correct Fourier transform should be:\marginpar{\vspace{2em}Inversion formula}
 \begin{align}\label{eqn:full-theta-tilda}
     \tilde{\theta}(k) = \mathcal{P}\left(\frac{1}{ik} \right) + c \delta(k)
 \end{align}
-for some constant $c$. $\mathcal{P}$ denotes the Cauchy principal value, which needs to be used to \q{fix} the singularity at $k=0$ (see the following green box for the details).
+for some constant $c$. $\mathcal{P}$ denotes the Cauchy principal value, which needs to be used to \q{fix} the singularity at $k=0$ (see the following green boxes for the details).
+
+\medskip
+
+There are several ways to fix $c$ in (\ref{eqn:full-theta-tilda}). One of the quickest is to reason \textit{with symmetries}.
+
+Let $f$ be an even function\marginpar{1. Fix $c$ (symmetries)} (i.e. a gaussian). Symmetry is preserved by the Fourier transform, and so:
+\begin{align}
+    \langle \tilde{\theta}, \tilde{f} \rangle = \mathcal{P} \int_{\mathbb{R}} \frac{1}{ik} \tilde{f}(k) \dd{k} + c \langle \delta, \tilde{f} \rangle = c \tilde{f}(0) = c \int_{\mathbb{R}} f(x) \dd{x} \label{eqn:scalar1}
+\end{align}
+The principal value vanishes because $\tilde{f}$ is even (as $f$ is even). The corresponding scalar product without the Fourier transforms is:\begin{align}
+    \langle \theta, f \rangle = \int_{0}^{+\infty} f(x) \dd{x} \underset{(a)}{=}  \frac{1}{2} \int_{\mathbb{R}} f(x) \dd{x} \label{eqn:scalar2} 
+\end{align}
+where in (a) we again used the symmetry of $f$. Then, recalling (\ref{eqn:unitary}), we have:
+\begin{align*}
+    \langle \tilde{\theta}, \tilde{f} \rangle = 2\pi \langle \theta, f \rangle \Rightarrow c\int_{\mathbb{R}} f(x) \dd{x} = \frac{2 \pi}{2} \int_{\mathbb{R}} f(x) \dd{x} \Rightarrow c = \pi 
+\end{align*}
+(Note that $c$ depends on the choice we made for the normalization in the Fourier transforms).
+
+\medskip
+
+A similar argument\marginpar{2. Fix $c$ with symmetries and $\operatorname{sgn}(x)$} can be made noting that $\theta(x)$ is just a scaled and shifted $\operatorname{sgn}$ function, which is odd:
+\begin{align*}
+    \theta(x) = \frac{1}{2} +  \frac{1}{2}\operatorname{sgn}(x) \qquad
+    \operatorname{sgn}(x) = \begin{cases}
+        1 & x > 0\\
+        0 & x = 0\\
+        -1 & x < 0
+    \end{cases} 
+\end{align*} 
+By linearity we have:
+\begin{align}
+    \tilde{\theta}(k) = \mathcal{F}\left(\frac{1}{2}\right) + \frac{1}{2} \mathcal{F}[\operatorname{sgn}(x)](k) \label{eqn:theta-transform2}
+\end{align}
+Noting that $\operatorname{sgn}' = 2 \delta$ and using (\ref{eqn:derivative-property}) leads to:
+\begin{align*}
+    2 = ik \mathcal{F}[\operatorname{sgn}](k)
+\end{align*}
+Inverting with (\ref{eqn:full-theta-tilda}), we have:
+\begin{align*}
+    \mathcal{F}[\operatorname{sgn}](k) = \mathcal{P}\left(\frac{2}{ik} \right) + c \delta(k) =\mathcal{P}\left(\frac{2}{ik} \right) \ 
+\end{align*}
+As this time $c$ must be $0$, otherwise $\mathcal{F}[\operatorname{sgn}](k)$ wouldn't be odd (the $\delta$ is \textit{even}). Substituting in (\ref{eqn:theta-transform2}) we have:
+\begin{align*}
+    \tilde{\theta}(k) = \frac{1}{2} \underbrace{\mathcal{F}[1] }_{2 \pi}+\frac{1}{\cancel{2}} \mathcal{P}\left(\frac{\cancel{2}}{ik} \right) = \mathcal{P}\left(\frac{1}{ik} \right)  + \pi \delta(k)
+\end{align*}
 
 \begin{expl}\textbf{Why is (\ref{eqn:wrong-theta-transform}) wrong?} There are two main reasons:
 \begin{itemize}
@@ -208,9 +253,7 @@ Substituting back in (\ref{eqn:division}) and rearranging we get:
 %Extend to xT = 1 with https://math.stackexchange.com/questions/2962209/solve-the-distribution-equation-xt-1 (introducing Cauchy principal part)
      
 %Also look up "division problem" for distributions
-\end{expl}
 
-\begin{expl}
     All that's left is to solve:
     \begin{align}
         x T' = 0 \label{eqn:reduced-div}
@@ -230,26 +273,41 @@ Substituting back in (\ref{eqn:division}) and rearranging we get:
         \varphi(x) = \varphi(0) + x \psi(x) 
     \end{align*}
     for some $\psi(x) \in \mathcal{S}(\mathbb{R})$. Explicitly:
-    \begin{align*}
+    \begin{align} \nonumber
         \varphi(x) &= \varphi(0) + \int_0^x \varphi'(t) \dd{t} \underset{u = \frac{t}{x} }{=} \varphi(0) + \int_0^1 x \varphi'(xu) \dd{u} =\\
-        &= \varphi(0) + x \underbrace{\int_0^1 \varphi'(xu) \dd{u}}_{\psi(x)} = \varphi(0) + x\psi(x)
-    \end{align*}
+        &= \varphi(0) + x \underbrace{\int_0^1 \varphi'(xu) \dd{u}}_{\psi(x)} = \varphi(0) + x\psi(x) \label{eqn:decomposition}
+    \end{align}
     Note that if $\varphi(0) = 0$, then $\varphi(x) = x \psi(x)$. 
 
     \medskip
 
     Now, $x T = 0$ means that:
-    \begin{align*}
+    \begin{align} \label{eqn:Tprop}
         \langle x T, \varphi \rangle = 0 \qquad \forall \varphi \in \mathcal{S}(\mathbb{R})
-    \end{align*}
+    \end{align}
 
-    To see what $T$ is, we evaluate it on a test function $\varphi(x)$. If $\chi(x) \in \mathcal{S}(\mathbb{R})$ such that $\chi(0) = 1$, we have:
+    To see what $T$ is, we evaluate it on a test function $\varphi(x)$. The idea is to write $\varphi(x)$ as a sum of two test functions $a(x)$ and $b(x)$, choosing $b(x)$ so that it vanishes at $0$, meaning that we can factor a $x$ from it (\ref{eqn:decomposition}), and then use $\langle T, x b \rangle = \langle xT, b \rangle = 0$ (\ref{eqn:Tprop}).
+
+    Note that we can't just directly use (\ref{eqn:decomposition}), because while $x \psi(x)$ is indeed a test function, $\varphi(0) \notin \mathcal{S}(\mathbb{R})$ (it is a constant value, so it doesn't vanish for $x \to \infty$). So, the following is ill-defined:
+    \begin{align*}
+        \langle T, \varphi \rangle = \underbrace{\langle T, \varphi(0) \rangle}_{?}  + \underbrace{\langle T, x \psi(x) \rangle}_{0} 
+    \end{align*}
+    as $\langle T, \varphi(0) \rangle$ can't be done, because distributions act \textit{only} on elements of $\mathcal{S}(\mathbb{R})$.
+
+    \medskip
+
+    The idea is to \textit{convert} $\varphi(0)$ to a test function by multiplying it with another test function $\chi(x) \in \mathcal{S}(\mathbb{R})$, that we choose (for simplicity) so that $\chi(0) = 1$. Then we write $\varphi(x)$ as:
     \begin{align*}
         \varphi(x) &= \varphi(x) + \varphi(0)\chi(x) - \varphi(0) \chi(x) = \\
-        &= \varphi(0)\chi(x) + \underbrace{[\varphi(x) - \varphi(0) \chi(x)]}_{a(x)} 
+        &= \underbrace{\varphi(0)\chi(x)}_{a(x)} + \underbrace{[\varphi(x) - \varphi(0) \chi(x)]}_{b(x)} 
     \end{align*}
-    Note that $a(0) = \varphi(0) - \varphi(0) \chi(0) = \varphi(0) - \varphi(0) = 0$, and so $a(x) = x\psi(x)$ for some $\psi(x)$. Thus:
+    Note that now $a(x) \in \mathcal{S}(\mathbb{R})$, meaning that $\langle T, a \rangle$ is properly defined. Moreover, as we chose $\chi(0) = 1$, $b(x)$ is a test function that vanishes at $0$:
+    \begin{align*}
+        b(0) = \varphi(0) - \varphi(0) \chi(0) = \varphi(0) - \varphi(0) = 0
+    \end{align*}
+    And so we can use (\ref{eqn:decomposition}) to write $b(x) = x \psi(x)$ for some $\psi(x) \in \mathcal{S}(\mathbb{R})$. 
 
+    Finally, we are able to apply $T$ to $\varphi(x)$:
     \begin{align*}
         \langle T, \varphi \rangle &= \langle T, \varphi(0) \chi + x \psi \rangle =\\
         &= \varphi(0) \underbrace{\langle T, \chi \rangle}_{c}  + \underbrace{\langle x T, \psi \rangle}_{0} =\\
@@ -262,65 +320,174 @@ Substituting back in (\ref{eqn:division}) and rearranging we get:
     Some references on these derivations can be found in:
     \begin{itemize}
         \item \url{https://see.stanford.edu/materials/lsoftaee261/book-fall-07.pdf}
-        \item \url{https://math.stackexchange.com/questions/678457/distribution-solution-to-xt-0-in-schwartz-space}
-        \item \url{https://math.stackexchange.com/questions/2962209/solve-the-distribution-equation-xt-1}
+        \item \parbox{30em}{\url{https://math.stackexchange.com/questions/678457/distribution-solution-to-xt-0-in-schwartz-space}}
+        \item \parbox{30em}{\url{https://math.stackexchange.com/questions/2962209/solve-the-distribution-equation-xt-1}}
     \end{itemize}
     
 \end{expl}
 
-There are several ways to fix $c$ in (\ref{eqn:full-theta-tilda}). One of the quickest is to reason \textit{with symmetries}.
 
-Let $f$ be an even function (i.e. a gaussian). Symmetry is preserved by the Fourier transform, and so:
-\begin{align}
-    \langle \tilde{\theta}, \tilde{f} \rangle = \mathcal{P} \int_{\mathbb{R}} \frac{1}{ik} \tilde{f}(k) \dd{k} + c \langle \delta, \tilde{f} \rangle = c \tilde{f}(0) = c \int_{\mathbb{R}} f(x) \dd{x} \label{eqn:scalar1}
-\end{align}
-The principal value vanishes because $\tilde{f}$ is even (as $f$ is even). Then, as the Fourier transform is an isometry, i.e. preserves scalar product, we have:
-\begin{align}
-    \langle \theta, f \rangle = \int_{0}^{+\infty} f(x) \dd{x} \underset{(a)}{=}  \frac{1}{2} \int_{\mathbb{R}} f(x) \dd{x} \label{eqn:scalar2} 
-\end{align}
-where in (a) we again used the symmetry of $f$. Then, recalling (\ref{eqn:unitary}), we have:
+
+\begin{expl}
+    \textbf{Explicit computation}. It is also possible to compute $\tilde{\theta}$ \textit{directly}, at the cost of a longer derivation. The idea is to use a \textit{limit representation} $\theta_{\epsilon}(x)$ for $\theta(x)$, so that $\theta_{\epsilon}(x)$ has the same discontinuity of $\theta(x)$ at $x=0$, and $\lim_{\epsilon \to 0^+} \theta_{\epsilon}(x) = \theta(x)$. One possible choice is:
+    \begin{align*}
+        \theta_{\epsilon}(x) = \begin{cases}
+            e^{-\epsilon x} & x > 0\\
+            0 & x < 0
+        \end{cases}
+    \end{align*} 
+    When $\epsilon \to 0^+$, $e^{-\epsilon x} \to 1$, reconstructing the Heaviside function. So:
+    \begin{align*}
+        \tilde{\theta}(k) &= \int_{\mathbb{R}} \theta(x) e^{-ikx} \dd{x} = \lim_{\epsilon \to 0^+} \int_0^{+\infty} e^{-\epsilon x} e^{-ikx} \dd{x} = \lim_{\epsilon \to 0^+} -\frac{1}{\epsilon + ik}[e^{-\infty} - 1] =\\
+        &= \lim_{\epsilon \to 0^+} \frac{1}{\epsilon + ik} \frac{\textcolor{Red}{-i^2}}{\textcolor{Red}{-i^2}}   = \lim_{\epsilon \to 0^+} \frac{-i}{k- i \epsilon} 
+    \end{align*}
+    To manipulate this expression we need to treat it in the context of distributions, meaning that we need to apply it to a test function $\varphi(x)$ and see what happens:
+    \begin{align*}
+        \langle \tilde{\theta}, \varphi \rangle &= \int_{\mathbb{R}} \tilde{\theta}(k) \varphi(k) \dd{k} = \lim_{\epsilon \to 0^+} \int_{\mathbb{R}} \frac{-i}{k - i \epsilon} \frac{\textcolor{Red}{k+ i \epsilon}}{\textcolor{Red}{k + i \epsilon}}  \varphi(k) \dd{k} =\\
+        &= -i \lim_{\epsilon \to 0^+} \int_{\mathbb{R}} \frac{k + i \epsilon}{k^2 + \epsilon^2} \varphi(k) \dd{k} =\\
+        &\underset{(a)}{=} -i \Bigg[\lim_{\epsilon \to 0^+} \underbrace{\int_{\mathbb{R}} \frac{k}{k^2 + \epsilon^2} \varphi(k) \dd{k}}_{A(\epsilon)} + i \lim_{\epsilon \to 0^+} \underbrace{\int_{\mathbb{R}} \frac{\epsilon}{k^2 + \epsilon^2} \varphi(k) \dd{k}  }_{B(\epsilon)}\Bigg]
+    \end{align*}
+    where in (a) we split the real and imaginary part. We then examine each of them separately:
+    \begin{align*}
+        A(\epsilon) &= \int_{\mathbb{R}} \frac{k}{k^2 + \epsilon^2} \varphi(k) \dd{k} = \int_{\mathbb{R}} \left(\dv{k} \frac{1}{2} \ln(k^2 + \epsilon^2) \right) \varphi(k) \dd{k} =\\
+        &\underset{(b)}{=} \cancel{a \varphi \Big|_{\mathbb{R}}} - \frac{1}{2} \int_{\mathbb{R}} \ln(k^2 + \epsilon^2) \varphi'(k) \dd{k}  \\
+        &\xrightarrow[\epsilon \to 0^+]{}    -\frac{1}{2}\int_{\mathbb{R}} \underbrace{\ln(k^2) }_{2 \ln|k|}\varphi'(k) \dd{k} = - \int_{\mathbb{R}} \ln|k| \varphi'(k) \dd{k}
+    \end{align*}
+    \begin{align*}
+        B(\epsilon) &= \int_{\mathbb{R}} \frac{\epsilon}{k^2 + \epsilon^2} \varphi(k) \dd{k} = \int_{\mathbb{R}} \frac{1}{\epsilon} \frac{1}{1 + \frac{k^2}{\epsilon^2} }  \varphi(k) \dd{k} = \\
+        &= \int_{\mathbb{R}} \left[\dv{k} \arctan\left(\frac{k}{\epsilon} \right) \right] \varphi(k) \dd{k} =\\
+        &\underset{(c)}{=}  \cancel{b\varphi \Big|_{\mathbb{R}}} - \int_{\mathbb{R}} \arctan\left(\frac{k}{\epsilon} \right) \varphi'(k) \dd{k} \\
+        &\xrightarrow[\epsilon \to 0^+]{} - \int_0^{+\infty} \frac{\pi}{2} \varphi'(k) \dd{k} - \int_{-\infty}^0 \left(-\frac{\pi}{2} \right)  \varphi'(k) \dd{k} =\\
+        &= - \frac{\pi}{2} \int_{\mathbb{R}} \operatorname{sgn}(k) \varphi'(k) \dd{k} \underset{(d)}{=} \frac{\pi}{\cancel{2}} \int_{\mathbb{R}} \underbrace{\operatorname{sgn}'(k)}_{\cancel{2} \delta(k)}\varphi(k) \dd{k}
+    \end{align*}
+    where in (b), (c) and (d) we performed integrations by parts. Then we note that:
+    \begin{align*}
+        \lim_{\epsilon \to 0^+} \langle B(\epsilon), \varphi \rangle &= \pi \langle \delta, \varphi \rangle\\
+        \lim_{\epsilon \to 0^+} A(\epsilon) &= -\int_{\mathbb{R}} \ln|k| \varphi'(k) \dd{k} \underset{(e)}{=} \mathcal{P}\int_{\mathbb{R}}\frac{1}{k} \varphi(k) \dd{k} 
+    \end{align*}
+    with a final integration by parts in (e). Putting it all together we arrive at the desired result:
+    \begin{align*}
+        \tilde{\theta}(k) = -i \mathcal{P}(\frac{1}{k} ) + \pi \delta(k) = \mathcal{P}\left(\frac{1}{ik} \right) + \pi \delta(k)
+    \end{align*}
+
+    Reference: \url{https://math.stackexchange.com/questions/269809/heaviside-step-function-fourier-transform-and-principal-values}
+\end{expl}
+
+\section{Fresnel integral}
+An important complex integral, appearing for example in the Schr\"odinger equation, is the Fresnel integral:\index{Integral!Fresnel}
 \begin{align*}
-    \langle \tilde{\theta}, \tilde{f} \rangle = 2\pi \langle \theta, f \rangle \Rightarrow c\int_{\mathbb{R}} f(x) \dd{x} = \frac{2 \pi}{2} \int_{\mathbb{R}} f(x) \dd{x} \Rightarrow c = \pi 
+    I(a,b) \equiv \int_{-\infty}^{+\infty} \frac{\dd{k}}{2 \pi} \exp(-ia k^2 -ib k) = \frac{1}{\sqrt{4 \pi a i}} \exp\left(\frac{i b^2}{4a} \right)
 \end{align*}
-(Note that $c$ depends on the choice we made for the normalization in the Fourier transforms).
+It is similar to a Gaussian integral, but with complex mean and variance.
 
 \medskip
 
-A similar argument can be made noting that $\theta(x)$ is just a scaled and shifted $\operatorname{sgn}$ function, which is odd:
+To compute it, the idea is to \textit{rotate it} so that it is not entirely along the imaginary axis. Explicitly, we rewrite the $i$ multiplying the $a$ in the exponential argument as:
 \begin{align*}
-    \theta(x) = \frac{1}{2} +  \frac{1}{2}\operatorname{sgn}(x) \qquad
-    \operatorname{sgn}(x) = \begin{cases}
-        1 & x > 0\\
-        0 & x = 0\\
-        -1 & x < 0
-    \end{cases} 
-\end{align*} 
-By linearity we have:
+    i = \exp\left(i \frac{\pi}{2} \right)
+\end{align*}
+And then we subtract an angle $\epsilon$, and consider the limit $\epsilon \to 0^+$:
+\begin{align*}
+    i = \lim_{\epsilon \to 0^+} \exp\left[i \left(\frac{\pi}{2} - \epsilon \right)\right]
+\end{align*}
+Then, we evaluate the integral over one segment $[-R,R]$ of the real line, and take the limit $R \to \infty$:\marginpar{\vspace{3em}\q{Regularized} Fresnel integral}
+\begin{align*}
+    I(a, b) &= \lim_{\epsilon \to 0^+} I_\epsilon(a,b)\\
+    I_{\epsilon}(a,b) &= \lim_{R \to \infty} \int_{-R}^{+R} \frac{\dd{k}}{2 \pi} \exp\Bigg(-a\underbrace{k^2 \exp\left[i\left(\frac{\pi}{2} - \epsilon \right)\right] }_{z^2}- i bk\Bigg) \qquad a,b \in \mathbb{R}
+\end{align*}
+Suppose that $a > 0$. We make the change of variables:\marginpar{\vspace{1em}1. Change of variables}
+\begin{align*}
+    z^2 \equiv k^2 \exp\left[i\left(\frac{\pi}{2} - \epsilon \right)\right] \Rightarrow z = k \exp\Bigg[i \underbrace{\left(\frac{\pi}{4} - \frac{\epsilon}{2}  \right)}_{\phi_\epsilon}\Bigg] = k e^{i \phi_\epsilon} \Rightarrow k = z e^{-i \phi_\epsilon}
+\end{align*}
+And $\dd{k} = \dd{z} e^{-i \phi_\epsilon}$. Note that:
 \begin{align}
-    \tilde{\theta}(k) = \mathcal{F}\left(\frac{1}{2}\right) + \frac{1}{2} \mathcal{F}[\operatorname{sgn}(x)](k) \label{eqn:theta-transform2}
+    \phi_\epsilon < \frac{\pi}{4} 
+    \label{eqn:phie}
 \end{align}
-Noting that $\operatorname{sgn}' = 2 \delta$ and using (\ref{eqn:derivative-property}) leads to:
+definitely when $\epsilon \to 0^+$.
+
+\medskip
+
+This change of variables has removed the $i$ multiplying the $z^2$, meaning that now we have a \q{standard} Gaussian integral. However, the integration path is now $\gamma_R = \{|z| \leq R, \arg z = \phi_\epsilon \}$, i.e. a segment of length $2R$, centred at the origin and forming an angle $\phi_\epsilon$ with the real line. So the integral becomes:
 \begin{align*}
-    2 = ik \mathcal{F}[\operatorname{sgn}](k)
+    I_{\epsilon}(a,b) &= \lim_{R \to \infty} \int_{\gamma_R} \frac{\dd{z}}{2 \pi} e^{-i \phi_\epsilon} \exp \Big(-az^2 -iz\underbrace{b e^{-i \phi_\epsilon}}_{b'} \Big) \qquad b' = b e^{-i \phi_\epsilon}\\
+    &= \lim_{R \to \infty} \int_{\gamma_R} \frac{\dd{z}}{2\pi} e^{-i \phi_\epsilon}  \exp(-a z^2 - ib'z)
 \end{align*}
-Inverting, we have:
+We want to \textit{relate} this integral to its version \textit{on the real line}, that we know how to compute. To do this, as always, we \textit{close} the path of integration and use the Cauchy integral theorem, following the schema in fig. \ref{fig:fresnel-path}. 
+
+\begin{figure}[h!]
+    \centering
+    \import{Images/}{fresnel.pdf_tex}\hspace{-8em}
+    \caption{Integration path for the Fresnel integral\label{fig:fresnel-path}}
+\end{figure}
+
+Explicitly, consider the closed curve $\Gamma_R$ defined by:\marginpar{\vspace{1em}2. Contour integration}
 \begin{align*}
-    \mathcal{F}[\operatorname{sgn}](k) = \mathcal{P}\left(\frac{2}{ik} \right) + c \delta(k) =\mathcal{P}\left(\frac{2}{ik} \right) \ 
+    \Gamma_R = \gamma_R + \gamma_+ + \bar{\gamma}_R + \gamma_-
 \end{align*}
-As this time $c$ must be $0$, otherwise $\mathcal{F}[\operatorname{sgn}](k)$ wouldn't be odd (the $\delta$ is \textit{even}). Substituting in (\ref{eqn:theta-transform2}) we have:
+where:
 \begin{align*}
-    \tilde{\theta}(k) = \frac{1}{2} \underbrace{\mathcal{F}[1] }_{2 \pi}+\frac{1}{\cancel{2}} \mathcal{P}\left(\frac{\cancel{2}}{ik} \right) = \mathcal{P}\left(\frac{1}{ik} \right)  + \pi \delta(k)
+    \gamma_+ &= \{z = R e^{i \theta}\colon \theta\in [0, \phi_\epsilon] \}\\
+    \gamma_- &= \{z = R e^{i \theta} \colon \theta \in [\pi, \pi + \phi_\epsilon]\}\\
+    \gamma_R &= \{ |z| \leq R, \arg z = \phi_\epsilon\}\\
+    \bar{\gamma}_R &= [-R, R]
 \end{align*}
+As the integrand has no poles inside $\Gamma_R$, we have:
+\begin{align*}
+    \lim_{R \to \infty} \int_{\Gamma_R} \frac{\dd{z}}{2\pi} e^{-i \phi_\epsilon}  \exp(-a z^2 - ib'z) = 0
+\end{align*}
+Moreover, the integral over $\gamma_+$ and $\gamma_-$ vanish. We show this explicitly only for the $\gamma_+$ case:\marginpar{3. Integrals over $\gamma_\pm$ vanish}
+\begin{align} \label{eqn:g+1}
+    \left| \int_{\gamma_+} \frac{\dd{z}}{2 \pi} e^{-i \phi_\epsilon} \exp(-az^2 - i b z e^{-i \phi_\epsilon})  \right|
+\end{align}
+We use the parameterization of $\gamma_+$ to change variables:
+\begin{align*}
+    z = R  e^{i \theta} \Rightarrow \dd{z} = i R e^{i \theta} \dd{\theta} 
+\end{align*}
+leading to:
+\begin{align*}
+    (\ref{eqn:g+1}) &= \left|\int_0^{\phi_\epsilon} \frac{\dd{\theta}}{2 \pi} i R e^{i \theta} e^{-i \phi_\epsilon} \exp(-a R^2 e^{2 i \theta} - i b R e^{i \theta} e^{-i \phi_\epsilon})  \right| =\\
+    &= \underbrace{\left |\frac{iR}{2 \pi} e^{-i \phi_\epsilon}  \right|}_{R / (2\pi)} \left|\int_0^{\phi_\epsilon} \dd{\theta} e^{i \theta} \exp(-a R^2 e^{2i \theta} - i b R e^{i(\theta - \phi_\epsilon)})\right| \leq\\
+    &\leq \frac{R}{2 \pi} \int_0^{\phi_\epsilon} \dd{\theta} \left|\exp(i \theta - aR^2 e^{2i \theta} - i b R e^{i(\theta - \phi_\epsilon)}) \right| =\\
+    &= \frac{R}{2 \pi} \int_0^{\phi_\epsilon} \dd{\theta} \underbrace{|e^{i \theta}|}_{1} |e^{-aR^2 (\cos 2 \theta + i \sin 2 \theta)}| |e^{-ibR(\cos(\theta - \phi_\epsilon) + i \sin(\theta - \phi_\epsilon))}| =\\
+    &= \frac{R}{2 \pi}   \int_0^{\phi_\epsilon} \dd{\theta} e^{-a R^2 \cos 2 \theta + R b \sin(\theta - \phi_\epsilon)}  \xrightarrow[R \to \infty]{}  0
+\end{align*}
+As the integral is over $\theta$ in $[0,\phi_\epsilon]$, we have:
+\begin{align*}
+    0 < \theta < \phi_\epsilon \underbrace{<}_{(\ref{eqn:phie})}  \frac{\pi}{4} \Rightarrow 0 < 2 \theta < \frac{\pi}{2} \Rightarrow \cos(2 \theta) > 0  
+\end{align*}
+So, as we assumed $a > 0$, the integrand decays exponentially fast when $R \to \infty$, making the integral vanish.
 
-\begin{expl}
-    \textbf{Explicit computation}. It is also possible to compute $\tilde{\theta}$ \textit{directly}, at the cost of a longer derivation.  
-\end{expl}
+\medskip
 
-%Use sign, and the fact that is odd (so there is no delta term appearing, because delta is even), to find the fourier transform of heaviside
-%Solve with symmetry: https://math.stackexchange.com/questions/1353607/fourier-transform-of-the-heaviside-function
+Finally, as the integral over $\gamma_+$ and $\gamma_-$ vanish, then:
+\begin{align*}
+    I_{\gamma_R} + I_{\bar{\gamma}_{R}} = 0 \Rightarrow I_{{\gamma}_{R}} = -I_{\bar{\gamma}_{R}}
+\end{align*}
+where $I_{\bar{\gamma}_R}$ is the integral over the real line, that we can compute:\marginpar{4. Integral over the real line}
+\begin{align*}
+    I_{\gamma_R} &= -\int_{-R}^R \frac{\dd{z}}{2 \pi} e^{-i \phi_\epsilon} \exp(-a z^2 - i b' z)  \xrightarrow[R \to \infty]{}    \frac{e^{-i \phi_\epsilon}}{2 \pi} \sqrt{\frac{\pi}{a} }  \exp\left(-\frac{(b')^2}{4a} \right) =\\
+    &= \frac{1}{\sqrt{4 \pi a}} e^{-i \phi_\epsilon} \exp\left(-\frac{(b')^2}{4a} \right)
+\end{align*}
+Inserting back $b' = b e^{-i\phi_\epsilon}$, and taking the limit $\epsilon \to 0^+$, we have:
+\begin{align*}
+    \phi_\epsilon  \xrightarrow[\epsilon \to 0^+]{}   \frac{\pi}{4} \Rightarrow e^{-i\phi_\epsilon} \xrightarrow[\epsilon \to 0^+]{}  \frac{1}{\sqrt{i}}  \Rightarrow b' \xrightarrow[\epsilon \to 0^+]{}   \frac{b}{\sqrt{i}} 
+\end{align*} 
+and $(b')^2 \to -ib^2$, so that:
+\begin{align*}
+    I(a,b) = \frac{1}{\sqrt{4 \pi a i}}  \exp\left(\frac{ib^2}{4a} \right)
+\end{align*}
+which is the desired result.
 
+\medskip
 
-%Show full argument from notes
+For $a < 0$, observe that $I(a,b) = I^*(-a,-b)$, with $-ia = (ia)^*$ and $b^2 = (b^2)^*$, and the same result follows.
 
+\subsection{Schr\"odinger Equation}
+A possible application of the Fresnel integration is solving the Schr\"odinger equation for a \textit{free} particle:\marginpar{Example of application}
+\begin{align*}
+    i \hbar \partial_t \psi(x,t) = -\frac{\hbar^2}{2m} \partial_x^2 \psi(x,t)   
+\end{align*} 
+In the following, we will take $\hbar = 1$ for simplicity. %Complete
 
 \end{document}
