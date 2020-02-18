@@ -94,7 +94,7 @@ separate-uncertainty = true
 %---Indeces, links, bibliography---%
 \usepackage{makeidx} %Indice analitico
 \usepackage[stable]{footmisc}
-\usepackage{hyperref} %hyperref va caricato sempre dopo footmisc, altrimenti le footnotes si buggano e riportano tutte alla prima pagina
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref} %hyperref va caricato sempre dopo footmisc, altrimenti le footnotes si buggano e riportano tutte alla prima pagina
 \usepackage[symbol=$\wedge$,numberlinked=false]{footnotebackref}
 
 %---Utilities---%

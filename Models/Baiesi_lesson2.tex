@@ -29,21 +29,34 @@ The definition (\ref{eqn:fourier-def}) is quite limited, as several interesting 
 
 We start by defining a space $\mathcal{S}(\mathbb{R})$ (Schwartz space)\marginpar{Schwartz space} containing all functions $\varphi \in C^{\infty}(\mathbb{R})$ that are \textit{rapidly decreasing}, i.e. such that $\sup_{x \in \mathbb{R}} |x^\alpha \varphi^{(\beta)}(x)| < \infty$ $\forall \alpha, \beta \in \mathbb{N}$. These are also called \textit{test functions}. 
 
-Then a (tempered) \textbf{distribution}\marginpar{Tempered distributions} $T$ is a linear mapping $S(\mathbb{R}) \to \mathbb{R}$. So it is possible to \q{apply} a distribution $T$ to any test function $\varphi \in S(\mathbb{R})$, resulting in a real number, denoted with $\langle T, \varphi \rangle$.
+\medskip
 
-In general, if $f\colon \mathbb{R} \to \mathbb{R}$ is a locally integrable function (i.e. integrable on any compact) we can use it to define a (regular) distribution by using the inner product:
-\begin{align*}
-    \langle T_f, \varphi \rangle \equiv \int_{\mathbb{R}} \dd{x} f(x)\varphi(x) \qquad \forall \varphi \in S(\mathbb{R})
-\end{align*}
+Then a \textbf{tempered distribution}\marginpar{Tempered distributions} $T$ is a \textbf{continuous} \textbf{linear} mapping $\mathcal{S}(\mathbb{R}) \to \mathbb{R}$. So it is possible to \q{apply} a distribution $T$ to any test function $\varphi \in \mathcal{S}(\mathbb{R})$, resulting in a real number, denoted with $\langle T, \varphi \rangle$.
 
-\begin{expl}In the \textbf{complex} case, we instead use the Hermitian inner product:
+\medskip
+
+The choice of $\mathcal{S}$ is made expressly so that the Fourier transform is a linear and invertible operator on $\mathcal{S}$. However, other choices can be made for the space of test functions. For example, one can take the set $\mathcal{D}$ of all functions with \textit{compact support}, i.e. that vanish (along with all their derivatives) outside a compact region. 
+
+\medskip
+
+We can now see that distributions \textit{generalize} the concept of function. We start by noting that any \textbf{locally integrable} function $f \colon \mathbb{R} \to \mathbb{R}$ can be used to define a distribution, by considering its inner product with a test function:  
+\begin{align}
+    \langle T_f, \varphi \rangle \equiv \int_{\mathbb{R}} \dd{x} f(x)\varphi(x) \qquad \forall \varphi \in \mathcal{S}(\mathbb{R}) \label{eqn:regular-dist}
+\end{align}
+Distributions that can be defined like this are called \textbf{regular}. 
+
+\begin{expl}In the \textbf{complex} case, where $f \colon \mathbb{R} \to \mathbb{C}$, we instead use the Hermitian inner product:
     \begin{align*}
         \langle T_f, \varphi \rangle = \int_{\mathbb{R}} \dd{x} f(x)^* \varphi(x)
     \end{align*} 
-    where $f(x)^*$ is the complex conjugate of $f(x)$. The choice of the \textit{position} of this conjugate (on the first or second entry) is a convention. Physicist tend to use the first position (due to Dirac notation), while mathematicians the second one.
+    where $f(x)^*$ is the complex conjugate of $f(x)$. The choice of the \textit{position} of this conjugate (on the first or second entry) is a convention. Physicists tend to use the first position (due to Dirac notation), while mathematicians the second one.
 \end{expl}
 
-In general, the converse is not true: it is not possible to find a function $f(x)$ for a generic distribution $T$ such that the above identity is satisfied. The distributions for which this is not possible are called \textit{singular}. One of the most important example is the Dirac Delta\marginpar{Dirac Delta}\index{Dirac Delta} $\delta(x)$, defined as follows:
+Not all distributions are regular: in general, it is not possible to find a function $f(x)$ for a generic distribution $T$ such that (\ref{eqn:regular-dist}) is satisfied. The distributions for which this is not possible are called \textbf{singular}.
+
+\medskip
+
+The simplest (and most important) singular distribution is the \textbf{Dirac Delta} \marginpar{\vspace{3em}Dirac Delta}\index{Dirac Delta} $\delta(x)$, defined as follows:
 \begin{align*}
     \langle \delta, \varphi \rangle \equiv \varphi(0) \qquad \varphi \in S(\mathbb{R})
 \end{align*} 
@@ -53,11 +66,11 @@ In practice, we often write \textit{formally}:
 \begin{align*}
     \langle \delta, \varphi \rangle = \int_{\mathbb{R}} \delta(x) \varphi(x) \dd{x}
 \end{align*}
-\textit{as if} $\delta(x)$ were a function (it isn't).   
+\textit{as if} $\delta(x)$ were a function (but keep in mind that it isn't). This expression is often just a \textit{shortcut} for quickly reaching useful results, as we will see in the following.
 
 \medskip
 
-The point of defining \textit{distributions} is that they provide a way to extend rigorously may operations that cannot be done on normal functions. \marginpar{Distributional derivative} One such example is differentiation. Given a distribution $T$, its \textbf{distributional derivative} is defined as:
+The point of defining \textit{distributions} is that they provide a way to extend rigorously may operations that cannot be done on normal functions.  One such example is differentiation. Given a distribution $T$, its \textbf{distributional derivative} is defined as:\marginpar{\vspace{1em}Distributional derivative}
 \begin{align} \label{eqn:dist-derivative}
     \langle T', \varphi \rangle \equiv - \langle T, \varphi' \rangle \qquad \forall \varphi \in S(\mathbb{R})
 \end{align}  
@@ -69,14 +82,14 @@ For a singular distribution we use directly the definition (\ref{eqn:dist-deriva
 
 \medskip
 
-In the distributional sense, it is possible to differentiate the \textbf{Heaviside function}\index{Heaviside function}\marginpar{Heaviside step function} $\theta(x)$:
-\begin{align*}
+In the distributional sense, it is possible to differentiate the \textbf{Heaviside function}\index{Heaviside function}\marginpar{\vspace{4.5em}Heaviside step function} $\theta(x)$:
+\begin{align} \label{eqn:heaviside-def}
     \theta(x) \equiv \begin{cases}
         1 & x > 0\\
         \frac{1}{2} & x=0\\
         0 & x < 0 
     \end{cases}
-\end{align*}
+\end{align}
 As $\theta(x)$ is locally integrable, we can define a corresponding distribution - that we denote with the same symbol $\theta$. Then:
 \begin{align}\nonumber
     \langle \theta', \varphi \rangle &= - \langle \theta, \varphi' \rangle = -\int_{\mathbb{R}} \theta(x) \varphi'(x) \dd{x} = -\int_0^{+\infty} \varphi'(x) \dd{x} = -[\cancel{\varphi(+\infty)}-\varphi(0)] =\\
@@ -84,45 +97,60 @@ As $\theta(x)$ is locally integrable, we can define a corresponding distribution
 \end{align}
 So $\theta' = \delta$ \textit{in the distributional sense} - i.e. applying $\theta'$ or $\delta$ to any test function $\varphi$ leads to the same result.
 
-\medskip
+\subsection{Fourier transform of distributions}
 
-Another operation that can be extended is the \textbf{Fourier Transform}. \marginpar{Fourier Transform of distributions} $S(\mathbb{R})$ has been chosen, in fact, such that any $\varphi(x) \in S(\mathbb{R})$ has a well-defined transform $\tilde{\varphi}(k)$. Then we define the Fourier transform of a distribution as follows:
+We are finally ready to extend the \textbf{Fourier Transform} to tempered distributions.\marginpar{\vspace{3em}Fourier Transform of distributions} In fact, $S(\mathbb{R})$ has been chosen\footnote{More precisely, the Fourier transform is an \textit{automorphism} of $\mathcal{S}$, i.e. it is linear and invertible} such that any $\varphi(x) \in S(\mathbb{R})$ has a well-defined transform $\tilde{\varphi}(k)$. Then we define the Fourier transform of a distribution as follows:
 \begin{align*}
     \langle \mathcal{F}[T], \varphi \rangle \equiv 2\pi\langle T, \mathcal{F}^{-1}[\varphi] \rangle
 \end{align*}
+
 Again, this comes from the expression for regular distributions:
 \begin{align*}
     \langle \mathcal{F}[T_f], \varphi \rangle &= \int_{\mathbb{R}} \dd{k} \{\mathcal{F}[f(x)](k)\}^* \varphi(k) = \int_{\mathbb{R}} \dd{k} \int_{\mathbb{R}} \dd{x} \left[e^{-ikx} f(x)\right]^* \varphi(x) =\\
     &= \int_{\mathbb{R}} \dd{x} f(x) \int_{\mathbb{R}} \dd{k} e^{ikx}  \varphi(k) = \int_{\mathbb{R}} 2\pi f(x) \mathcal{F}^{-1}[\varphi(k)](x) = 2 \pi\langle T, \mathcal{F}^{-1}[\varphi]  \rangle
 \end{align*}
 
-All properties of the Fourier Transform can be immediately generalized to distributions. In particular:
-\begin{align*}
-    \mathcal{F}[T'] = ik \tilde{T}
-\end{align*}
-
-So, for example, we can compute the Fourier Transform of the $\theta(x)$: 
-\begin{align} \label{eqn:theta-transf1}
-    \mathcal{F}[\theta'] \underset{(\ref{eqn:theta-deriv})}{=}  \mathcal{F}[\delta] = ik \tilde{\theta}
+Note that:
+\begin{align}\label{eqn:unitary}
+    \langle \mathcal{F}[T], \mathcal{F}[\varphi] \rangle = 2\pi \langle T, \mathcal{F}^{-1} \mathcal{F}[\varphi] \rangle = 2 \pi \langle T, \varphi \rangle
 \end{align}
-where: \marginpar{Fourier Transform of $\delta(x)$}
+
+\subsubsection{Delta transform}
+Finally, we can use all this machinery to compute Fourier transforms of some \textit{generalized functions}. We start with the $\delta$:
 \begin{align*}
     \langle \mathcal{F}[\delta], \varphi \rangle = 2 \pi\langle \delta, \mathcal{F}^{-1}[\varphi]\rangle = 2\pi\mathcal{F}^{-1}[\varphi(x)](0)
 \end{align*}
-and:
+where:
 \begin{align*}
     \mathcal{F}^{-1}[\varphi(x)](k) = \frac{1}{2\pi} \int_{\mathbb{R}} \dd{x} e^{ikx} \varphi(x) \Rightarrow 2 \pi\mathcal{F}^{-1}[\varphi(x)](0) = \int_{\mathbb{R}} \dd{x} \varphi(x) = \langle 1, \varphi \rangle 
 \end{align*}
 And so $\mathcal{F}[\delta] = 1$. 
 
+\medskip
+
 Note that the same result could be obtained in a simpler way by treating $\delta$ as a \q{formal function}:
 \begin{align*}
-    \mathcal{F}[\delta] = \int_{\mathbb{R}} e^{-ikx} \delta(x) = 1
+    \mathcal{F}[\delta](k) = \int_{\mathbb{R}} e^{-ikx} \delta(x) = e^{-ik 0} =  1
 \end{align*}
-Equivalently:
+This leads to an equivalent definition for the $\delta$ \q{function}:
 \begin{align*}
     \delta(x) = \mathcal{F}^{-1}[1](x) = \frac{1}{2\pi} \int_{\mathbb{R}} e^{ikx} \dd{k}
 \end{align*}
+Also, note that:
+\begin{align} \label{eqn:1-transform}
+    \mathcal{F}[1](k) = \int_{\mathbb{R}} e^{-ikx} \dd{x} = \int_{\mathbb{R}} e^{ikx} \dd{x} = \textcolor{Red}{2 \pi} \left( \frac{1}{\textcolor{Red}{2 \pi}} \int_{\mathbb{R}} e^{ikx}  \right) = 2\pi \delta(k)
+\end{align}
+
+\subsubsection{Heaviside transform}
+We can use the result for the $\delta$ to aid the computation of $\mathcal{F}[\theta]$, where $\theta(x)$ is the regular distribution defined from (\ref{eqn:heaviside-def}). We have already seen in (\ref{eqn:theta-deriv}) that $\theta' = \delta$. So, we can use the formula for the Fourier transform of a derivative (which naturally generalizes to distributions):
+\begin{align} \label{eqn:derivative-property}
+    \mathcal{F}[T'] = ik \tilde{T}
+\end{align}
+In our case:
+\begin{align} \label{eqn:theta-transf1}
+    \mathcal{F}[\theta'] \underset{(\ref{eqn:theta-deriv})}{=}  \mathcal{F}[\delta] = 1 = ik \tilde{\theta}
+\end{align}
+
 
 However, (\ref{eqn:theta-transf1}) cannot be used to reconstruct $\tilde{\theta}$ by itself, that is we cannot just \q{solve by $\tilde{\theta}$} and write:
 \begin{align} \label{eqn:wrong-theta-transform}
@@ -133,22 +161,166 @@ In fact, consider a different $\theta^*(x) \equiv \theta(x) + c$, with $c \in \m
 \begin{align*}
     \mathcal{F}[\theta^*(x)](k) = \mathcal{F}[\theta(x)](k) + \mathcal{F}[c](k) = \tilde{\theta}(k) + c \delta(k) \neq \tilde{\theta}(k)
 \end{align*}
-So we are missing a $\delta$ term.
+So we are missing a $\delta$ term, meaning that the correct Fourier transform should be:
+\begin{align}\label{eqn:full-theta-tilda}
+    \tilde{\theta}(k) = \mathcal{P}\left(\frac{1}{ik} \right) + c \delta(k)
+\end{align}
+for some constant $c$. $\mathcal{P}$ denotes the Cauchy principal value, which needs to be used to \q{fix} the singularity at $k=0$ (see the following green box for the details).
 
 \begin{expl}\textbf{Why is (\ref{eqn:wrong-theta-transform}) wrong?} There are two main reasons:
 \begin{itemize}
-    \item $1/(ik)$ is not locally integrable, so it cannot be used to define a distribution, such as $\tilde{\theta}$. This can be solved by using the \textit{principal part} of $1/(ik)$ instead. 
-    \item %Not the most general solution of xT = 1
+    \item $1/(ik)$ is not locally integrable (as it diverges for $k=0$), so it cannot be used to define a distribution, such as $\tilde{\theta}$. This can be solved by using the \textit{principal part} of $1/(ik)$ instead. 
+    \item The most general solution to the equation $xT = 1$, where $T$ is a tempered distribution, is not just $T = \mathcal{P} (1/x)$, but:
+    \begin{align*}
+        T = \mathcal{P}\left(\frac{1}{x} \right) + c \delta
+    \end{align*}
+    for some constant $c \in \mathbb{R}$.
 \end{itemize}
 
+First, to be precise, the product of a function, such as $f(x) = x$, with a distribution $T$ is \textit{defined} as the following distribution:
+\begin{align} \label{eqn:dist-mult}
+    \langle f(x)T, \varphi \rangle \equiv \langle T, f(x) \varphi \rangle
+\end{align} 
+where $f(x)$ must be such that $f(x) \varphi \in \mathcal{S}$ $\forall \varphi \in \mathcal{S}$, which is indeed the case for any polynomial. 
+
+Now consider the \textit{distributional} equation $x T =1$. If we apply \textit{both sides} to some test function $\varphi$, we have:
+\begin{align} \label{eqn:division}
+    \langle T, x \varphi \rangle = \langle 1, \varphi \rangle = \int_{\mathbb{R}} \varphi(x) \dd{x}
+\end{align}  
+The problem of \textit{finding} $T$ satisfying (\ref{eqn:division}) is called the (distributional) \textbf{division problem}. To solve it, we want to reduce the equation to something in the form of $x T' = 0$, that can then be solved. So we rewrite the rhs as follows:
+\begin{align*}
+    \int_{\mathbb{R}} \varphi(x) \dd{x} = \lim_{\epsilon \to 0^+} \int_{\mathbb{R} \setminus [-\epsilon, \epsilon]} \varphi(x) \dd{x} = \lim_{\epsilon \to 0^+} \int_{\mathbb{R}\setminus [-\epsilon, \epsilon]} \frac{x \varphi(x)}{x} \dd{x}
+\end{align*}
+Then we define the \textbf{principal value distribution} $\mathcal{P}(1/x)$ as:
+\begin{align*}
+    \langle \mathcal{P}\left(\frac{1}{x} \right), \varphi\rangle = \lim_{\epsilon \to 0^+} \int_{\mathbb{R} \setminus [-\epsilon, \epsilon]} \frac{\varphi(x)}{x} \dd{x} 
+\end{align*} 
+so that:
+\begin{align*}
+    \int_{\mathbb{R}}\varphi(x) \dd{x} = \langle \mathcal{P}\left(\frac{1}{x}\right), x\varphi \rangle
+\end{align*}
+Substituting back in (\ref{eqn:division}) and rearranging we get:
+\begin{align*}
+    \langle T, x \varphi \rangle = \langle \mathcal{P}\left(\frac{1}{x}\right), x\varphi \rangle \Rightarrow \langle T - \mathcal{P}\left(\frac{1}{x} \right), x \varphi \rangle = 0 \underset{(\ref{eqn:dist-mult})}{\Rightarrow}  
+    x\left[T - \mathcal{P}\left(\frac{1}{x} \right)\right] = 0
+\end{align*}
 %Show solution xT = 0. From https://see.stanford.edu/materials/lsoftaee261/book-fall-07.pdf in 4.13.1 sec. and https://math.stackexchange.com/questions/678457/distribution-solution-to-xt-0-in-schwartz-space
 %Extend to xT = 1 with https://math.stackexchange.com/questions/2962209/solve-the-distribution-equation-xt-1 (introducing Cauchy principal part)
      
+%Also look up "division problem" for distributions
+\end{expl}
+
+\begin{expl}
+    All that's left is to solve:
+    \begin{align}
+        x T' = 0 \label{eqn:reduced-div}
+    \end{align}
+    with $T' = T - \mathcal{P}(1/x)$. We will now see that the general solution of (\ref{eqn:reduced-div}) is $T = c \delta$, for some constant $c$. This leads to:
+    \begin{align*}
+        T' = T - \mathcal{P}\left(\frac{1}{x} \right) = c \delta \Rightarrow T = \mathcal{P}\left(\frac{1}{x} \right) + c \delta
+    \end{align*}
+    which indeed confirms (\ref{eqn:full-theta-tilda}). 
+
+    \medskip
+
+    So, let's see why $T' = c \delta$. In the following, we drop the $'$ for simplicity.
+    
+    First, we note that any test function $\varphi(x)$ can be written as:
+    \begin{align*}
+        \varphi(x) = \varphi(0) + x \psi(x) 
+    \end{align*}
+    for some $\psi(x) \in \mathcal{S}(\mathbb{R})$. Explicitly:
+    \begin{align*}
+        \varphi(x) &= \varphi(0) + \int_0^x \varphi'(t) \dd{t} \underset{u = \frac{t}{x} }{=} \varphi(0) + \int_0^1 x \varphi'(xu) \dd{u} =\\
+        &= \varphi(0) + x \underbrace{\int_0^1 \varphi'(xu) \dd{u}}_{\psi(x)} = \varphi(0) + x\psi(x)
+    \end{align*}
+    Note that if $\varphi(0) = 0$, then $\varphi(x) = x \psi(x)$. 
+
+    \medskip
+
+    Now, $x T = 0$ means that:
+    \begin{align*}
+        \langle x T, \varphi \rangle = 0 \qquad \forall \varphi \in \mathcal{S}(\mathbb{R})
+    \end{align*}
+
+    To see what $T$ is, we evaluate it on a test function $\varphi(x)$. If $\chi(x) \in \mathcal{S}(\mathbb{R})$ such that $\chi(0) = 1$, we have:
+    \begin{align*}
+        \varphi(x) &= \varphi(x) + \varphi(0)\chi(x) - \varphi(0) \chi(x) = \\
+        &= \varphi(0)\chi(x) + \underbrace{[\varphi(x) - \varphi(0) \chi(x)]}_{a(x)} 
+    \end{align*}
+    Note that $a(0) = \varphi(0) - \varphi(0) \chi(0) = \varphi(0) - \varphi(0) = 0$, and so $a(x) = x\psi(x)$ for some $\psi(x)$. Thus:
+
+    \begin{align*}
+        \langle T, \varphi \rangle &= \langle T, \varphi(0) \chi + x \psi \rangle =\\
+        &= \varphi(0) \underbrace{\langle T, \chi \rangle}_{c}  + \underbrace{\langle x T, \psi \rangle}_{0} =\\
+        &= c \varphi(0) = \langle c \delta, \varphi \rangle
+    \end{align*}
+    where we denoted with $c$ the result of $\langle T, \chi \rangle$. This proves that the general solution is indeed $T = c \delta$.
+
+    \medskip
+
+    Some references on these derivations can be found in:
+    \begin{itemize}
+        \item \url{https://see.stanford.edu/materials/lsoftaee261/book-fall-07.pdf}
+        \item \url{https://math.stackexchange.com/questions/678457/distribution-solution-to-xt-0-in-schwartz-space}
+        \item \url{https://math.stackexchange.com/questions/2962209/solve-the-distribution-equation-xt-1}
+    \end{itemize}
     
 \end{expl}
 
+There are several ways to fix $c$ in (\ref{eqn:full-theta-tilda}). One of the quickest is to reason \textit{with symmetries}.
+
+Let $f$ be an even function (i.e. a gaussian). Symmetry is preserved by the Fourier transform, and so:
+\begin{align}
+    \langle \tilde{\theta}, \tilde{f} \rangle = \mathcal{P} \int_{\mathbb{R}} \frac{1}{ik} \tilde{f}(k) \dd{k} + c \langle \delta, \tilde{f} \rangle = c \tilde{f}(0) = c \int_{\mathbb{R}} f(x) \dd{x} \label{eqn:scalar1}
+\end{align}
+The principal value vanishes because $\tilde{f}$ is even (as $f$ is even). Then, as the Fourier transform is an isometry, i.e. preserves scalar product, we have:
+\begin{align}
+    \langle \theta, f \rangle = \int_{0}^{+\infty} f(x) \dd{x} \underset{(a)}{=}  \frac{1}{2} \int_{\mathbb{R}} f(x) \dd{x} \label{eqn:scalar2} 
+\end{align}
+where in (a) we again used the symmetry of $f$. Then, recalling (\ref{eqn:unitary}), we have:
+\begin{align*}
+    \langle \tilde{\theta}, \tilde{f} \rangle = 2\pi \langle \theta, f \rangle \Rightarrow c\int_{\mathbb{R}} f(x) \dd{x} = \frac{2 \pi}{2} \int_{\mathbb{R}} f(x) \dd{x} \Rightarrow c = \pi 
+\end{align*}
+(Note that $c$ depends on the choice we made for the normalization in the Fourier transforms).
+
+\medskip
+
+A similar argument can be made noting that $\theta(x)$ is just a scaled and shifted $\operatorname{sgn}$ function, which is odd:
+\begin{align*}
+    \theta(x) = \frac{1}{2} +  \frac{1}{2}\operatorname{sgn}(x) \qquad
+    \operatorname{sgn}(x) = \begin{cases}
+        1 & x > 0\\
+        0 & x = 0\\
+        -1 & x < 0
+    \end{cases} 
+\end{align*} 
+By linearity we have:
+\begin{align}
+    \tilde{\theta}(k) = \mathcal{F}\left(\frac{1}{2}\right) + \frac{1}{2} \mathcal{F}[\operatorname{sgn}(x)](k) \label{eqn:theta-transform2}
+\end{align}
+Noting that $\operatorname{sgn}' = 2 \delta$ and using (\ref{eqn:derivative-property}) leads to:
+\begin{align*}
+    2 = ik \mathcal{F}[\operatorname{sgn}](k)
+\end{align*}
+Inverting, we have:
+\begin{align*}
+    \mathcal{F}[\operatorname{sgn}](k) = \mathcal{P}\left(\frac{2}{ik} \right) + c \delta(k) =\mathcal{P}\left(\frac{2}{ik} \right) \ 
+\end{align*}
+As this time $c$ must be $0$, otherwise $\mathcal{F}[\operatorname{sgn}](k)$ wouldn't be odd (the $\delta$ is \textit{even}). Substituting in (\ref{eqn:theta-transform2}) we have:
+\begin{align*}
+    \tilde{\theta}(k) = \frac{1}{2} \underbrace{\mathcal{F}[1] }_{2 \pi}+\frac{1}{\cancel{2}} \mathcal{P}\left(\frac{\cancel{2}}{ik} \right) = \mathcal{P}\left(\frac{1}{ik} \right)  + \pi \delta(k)
+\end{align*}
+
+\begin{expl}
+    \textbf{Explicit computation}. It is also possible to compute $\tilde{\theta}$ \textit{directly}, at the cost of a longer derivation.  
+\end{expl}
 
 %Use sign, and the fact that is odd (so there is no delta term appearing, because delta is even), to find the fourier transform of heaviside
+%Solve with symmetry: https://math.stackexchange.com/questions/1353607/fourier-transform-of-the-heaviside-function
+
 
 %Show full argument from notes
+
+
 \end{document}
