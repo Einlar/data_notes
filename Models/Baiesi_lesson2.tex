@@ -495,7 +495,7 @@ In the following, we will take $\hslash = 1$ for simplicity. Note that (\ref{eqn
     i \partial_t \tilde{\psi}(p,t) &\underset{(a)}{=}  -\frac{1}{2m} \int_{\mathbb{R}} \dd{x} \partial_x^2 \psi(x,t) e^{-ixp} =\\ 
     &= \frac{p^2}{2m} \underbrace{\int_{\mathbb{R}} \dd{x} \psi(x,t) e^{-ipx}}_{\tilde{\psi}(p,t)}  = \frac{p^2}{2m} \tilde{\psi}(p,t) 
 \end{align*}
-where in (a) we performed two integrations by parts, using the fact that $\psi(x,t)$ vanishes at infinity to remove the boundary terms. 
+where in (a) we performed two integrations by parts, using the fact that $\psi(x,t)$ vanishes at infinity to remove the boundary terms.\index{Propagator!Schrodinger equation}
 
 \medskip
 
@@ -519,9 +519,10 @@ To reinsert $\hslash$ we substitute $t \to t \hslash$:
 \begin{align*}
     \psi(x,t) = \sqrt{\frac{m}{2 \pi \hslash i t}} \exp\left(-\frac{m x^2}{2 \hslash i t} \right)
 \end{align*}
+This is the Schr\"odinger \textbf{propagator} for a one-dimensional free particle.
 
 \section{Indented Integrals}
-Sometimes it is needed to compute integrals with \textit{singularities} on the path of integration. Note that this integrals \textit{do not exist}, meaning that there is not a unique way to compute them. Nonetheless, there are several \textit{rules} (or \textit{prescriptions}) that can be used to assign some result (possibly of physical significance) to these integrals.
+Sometimes it is needed to compute integrals with \textit{singularities}\marginpar{Compute integrals that do not exist} on the path of integration. Note that this integrals \textit{do not exist}, meaning that there is not a unique way to compute them. Nonetheless, there are several \textit{rules} (or \textit{prescriptions}) that can be used to assign some result (possibly of physical significance) to these integrals.
 
 \medskip
 
@@ -529,7 +530,7 @@ Consider, for example, an analytic function $f(z)$, and the following integral:
 \begin{align*}
     I = \int_{\mathbb{R}} \dd{x} \frac{f(x)}{x-x_0} 
 \end{align*}
-The integrand has a pole at $x_0$, which lies in the path of integration. So $I$ does not exist. However, we could integrate \q{symmetrically}, hoping that the diverging term from one side \q{cancels} with the one from the other. This is the gist of the Cauchy Principal Value:
+The integrand has a pole at $x_0$, which lies in the path of integration. So $I$ does not exist. However,\marginpar{1. Symmetrical integration} we could integrate \q{symmetrically}, hoping that the diverging term from one side \q{cancels} with the one from the other. This is the gist of the \textbf{Cauchy Principal Value}:\marginpar{\vspace{2em}Cauchy Principal Value}\index{Cauchy Principal Value}
 \begin{align*}
     \mathcal{P}\int_\mathbb{R} \dd{x} \frac{f(x)}{x-x_0} = \lim_{\delta \to 0} \left[\int_{-\infty}^{x_0 - \delta} \frac{f(x)}{x - x_0} \dd{x} + \int_{x_0 + \delta}^\infty \frac{f(x)}{x-x_0} \dd{x}  \right]
 \end{align*} 
@@ -542,7 +543,7 @@ where in (a) we used the \textit{symmetry} of $1/x^3$ to cancel the two integral
 
 \medskip
 
-Another possibility is to \textit{deform} the integration path from the real line to a curve $\gamma_{\epsilon}$ that avoids the singularity, as can be seen in the bottom half of fig. \ref{fig:indented1}. Doing so produces a \textit{different} result from the one of the Cauchy Principal Value, because now we are accounting for half a small circle $C_\epsilon = \{z = x_0 + \epsilon e^{i \theta} \colon \theta \in [-\pi, 0]\}$ around the singularity:
+Another possibility is to \textit{deform}\marginpar{2. Path deformation} the integration path from the real line to a curve $\gamma_{\epsilon}$ that avoids the singularity, as can be seen in the bottom half of fig. \ref{fig:indented1}. Doing so produces a \textit{different} result from the one of the Cauchy Principal Value, because now we are accounting for half a small circle $C_\epsilon = \{z = x_0 + \epsilon e^{i \theta} \colon \theta \in [-\pi, 0]\}$ around the singularity:
 \begin{align} \label{eqn:diff}
     \lim_{\epsilon \to 0} \int_{\gamma_\epsilon} \frac{f(x)}{x-x_0} \dd{x} = \mathcal{P}\int_{\mathbb{R}} \frac{f(x)}{x-x_0} \dd{x} + 
     \lim_{\epsilon \to 0} \int_{C_{\epsilon}} \frac{f(x)}{x-x_0} \dd{x} 
@@ -555,7 +556,7 @@ where in (a) we changed variables using the parameterization of $C_\epsilon$.
 
 \medskip
 
-Integrating over $\gamma_\epsilon$ that passes \textit{to the right} of the singularity is equivalent to not deforming at all the integration path and moving the singularity \q{up} instead, as can be seen in fig. \ref{fig:indented1}. This is the idea of the \textit{prescription $\pm i \epsilon$}:
+Integrating over $\gamma_\epsilon$\marginpar{3. Moving the singularity} that passes \textit{to the right} of the singularity is equivalent to not deforming at all the integration path and moving the singularity \q{up} instead, as can be seen in fig. \ref{fig:indented1}. This is the idea of the \textbf{prescription $\pm i \epsilon$}\index{Prescription $i \epsilon$}:
 \begin{align*}
     \int_\mathbb{R} \dd{x} \frac{f(x)}{x-(x_0 + i \epsilon)} = \int_{\gamma_\epsilon} \dd{x} \frac{f(x)}{x-x_0} =  \mathcal{P}\int_{\mathbb{R}} \frac{f(x)}{x-x_0} \dd{x} + i \pi f(x_0)
 \end{align*}  
