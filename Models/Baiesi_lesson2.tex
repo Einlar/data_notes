@@ -1,6 +1,8 @@
 %&latex
 %
 \documentclass[../template.tex]{subfiles}
+\usepackage{graphicx}
+
 \begin{document}
 
 \chapter{Integrals of complex variables}
@@ -485,9 +487,98 @@ For $a < 0$, observe that $I(a,b) = I^*(-a,-b)$, with $-ia = (ia)^*$ and $b^2 = 
 
 \subsection{Schr\"odinger Equation}
 A possible application of the Fresnel integration is solving the Schr\"odinger equation for a \textit{free} particle:\marginpar{Example of application}
+\begin{align} \label{eqn:schrody}
+    i \hslash \partial_t \psi(x,t) = -\frac{\hslash^2}{2m} \partial_x^2 \psi(x,t)   
+\end{align} 
+In the following, we will take $\hslash = 1$ for simplicity. Note that (\ref{eqn:schrody}) is very similar to the diffusion equation, and in fact we can solve it in the same way, by applying a Fourier transform to both sides:
 \begin{align*}
-    i \hbar \partial_t \psi(x,t) = -\frac{\hbar^2}{2m} \partial_x^2 \psi(x,t)   
+    i \partial_t \tilde{\psi}(p,t) &\underset{(a)}{=}  -\frac{1}{2m} \int_{\mathbb{R}} \dd{x} \partial_x^2 \psi(x,t) e^{-ixp} =\\ 
+    &= \frac{p^2}{2m} \underbrace{\int_{\mathbb{R}} \dd{x} \psi(x,t) e^{-ipx}}_{\tilde{\psi}(p,t)}  = \frac{p^2}{2m} \tilde{\psi}(p,t) 
+\end{align*}
+where in (a) we performed two integrations by parts, using the fact that $\psi(x,t)$ vanishes at infinity to remove the boundary terms. 
+
+\medskip
+
+We are left with a first order ODE that can be solved by separation of variables:
+\begin{align*}
+    i \partial_t \tilde{\psi} = \frac{p^2}{2m} \tilde{\psi} \Rightarrow \frac{\dd{\tilde{\psi}}}{\tilde{\psi}} = \textcolor{Red}{-i^2} \frac{p^2}{2m i} \dd{t} = -\frac{ip^2}{2m} \dd{t} \Rightarrow \tilde{\psi}(p,t) = \tilde{\psi}(p,0) \exp\left(-\frac{ip^2 t}{2m} \right)
+\end{align*}
+If we assume the particle to be initially localized at $x=0$, meaning that $\psi(x,0) = \delta(x)$, we have $\tilde{\psi}(p,0) = 1$, and so:
+\begin{align*}
+    \tilde{\psi}(p,t) = \exp\left(-i\frac{p^2 t}{2m} \right)
+\end{align*}
+All that's left is to \q{go back to \textit{position} space} with an inverse Fourier transform, which involves a Fresnel integral:
+\begin{align*}
+    \psi(x,t) = \frac{1}{2\pi} \int_{\mathbb{R}} \dd{p} \exp\left(-\frac{ip^2 t}{2m} \right) e^{ipx} = \frac{1}{\sqrt{4 \pi a i}} \exp\left(\frac{ib^2}{4a} \right) 
+\end{align*}
+with $a = t/(2m)$ and $b=-x$, leading to:
+\begin{align*} 
+    \psi(x,t) = \sqrt{\frac{m}{2 \pi i t}} \exp\left(-\frac{m x^2}{2 i t} \right)
+\end{align*}
+To reinsert $\hslash$ we substitute $t \to t \hslash$:
+\begin{align*}
+    \psi(x,t) = \sqrt{\frac{m}{2 \pi \hslash i t}} \exp\left(-\frac{m x^2}{2 \hslash i t} \right)
+\end{align*}
+
+\section{Indented Integrals}
+Sometimes it is needed to compute integrals with \textit{singularities} on the path of integration. Note that this integrals \textit{do not exist}, meaning that there is not a unique way to compute them. Nonetheless, there are several \textit{rules} (or \textit{prescriptions}) that can be used to assign some result (possibly of physical significance) to these integrals.
+
+\medskip
+
+Consider, for example, an analytic function $f(z)$, and the following integral:
+\begin{align*}
+    I = \int_{\mathbb{R}} \dd{x} \frac{f(x)}{x-x_0} 
+\end{align*}
+The integrand has a pole at $x_0$, which lies in the path of integration. So $I$ does not exist. However, we could integrate \q{symmetrically}, hoping that the diverging term from one side \q{cancels} with the one from the other. This is the gist of the Cauchy Principal Value:
+\begin{align*}
+    \mathcal{P}\int_\mathbb{R} \dd{x} \frac{f(x)}{x-x_0} = \lim_{\delta \to 0} \left[\int_{-\infty}^{x_0 - \delta} \frac{f(x)}{x - x_0} \dd{x} + \int_{x_0 + \delta}^\infty \frac{f(x)}{x-x_0} \dd{x}  \right]
 \end{align*} 
-In the following, we will take $\hbar = 1$ for simplicity. %Complete
+
+For example, this works for $f(x) = 1/x^2$ and $x_0 = 0$:
+\begin{align*}
+    \mathcal{P}\int_\mathbb{R} \frac{1}{x^3} \dd{x} = \lim_{\delta \to 0} \left[\int_{-\infty}^{- \delta} \frac{1}{x^3} + \int_{\delta}^{\infty} \frac{1}{x^3}  \right]  \underset{(a)}{=}  \lim_{\delta \to 0} 0 = 0
+\end{align*}
+where in (a) we used the \textit{symmetry} of $1/x^3$ to cancel the two integrals.
+
+\medskip
+
+Another possibility is to \textit{deform} the integration path from the real line to a curve $\gamma_{\epsilon}$ that avoids the singularity, as can be seen in the bottom half of fig. \ref{fig:indented1}. Doing so produces a \textit{different} result from the one of the Cauchy Principal Value, because now we are accounting for half a small circle $C_\epsilon = \{z = x_0 + \epsilon e^{i \theta} \colon \theta \in [-\pi, 0]\}$ around the singularity:
+\begin{align} \label{eqn:diff}
+    \lim_{\epsilon \to 0} \int_{\gamma_\epsilon} \frac{f(x)}{x-x_0} \dd{x} = \mathcal{P}\int_{\mathbb{R}} \frac{f(x)}{x-x_0} \dd{x} + 
+    \lim_{\epsilon \to 0} \int_{C_{\epsilon}} \frac{f(x)}{x-x_0} \dd{x} 
+\end{align} 
+And the difference amounts to:
+\begin{align*}
+    \lim_{\epsilon \to 0} \int_{C_\epsilon} \dd{z} \frac{f(z)}{z-a} \underset{(a)}{=}  \lim_{\epsilon \to 0} \int_{-\pi}^0 \dd{\theta} (i \epsilon e^{i \theta}) \frac{f(x_0 + \epsilon e^{i \theta})}{\epsilon e^{i \theta}}  = i \lim_{\epsilon \to 0} \dd{\theta} f(x_0 + \epsilon e^{i \theta}) = i \pi f(x_0)
+\end{align*}
+where in (a) we changed variables using the parameterization of $C_\epsilon$.
+
+\medskip
+
+Integrating over $\gamma_\epsilon$ that passes \textit{to the right} of the singularity is equivalent to not deforming at all the integration path and moving the singularity \q{up} instead, as can be seen in fig. \ref{fig:indented1}. This is the idea of the \textit{prescription $\pm i \epsilon$}:
+\begin{align*}
+    \int_\mathbb{R} \dd{x} \frac{f(x)}{x-(x_0 + i \epsilon)} = \int_{\gamma_\epsilon} \dd{x} \frac{f(x)}{x-x_0} =  \mathcal{P}\int_{\mathbb{R}} \frac{f(x)}{x-x_0} \dd{x} + i \pi f(x_0)
+\end{align*}  
+
+Equivalently, it is possible to show that integrating over a path $\gamma_{\epsilon}^-$ that passes \textit{to the left} of the singularity equates to moving the singularity \q{down}:
+\begin{align*}
+    \int_{\mathbb{R}} \dd{x} \frac{f(x)}{x-(x_0 - i \epsilon)} = \int_{\gamma_{\epsilon}^-} \dd{x} \frac{f(x)}{x- x_0} =  \mathcal{P}\int_{\mathbb{R}} \frac{f(x)}{x-x_0} \dd{x} - i \pi f(x_0)
+\end{align*} 
+
+We can summarize these facts as an equation between \textit{operators}:
+\begin{align*}
+    \lim_{\epsilon \to 0} \frac{1}{x - x_0 \mp i \epsilon} = \mathcal{P}\frac{1}{x - x_0} \mp i \pi \delta(x-x_0)  
+\end{align*} 
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics{image003.png}
+    \caption{Integration path for an indented integral\label{fig:indented1}}
+\end{figure}
+
+ 
+
+
+
 
 \end{document}
