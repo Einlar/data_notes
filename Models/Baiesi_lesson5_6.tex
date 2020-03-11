@@ -1,0 +1,250 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\chapter{Ising Model and disorder}
+
+Introduction
+
+\section{Mean Field Ising Model}
+To be completed
+
+\section{Random Field Ising Model}
+Suppose that the spins are not immersed in the same field $h$, but each of them experiences a \textit{local field} $h_i$, where $h_i$ is sampled at random from a certain distribution $p(h)$. For a given realization $\bm{h}$ of the local fields, the system's energy in the state $\bm{S}$ is given by:\marginpar{\vspace{2.5em}RFIM energy}
+\begin{align}\label{eqn:disordered-energy}
+    H_{\bm{h}}[\bm{S}] = -\frac{J}{N} \sum_{i,j=1}^N S_i S_j - \sum_{i=1}^N h_i S_i
+\end{align}
+
+The system is now \textbf{disordered},\marginpar{Quenched disorder} as it has no symmetries nor uniformities. As the $h_i$ are fixed once and for all, i.e. they do not change over time, we call the disorder \textbf{quenched}.\index{Quenched disorder}  
+
+\medskip
+
+For simplicity, we choose the disorder distribution $p(h)$ to be gaussian:
+\begin{align} \label{eqn:disorder-dist}
+    p(h_i) = \frac{1}{\sqrt{2 \pi \delta^2}} \exp\left(-\frac{h_i^2}{2 \delta^2} \right) \qquad \forall i=1,\dots,N
+\end{align}
+We suppose that, for any given temperature $T$, we can choose a disorder \q{strong enough} (i.e. a $\delta$ high enough) so that (for a random choice of the disorder) the spins will (on average) \textbf{not} align all in the same direction - meaning that the local fields \textit{prevail} over the spin-spin interactions. Surprisingly, we can verify this fact \textit{analytically}.   
+
+\medskip
+
+Our aim is to compute the average value of the \textbf{Helmholtz free energy} $F$, over all possible choices for the \textit{disorder} $\bm{h}$:
+\begin{align}\label{eqn:mean-free-energy}
+    \bar{F} = -\frac{1}{\beta}  \overline{\log Z_{\bm{h}}} =  - \frac{1}{\beta}  \int_{\mathbb{R}^N} \left(\prod_{i=1}^N \dd{h_i} p(h_i)\right) \log Z_{\bm{h}} 
+\end{align} 
+where we used the \textbf{independence} of the local fields to factorize the average. 
+
+\medskip
+
+The presence of the logarithm makes (\ref{eqn:mean-free-energy}) very difficult to compute. To overcome this problem, we introduce the \textbf{replica trick}\index{Replica trick}\marginpar{1. Replica trick} - a \textit{not totally mathematically rigorous} argument which, at the end, will still lead to the correct result.
+
+We start by rewriting $\log Z$ as follows:
+\begin{align} \label{eqn:replica-log}
+    \overline{\log Z} = \pdv{n} \overline{Z^n} \Big|_{n=0}
+\end{align}
+In fact:
+\begin{align*}
+    \pdv{n} \overline{Z^n} \Big|_{n=0} = \pdv{n} \exp(n \overline{\log Z}) \Big|_{n = 0} = \exp(n \overline{\log Z}) \overline{\log Z} \Big|_{n=0} = \overline{\log Z}
+\end{align*}
+
+%Geometric interpretation?
+
+\begin{expl} \textbf{Other equivalent expressions}.  
+    To do
+\end{expl}
+
+The idea is that $Z^n$, with $n$ integer, has a physical interpretation: it is the partition function for a system made of $n$ replicas of the original one, i.e. $n$ non-interacting \textit{copies}, each with the \textbf{same} quenched disorder (but, in general, different spin states). The replica trick involves computing $\overline{Z^n}$ assuming $n$ integer, and then take the limit $n \to 0$ of its derivative \textit{as if} $n$ could vary continuously. Of course this is a problematic step - and in fact it produces unphysical results (such as a negative entropy) in some cases. However, in the RFIM all works out nicely, leading to the same results that can be obtained with much more involved methods.
+
+\medskip
+
+So, let's denote with $a = 1, \dots, n$ each replica. The spin-state of the $a$-th replica is $\bm{S^a} = \{S_1^a, \dots, S_N^a\}$, and the state of the entire system is denoted with $\{\bm{S^a}\} = \{\bm{S^1}, \dots, \bm{S^n}\} = \{\bm{S}\}^{\otimes n}$. Then:
+\begin{align} \nonumber
+    \overline{Z^n} &= \overline{\sum_{\{\bm{S^a}\}} \prod_{a=1}^n e^{-\beta H[\bm{S^a}]}} =\\ \nonumber
+    &\underset{(\ref{eqn:disordered-energy})}{=} \overline{\sum_{\{\bm{S^a}\}} \exp\left(\frac{\beta J}{N} \sum_{a=1}^n \sum_{i,j=1}^N S_i^a S_j^a \right) \exp\left(\beta \sum_{i=1}^N \sum_{a=1}^n S_i^a h_i\right)}
+    \shortintertext{Note that only the $h_i$ are disordered, and so, by linearity of the expectation, we can move the average only to the last term:}
+    &=\sum_{\{\bm{S^a}\}} \exp\left(\frac{\beta J}{N} \sum_{a=1}^n \sum_{i,j=1}^N S_i^a S_j^a \right) \overline{\exp(\hlc{Yellow}{\beta} \hlc{Yellow}{\sum_{a=1}^n} \sum_{i=1}^N \hlc{Yellow}{S_i^a }h_i)} \label{eqn:st1}
+\end{align}
+To compute the disorder average,\marginpar{2. Disorder average} we first \textit{isolate} the $h_i$. The pre-factor for each of them is: 
+We then define:
+\begin{align} \label{eqn:lambdai}
+    \lambda_i = \hlc{Yellow}{\beta \sum_{a=1}^n S_i^a}
+\end{align}
+And so the last term becomes:
+\begin{align*}
+    \overline{\exp\left(\beta \sum_{a=1}^n \sum_{i=1}^N S_i^a h_i\right)} = \overline{\exp\left(\sum_{i=1}^N \lambda_i h_i\right)} = \prod_{i=1}^N \overline{e^{\lambda_i h_i}}
+\end{align*}
+where the average factorizes because the $h_i$ are \textbf{independent.} 
+
+\medskip
+
+All that's left is to compute the gaussian integral:
+\begin{align*}
+    \overline{e^{\lambda_i h_i}} &= \int_{\mathbb{R}} \dd{h_i} p(h_i) e^{\lambda_i h_i} \underset{(\ref{eqn:disorder-dist})}{=}  \int_{\mathbb{R}} \dd{h_i} \frac{1}{\sqrt{2 \pi \delta^2}} \exp\left(-\frac{h_i^2}{2 \delta^2} + \lambda_i h_i \right) =\\
+    &= \exp\left(\frac{\delta^2 \lambda_i^2}{2} \right) \underset{(\ref{eqn:lambdai})}{=} \exp\left(\frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S_i^a\right]^2 \right)
+\end{align*}
+Substituting back in (\ref{eqn:st1}) we get:
+\begin{align} \nonumber
+    \overline{Z^n} &= \sum_{\{\bm{S^a}\}} \exp\left(\frac{\beta J}{N} \sum_{a=1}^n \sum_{i,j=1}^N S_i^a S_j^a \right) \exp\left(\frac{\beta^2 \delta^2}{2} \sum_{i=1}^N \left[\sum_{a=1}^n S_i^a\right]^2 \right) =
+    \shortintertext{We then rewrite the sum $\sum_{ij} = (\sum_i)^2$ and merge the exponentials:}
+    &= \sum_{\{\bm{S^a}\}} \exp\left(\frac{\beta J}{N} \sum_{a=1}^n \left[\sum_{i=1}^N S_i^a\right]^2 + \frac{\beta^2 \delta^2}{2} \sum_{i=1}^N \left[\sum_{a=1}^n S_i^a\right]^2  \right) \label{eqn:st2}
+\end{align}
+Note that there are now terms $S_i^a S_i^b$ with $a \neq b$ originating \marginpar{Coupled replicas}from the square $(\sum_a S_i^a)^2$. So, after averaging over disorder, \textit{corresponding} spins from different replicas behave like if they were \q{close together} and \textbf{interacting}, meaning that replicas are not anymore independent from each other. This should be expected, as they are subject to the \textit{same quenched local fields} $h_i$.
+
+\medskip
+
+We then proceed like we did in the Mean Field Ising Model,\marginpar{3. Disentangling spins with H-S transform} by \q{disentangling} spins and focusing on each of them as if they were independent. The only term in (\ref{eqn:st2}) where spins are coupled is $(\sum_i S_i^a)^2$, because it produces mixed terms like $S_i^a S_j^a$ with $i\neq j$. The idea is to reinterpret this pairwise interaction as the interaction with a \textit{common field}. Mathematically, this is done through the \textbf{Hubbard-Stratonovich transformation}\index{Hubbard Stratonovich transformation}, which is just a gaussian integral \q{done in reverse}:
+\begin{align} \label{eqn:HS}
+    \exp\left(\frac{b}{2} z^2 \right) = \frac{1}{\sqrt{2 \pi b}} \int_{\mathbb{R}} \dd{x} \exp\left(-\frac{x^2}{2b} \pm zx \right)
+\end{align}
+Note that it can be used to move the square from $z$ to an auxiliary variable $x$, representing the \textit{common field}. In our case we apply it to the first exponential term in (\ref{eqn:st2}):
+\begin{align*}
+    \exp\left(\frac{\beta J}{N} \sum_{a=1}^n \left[\sum_{i=1}^N S_i^a\right]^2 \right) &= \prod_{a=1}^n\exp\left(\frac{\textcolor{Red}{2} \beta J}{\textcolor{Red}{2} N} \left[\sum_{i=1}^N S_i^a\right]^2 \right) = \prod_{a=1}^n \exp\left(\frac{b}{2} z_a^2 \right) =\\
+    &\underset{(\ref{eqn:HS})}{=} \prod_{a=1}^n\int_{\mathbb{R}}\frac{1}{\sqrt{2 \pi b}} \dd{x_a} \exp\left(-\frac{x_a^2}{2b} + z x_a \right)  \\
+        z_a &= \sqrt{2 \beta J} \left[\sum_{i=1}^N S_i^a \right]; \qquad b = \frac{1}{N} 
+\end{align*}
+Leading to:
+\begin{align*}
+    \overline{Z^n} &= \sum_{\{\bm{S^a}\}} \int_{\mathbb{R}^n} \left(\prod_{a=1}^n \dd{x_a}\right) \left(\frac{N}{2 \pi} \right)^{n/2} \exp\left(-\frac{N}{2} \sum_{a=1}^n x_a^2 + \sqrt{2 \beta J} \sum_{a=1}^n \sum_{i=1}^N S_i^a x_a \right) \cdot\\
+    &\qquad \cdot \exp\left(\frac{\beta^2 \delta^2}{2} \sum_{i=1}^N \left[\sum_{a=1}^n S_i^a\right]^2 \right)
+\shortintertext{Now all spins are \textit{independent} from each other (there are no mixed terms $S_i^a S_j^a$). So we isolate each $S_i$:}
+    &=\sum_{\{\bm{S^a}\}}  \int_{\mathbb{R}^n} \left(\prod_{a=1}^n \dd{x_a}\right) \left(\frac{N}{2 \pi} \right)^{n/2} \exp\left(-\frac{N}{2} \sum_{a=1}^n x_a^2 \right)\cdot \\
+    &\qquad\cdot \prod_{i=1}^N    \exp\left( \sqrt{2 \beta J} \sum_{a=1}^n S_i^a x_a  + \frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S_i^a\right]^2\right)
+\shortintertext{By linearity of integration we can bring the sum over all states inside the integral, and factor the first exponential:}
+&= \int_{\mathbb{R}^n} \left(\prod_{a=1}^n \dd{x_a}\right) \left(\frac{N}{2 \pi} \right)^{n/2} \exp\left(-\frac{N}{2} \sum_{a=1}^n x_a^2 \right)\cdot \\
+&\qquad\cdot \sum_{\{\bm{S^a}\}}  \prod_{i=1}^N    \exp\left( \sqrt{2 \beta J} \sum_{a=1}^n S_i^a x_a  + \frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S_i^a\right]^2\right)
+\end{align*}  
+As the $S_i$ are independent, the sum over all possible states factorizes:
+\begin{align*}
+    \sum_{\{\bm{S^a}\}}  \prod_{i=1}^N    \exp\left( \sqrt{2 \beta J} \sum_{a=1}^n S_i^a x_a  + \frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S_i^a\right]^2\right) = \span \\
+    &= \prod_{i=1}^N \underbrace{\sum_{\substack{\{S^a_i = \pm 1\}\\a=1,\dots,n}} \exp\left( \sqrt{2 \beta J} \sum_{a=1}^n S_i^a x_a  + \frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S_i^a\right]^2\right)}_{Z_i(x_1, \dots, x_n)} 
+\end{align*}
+
+\begin{expl} To make the last passage clearer, we can rewrite the sum over all states as a rescaled average, and then apply in (*) the independence of $S_i$ to factorize the average:
+    \begin{align*}
+        \sum_{\{\bm{S^a}\}} \prod_{i=1}^N f(S_i^a) = \underbrace{|\{\bm{S^a}\} |}_{2^{Nn}} \langle \prod_{i=1}^N f(S_i^a) \rangle \underset{(*)}{=}  2^{Nn} \langle f(S_1^a) \rangle \cdots \langle f(S_N^a) \rangle
+    \end{align*} 
+    where the averages in the last step are over the \textit{replicas} (i.e. the $a$ index).    
+\end{expl}
+
+
+As we are summing over \textit{every possible state} of the entire system, each $Z_i(x_1, \dots, x_n)$ is the same, i.e. $Z_i(x_1, \dots, x_n) \equiv Z_1(\bm{x_a})$. So we have a product of $N$ equal terms, leading to a $Z_1^N = \exp(N \log Z_1)$, that we then bring inside the exponential:
+\begin{align} \label{eqn:st3}
+    \overline{Z^n} &=  \left(\frac{N}{2 \pi} \right)^{n/2} \int_{\mathbb{R}^n} \left(\prod_{a=1}^n \dd{x_a}\right) \exp\left[N\left(-\frac{1}{2} \sum_{a=1}^n x_a^2 + \log Z_1(\bm{x_a}) \right)\right]
+\end{align}
+$Z_1$ represents the partition function for a \textit{single spin} (replicated $n$ times). So, effectively, we succeeded in rewriting the RFIM as a system of non-interacting spins, as we did in the MFIM, but at the cost of introducing replicas.
+
+\medskip
+
+To proceed, we drop the $i$ subscript in $Z_1$, and write:
+\begin{align} \nonumber
+    Z_1(\bm{x_a}) &= \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} \exp\left( \sqrt{2 \beta J} \sum_{a=1}^n S^a x_a  + \frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S^a\right]^2\right) \equiv  \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} e^{A[\bm{S}, \bm{x_a}]}\\
+    A[\bm{S}, \bm{x_a}] &\equiv \sqrt{2 \beta J} \sum_{a=1}^n S^a x_a + \frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S^a\right]^2 \label{eqn:Aterm}
+\end{align}
+where $S^a$ is an arbitrary spin in the $a$-th replica - as we are summing over every combination, its position does not matter (however, in the sum over all replicas we pick always corresponding positions). 
+
+\medskip
+
+We assume that (in the thermodynamic limit) no replica is \q{special}, meaning that all the fields $x_a$ are the \textit{same} $x$ (\textbf{full replica symmetry}). Then:\marginpar{4. Full replica symmetry}
+\begin{align*}
+    \sum_{a=1}^n x_a = nx; \qquad \sum_{a=1}^n x_a^2 = n x^2
+\end{align*} 
+Substituting in (\ref{eqn:st3}), now all the integrands are the same:
+\begin{align}\label{eqn:st4}
+    \overline{Z^n} = \left(\frac{N}{2 \pi} \right)^{n/2} \left[\int_{\mathbb{R}} \dd{x}  \exp\left(N \left[-\frac{1}{2} n x^2 + \log Z_1(x) \right]\right)\right]^n
+\end{align}
+In the limit $N \to \infty$, we can use the saddle-point approximation.\marginpar{Saddle-point integration} So we stationarize the argument:
+\begin{align*}
+    \pdv{x} \left(-\frac{1}{2} n x^2 + \log Z_1(x) \right) = 0 \Rightarrow nx = \pdv{x} \log Z_1(x)
+\end{align*}
+The solution $x_m$ satisfies:
+\begin{align*}
+    n x_m &= \frac{1}{\displaystyle\sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} e^{A[S, x]}} \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} e^{A[S,x_m]} \underbrace{\pdv{x} A[S,x]}_{\sqrt{2 \beta J} \sum_a S^a} \Big|_{x=x_m}  =\\
+    &= \sqrt{2 \beta J}\frac{\displaystyle  \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} e^{A[S, x_m]} \left(\sum_{a=1}^n S^a\right)}{\displaystyle \underbrace{\sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} e^{A[S, x_m]}}_{Z_1(x_m)}} = \langle \sqrt{2 \beta J} \sum_{a=1}^n S^a \rangle
+\end{align*}
+where we recognized the canonical ensemble average with partition function $Z_1(x_m)$. We interpret the average spin over replicas as the system's \textbf{magnetization} $m$:\marginpar{\vspace{5em}Magnetization $m$}
+\begin{align} \label{eqn:magnetization}
+    \frac{x_m}{\sqrt{2 \beta J}} = \langle \frac{1}{n} \sum_{a=1}^n S^a  \rangle \equiv m = \frac{\displaystyle \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} e^{A[S, x_m]} \left(\frac{1}{n} \sum_{a=1}^n S^a \right)}{Z_1(x_m)} 
+\end{align}
+
+\begin{expl}
+    The magnetization $m$ is here defined as the average of replicated spins. In other words, consider any arbitrary position $i$ (with $1 \leq i \leq N$), and take the average value of the spins lying in that position in every replica:
+    \begin{align*}
+        m_{\mathrm{R}} = \frac{1}{n} \sum_{a = 1}^n S_i^a
+    \end{align*}
+    At this stage, each spin locus is \textit{independent} from all others, so the choice of $i$ does not matter - and that's why we omit the $i$ subscript.
+
+    \medskip
+
+    Note that this is a \textit{generalization} of the magnetization in the MFIM, where we do not need replicas:
+    \begin{align*}
+        m_{\mathrm{M}} = \frac{1}{N} \sum_{i=1}^N S_i
+    \end{align*} 
+\end{expl} %Is this magnetization a physical (measurable) quantity in the RFIM?
+
+Then, ignoring all the pre-factors, the integral in (\ref{eqn:st4}) becomes:
+\begin{align} \nonumber
+    \overline{Z^m} \propto \exp\left[N \left(-\frac{1}{2} n x_m^2 + \log Z_1(x_m) \right)\right]
+    \shortintertext{We then express everything in terms of $m$. Substituting $x_m^2 = 2 \beta J m^2$ leads to:}
+    \overline{Z^n} \propto \exp\left[N \left(-n \beta J m^2 + \log Z_1(m)\right)\right] \label{eqn:Znm}
+\end{align}
+
+Note that if we express $x_m$ in terms of $m$ in the rhs of (\ref{eqn:magnetization}) we get a self-consistent equation for $m$. So we proceed to do this for $Z_1$ and (\ref{eqn:Aterm}):
+\begin{align*}
+    Z_1(m) &= \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} e^{A[\bm{S}, m]}\\
+    A[\bm{S},m] &= 2 \beta J m \left(\sum_{a=1}^n S^a\right) + \frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S^a\right]^2
+\end{align*}
+
+To go further,\marginpar{5. Decoupling replicas with H-S transform} we need to get rid of the quadratic sum $(\sum_a S^a)^2$. If we do this, we could factor a $\sum_a S^a$, so that $A[\bm{S},m] = (\sum_a S^a) B$ and write $Z_1$ as a product of exponentials $\prod_a e^{S_a B}$, and finally bring the sum over all $S^a$ inside. In other words, we need a way to make replicas \textit{decoupled}. This can be done, again, by introducing a common field $\nu$ and doing a Hubbard-Stratonovich trasformation.
+We start from:
+\begin{align*}
+    e^{A[\bm{S},m]} = \exp\left(2 \beta J m \left[\sum_{a=1}^n S^a\right] \right) \exp\left(\frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S^a\right]^2 \right)
+\end{align*} 
+then rewrite the second exponential as:
+\begin{align*}
+    \exp\left(\frac{\beta^2 \delta^2}{2} \left[\sum_{a=1}^n S^a\right]^2 \right) = \exp\left(\frac{b}{2} z^2 \right) = \frac{1}{\sqrt{2 \pi b}} \int_{\mathbb{R}} \dd{\nu} \exp\left(-\frac{\nu^2}{2b} + z \nu \right) \\
+    z = \beta \delta \sum_{a=1}^n S^a; \qquad b= 1 \span
+\end{align*}
+leading to:
+\begin{align} \nonumber
+    Z_1(m) &= \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}} e^{A[\bm{S},m]} =\\ \nonumber
+    &= \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}}\exp\left(2 \beta J m \left[\sum_{a=1}^n S^a\right]\right) \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 + \beta \delta \nu \left[\sum_{a=1}^n S^a\right]  \right) =\\ \nonumber
+    &= \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}}\int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 + \left[\sum_{a=1}^n S^a\right] (2 \beta J m + \beta \delta \nu) \right) =\\ \nonumber
+    &= \sum_{\substack{\{S^a = \pm 1\}\\a=1,\dots,n}}\int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right)  \prod_{a=1}^n \exp\left[(2 \beta J m + \beta \delta \nu) S_a\right]
+    \shortintertext{As the replicas are independent, we can \q{factor the average}, i.e. bring the sum inside the product as we did before:}
+    &= \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}}  \exp\left(-\frac{1}{2} \nu^2 \right) \prod_{a=1}^n \sum_{S^a = \pm 1} \exp\left[(2 \beta J m + \beta \delta \nu) S_a\right] = \nonumber
+    \shortintertext{Now the sum is over only two states, and so we can compute it:} \nonumber
+    Z_1(m)&= \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 \right) \left[\frac{e^{2 \beta J m + \beta \delta \nu} + e^{-(2 \beta J m + \beta \delta \nu)}}{\textcolor{Red}{2}} \textcolor{Red}{2} \right]^n =\\ \nonumber
+    &= \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}}  \exp\left(-\frac{1}{2} \nu^2 \right) [2 \cosh (2 \beta J m + \beta \delta \nu)]^n =\\
+    &= \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 + n \log[2 \cosh (2 \beta J m+ \beta \delta \nu)] \right)
+    \label{eqn:z1m}
+\end{align}
+We can finally compute the \textbf{free energy}:\marginpar{Free energy for the RFIM}
+\begin{align*}
+    \bar{F} &\underset{(\ref{eqn:mean-free-energy})}{=}  - \frac{1}{\beta}  \overline{\log Z} \underset{(\ref{eqn:replica-log})}{=}  -\frac{1}{\beta}  \pdv{n} \overline{Z^n} \Big|_{n = 0} \underset{(\ref{eqn:Znm})}{\approx}  -\frac{1}{\beta} \pdv{n} \exp\left[N \left(- n \beta J m^2 + \log Z_1(m) \right)\right]_{n=0} =\\
+    &= -\frac{1}{\beta} \exp(N[-n \beta J m^2 + \log Z_1(m)])\left(-N \beta J m^2 + \frac{N}{Z_1(m)} \pdv{n} Z_1 \right) \Big|_{n=0}
+\end{align*} 
+Note that, for $n=0$, $Z_1(m)$ becomes:
+\begin{align*}
+    Z_1(m) \underset{n \to 0}{=}  \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}}  \exp\left(-\frac{1}{2} \nu^2 \right) = 1
+\end{align*}
+and so the first exponential is:
+\begin{align*}
+    \exp \Big(N[\cancel{-n \beta J m^2} + \underbrace{\log Z_1(m)}_{0} ] \Big) \Big|_{n = 0} = 1
+\end{align*}
+Leading to:
+\begin{align*}
+    \bar{F} &= -\frac{N}{\cancel{\beta}} \left[-\cancel{ \beta} J m^2 + \frac{\textcolor{Red}{\cancel{\beta}}}{\textcolor{Red}{\beta} Z_1} \pdv{n} Z_1 \right]_{n=0} = N \left[Jm^2 - \frac{1}{\beta} \pdv{n} Z_1(m)\right]_{n=0} =\\
+    &\underset{(\ref{eqn:z1m})}{=} N\left[J m^2 - \frac{1}{\beta} \pdv{n} \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2} \nu^2 + n \log[2 \cosh (2 \beta J m+ \beta \delta \nu)] \right) \right]_{n=0} =\\
+    &=N\left[Jm^2 - \frac{1}{\beta} \int_{\mathbb{R}} \frac{\dd{\nu}}{\sqrt{2 \pi}} \exp\left(-\frac{1}{2}\nu^2 \right) \log[2 \cosh (2 \beta J m + \beta \delta \nu)] \right]
+    \shortintertext{Finally, we extract the disorder amplitude $\delta$ from the field $\nu$ with a change of variables $h= \delta \nu$, allowing to explicitly see $\bar{F}$ as an average over disorder:}
+    &= N\left[Jm^2 - \frac{1}{\beta} \int_{\mathbb{R}} \frac{\dd{h}}{\sqrt{2 \pi \delta^2}} \exp\left(-\frac{h^2}{2 \delta^2} \right) \log[2 \cosh(\beta (2 Jm +h))]  \right]
+\end{align*}
+
+%Missing: self-consistent equation and phase-space discussion
+
+
+
+
+%Disegna le varie connessioni durante gli step
+
+\end{document}

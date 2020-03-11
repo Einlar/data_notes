@@ -1,0 +1,74 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Review of Mathematical Methods}
+\subsection{Continuous Random Variables}
+Let $X$ be a \textit{continuous} random variable with probability distribution $p(x)$. Then:
+\begin{itemize}
+    \item The probability of $X$ assuming values in the interval $[a,b)$ is given by:
+    \begin{align*}
+        \mathbb{P}[a \leq X < b] = \int_a^b p(x) \dd{x}
+    \end{align*}
+    \item The probability distribution $p(x)$ represents the \textit{infinitesimal} probability of $X$ assuming a value \textit{very close to} $x$:
+    \begin{align*}
+        \mathbb{P}(x \leq X < x+ \dd{x}) = p(x) \dd{x}
+    \end{align*} 
+    \item The average of a function of $X$ (also called an \textbf{observable}) $O(X)$ is given by sampling many $X_i \sim p$ all \textbf{independently} and \textbf{identically}, and then computing the limit:
+    \begin{align*}
+        \langle O \rangle &= \lim_{n \to \infty} \frac{1}{n} \sum_{i=1}^n O(X_i) =\\
+        &= \int_{\mathbb{R}} p(x) O(x) \dd{x} 
+    \end{align*}  
+    Physically, this corresponds to \textit{repeating many time the same experiment}. 
+\end{itemize}
+ 
+\begin{example}[Probability distributions]
+    
+\end{example}
+
+\begin{exo}
+    1
+\end{exo}
+
+\begin{exo}
+    2
+\end{exo}
+
+\begin{exo}
+    Consider the following pdf:
+    \begin{align*}
+        p(x) = (\alpha + 1) x^{-\alpha} \theta(x-1)
+    \end{align*}
+    For what values of $\alpha$ is it normalizable? Which moments $\langle x^k \rangle$, with $k \in \mathbb{R}$, are well defined?
+\end{exo}
+
+\subsection{Discrete Random Variables}
+A discrete random variable $X$ can only assume values inside a \textit{discrete}, numerable set $E$.
+
+\begin{exo}
+    4
+\end{exo}
+
+\subsection{Characteristic Functions}
+
+\begin{example}[Characteristic function of the gaussian]
+    Applying the definition, we get:
+    \begin{align*}
+        \varphi_m(\alpha) = \int_{\mathbb{R}} \frac{\dd{x}}{\sigma \sqrt{2 \pi}} \exp(i \alpha x - \frac{(x-m)^2}{2 \sigma^2} ) 
+    \end{align*}
+    To simplify the integral, we perform a change of variables $x = y+m$, with unit jacobian:
+    \begin{align*}
+        \varphi_m(\alpha) &= e^{im \alpha}\int_{\mathbb{R}} \frac{\dd{y}}{\sigma \sqrt{2 \pi}} \exp(i \alpha y - \frac{y^2}{2 \sigma^2} ) = e^{im \alpha} \varphi_0(\alpha)
+        \shortintertext{So we need to compute just $\varphi_0(\alpha)$. To do this, we rewrite: $e^{i \alpha y} = \cos(\alpha y) + i \sin(\alpha y)$, so that:}
+        \varphi_0(\alpha) &= \int_{\mathbb{R}} \frac{\dd{y}}{\sigma \sqrt{2 \pi}} \exp\left(-\frac{y^2}{2 \sigma^2} \right) (\cos(\alpha y) + \hlc{Yellow}{i \sin(\alpha y)}) =\\
+        \shortintertext{Note that the $\sin$ term is an odd function, integrated over a symmetric domain, and so it vanishes:}
+        &= \int_{\mathbb{R}} \frac{\dd{y}}{\sigma \sqrt{2 \pi}} \exp\left(-\frac{y^2}{2 \sigma^2} \right) \cos(\alpha y)
+        ...
+    \end{align*}
+    So we arrive at the final result:
+    \begin{align*}
+        \varphi_m(\alpha) = \exp(i \alpha m - \frac{\alpha^2 \sigma^2}{2} )
+    \end{align*}
+\end{example}
+\end{document}

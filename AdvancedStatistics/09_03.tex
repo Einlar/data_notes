@@ -1,0 +1,373 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Introduction}
+Statistics is the discipline that concerns the collection, organization, analysis, interpretation and presentation of data\footnote{\url{https://en.wikipedia.org/wiki/Statistics}}. It can be divided in:
+\begin{itemize}
+    \item \textbf{Descriptive Statistics}, which encompasses all the methods of summarizing and organizing information from a dataset - for example by computing numbers (e.g. \q{mean} and \q{standard deviation}), constructing tables or plotting graphs.
+    \item \textbf{Inferential Statistics}, which uses methods to extract new information (effectively \textit{learning}) from data, estimating and drawing conclusions based on the available evidence.
+\end{itemize}
+Statistics heavily makes use of \textbf{probability theory}, the branch of mathematics that provides rigorous abstractions for analysing non-deterministic and aleatory events. So, before considering the core aspects of statistics, we will spend some time reviewing the main concepts of probability.
+
+
+\section{Probability}
+The idea at the core of statistics is that many situations are \textbf{not} completely \textbf{predictable} - and so we need to account for their uncertainty if we seek their explanation. This is difficult because usual \textbf{deductive reasoning} cannot be applied when relevant information is missing. So we need another kind of \textit{logic} - denoted with \textbf{plausible reasoning} - that is best illustrated with a simple story\footnote{E. T. Jaynes, \textit{Probability Theory}, The Logic of Science, Cambridge Univ. Press., 2003}.
+
+\medskip
+
+Suppose that it's a dark night, and a policeman walks along a street, apparently deserted. Suddenly he hears a burglar alarm, and looking around, he sees a broken window in a jewellery shop. When he approaches it, he sees a gentleman with a mask, crawling out the shop with a bag, which turns out to be full of precious jewellery. To the policeman is immediately evident that the gentleman is a burglar, and must be brought to justice.
+
+\medskip
+
+However, the policeman's conclusion is not an example of logical deduction from evidence - as he cannot rule out every possibility where the gentleman is innocent. For example the latter could be the owner of the shop, coming home from a masquerade party, just to see that some vandal has broken the window. He could have decided to take away the jewellery to protect it from thieves, and passed through the window hole because he had left the shop's keys at home. In this scenario, the gentleman's behaviour is entirely justified - as he is just protecting his own property.
+
+\medskip
+
+However, the evidence in the policeman's possession strongly suggests that this is not the case - because it is \textit{implausible}. It is much more \textit{plausible} that the gentleman is, in fact, a burglar stealing jewellery.
+
+\medskip
+
+This is, in essence, the difference between \textbf{deductive reasoning}, where we can undoubtedly prove that something is right given some hypothesis (as in \textit{mathematical proofs}) and \textbf{plausible reasoning}, where we are not certain, but can prefer certain alternatives over others given the evidence.
+
+\medskip
+
+Formally, \textbf{deductive reasoning} makes use of \textbf{strong syllogisms}. If we know that $A \Rightarrow B$, and we see that $A$ is true, then certainly $B$ must be true. Conversely, if $A \Rightarrow B$ and we see that $B$ is false, $A$ must be false - if it were true, we would have observed $B$, but this is not the case.  
+
+\medskip
+
+On the other hand, \textbf{plausible reasoning} revolves around \textbf{weak syllogisms}: if we know that $A \Rightarrow B$, and we observe $B$, then $A$ is more \textit{plausible} (but not necessarily true!). In other words, observing a consequence makes the antecedent more \textit{plausible}. 
+
+Conversely, if $A \Rightarrow B$ and we see that $A$ is false, we conclude that $B$ is \textit{less plausible}. In other words, lack of the antecedent makes its consequences less \textit{plausible} - because one of their possible reasons is not true. 
+
+\begin{example}[Weak syllogism]
+    Let $A$ be the proposition \q{It will start to rain today by 10AM at the latest}, and $B$ \q{The sky will become cloudy before 10AM}. Clearly $A \Rightarrow B$, but $B \not \Rightarrow A$. However, if we $B$ is true - for example we see clouds at 9:45, it is common sense to take an umbrella, or stay inside, as $A$ is \textit{plausible}.  
+
+    \medskip
+
+    Note that with $A \Rightarrow B$ we are expressing merely a logical connection (clouds are a \textit{necessary} condition for rain), not a causal one (rain \textit{causes} clouds) which in this case does not even make sense.
+\end{example}
+
+The \textit{convincing power} of a plausible proposition depends on the amount of evidence leading to it: darker clouds mean that it is more likely to rain; the many clues available to the policeman in the example make the choice of arresting the gentleman very natural. In other words, plausibility comes in \textit{degrees} - it is not an \q{all or nothing} thing. Moreover, how much a proposition is plausible depends on the kind of \textbf{past experience} we have access to. For the rain example, we consider (implicitly) the many situations where we have seen dark clouds followed by rain; while the policeman has experience in the behaviour of burglars, and the circumstances where they are usually found. The (complex)  information that we unconsciously use for evaluating uncertain situations is often referred as \textbf{common sense}. 
+
+\medskip
+
+Plausibility is key to making decisions. A decision cannot be evaluated as right or wrong based only on its outcome - also the information available at that moment must be accounted. 
+
+\medskip
+
+So, let's make this quantitative. The idea is to represent the \textit{plausibility} of a proposition with a number, with the following rules:
+\begin{itemize}
+    \item It should be a \textbf{non-negative real number}, as a \q{negative plausibility} does not make sense.
+    \item It should be directly \textbf{correlated}  with plausibility: larger values mean greater plausibility.
+    \item It should be \textbf{independent} on the \textbf{proposition representation}, meaning that if $A$ and $B$ are equivalent propositions, their plausibility-values, given the same state of knowledge (i.e. the same amount of evidence) must be the same.
+    \item It must take \textbf{all relevant evidence} into account.  
+\end{itemize}
+This leads to the definition of \textbf{probabilities}, providing an extension of \textbf{logic} to non-deterministic situations.
+
+\medskip
+
+First, we precisely define the objects we are working with:
+\begin{itemize}
+    \item A \textbf{proposition} is a phrase with \textbf{unambiguous meaning} and \textbf{simple logical type} (it is either true or false).
+    \item Given two propositions $A$ and $B$ we can define \textit{operations} between them, allowing the construction of other (derived) propositions:
+    \begin{itemize}
+        \item \textbf{Logical product} $A \cdot B$ (or \textit{conjunctions}) denotes the proposition \q{Both $A$ and $B$ are true}. This product is commutative: $A\cdot B = B\cdot A$.
+        \item  \textbf{Logical sum} $A + B$ (or \textit{disjunction}) denotes the proposition \q{At least one of $A$ and $B$ is true}. Again $A+B=B+A$
+        \item \textbf{Equivalence} $A = B$ means that the proposition on the left hand side has the \textit{same truth value} as that on the right side ($A$ is true if and only if $B$ is true, and the same for \textit{false}). Note that \textit{it does not mean} that the two propositions have the \textit{same} meaning!  
+        \item The \textbf{denial} $\bar{A}$ denotes the \textit{opposite} proposition of $A$, i.e. the one that is true when $A$ is false, and false when $A$ is true.    
+    \end{itemize}
+\end{itemize}
+
+\begin{example}[Ambigous sentence]
+    Not all English sentences are propositions as above defined. For example, consider the phrase \q{This is a ceramic or a conductor}. Let $A$ be \q{It is a ceramic}, and $B$ \q{It is a conductor}.
+
+    \medskip
+
+    Then, depending on the use of \textit{or} as \textit{inclusive} or \textit{exclusive}, we can rewrite the original sentence as:
+    \begin{itemize}
+        \item \textbf{Inclusive}: $A+B$ (both propositions may be true at the same time)
+        \item \textbf{Exclusive}: $A\bar{B} + \bar{A}B$  (only one proposition may be true at any given time)
+    \end{itemize}
+       
+\end{example}
+
+Then, borrowing examples from theory of games, we also define:
+\begin{itemize}
+    \item \textbf{Random experiment}: an experiment with an outcome not completely predictable (uncertain), i.e. such that it can lead to different results when repeated.
+    \item \textbf{Outcome}: the result of a single trial of the experiment.
+    \item \textbf{Sample space}: the set of all possible outcomes of one single trial of the random experiment, usually denoted with $\Omega$. The sample space containing everything we are considering in the analysis of the experiment is called the \textbf{universe}.    
+    \item \textbf{Event}: any set of possible outcomes of the experiment. 
+\end{itemize}
+
+\begin{example}[Six-sided dice]
+    Consider a dice with six faces, numbered between $1$ and $6$. The sample space is $\Omega = \{1,2,3,4,5,6\}$, which coincides with the universe. An outcome can be, for example, $4$. An event could be \q{any number lower than $3$}, i.e. the set $\{1,2\}$.
+    %Difference between sample space and universe. Aren't they the same?
+\end{example}
+
+%Operations with events (union, intersection, complements)
+
+\section{Axiomatic definition of probability}
+Probability can be formally defined from three axioms:
+\begin{itemize}
+    \item $\mathbb{P}(A|I) \geq 0$ for any event $E$
+    \item $\mathbb{P}(U|I) = 1$ is the probability of the universe
+    \item \textbf{Product rule}. $\mathbb{P}(AB|I) = \mathbb{P}(A|B,I) \cdot \mathbb{P}(B|I) = \mathbb{P}(B|A,I) \cdot \mathbb{P}(A|I)$
+\end{itemize}
+From the axioms, the following properties immediately follow:
+\begin{itemize}
+    \item $\mathbb{P}(\varnothing) = 0$
+    \item \textbf{Normalization}. $\mathbb{P}(\bar{A}|I) = 1- \mathbb{P}(A|I)$
+    \item \textbf{Sum rule}. $\mathbb{P}(A+B|I) = \mathbb{P}(A|I) + \mathbb{P}(B|I) - \mathbb{P}(AB|I)$
+    \item \textbf{Marginalization}. $\mathbb{P}(A|I) = \mathbb{P}(A,B|I) + \mathbb{P}(A,\bar{B}|I)$ 
+\end{itemize}
+All probabilities are conditional: we say $\mathbb{P}(A|I)$ and not $\mathbb{P}(A)$, where $I$ is the \textbf{background condition}, i.e. the evidence that we have at the moment we are computing the probability. It makes no sense to talk about a \q{absolute} probability $\mathbb{P}(A)$!
+
+\medskip
+
+Therefore, if $I$ changes (i.e. we learn something new), probabilities may change.
+
+
+%19
+%Independence
+
+%Mutually exclusive
+
+
+\begin{align*}
+    \mathbb{P}(AB|I) = \mathbb{P}(A|B,I) \mathbb{P}(B|I) = \mathbb{P}(B|A,I)\mathbb{P}(A|I)
+\end{align*}
+Rearranging:
+\begin{align*}
+    \mathbb{P}(B|A,I) = \frac{\mathbb{P}(AB|I)}{\mathbb{P}(A|I)} 
+\end{align*}
+and substituting in the marginarlized expression for 
+
+
+\begin{exo}[Bayes theorem]
+    A new medical diagnostic test for a specific disease comes to market. We know the following:
+    \begin{itemize}
+        \item The \textbf{sensitivity} of the test, i.e. the probability that the test gives a positive response if a person has the disease (meaning that it \textit{correctly \q{senses} the disease}), is $0.95$.
+        \item The \textbf{specificity}, i.e. the probability that the test gives a negative response if a person does not have the disease (meaning that it \textit{does not react to something else}), is $0.90$.  
+        \item $1\%$ of the population, in Italy, has the disease.
+    \end{itemize}
+    \begin{expl}
+        The \textbf{false positive rate}, i.e. the probability that the test comes out positive when the disease is \textit{not} present, is $1-\rm{specificity}=0.10$.
+    \end{expl}
+    
+    What is the probability that a person has the disease, given the fact that the test gives a positive response?
+
+    \medskip
+
+    \textbf{Solution}. Let's formalize everything. We define the following propositions:
+    \begin{align*}
+        D = \text{a person has the disease}; \qquad T = \text{the test gives a positive result}
+    \end{align*} 
+    We denote with $I$ our state of knowledge regarding the disease and the test.
+    Then:
+    \begin{itemize}
+        \item The sensitivity is $\mathbb{P}(T|D,I) = \hlc{Yellow}{0.95}$ 
+        \item The specificity is $\mathbb{P}(\bar{T}|\bar{D}, I) = \hlc{SkyBlue}{0.90}$
+        \item The disease incidence (prior probability) is $\mathbb{P}(D|I) = \hlc{ForestGreen}{0.01}$
+    \end{itemize}
+    And we wish to compute $\mathbb{P}(D|T,I)$.
+    
+    \medskip
+
+    To organize all these probabilities we can use a \textbf{contingency table}, as shown in tab. \ref{tab:contingency}.  
+\begin{table}[H]
+    \centering
+    \begin{tabular}{@{}r|ll|c@{}}
+    \multicolumn{1}{c|}{} & \multicolumn{1}{c}{$B$}    & \multicolumn{1}{c|}{$\bar{B}$} & \multicolumn{1}{c}{}       \\ \midrule
+    $A$                   & $\mathbb{P}(AB|I)=\omega_1$           & $\mathbb{P}(A\bar{B}|I) = \omega_2$       & $\mathbb{P}(A|I)=\omega_1+\omega_2$ \\
+    $\bar{A}$             & $\mathbb{P}(\bar{A}B|I) = \omega_3$ & $\mathbb{P}(\bar{A}\bar{B}|I)=\omega_4$ & $\mathbb{P}(\bar{A}|I)=\omega_3+\omega_4$ \\ \midrule
+    \multicolumn{1}{l|}{} & $\mathbb{P}(B|I) = \omega_1+\omega_3$ & $\mathbb{P}(\bar{B}|I)=\omega_2+\omega_4$ & $1$                       
+    \end{tabular}
+    \caption{Contingency table for two propositions $A$ and $B$}
+    \label{tab:contingency}
+    \end{table}
+
+    Sums over columns and rows produce \textit{marginal probabilities} - i.e. the probabilities of one proposition $A$ or $B$ (or their negation) without dependence on the other. Clearly $\mathbb{P}(A|I) + \mathbb{P}(\bar{A}|I) = 1$, and the same for $B$ (by the sum rule).
+
+    \medskip
+
+    So, let's build the table for our case. At the start, the only cell we can fill is the one for $P(D|I)$:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{@{}r|ll|c@{}}
+        \multicolumn{1}{c|}{} & \multicolumn{1}{c}{$T$}    & \multicolumn{1}{c|}{$\bar{T}$} & \multicolumn{1}{c}{}       \\ \midrule
+        $D$                   & $$           & $$       & $\hlc{ForestGreen}{0.01}$ \\
+        $\bar{D}$             & $$ & $$ & $$ \\ \midrule
+        \multicolumn{1}{l|}{} & $$ & $$ & $1$                       
+        \end{tabular}
+    \end{table}
+    Immediately we know $\mathbb{P}(\bar{D}|I) = 1-\mathbb{P}(D|I)=0.99$ (the outer column/row must sum to unity), and so:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{@{}r|ll|c@{}}
+        \multicolumn{1}{c|}{} & \multicolumn{1}{c}{$T$}    & \multicolumn{1}{c|}{$\bar{T}$} & \multicolumn{1}{c}{}       \\ \midrule
+        $D$                   & $$           & $$       & $0.01$ \\
+        $\bar{D}$             & $$ & $$ & $\textcolor{Red}{0.99}$ \\ \midrule
+        \multicolumn{1}{l|}{} & $$ & $$ & $1$                       
+        \end{tabular}
+    \end{table}
+    We proceed with $\mathbb{P}(DT|I)$. By the product rule:
+    \begin{align*}
+        \mathbb{P}(DT|I) = \mathbb{P}(T|D,I) \cdot \mathbb{P}(D|I) = \hlc{Yellow}{0.95} \cdot \hlc{ForestGreen}{0.01}= 0.0095
+    \end{align*}
+    And so:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{@{}r|ll|c@{}}
+        \multicolumn{1}{c|}{} & \multicolumn{1}{c}{$T$}    & \multicolumn{1}{c|}{$\bar{T}$} & \multicolumn{1}{c}{}       \\ \midrule
+        $D$                   & $\textcolor{Red}{0.0095}$           & $$       & $0.01$ \\
+        $\bar{D}$             & $$ & $$ & $0.99$ \\ \midrule
+        \multicolumn{1}{l|}{} & $$ & $$ & $1$                       
+        \end{tabular}
+    \end{table}
+    The first row must sum to $0.01$, and so we get another cell:
+    \begin{align*}
+        \mathbb{P}(D\bar{T}) = \mathbb{P}(D|I) - \mathbb{P}(DT|I) = 0.01-0.0095=0.0005
+    \end{align*}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{@{}r|ll|c@{}}
+        \multicolumn{1}{c|}{} & \multicolumn{1}{c}{$T$}    & \multicolumn{1}{c|}{$\bar{T}$} & \multicolumn{1}{c}{}       \\ \midrule
+        $D$                   & ${0.0095}$           & $\textcolor{Red}{0.0005}$       & $0.01$ \\
+        $\bar{D}$             & $$ & $$ & $0.99$ \\ \midrule
+        \multicolumn{1}{l|}{} & $$ & $$ & $1$                       
+        \end{tabular}
+    \end{table}
+    We proceed with the second row. Again, by the product rule:
+    \begin{align*}
+        \mathbb{P}(\bar{D}T|I) &= \mathbb{P}(T|\bar{D},I) \cdot \mathbb{P}(\bar{D}|I) = (1-\mathbb{P}(\bar{T}|\bar{D},I))(1-\mathbb{P}(D|I)) = \\
+        &= (1-\hlc{SkyBlue}{0.90})(1-0.01) = 0.1 \cdot 0.99 = 0.099
+    \end{align*}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{@{}r|ll|c@{}}
+        \multicolumn{1}{c|}{} & \multicolumn{1}{c}{$T$}    & \multicolumn{1}{c|}{$\bar{T}$} & \multicolumn{1}{c}{}       \\ \midrule
+        $D$                   & ${0.0095}$           & ${0.0005}$       & $0.01$ \\
+        $\bar{D}$             & $\textcolor{Red}{0.099}$ & $$ & $0.99$ \\ \midrule
+        \multicolumn{1}{l|}{} & $$ & $$ & $1$                       
+        \end{tabular}
+    \end{table}
+    And finally we can fill up the remaining cells by sums and differences:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{@{}r|ll|c@{}}
+        \multicolumn{1}{c|}{} & \multicolumn{1}{c}{$T$}    & \multicolumn{1}{c|}{$\bar{T}$} & \multicolumn{1}{c}{}       \\ \midrule
+        $D$                   & ${0.0095}$           & ${0.0005}$       & $\hlc{Yellow}{0.01}$ \\
+        $\bar{D}$             & $0.099$ & $0.891$ & $0.99$ \\ \midrule
+        \multicolumn{1}{l|}{} & $\hlc{SkyBlue}{0.1085}$ & $0.8915$ & $1$ 
+                     
+        \end{tabular}
+    \end{table}
+
+    We can finally evaluate Bayes theorem:
+    \begin{align} \label{eqn:bayes-res}
+        \mathbb{P}(D|T,I) = \frac{\mathbb{P}(T|D,I) \hlc{Yellow}{\mathbb{P}(D|I)}}{\hlc{SkyBlue}{\mathbb{P}(T|I)}} = \frac{0.95 \cdot 0.01}{0.1085} \approx 0.0876 
+    \end{align}
+
+    Note that the normalization factor can also be computed directly:
+    \begin{align*}
+        \mathbb{P}(T|I) &= \mathbb{P}(T|D,I) \mathbb{P}(D|I) + P(T|\bar{D},I)P(\bar{D},I) =\\
+        &= 0.95 \cdot 0.01 + 0.10 \cdot 0.99 = 0.1085
+    \end{align*}
+
+    The result in (\ref{eqn:bayes-res}) indicates that the test is not very effective at detecting the disease. How can this be, as the test has high sensitivity and specificity?
+    \medskip
+
+    If we were to test only people that have the disease (or that likely have it), the test would be indeed accurate and useful. However, in this case we are testing \textit{the general population}, and (fortunately) \textit{almost all} people \textit{do not have} the disease. In this case, out of $100$ people, only one is ill, and the test will likely be positive for him/her. For all the other cases, the test will \textit{mostly} give the correct answer (no disease) and be wrong only for a small fraction. However, a small fraction of a \textit{very large number} can be very significant - and in this case outweigh the signal that we want to observe (who is effectively ill).
+
+    \medskip
+
+    The Bayesian trap, i.e. the surprising fact that a seemingly accurate test proves unworthy, is an effect of the \textit{very skewed} prior distribution of the disease. Usually we think as alternative possibilities as \textit{equivalent} and \textit{equiprobable} - and only in this case high specificity and sensitivity directly correlates with final performance. However, the real picture is often much more peculiar.
+    \medskip
+
+    In other words, to detect very \textit{rare diseases} the test must be \textit{extremely accurate} (sensitivity and specificity of $>0.99$), or be repeated multiple times.  For one of the best visualization of Bayes theorem, see the \textit{waterfall example} (\url{https://arbital.com/p/bayes_waterfall_diagram/?l=1x1}). 
+\end{exo}
+
+\begin{exo}[Bayes theorem 2]
+    A new medical screening procedure for a specific cancer is introduce. The screening has \textbf{sensitivity} $=0.90$ and \textbf{specificity} $=0.95$. The \textbf{underlying rate} of the cancer in the population is $0.001$.
+    
+    What is the probability that a person has the disease given the results of the screening is positive? Does this show that screening is effective in detecting this cancer?
+
+    \medskip
+
+    \textbf{Solution}. Again, we define two propositions:
+    \begin{align*}
+        A = \text{the screening has positive result}; \quad B = \text{a person has a specific cancer}
+    \end{align*} 
+    From the data we have:
+    \begin{align*}
+        \mathbb{P}(A|B,I) = 0.90; \quad \mathbb{P}(\bar{A}|\bar{B},I) = 0.95; \quad P(B|I) = 0.001
+    \end{align*}
+
+    And we create a contingency table:
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{@{}r|ll|c@{}}
+        \multicolumn{1}{c|}{} & \multicolumn{1}{c}{$A$}    & \multicolumn{1}{c|}{$\bar{A}$} & \multicolumn{1}{c}{}       \\ \midrule
+        $B$                   & ${\num{9e-4}}$           & $\num{1e-4}$       & $0.001$ \\
+        $\bar{B}$             & $0.05$ & $0.949$ & $0.999$ \\ \midrule
+        \multicolumn{1}{l|}{} & $0.051$ & $0.9491$ & $1$      
+        \end{tabular}
+    \end{table}
+    Where:
+    \begin{align*}
+        \mathbb{P}(AB|I) &= \mathbb{P}(A|B,I) \mathbb{P}(B|I)=0.90 \cdot 0.001 = \num{9e-4}\\
+        \mathbb{P}(A\bar{B}|I) &= \mathbb{P}(A|\bar{B},I) \mathbb{P}(\bar{B}|I) = (1-\mathbb{P}(\bar{A}|\bar{B},I)) \mathbb{P}(\bar{B}|I) =\\
+        &=(1-0.95)\cdot 0.999 \approx 0.05
+    \end{align*}
+    and the remaining cells are given by sums and differences. Then, applying Bayes theorem leads to:
+    \begin{align*}
+        \mathbb{P}(B|A,I) = \frac{\mathbb{P}(A|B,I) \mathbb{P}(B,I)}{\mathbb{P}(A|I)}  = \frac{\num{9e-4}}{0.05} = 0.018 
+    \end{align*}
+    
+\end{exo}
+
+Sometimes it is useful to talk about \textit{probability ratios}.\marginpar{Odds}\index{Odds} In particular, we define the \textbf{odds} of an event $A$ as:
+\begin{align}\label{eqn:odds}
+    \operatorname{odds}(A|I) = \frac{\mathbb{P}(A|I)}{\mathbb{P}(\bar{A},I)} = \frac{\mathbb{P}(A|I)}{1-\mathbb{P}(A|I)} 
+\end{align}  
+In other words, the \textit{odds} of an event quantify how much is convenient to \textit{bet} on its occurrence or not. If they are $>1$, $A$ is more likely to occur than not, and the opposite happens if $A < 1$, with $A=1$ being the \textit{indifferent} case (e.g. launch of a fair coin). Odds can be computed for prior and posterior probabilities, and in these cases we talk respectively about \textbf{prior} and \textbf{posterior} odds ratios.      
+
+\medskip
+
+We can express a probability as a function of the odds by inverting (\ref{eqn:odds}):
+\begin{align*}
+    \mathbb{P}(A|I) = \frac{\operatorname{odds}(A|I) }{1 + \operatorname{odds}(A|I) } 
+\end{align*}
+
+\subsection{Assigning probabilities}
+So far we have derived consistent rules that can be used to \textbf{manipulate probabilities}, but we have still no way of assigning them to real world events.
+
+\medskip
+
+As we will see, there are several ways to do this. One of the simplest one is the \textbf{principle of indifference}, which states that if we do not have any reason (background information) to prefer one possibility over another, they all have the same probability.
+
+\medskip
+
+Let's formalize this concept. Suppose that:
+\begin{itemize}
+    \item $\{A_j\}_{j=1,\dots,n}$ are $n$ propositions, and \textbf{at least one of them is true}.
+    \item All the $\{A_j\}$ are mutually exclusive, meaning that two of them \textit{cannot happen at the same time}: 
+    \begin{align*}
+        \mathbb{P}(A_iA_j|B) = \mathbb{P}(A_j|B) \delta_{ij}
+    \end{align*}
+    (In other words, $\mathbb{P}(A_i A_j|B) = 0$ if $i\neq j$)
+    \medskip
+
+    Then, the probability of at least one of them happening is just the sum of their probabilities:
+    \begin{align*}
+        \mathbb{P}(A_1 + A_2 + \dots + A_n|B) = \sum_{i=1}^n \mathbb{P}(A_i|B) 
+    \end{align*}
+    \item The $\{A_j\}$ propositions are \textbf{exhaustive}, meaning that their union fills the entire sample space, and so:
+    \begin{align*}
+        \sum_{i=1}^n \mathbb{P}(A_i|B) = 1
+    \end{align*} 
+\end{itemize}
+
+\end{document}

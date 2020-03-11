@@ -1,7 +1,7 @@
 %&latex
 %
 \documentclass[../template.tex]{subfiles}
-\usepackage{graphicx}
+%\usepackage{graphicx}
 
 \begin{document}
 
@@ -9,6 +9,7 @@
 In this chapter we discuss several techniques for computing integrals on the complex plane.
 
 \section{Fourier Transform}
+\label{sec:fourier}
 One of the most frequent kind of complex integral is given by the \textit{Fourier Transform} (FT). Let $f(x) \in L_2(\mathbb{R})$ be a square-integrable function. Then the Fourier transform maps $f(x)$ to another function $\tilde{f}(k)$ defined as follows: \marginpar{Fourier transform}
 \begin{align} \label{eqn:fourier-def}
     \mathcal{F}[f(x)](k) = \tilde{f}(k) \equiv \int_{\mathbb{R}} e^{-ikx} f(x) \dd{x} \qquad f \in L_2(\mathbb{R})
