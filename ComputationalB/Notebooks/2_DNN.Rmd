@@ -1,0 +1,114 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.2'
+      jupytext_version: 1.3.2
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+```{python}
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(12345) #For reproducibility
+```
+
+## Data generation
+
+```{python}
+# %%timeit
+#number of samples
+N = 1000
+#generate L digits, from 1 to 9. Some strings (with certain probability p) contain a "secret key", i.e. the pattern C0*C1
+#(* = any number, eventually "wrapping around" the string
+
+L = 6
+C0, C1 = 8, 9
+Cmin = 1
+Cmax = 9
+
+x = np.random.randint(low=Cmin, high=Cmax+1, size=(N, L))
+y = np.random.randint(low=0, high=4, size=N)
+y = np.asarray(y==0, dtype='int') #generate random labels, with 1s in 1/4 of samples
+
+n_patterns = np.sum(y) #number of patterns to produce
+p0 = np.random.randint(low=0, high=L, size=n_patterns) #position of C0
+p1 = (p0+2) % L
+
+x[y==1, p0] = C0
+x[y==1, p1] = C1
+
+#remove spurious patterns
+t = x[y==0]
+ind0 = np.argwhere(t == C0)
+ind1 = np.argwhere(t == C1)
+comm, i0, i1 = np.intersect1d(ind0[:,0], ind1[:,0], return_indices=True) #lines with both C0 and C1
+
+diffs = ind1[i1][:,1] - ind0[i0][:,1]
+hits = np.argwhere(np.logical_or(diffs == 2, diffs == -(L-2)))
+to_regen = len(hits)
+
+regenerated = np.random.choice(list(set(np.arange(Cmin, Cmax+1)) - set([C0,C1])), size=to_regen)
+where_to = np.random.randint(2, size=to_regen)
+replace_index = np.where(where_to, ind0[i0][:,1][hits].flatten(), ind1[i1][:,1][hits].flatten())
+
+t[comm[hits].flatten(), replace_index] = regenerated
+
+x[y==0] = t #copy back
+```
+
+```{python}
+# %%timeit
+y = [None] * N
+x = [[None] * L for j in range(N)]
+
+for i in range(N):
+    y[i] = int(random.randint(0,3) == 0)
+    if y[i]:
+        j0 = random.randint(0, L-1)
+        j1 = (j0+2) % L
+    ok = True
+    
+    while ok:
+        for j in range(L):
+            n = random.randint(Cmin, Cmax)
+            if y[i]:
+                if j==j0:
+                    n=C0
+                elif j==j1:
+                    n=C1
+            x[i][j] = n
+        ok = False
+        if y[i] == 0:
+            for j0 in range(L):
+                j1 = (j0+2)%L
+                if x[i][j0] == C0 and x[i][j1] == C1:
+                    ok=True
+
+```
+
+```{python}
+replace_index
+```
+
+```{python}
+
+```
+
+```{python}
+x[0]
+```
+
+```{python}
+8*8 + 9*9
+```
+
+```{python}
+
+```
