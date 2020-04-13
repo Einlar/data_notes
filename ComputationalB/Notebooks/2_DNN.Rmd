@@ -64,7 +64,22 @@ x[y==0] = t #copy back
 ```
 
 ```{python}
-# %%timeit
+import random
+
+random.seed(12345) #For reproducibility
+
+print(random.randint(0,10), random.randint(0,10), random.randint(0,10))
+
+#number of samples
+N = 1000
+#generate L digits, from 1 to 9. Some strings (with certain probability p) contain a "secret key", i.e. the pattern C0*C1
+#(* = any number, eventually "wrapping around" the string
+
+L = 6
+C0, C1 = 8, 9
+Cmin = 1
+Cmax = 9
+
 y = [None] * N
 x = [[None] * L for j in range(N)]
 
@@ -75,7 +90,7 @@ for i in range(N):
         j1 = (j0+2) % L
     ok = True
     
-    while ok:
+    while ok: #if ok is True (re)generate this sample
         for j in range(L):
             n = random.randint(Cmin, Cmax)
             if y[i]:
@@ -85,28 +100,51 @@ for i in range(N):
                     n=C1
             x[i][j] = n
         ok = False
-        if y[i] == 0:
+        if y[i] == 0: #check absence of spurious patterns
             for j0 in range(L):
                 j1 = (j0+2)%L
                 if x[i][j0] == C0 and x[i][j1] == C1:
                     ok=True
 
+for i in range(10):
+    print(x[i], y[i])
 ```
 
 ```{python}
-replace_index
+#Save space
+
+def compact1(v):
+    """Store a vector of L digits in a single number"""
+    s = 0
+    p = 10**(L-1)
+    j = 0
+    while j < L:
+        s += p * v[j]
+        p = int(p/10)
+        j += 1
+    return s
+
+compact(x[0])
 ```
 
 ```{python}
+def compact(v): #easier
+    """Store a vector of L digits in a single number"""
+    
+    return int(''.join(str(e) for e in v))
 
+compact(x[0])
 ```
 
 ```{python}
-x[0]
-```
+import csv
 
-```{python}
-8*8 + 9*9
+with open('secretkeys.csv', 'w') as myfile:
+    writer = csv.writer(myfile, delimiter=',')
+    
+    for i in range(N):
+        writer.writerow([compact(x[i]), y[i]])
+    
 ```
 
 ```{python}

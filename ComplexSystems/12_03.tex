@@ -109,17 +109,17 @@ And so we can rewrite:
 
 \begin{exo}[Generalization]
     Prove that:
-    \begin{align*}
+    \begin{align}\label{eqn:generalized-gauss-int}
         I(A,\bm{b}) \equiv \int_{\mathbb{R}^d} \dd[d]{\bm{x}} e^{-\bm{x}^T A \bm{x} + \bm{b}^T \bm{x}} = \pi^{d/2} (\operatorname{det}A)^{-1/2} \exp\left(\frac{1}{4} \bm{b}^T A^{-1} \bm{b} \right)
-    \end{align*}
+    \end{align}
     where $A$ is a \textbf{symmetric}, \textbf{positive definite} $d\times d$ real matrix, and $\bm{b} \in \mathbb{C}^d$.  
 \end{exo}
 
 \section{Saddle Point approximation}
 Let $f(\bm{x})$ be a function with a single minimum at $\bm{x_0}$ and such that:
-\begin{align*}
+\begin{align}\label{eqn:If-def}
     I_f = \int_{D} e^{-N f(\bm{x})} \dd[d]{\bm{x}} \qquad D \subset \mathbb{R}^d
-\end{align*}
+\end{align}
 Suppose that $\bm{x_0}$ \textit{is not on the boundary of $D$}, meaning that there exists some $r > 0$ so that the sphere centred on $\bm{x_0}$ of radius $r$ is entirely inside $D$:
 \begin{align*}
     \exists r > 0 \text{ s.t. }\{\bm{x} \in \mathbb{R}^d \colon |\bm{x}-\bm{x_0}| < r\} \subset D
@@ -186,13 +186,135 @@ Note that we are implicitly assuming that $D'$ is symmetric about $\bm{x_0}$ (fo
     \end{enumerate}
 \end{exo}
 
-\begin{exo}[10]\label{ex:saddle-domain}
-    TO DO
+\begin{exo}[Motivation of the saddle-point result]\label{ex:saddle-domain}
+    Consider a one-dimensional example of the saddle-point approximation (\ref{eqn:If-def}), with $f(x) = x^2$ and $D = [-r, r]$ (a small \textit{neighbourhood} of $x=0$ with radius $r > 0$). Show that the \textit{error} in computing $I_f$ over $F = \mathbb{R}$ rather than $D$ decreases exponentially as $N \to \infty$:
+    \begin{align*}
+        0 < \int_{-\infty}^{+\infty} e^{-N x^2} \dd{x} - \int_{-r}^{+r} e^{-Nx^2} \dd{x} < \frac{2}{\sqrt{N}}  e^{-r^2 N}
+    \end{align*}
+    In particular, this means that if we had kept track of that error in the $d$ dimensional case (\ref{eqn:result-saddle}) we would have had extra terms of order less than $N^{-d/2} e^{-r^2 N}$, which is $\ll O(1/N)$ - and so are irrelevant in the final result.
 \end{exo}
 
-TO DO
+\begin{exo}[Saddle-point of a monotone increasing function]
+    Let $f(x)$ in (\ref{eqn:If-def}) be a monotone increasing function $f\colon \mathbb{R} \to \mathbb{R}$. Show that:
+    \begin{align*}
+        \int_a^b e^{-N f(x)} \dd{x} = \frac{e^{-N f(a)}}{N f'(a)} \left(1 + O\left(\frac{1}{N} \right)\right)
+    \end{align*}
+\end{exo}
 
-\section{Statistical Ensembles}
+\subsection{Gaussian averages}
+The multi-dimensional gaussian distribution is given by:
+\begin{align} \label{eqn:mult-gauss-dist}
+    p_G(\bm{x}) \equiv \frac{(\operatorname{det}A)^{1/2}}{(2 \pi)^{d/2}} \exp\left(-\frac{\bm{x}^T A \bm{x}}{2} \right)
+\end{align}
+The result we obtained in (\ref{eqn:mult-gaussian}) confirms that (\ref{eqn:mult-gauss-dist}) is properly normalized.
+
+\medskip
+
+Then, by using (\ref{eqn:generalized-gauss-int}) we can derive its characteristic function:
+\begin{align*}
+    \varphi(\bm{\alpha}) = \langle e^{i \bm{\alpha}\cdot \bm{x}} \rangle = \int_{\mathbb{R}^d} \dd[d]{\bm{x}} p_G(\bm{x}) e^{i \bm{\alpha} \cdot \bm{x}} = \exp\left(-\frac{1}{2} \bm{\alpha}^T A^{-1} \bm{\alpha} \right)
+\end{align*}
+Then the first moment of the $k$-th component of (\ref{eqn:mult-gauss-dist}) is:
+\begin{align*} %add ref to characteristic function property
+    \langle X_k \rangle &= \int_{\mathbb{R}^d} \dd[d]{\bm{x}} x_k \,p_G(\bm{x}) = -i \pdv{\alpha_k} \varphi(\bm{\alpha})\Big|_{\alpha = 0} =\\
+    &= i \sum_{j=1}^d A_{kj}^{-1} \alpha_j \exp\left(-\frac{1}{4} \bm{\alpha}^T A^{-1} \bm{\alpha} \right) \Big|_{\alpha = 0} = 0 \qquad k=1,2,\dots,d
+\end{align*}
+And the second moment of the $k,l$ components is:
+\begin{align*}
+    \langle X_k X_l \rangle &= \int_{\mathbb{R}^d} \dd[d]{\bm{x}} x_k x_l p_G(\bm{x}) = \left(-i\pdv{\alpha_l}\right)\left(-i \pdv{\alpha_k}\right) \exp\left(-\frac{1}{2} \bm{\alpha}^T A^{-1} \bm{\alpha} \right)=\\
+    &=\exp\left(-\frac{1}{2} \bm{\alpha}^T A^{-1} \bm{\alpha} \right) [A^{-1}_{kl} - \sum_{m,n=1}^d A^{-1}_{km} A^{-1}_{ln} \alpha_m \alpha_n] \Big|_{\alpha=0}=\\
+    &= A^{-1}_{kl}
+\end{align*}
+
+\section{Central Limit Theorem}
+One of the most important results in statistics is the \textbf{Central Limit Theorem}, which states that the sum $S_n \equiv \sum_{i=1}^n X_i$ of $n$ i.i.d. random variables $X_i \sim p(x)$ with $\langle X_i \rangle = \mu$ and \textit{finite variance}:
+\begin{align*}
+    \sigma^2 \equiv \langle X_i^2 \rangle - \langle X_i \rangle^2 < \infty
+\end{align*} 
+converges \textit{in distribution} to a random variable with \textit{gaussian} distribution.  
+
+\medskip
+
+More precisely, we consider a shifted and rescaled version of $S_n$:
+\begin{align*}
+    Z_n \equiv \frac{S_n - n \mu}{\sigma\sqrt{n}} 
+\end{align*}
+such that $\langle Z_n \rangle = 0$ and $\operatorname{Var}(Z_n) = 1$. Then the CDF of $Z_n$ is that of a standard gaussian, in the limit of large $n$:
+\begin{align*}
+    \mathbb{P}(Z_n < a)  \xrightarrow[n \to \infty]{}  \int_{-\infty}^a \frac{\dd{x}}{\sqrt{2 \pi}}  \exp\left(-\frac{x^2}{2} \right) 
+\end{align*} 
+Equivalently\footnote{The CDF for a random variable always exists. If it is differentiable, then we can compute the pdf - so the CLT theorem is actually more general in its CDF form. However, we will always work in the \q{nice cases} where the pdf\textit{s}  exist.},%TO DO: need a reference for this
+ this means that the pdf of $Z_n$ is a standard gaussian $\mathcal{N}(0,1)$ (with $0$ mean and unit variance):
+\begin{align*}
+    p_n(z) = \langle \delta(Z_n - z)  \rangle  \xrightarrow[n \to \infty]{}  \frac{1}{\sqrt{2 \pi}} \exp\left(-\frac{z^2}{2} \right) = \mathcal{N}(0,1)
+\end{align*}
+
+\medskip
+
+\textbf{Proof}. We start from the change of random variable formula:
+\begin{align*}
+    p_n(z) = \langle \delta(Z_n-z) \rangle
+\end{align*}
+and we use the Fourier representation of the Dirac's delta:
+\begin{align*}
+    \delta(x) = \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi}  e^{i \alpha x}
+\end{align*}
+leading to:
+\begin{align} \label{eqn:pnz}
+    p_n(z) = \langle \int_{\mathbb{R}} \frac{\dd{\alpha}}{2\pi} e^{i \alpha (Z_n-z)}  \rangle = \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} e^{-i \alpha z} \langle e^{i \alpha Z_n} \rangle 
+\end{align} 
+As the $X_i$ are all i.i.d., we can factorize the average:
+\begin{align*}
+    \langle e^{i \alpha Z_n} \rangle = \langle\exp\left(-\frac{i  \alpha n \mu}{\sigma \sqrt{n}}\right) \prod_{i=1}^n \exp\left(\frac{i \alpha X_i}{\sigma \sqrt{n}} \right) \rangle =\exp\left(-\frac{i \alpha\sqrt{n}\mu}{\sigma } \right) \prod_{i=1}^n \underbrace{\langle\exp\left(\frac{i \alpha X_i}{\sigma \sqrt{n}} \right)  \rangle}_{\varphi(\alpha/(\sigma \sqrt{n}))} 
+\end{align*}
+and we recognize the \textit{characteristic function} $\varphi(\alpha)$ of the $X_i$. Thus:
+\begin{align}
+    \langle e^{i \alpha Z_n} \rangle = \exp\left(-\frac{i \alpha \mu \sqrt{n}}{\sigma} \right) \left[\varphi\left(\frac{\alpha}{\sigma \sqrt{n}} \right)\right]^n
+    \label{eqn:eian}
+\end{align}
+Then we rewrite the characteristic function by expanding the exponential:
+\begin{align*}
+    \varphi(\alpha) &= \int_{\mathbb{R}} \dd{x} p(x) e^{i \alpha x} = \int_{\mathbb{R}} \dd{x} p(x) \left(1 + i \alpha x - \frac{\alpha^2 x^2}{2} + \dots \right) =\\
+    &= 1 + i \alpha \mu - \frac{\alpha^2}{2} (\sigma^2 + \mu^2) + O(\alpha^3) %Add a step here (TO DO) 
+\end{align*}
+where we used $\langle X^2 \rangle = \sigma^2 + \mu^2$. 
+
+Note that we are implicitly assuming that the cubic moment of $p$ exists - but in a more careful proof this would not be necessary.
+
+\medskip
+
+To proceed, we need to rewrite $\varphi(\alpha)$ as an exponential:
+\begin{align*}
+    \varphi(\alpha) = e^{\ln \varphi(\alpha)}
+\end{align*}
+and we use the logarithm expansion $\ln (1+x) = x- x^2/2 + x^3/3 + \dots $ to compute:
+\begin{align*}
+    \ln \varphi(\alpha) = i \alpha \mu - \frac{\alpha^2}{2} \sigma^2 + O(\alpha^3) 
+\end{align*}
+Substituting back in (\ref{eqn:eian}) we arrive to:
+\begin{align*}
+    \langle e^{i \alpha Z_n} \rangle = \exp\left(-\frac{\alpha^2}{2} + O\left(\frac{1}{n} \right) \right)
+\end{align*}
+And finally we can go back to (\ref{eqn:pnz}), and compute the resulting gaussian integral in the large $n$ limit:
+\begin{align*}
+    p_n(z) = \int_{\mathbb{R}} \frac{\dd{\alpha}}{2 \pi} \exp\left(-i \alpha z - \frac{\alpha^2}{2} + \operatorname{\left(\frac{1}{\sqrt{n}} \right)}  \right)  \xrightarrow[n \to \infty]{} \frac{1}{\sqrt{2 \pi}} \exp\left(-\frac{z^2}{2}  \right) \qquad \square
+\end{align*}
+This concludes the proof.
+
+\medskip
+
+Note that:
+\begin{align*}
+    S_n = \frac{1}{n} \sum_{i=1}^n X_i  \xrightarrow[n \to \infty]{}   \mu = \langle X_i \rangle \text{ almost surely}
+\end{align*}
+That is, the sample average of a \textit{large number of samples} will be very close to the population average $\mu$ with a high probability. This convergence is, in a sense, the \q{probabilistic equivalent} of the usual convergence in $\mathbb{R}$.
+
+\medskip
+
+However, $Z_n$ converges \textit{in distribution} (or weakly) to a random variable $X$ with gaussian distribution. %TO DO: why are these two convergences different?
+
+
+\chapter{Statistical Ensembles}
 %Following chap. 3 of Sethna, James. Statistical mechanics: entropy, order parameters, and complexity. Vol. 14. Oxford University Press, 2006
 
 The goal of \textbf{equilibrium statistical mechanics} is to \textbf{connect} the macroscopic behaviour of a system to the dynamics of its microscopical constituents. This allows to \textit{rederive} the results of thermodynamics from a very different approach: instead of focusing directly on the observables, we try to deeply understand the \textit{nature} of the system at hand.

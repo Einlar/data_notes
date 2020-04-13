@@ -1,0 +1,125 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Gibbs' Paradox}
+
+When we derived the entropy for the ideal gas, we got a strange non-extensive term:
+\begin{align}
+    S_{\mathrm{IG}} = k_B N \left\{\frac{3}{2} + \ln\left[\frac{V}{N} \left(\frac{\mathcal{E}}{N} \right)^{3/2} \frac{4 \pi m}{h^3}  \right] + \hlc{Yellow}{\ln N} \right\} \label{eqn:78}
+\end{align}
+We will now see why this term appears, and why it should be removed.
+
+\medskip
+
+The main result of the above analysis is the relation between entropy and the volume occupied by the system respecting the macroscopic constraints $\mathcal{E}$, $V$ and $N$:
+\begin{align}\label{eqn:75}
+    \exp\left(\frac{S(\mathcal{E}, V, N)}{k_B} \right) = \Omega(\mathcal{E}, V, N) = \int \frac{\dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}}}{h^{3N}} \delta(\mathcal{E}- \mathcal{H}(\mathbb{Q},\mathbb{P})) 
+\end{align}
+We are implicitly assuming that configurations where particles are simply scrambled are considered different, i.e. for example:
+\begin{align*}
+    \mathbb{Q}=(\bm{r_1}, \bm{r_2}, \dots, \textcolor{Red}{\bm{r_i}}, \dots, \textcolor{ForestGreen}{\bm{r_j}}, \dots, \bm{r_N})^T; \qquad \mathbb{P}=(\bm{p_1}, \bm{p_2}, \dots, \textcolor{Red}{\bm{p_i}}, \dots, \textcolor{ForestGreen}{\bm{p_j}}, \dots, \bm{p_N})^T
+\end{align*}
+and exchanging the $i$-th and $j$-th labels leads to:
+\begin{align*}
+    \mathbb{Q}=(\bm{r_1}, \bm{r_2}, \dots, \textcolor{ForestGreen}{\bm{r_j}} \textcolor{Red}{}, \dots,\bm{r_i}, \dots, \bm{r_N})^T; \qquad \mathbb{P}=(\bm{p_1}, \bm{p_2}, \dots,\textcolor{ForestGreen}{\bm{p_j}} , \dots,\textcolor{Red}{\bm{p_i}} , \dots, \bm{p_N})^T
+\end{align*}
+See figure %add \bm{figure}.
+
+\medskip
+
+In principle, in \textbf{classical mechanics}, particle identity can be detected, for example by their initial conditions $\bm{r_k}(t=0)$ and $\bm{p_k}(t=0)$ ...
+
+Notwithstanding that, for the macroscopic emergent behaviour, it seems \q{natural} not to consider the scrambled up configurations as distinct. If we postulate that, indeed, they are not distinct, in the integral (\ref{eqn:75}), which evaluates to the phase-space volume occupied by the system with the given constraints there is an overcounting. Thus the number of \q{distinct} configurations would require that the \textbf{correct volume element} in phase space is:
+\begin{align}
+    \label{eqn:76}
+    \dd{\bm{\Gamma}} = \frac{\dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}}}{h^{3N} \textcolor{Red}{N!}} 
+\end{align} 
+and thus (\ref{eqn:75}) has to be modified for the \textbf{correct volume/entropy}:
+\begin{align}\label{eqn:77}
+    \exp(\frac{S^{\mathrm{new} }(\mathcal{E}, V, N)}{k_B} ) = \Omega^{\mathrm{new}}(\mathcal{E}, V, N) = \int \frac{\dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}}}{h^{3N}N!} \delta(\mathcal{E}-H(\mathbb{Q}, \mathbb{P})) 
+\end{align} 
+For the \textbf{IG} we have, using Stirling's approximation for $N!$:
+\begin{align}
+    S_{IG}^{\mathrm{new}} = k_B N \left\{\frac{\textcolor{Red}{5}}{2} + \ln \left[\frac{V}{N} \left(\frac{\mathcal{E}}{N} \right) \dots \right]\right\} \label{eqn:79}
+\end{align} 
+
+In fact, if we do not make this correction, we could have \textbf{unphysical results}. For example, consider a box separated in two equal parts by a removable wall. Each of the two parts contains an \textbf{IG} of $N$ identical particles. We examine two cases:
+\begin{itemize}
+    \item The two IG\textit{s} are different with same $m$, e.g. on the left there is $^{16}\rm{O}_2$ and on the right it is $^{16}{\rm{N}}_2$ (a short living isotope of Nitrogen). If we remove the wall (fig. )%TO DO add figure
+    the system relaxes to a state with $2 \mathcal{E}$, $2N$ and $2V$.
+    \item The two IG\textit{s} are the same (e.g. in both parts $^{16}{\mathrm{O}}_2$) 
+\end{itemize}
+Note that, in the second case, if we put back the wall we return \textit{exactly} to the initial case, meaning that the transformation is \textbf{reversible}. This is not true for the first case, because now the two parts are mixtures of two different gases. 
+
+\medskip
+
+So we expect to have a positive entropy variation in the first case (irreversible transformation of a isolate system), and zero entropy variation in the second (reversible transformation of a isolate system). 
+ 
+\medskip
+
+We can then compute the entropy change with (\ref{eqn:78}) and (\ref{eqn:79}) (with or without the correction) and see which formula gives the correct result. 
+
+\begin{itemize}
+    \item Without the correction we get, for the first case:
+    \begin{align*}
+        \Delta S_{\mathrm{IG}} = S_{\mathrm{IG}}(2 \mathcal{E}, 2V, 2N) - [S_{\mathrm{IG}}(\textcolor{Red}{\mathcal{E}, V, N}) + S_{\mathrm{IG}}(\textcolor{ForestGreen}{\mathcal{E}, V, N)}] = N 2 k_B \ln 2 > 0
+    \end{align*}
+    But we get the same result even for the second case, as the two gases have the same mass, and so nothing changes in the above computation.
+    \item With the correction, we instead have:
+    \begin{align*}
+        \Delta S_{\mathrm{IG}}^{\mathrm{new}} = S_{\mathrm{IG}}^{\mathrm{new}}(\textcolor{Red}{\mathcal{E}, 2V, N}) + S_{\mathrm{IG}}^{\mathrm{new}}(\textcolor{ForestGreen}{\mathcal{E}, 2V, N}) - [S_{\mathrm{IG}}^{\mathrm{new}}(\textcolor{Red}{\mathcal{E}, V, N}) + S_{\mathrm{IG}}^{\rm{new}}(\textcolor{ForestGreen}{\mathcal{E}, V, N})] \underset{(\ref{eqn:78})}{=}  Nk_B 2 \ln 2
+    \end{align*}
+    In the final state, in fact, the two gases are non-interacting, and so we can consider them as the \textit{superposition} of two \q{large systems} each filled with $N$ particles of one of them.
+    
+    \medskip
+
+    In the second case, however, we have:
+    \begin{align*}
+        \Delta S_{\mathrm{IG}}^{\mathrm{new}} = S_{\mathrm{IG}}^{\mathrm{new}} (2 \mathcal{E}, 2V, 2N) - [S_{\mathrm{IG}}^{\mathrm{new}}(\mathcal{E}, V, N) + S_{\mathrm{IG}}^{\mathrm{new}}(\mathcal{E}, V, N)] \underset{(\ref{eqn:79})}{=}  0
+    \end{align*}
+    due to extensivity.
+\end{itemize}
+
+This experiment can be done, measuring the change of entropy as a flux of heat exchanged with the universe, and confirms these theoretical considerations.
+
+\begin{appr}
+    Is the second case really reversible? We could argue that the number of particles on the right and on the left, which is equal at the start, won't probably be equal in the final state, due to the fluctuations we already considered in a previous example. So, more precisely, this transformation is \textbf{weakly irreversible}, i.e. it can \q{almost} be reversed, but not quite. We can explore the corrections to the entropy computation in the exercise \ref{exo:entropy-corr}.
+\end{appr}
+
+\begin{exo}\label{exo:entropy-corr}
+    
+\end{exo}
+
+In \textbf{quantum mechanics} identical particles cannot be distinguished even in principle. Due to the Heisenberg uncertainty principle, a consequence of the wave nature of matter, position and momentum can not be determined simultaneously with arbitrary precision, rather:
+\begin{align}\label{eqn:84}
+    \sigma_x \cdot \sigma_{p_x} \geq \frac{h}{4 \pi} 
+\end{align} 
+with $\sigma_x = (\langle x^2 \rangle - \langle x \rangle^2)^{1/2}$ and $\sigma_{p_x} = (\langle p_x^2 \rangle - \langle p_x \rangle^2)^{1/2}$, and $h = \SI{6.62e-34}{\J\s}$ is Planck's constant.
+
+%TO DO: insert figure
+
+Equation (\ref{eqn:84}) means that within each of the $d=2$ sub-spaces $(x_i, p_{x_i})$ of the $\Gamma$-space we cannot distinguish two points $(x,p_x)$ and $(x+\Delta x, p_x + \Delta p_x)$ if $\Delta x \Delta p_x < h/(4\pi)$. In some sense it is as if we divide the $\Gamma$-space in cells of volume $(h/(4\pi))^{3N}$, $h/(4\pi)$ for each pair $(\alpha_i, p_{\alpha,i})$, with $\alpha=x,y,z$ and $i=1,\dots,N$. Thus the effective number of \q{distinct} configurations with the given macroscopic constraints is given by (\ref{eqn:77}), which can be better derive within \textbf{quantum statistical mechanics} in the semiclassical approximation (outside the scope of this course). 
+
+\section{Canonical Ensemble}
+The canonical ensemble is more appropriate to do detailed calculations. For very large systems it is equivalent to the microcanonical ensemble. The canonical ensemble corresponds to a small part, but not necessarily macroscopic (it may also consists of a single particle) of a much larger system:
+\begin{align*}
+    \text{Environment} + \underbrace{\text{Sub-system}}_{\textit{Canonical}}  = \underbrace{\text{Isolate system}}_{\textit{Microcanonical} } 
+\end{align*}
+The sub-system (from now on denoted just as \textit{system}), exchanges energy (heat) with the environment:
+\begin{align*}
+    \mathcal{E} = \textcolor{Blue}{H_1(\mathbb{Q}_1, \mathbb{P}_1)} + \textcolor{ForestGreen}{H_2(\mathbb{Q}_2, \mathbb{P}_2)} + \Delta U(\textcolor{Blue}{\mathbb{Q}_1}, \textcolor{ForestGreen}{\mathbb{Q}_2})
+\end{align*}
+The total energy $\mathcal{E}$ is constant in time. $\Delta U$ is the interaction between environment and the system. This allows the energy exchange and mutual equlibrium to be reached, but otherwise is neglible if forces are short-ranged, as it is just a surface effect. 
+
+\medskip
+
+We are interested in the marginal pdf \textit{over the environment}:
+\begin{align*}
+    \textcolor{Blue}{\rho_1(\mathbb{Q}_1,\mathbb{P}_1)} = \int \dd{\bm{\Gamma}_2} \rho_{1 \cup 2}
+\end{align*}
+
+%To be copied
+
+\end{document}

@@ -31,6 +31,7 @@
 \usepackage{array}
 \usepackage{yhmath}
 \usepackage{gensymb}
+\usepackage{blkarray}
 
 \newcommand\myop{\ensuremath\mathrel{\raisebox{1pt}{\stackunder{$<$}{\rotatebox{-27}{\resizebox{7pt}{2pt}{$\sim$}}}}}}
 \setstackgap{S}{-1.5pt}
@@ -47,6 +48,10 @@ separate-uncertainty = true
 %---Tables---%
 \usepackage{booktabs}
 \usepackage{multirow}
+\usepackage{adjustbox}
+\usepackage{chngpage}
+\usepackage{setspace}
+
 
 \setlength{\aboverulesep}{0pt} %removes annoying spaces in booktabs tables
 \setlength{\belowrulesep}{0pt}
@@ -65,12 +70,13 @@ separate-uncertainty = true
             singlelinecheck=on]{caption} %fancy captions
 \usepackage{subcaption} 
 \captionsetup[sub]{font=footnotesize,
-            labelsep=endash, justification=centering}
+            labelsep=endash, justification=raggedright}
 
 \usepackage{pgf,tikz}
-\usetikzlibrary{arrows}
+\usetikzlibrary{automata, positioning, arrows}
 \usetikzlibrary{tikzmark}
 \usetikzlibrary{patterns}
+\usetikzlibrary{calc}
 \usepackage{epstopdf}
 \usepackage{gnuplottex}
 \usepackage{soul}

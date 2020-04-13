@@ -1,0 +1,354 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\usepackage{amsbsy}
+
+\begin{document}
+
+\lesson{6}{27/3/20}
+
+\section{Alternative First Step Analysis}
+All the results we obtained from first-step analysis (the average number of visits to a state, the mean absorption time, and the absorption probabilities) can be re-derived by using the $n$-step probability matrix, at the cost of a lengthier computation. The idea is to compute the value of each of these quantities for a $n$-long evolution, and then study the asymptotic behaviour for $n \to \infty$.
+
+\medskip
+
+Consider a (general) Markov chain with states $N+1$ states labelled as $0,1,\dots, N$. Suppose that the first $r$ ones (i.e. $0,1,\dots, r-1$) are \textbf{transient} - meaning that, given a sufficient time, the system \textit{does not visit them} anymore, and so $P_{ij}^{(n)}  \xrightarrow[n \to \infty]{} 0$ for $0\leq i,j < r$ - while the remaining states ($r,\dots, N$) are \textbf{absorbing} - i.e. the system cannot escape them ($P_{i i} = 1$ for $r \leq i \leq N$).
+
+The resulting transition matrix can be decomposed in 4 blocks:
+\begin{align*}
+    \textbf{P} = \left(\begin{array}{cc}
+    \textbf{Q}  & \textbf{R}  \\ 
+    \mathbb{O}  & \bb{1}
+    \end{array}\right) 
+\end{align*}
+We now compute explicitly the $n$-step transition matrix, i.e. the $n$-th power of \textbf{P}. We start from the $n=2$ case:
+\begin{align*}
+    \textbf{P}^2 = \left(\begin{array}{cc}
+    \textbf{Q}^2  & \textbf{R}+ \textbf{Q}\textbf{R}    \\ 
+    \mathbb{O} & \bb{1}
+    \end{array}\right) 
+\end{align*} 
+And for $n=3$ we have:
+\begin{align*}
+    \textbf{P}^3 = \left(\begin{array}{cc}
+    \textbf{Q}  & \textbf{R}  \\ 
+    \mathbb{O} & \bb{1}
+    \end{array}\right) \times \left(\begin{array}{cc}
+        \textbf{Q}^2  & \textbf{R}+ \textbf{Q}\textbf{R}    \\ 
+        \mathbb{O} & \bb{1}
+        \end{array}\right)  = 
+    \left(\begin{array}{cc}
+    \textbf{Q}^3  & \textbf{R} + \textbf{QR} + \textbf{Q}^2\textbf{R}    \\ 
+    \mathbb{O} & \bb{1}
+    \end{array}\right)
+\end{align*}
+Generalizing, we arrive to:
+\begin{align} \label{eqn:P-n2}
+    \textbf{P}^n = \left(\begin{array}{cc}
+    \textbf{Q}^n  & (\bb{1} + \textbf{Q} + \dots + \textbf{Q}^{n-1}) \textbf{R}  \\ 
+    \mathbb{O} & \bb{1}
+    \end{array}\right) 
+\end{align}
+
+Suppose now that the system starts in state $i$, and makes a total of $n$ transitions. Given this time window,\marginpar{a. Average number of visits} the \textbf{mean number of visits} to a certain state $j$ is given by:
+\begin{align*}
+    W_{ij}^{(n)} = \mathbb{E}\left[\sum_{l=0}^n \textbf{1}\{X_l = j\}| X_0 = i \right] \qquad \textbf{1}\{X_l = j\} = \begin{cases}
+        1 & X_l = j\\
+        0 & X_l \neq j
+    \end{cases}
+\end{align*} 
+and $\textbf{1}(A)$ is the \textit{indicator function} of the set $A$.
+
+Bringing the expectation inside the sum (by linearity), and noting that $\mathbb{E}[\textbf{1}\{X_l = j\}|X_0 = i] = \mathbb{P}\{X_l = j|X_0 = i\} = P_{ij}^{(l)}$, we get:
+\begin{align}\label{eqn:Wijn}
+    W_{ij}^{(n)} &= \sum_{l=0}^n \mathbb{E}[\textbf{1}\{X_l = j\}|X_0 = i] = \sum_{l=0}^n P_{ij}^{(l)}
+\end{align}
+This expression holds for any pair of states $i$ and $j$. However, if the initial state $i$ is absorbing, the evolution of the chain is trivial (nothing changes), while if $j$ is absorbing the mean number of visit will be either $0$ (if the state is never reached), or something diverging with $n$ (because if $j$ is reached, then the system will never leave it). So the only real interesting case is when $i$ and $j$ are both transient, meaning that $0 \leq i,j < r$ and so $P_{ij}^{(l)} = Q_{ij}^{(l)}$:
+\begin{align*}
+    W_{ij}^{(n)} = Q_{ij}^{(0)} + Q_{ij}^{(1)} + \dots + Q_{ij}^{(n)} \qquad 0\leq i, j < r
+\end{align*}
+with:
+\begin{align*}
+    Q_{ij}^{(0)} = \begin{cases}
+        1 & i = j\\
+        0 & i \neq j
+    \end{cases}
+\end{align*}
+We can rewrite this in matrix notation as:
+\begin{align}\label{eqn:W-n2}
+    \textbf{W}^{(n)} &= \bb{1} + \textbf{Q} + \textbf{Q}^2 + \dots + \textbf{Q}^n =\\ \nonumber
+    &= \bb{1} + \textbf{Q}(\bb{1} + \textbf{Q} + \dots + \textbf{Q}^{n-1}  )    =\\
+    &= \bb{1} + \textbf{QW}^{(n-1)}  \label{eqn:matrix-rec}
+\end{align}
+In terms of matrix entries:
+\begin{align*}
+    W_{ij}^{(n)} &= \delta_{ij} + \sum_{k=0}^{r-1} Q_{ik} W_{kj}^{(n-1)} = \delta_{ij} + \sum_{k=0}^{r-1} P_{ik} W_{kj}^{(n-1)}
+\end{align*}
+In other words, the mean number of visits $W_{ij}^{(n)}$ to state $j$ in the first $n$ transitions starting from initial state $i$ includes the initial visit if $i = j$, and the future visits during the $n-1$ remaining steps - each weighted by the appropriate transition probabilities.
+
+\medskip
+
+If we let $n \to \infty$, $W_{ij}^{(n)}$ becomes the (average) count of the total number of visits to state $j$ - because the system will definitely be trapped in an absorbing state given a sufficient time:
+\begin{align*}
+    W_{ij} \equiv \lim_{n \to \infty} W_{ij}^{(n)} = \mathbb{E}[\text{Total visits to $j$}|X_0 = i] \qquad 0 \leq i, j < r
+\end{align*}
+Clearly $\lim_{n \to \infty} \textbf{W}^{(n)} = \lim_{n \to \infty} \textbf{W}^{(n-1)} \equiv \textbf{W}$, and so (\ref{eqn:matrix-rec}) leads to:
+\begin{align}\label{eqn:W-matrix}
+    \textbf{W} = \bb{1} + \textbf{QW}  
+\end{align}
+In terms of entries, this is the same result that was previously obtained through first-step analysis in (\ref{eqn:first-step-probabilities}, pag. \pageref{eqn:first-step-probabilities}):
+\begin{align} \label{eqn:Wij-alt2}
+    W_{ij} = \delta_{ij} + \sum_{l=0}^{r-1} P_{il} W_{li} \qquad \forall i, j = 0,\dots, r-1
+\end{align}
+We can explicitly solve (\ref{eqn:W-matrix}) by rearranging:
+\begin{align*}
+    \textbf{W} - \textbf{QW} = (\bb{1} - \textbf{Q}) \textbf{W} = \bb{1}  \Rightarrow \textbf{W} = (\bb{1} - \textbf{Q})^{-1}  
+\end{align*}
+
+\medskip
+
+When taking\marginpar{b. Mean time of absorption} the limit $n \to \infty$ of (\ref{eqn:Wijn}) we can \textit{stop} the sum at the instant $T$ of absorption. That is, let $T$ be the number of steps required, for a specific evolution $X_n$, to go from initial state $i$ to \textit{any} absorbing state $r,\dots, N$ for the first time:
+\begin{align*}
+    T = \min \{n \geq 0; r \leq X_n \leq N\}
+\end{align*} 
+Then:
+\begin{align} \label{eqn:W-T}
+    W_{ij} = \lim_{n \to \infty} W_{ij}^{(n)} = \mathbb{E}\left[\sum_{n=0}^{\textcolor{Red}{T-1}} \textbf{1}\{X_n=j\}|X_0 = i \right] \qquad 0 \leq i,j < r
+\end{align}
+In fact, for every $n \geq T$, we have $r \leq X_n \leq N$, and so clearly $X_n \neq j$, meaning that $\textbf{1}\{X_n = j\} = 0$.  
+
+\medskip
+
+Note that, before absorption, the system evolves only through transient states, and so:
+\begin{align}
+    \mathclap{\overbrace{\textcolor{Red}{\sum_{j=0}^{r-1}}}^{\parbox{5em}{\scriptsize \centering All transient states}}} \quad  \quad  \mathclap{\underbrace{\textcolor{Blue}{\sum_{n=0}^{T-1}}}_{\parbox{5em}{\centering \scriptsize All steps before absorption}}}\quad  \textbf{1}\{X_n = j\} = \textcolor{Blue}{\sum_{n=0}^{T-1}} \> \>\textcolor{Red}{\sum_{j=0}^{r-1}} \textbf{1}\{X_j = 1\} = \textcolor{Blue}{\sum_{n=0}^{T-1}} 1 = T \label{eqn:T-alt}
+\end{align}
+
+So, if we sum over all transient states in (\ref{eqn:W-T}) and apply linearity:
+\begin{align} \nonumber
+    \sum_{j=0}^{r-1} W_{ij} &= \sum_{j=0}^{r-1} \mathbb{E}\left[\sum_{n=0}^{T-1} \textbf{1}\{X_n=j\}|X_0 = i  \right] =\\ \nonumber 
+    &= \mathbb{E}\left[ \sum_{j=0}^{r-1} \sum_{n=0}^{T-1}\textbf{1}\{X_n=j\}|X_0 = i \right] =\\
+    &\underset{(\ref{eqn:T-alt})}{=} \mathbb{E}[T|X_0 = i] \equiv \nu_i \qquad 0 \leq i < r \label{eqn:nui-alt}
+\end{align}
+where $\nu_i$ represents the \textbf{mean time to absorption} for a system starting in state $i$. 
+
+\medskip
+
+All that's left is to substitute the expression for $W_{ij}$ found in (\ref{eqn:Wij-alt2}) in (\ref{eqn:nui-alt}):
+\begin{align} \nonumber
+    \nu_i = \sum_{j=0}^{r-1} W_{ij} &\underset{(\ref{eqn:Wij-alt2})}{=} \underbrace{\sum_{j=0}^{r-1} \delta_{ij}}_{1}  + \hlc{Yellow}{\sum_{j=0}^{r-1}} {\sum_{k=0}^{r-1}} P_{ij} \hlc{Yellow}{W_{kj}} \quad i = 0,1,\dots, r-1 =\\
+    &= 1 + \sum_{k=0}^{r-1} P_{ij} \hlc{Yellow}{\nu_k} \qquad i = 0,1,\dots, r-1 \label{eqn:nu-rel}
+\end{align}
+which is again the same result that can be obtained by first-step analysis.
+
+\medskip
+
+In matrix form, denoting with $\bm{\nu} = (\nu_0, \dots, \nu_{r-1})^T$ and with $\textbf{1} = (1,\dots,1)^T \in \mathbb{R}^{r-1}$, (\ref{eqn:nu-rel}) becomes:
+\begin{align}\label{eqn:nu-mtx}
+    \bm{\nu} = \textbf{W} \times \textbf{1} = (\bb{1} - \textbf{Q})^{-1} \times \textbf{1} 
+\end{align}
+Note that matrix multiplication with a column vector of ones results in a column vector with entries equal to the \textit{sum} of all entries in each \textit{row} of the original matrix.
+
+\medskip
+
+Finally, we can study\marginpar{c. Probabilities of absorption} the probabilities of the system being absorbed by a certain state $k \in \{r,\dots,N\}$. As before, we start by focusing only on the first $n$ steps, i.e. on the probability $U_{ik}^{(n)}$ of the system being absorbed in state $k$ during the first $n$ steps given it started at $i$. As state $k$, once entered, cannot be left, if the system reaches it before the $n$-th step then $X_n = k$, and so $U_{ik}^{(n)}$ is just the $n$-step probability of reaching $k$ from $i$:
+\begin{align*}
+    U_{ik}^{(n)} = P_{ik}^{(n)} &= \mathbb{P}\{X_n = k | X_0 = i\}
+\end{align*}
+Equivalently, we can focus on the state reached after the \textit{absorption time} $T$:
+\begin{align*}
+    U_{ik}^{(n)} &= \mathbb{P}\{T \leq n \land  X_T=k|X_0 = i\} \qquad \forall 0\leq i<r; \> r\leq k \leq N
+\end{align*}
+As $i$ is transient and $k$ is absorbing, we know the form of $P_{ik}^{(n)}$ from (\ref{eqn:P-n2}), and so, in matrix form:
+\begin{align}\label{eqn:U-mtx}
+    \textbf{U}^{(n)} = (\bb{1} + \textbf{Q} + \dots + \textbf{Q}^{n-1}) \textbf{R} \underset{(\ref{eqn:W-n2})}{=}  \textbf{W}^{(n-1)} \textbf{R}    
+\end{align} 
+Then we take the limit $n \to \infty$, obtaining the absorption probabilities $U_{ik}$ (also called \textit{hitting probabilities}, as $U_{ik}$ is the probability of \q{hitting} the final state $k$):
+\begin{align*}
+    U_{ik} \equiv \lim_{n \to \infty} U_{ik}^{(n)} = \mathbb{P}\{X_T = k|X_0 = i\} \quad \forall 0 \leq i < r; \> r\leq k \leq N
+\end{align*}
+And from the limit of (\ref{eqn:U-mtx}) we have:
+\begin{align*}
+    \textbf{U} = \textbf{WR} \Leftrightarrow U_{ik} = \sum_{j=0}^{r-1} W_{ij} R_{jk} \quad 0 \leq i < r; \> r \leq k \leq N    
+\end{align*}
+
+\subsection{A matrix approach for average fpt}
+We can now elaborate a matrix approach for computing the average first passage times from any state $i\neq N$ to state $N$. The idea is to consider the $N$-th state as \textbf{absorbing} - discarding all the chain evolution after reaching $N$ for the first time.
+
+\medskip
+
+Explicitly, we start from a transition matrix \textbf{P} in the form of:
+\begin{align} \label{eqn:first-ev}
+    \textbf{P} = \begin{blockarray}{l*{2}{c}}
+        \begin{block}{l*{2}{>{\scriptstyle}c<{}}}
+            & 0\cdots N-1 & N \\
+        \end{block}
+        \begin{block}{>{\scriptstyle}r<{}[*{2}{c}]}
+            0\cdots N-1 & \textbf{Q}  & \textbf{r} \\
+            N & * & *  \\
+        \end{block}
+    \end{blockarray}
+\end{align}
+and \textit{replace} the last row with:
+\begin{align}
+    \tilde{\textbf{P}} = \begin{blockarray}{l*{2}{c}}
+        \begin{block}{l*{2}{>{\scriptstyle}c<{}}}
+            & 0\cdots N-1 & N \\
+        \end{block}
+        \begin{block}{>{\scriptstyle}r<{}[*{2}{c}]}
+            0\cdots N-1 & \textbf{Q}  & \textbf{r} \\
+            N & \textbf{0}  & 1  \\
+        \end{block}
+    \end{blockarray}
+    \label{eqn:truncated-ev}
+\end{align} 
+In the expressions above, \textbf{Q} is a $N\times N$ matrix, $\bm{r}$ is a $N\times 1$ vector, and $\bm{0}$ is $1\times N$.
+
+\medskip
+
+Note that (\ref{eqn:first-ev}) and (\ref{eqn:truncated-ev}) describe \textit{exactly} the same system \textit{until} state $N$ is visited, and so are completely equivalent in the regime we are interested on. However, the average first arrival time $\mathbb{E}[\theta_{iN}]$ from any state $i$ to $N$ in (\ref{eqn:first-ev}) is exactly the mean absorption time $\nu_i$ from state $i$ in (\ref{eqn:truncated-ev}):
+\begin{align*}
+    \mathbb{E}[\theta_{iN}] = \nu_i
+\end{align*}
+which can then be computed using (\ref{eqn:nu-mtx}):
+\begin{align*}
+    \bm{\nu} \equiv \left[\begin{array}{c}
+    \nu_0 \\ 
+    \cdots \\ 
+    \nu_{N-1}
+    \end{array}\right] = (\bb{1} - \textbf{Q})^{-1} \times \textbf{1} 
+\end{align*}
+
+Finally, note that there is nothing special about the choice of state $N$ - we can always \textit{relabel} states so that the one we are interested on is the $N$-th. 
+
+%Chapter 4
+\chapter{Long Run Behaviour of Markov Chains}
+\section{Regular Markov Chains}
+A Markov Chain is said to be \textbf{regular} if:
+\begin{enumerate}
+    \item It has a finite number of states $0,1,\dots, N$.
+    \item There is an integer $k \in \mathbb{Z}$ so that $(\textbf{P}^k)_{ij} > 0$ $\forall i, j$, i.e. all $k$-step transition probabilities are non-zero.  
+\end{enumerate}
+From these two conditions it follows that, given enough time, the system can (in principle) evolve from \textit{any} state $i$ to \textit{any} other state $j$. We will see (later on) that this guarantees the existence of a unique \textit{limiting probability distribution} $\pi = (\pi_0, \pi_1, \dots, \pi_N)$, where $\pi_j >0$ $\forall j =0,\dots, N$ and $\sum_j \pi_j = 1$, such that:
+\begin{align*}
+    \lim_{n \to \infty} P_{ij}^{(n)} = \pi_j > 0 \quad \forall j = 0,1,\dots,N
+\end{align*} 
+This means that:
+\begin{itemize}
+    \item There is a \textit{definite} asymptotic behaviour - i.e. the limit $\lim_{n \to \infty} P_{ij}^{(n)}$ exists. 
+    \item This limit is \textit{independent} of the initial state $i$, and so the system completely \q{forgets} where it came from.
+    \item All states will keep being visited, because $\pi_j > 0$, i.e. $\pi_j \neq 0$. 
+\end{itemize}
+
+\begin{thm}
+    Let \textbf{P} be a \textbf{regular} transition probability matrix on the states $0,1,\dots, N$. Then the limiting distribution $\bm{\pi} = (\pi_0, \pi_1, \dots, \pi_N)^{T}$ is the \textbf{unique}, \textbf{nonnegative} solution of the equations:
+    \begin{align} \label{eqn:limit-p}
+        \pi_j = \sum_{k=0}^N \pi_k P_{kj} \qquad j=0,1,\dots,n
+    \end{align}   
+    with $\pi_k \geq 0$ and the normalization constraint:
+    \begin{align} \label{eqn:limit-norm}
+        \sum_{k=0}^N \pi_k = 1
+    \end{align}
+\end{thm}
+
+\textbf{Proof}. First note that the system in (\ref{eqn:limit-p}) is homogeneous, meaning that if $\bm{\pi_0}$ is a solution then also $a \bm{\pi_0}$, with $a \in \mathbb{R} \setminus \{0\}$ is a solution - and so it admits an \textit{infinite} number of solutions. So, to have only a \textbf{unique} $\bm{\pi}$ we need the constraint of (\ref{eqn:limit-norm}), which also serves to guarantee that $\bm{\pi}$ correctly represents a probability distribution.
+
+\medskip
+
+\begin{enumerate}
+    \item \textbf{Existence}. As the Markov chain is regular, it admits a limiting distribution $\lim_{n \to \infty} P_{ij}^{(n)} = \pi_j$, for which $\sum_{k=0}^N \pi_k = 1$. In fact:
+    \begin{align*}
+        \sum_{j=0}^N P_{ij}^{(n)} = 1 \qquad \forall i \in \{0,\dots,N\}, n \geq 1    
+    \end{align*}
+    Taking the limit of both sides:
+    \begin{align*}
+        \lim_{n \to \infty} \sum_{j=0}^N P_{ij}^{(n)} = 1 = \sum_{j=0}^N \pi_j 
+    \end{align*}
+    And so the $\pi_j$ are correctly normalized.
+
+    \medskip
+
+    All that's left is to show that they verify (\ref{eqn:limit-p}). To do so, we start from:
+    \begin{align*}
+        \textbf{P}^{(n)} = \textbf{P}^{(n-1)} \times \textbf{P} \Leftrightarrow P_{ij}^{(n)} = \sum_{k=0}^N P_{ik}^{(n-1)} P_{kj} \quad j = 0,\dots,N
+    \end{align*}
+    And take the limit $n \to \infty$:
+    \begin{align*}
+        \lim_{n \to \infty} P_{ij}^{(n)} &=  \lim_{n \to \infty} \sum_{k=0}^N P_{ik}^{n-1} P_{kj} \\
+        \Rightarrow \pi_j &= \sum_{k=0}^N \lim_{n \to \infty} P_{ik}^{n-1} P_{kj} = \sum_{k=0}^N \pi_k P_{kj}
+    \end{align*}
+    which is exactly (\ref{eqn:limit-p}). Exchanging the limit and the sum can be done because $N$ is finite, and so we do not have problems of convergence.
+    \item \textbf{Uniqueness}. Suppose that $\bm{x}$ is a solution of (\ref{eqn:limit-p}), i.e. that:
+    \begin{align} \label{eqn:x-sol}
+        x_j = \sum_{k=0}^N x_k P_{kj} \quad j = 0,\dots,N \qquad \sum_{k=0}^N x_k = 1
+    \end{align}
+    We want to show that $x_j = \pi_j$, and so there is only one limiting probability. In matrix notation:
+    \begin{align*}
+        \bm{x} = \bm{x}\textbf{P}   
+    \end{align*}
+    Multiplying to the right by \textbf{P}:
+    \begin{align*}
+        \bm{x}\textbf{P} = \bm{x} \textbf{P}^{(2)}    
+    \end{align*} 
+    In terms of entries, this equates to:
+    \begin{align*}
+        x_l \underset{(\ref{eqn:x-sol})}{=}  \sum_{j=0}^N x_j P_{jl} = \sum_{j=0}^N \sum_{k=0}^N x_k P_{kj} P_{jl} = \sum_{k=0}^N x_k P_{kl}^{(2)}
+    \end{align*}
+    where we \textit{exchanged} the order of the two sums (as they are over a finite number of elements) to highlight the $2$-step transition matrix. 
+
+    Note that $\bm{x} = \bm{x}\textbf{P} = \bm{x} \textbf{P}^{(2)}$. Reiterating $n$ times:
+    \begin{align*}
+        \bm{x} = \bm{x} \textbf{P}^{(n)} \Leftrightarrow x_l = \sum_{k=0}^N x_k P_{kl}^{(n)} \quad l = 0,\dots,N
+    \end{align*} 
+    As this holds for all values of $n$, it holds also in the limit $n \to \infty$:
+    \begin{align*}
+        x_l = \lim_{n \to \infty} \sum_{k=0}^N x_k P_{kl}^{(n)} = \underbrace{\sum_{k=0}^N x_k}_{1}  \pi_l = \pi_l \qquad l = 0,\dots,N
+    \end{align*}
+    which proves uniqueness.
+\end{enumerate}
+
+%Doubly Stochastic Matrices (TBR = To Be Read)
+
+\subsection{Interpretation of the Limiting Distribution}
+Given a regular transition matrix \textbf{P} for a Markov process on $N+1$ states $0,\dots, N$, we can find the limiting distribution by solving (\ref{eqn:limit-p}):
+\begin{align*}
+    \pi_i = \sum_{k=0}^N \pi_k P_{ki} \quad i=0,\dots,N \qquad \sum_{i=0}^N \pi_i = 1
+\end{align*} 
+This means that\marginpar{First interpretation} the probability of finding the system in state $j$ \textit{after a long time} does not depend on the initial state $i$, and it is given by $\pi_j$:
+\begin{align*}
+    \pi_j = \lim_{n \to \infty} P_{ij}^{(n)} = \lim_{n \to \infty} \mathbb{P}\{X_n = j | X_0 = i\}
+\end{align*} 
+
+Equivalently, each\marginpar{Second interpretation} $\pi_j$ represents the \textit{fraction of time} spent by the system in state $j$. In particular, this is useful to compute the long run average of \textit{functional} of the states. For example, if each visit to state $j$ is associated with a \textit{cost} $c_j$, then the long run mean cost $C$ (per unit time) associated with the Markov chain is:
+\begin{align*}
+    C = \sum_{j = 0}^N \pi_j c_j
+\end{align*}
+
+This second interpretation comes from the fact that if a sequence $\{a_n\}_{n\in \mathbb{N}}$ converges to a limit $a$, then also the \textit{running averages} over the first $m$ elements converge to $a$:
+\begin{align*}
+    \lim_{k \to \infty} a_k = a \Rightarrow 
+    \lim_{m \to \infty} \frac{1}{m} \sum_{k=0}^{m-1} a_k = a 
+\end{align*}
+(but the converse is not true in general). 
+
+With respect to our problem, we note that the \textit{fraction of time} spent by the system in state $j$ over a $m$-long run can be written as:
+\begin{align*}
+    \frac{1}{m} \sum_{k=0}^{m-1} \textbf{1}\{X_k = j\} 
+\end{align*} 
+The \textit{mean} fraction of visits of state $j$ (over a $m$-long run) is then:
+\begin{align*}
+    \mathbb{E}\left[\frac{1}{m} \sum_{k=0}^{m-1} \textbf{1}\{X_k = j\} |X_0 = i  \right] &= \frac{1}{m} \sum_{k=0}^{m-1} \mathbb{E}[\textbf{1}\{X_k = j\}|X_0 = i ] =\\
+    &= \frac{1}{m} \sum_{k=0}^{m-1} \mathbb{P}\{X_k = j|X_0 = i\} =\\
+    &= \frac{1}{m} \sum_{k=0}^{m-1} P_{ij}^{(k)}  
+\end{align*} 
+Taking the limit $n \to \infty$, we know that:
+\begin{align*}
+    \lim_{n \to \infty} P_{ij}^{(n)} = \pi_j \Rightarrow \lim_{n \to \infty} \frac{1}{m} \sum_{k=0}^{m-1} P_{ij}^{(k)} = \pi_j
+\end{align*}
+And so:
+\begin{align*}
+    \lim_{n \to \infty} \mathbb{E}\left[\frac{1}{m} \sum_{k=0}^{m-1} \textbf{1}\{X_k = j\} |X_0 = i  \right] &= \lim_{n \to \infty} \frac{1}{m} \sum_{k=0}^{m-1} P_{ij}^{(k)} = \pi_j
+\end{align*}
+
+
+\end{document}

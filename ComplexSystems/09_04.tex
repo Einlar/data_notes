@@ -1,0 +1,287 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+In certain cases, the nature of a process allows to infer the \textit{direction} of evolution  %Ability to distinguish forward movie from backward one.
+
+But Recurrence theorem allows the inverse process to happen. But how much do we need to wait? Irreversibility = recurrence of macroscopic systems takes more than the age of the universe, and so we don't observe it.
+%Mathematical Statistical Mechanics, Thompson
+
+Average value of observable is over the initial conditions (the only thing that we don't know precisely, as the evolution is deterministic). %Can move previous section here
+
+This average can be done over the initial conditions, by using the equation of motion, or over the \textit{evolved} ensemble.
+
+When $t \to \infty$ (towards equilibrium), does $\rho(\mathbb{Q},\mathbb{P},t)$ tend to the microcanonical ensemble? This is what we assume in SM. 
+
+%\rho_MC def
+
+In other terms we are asking if:
+\begin{enumerate}
+    \item Hamilton dynamics lead, in the large time limit, to a \textit{stationary distribution} $\rho_{\mathrm{st}}$: 
+    $\displaystyle \lim_{t \to \infty} \rho(\mathbb{Q}, \mathbb{P}, t) = \rho_{\mathrm{st}}(\mathbb{Q}, \mathbb{P})$
+    \item The stationary distribution coincides with the microcanonical ensemble: $\rho_{\mathrm{st}} = \rho_{\mathrm{MC}}$ %Chapter 4, ergodicity in the Sethna book. There they follow only one system for infinite time, and average over time, while here we follow an ensemble of systems, evolve them at t and average over them. The two approaches are equivalent.
+\end{enumerate}
+
+Point $1$ is very difficult to prove in general, and is known to hold only for certain toy models that are far from real cases. However, if we assume that $1$ holds, then we can use Liouville's theorem to prove $2$. In fact, as consequence of (\ref{eqn:Liouville}), the local probability density is a constant of motion:
+\begin{align*}
+    \dv{t} \rho_{\mathrm{st}}(\mathbb{Q}(t), \mathbb{P}(t)) = 0
+\end{align*}
+For a generic system, there are only $7$ possible constants of motion: the energy $H$, three components of the total momentum $\bm{P}$ and the three components of the angular momentum $\bm{L}$. So $\rho_{\mathrm{st}}$ is necessarily a function of them:
+\begin{align*}
+    \rho_{\mathrm{st}}(\mathbb{Q}, \mathbb{P}) = \mathcal{F}(H, \bm{L}, \bm{P})
+\end{align*}
+However, if our system is at rest and not rotating, $\bm{P} = \bm{0} = \bm{L}$, and so the only remaining constant is $H$:
+\begin{align*}
+    \rho_{\mathrm{st}}(\mathbb{Q}, \mathbb{P}) = \mathcal{F}(H)
+\end{align*}
+For an isolated system the energy is constant: $H(\mathbb{Q}(t), \mathbb{P}(t)) \equiv \mathcal{E}$, and thus $\rho_{\mathrm{st}} = \text{const}$ on the hypersurface $H=\mathcal{E}$, implying that:
+\begin{align*}
+    \rho_{\mathrm{st}} = \rho_{\mathrm{MC}}
+\end{align*}
+(In fact, recall that we chose $\rho_{\mathrm{MC}}$ as the uniform distribution in phase-space over the hypersurface $H=\mathcal{E}$).
+
+\subsection{Heuristic estimate of recurrence time}
+Consider a box filled by $N$ particles of gas. Let's discretize time, and denote with $X_n$ the \textit{state} of the system at time $t_n$. $X_{n+1}$ depends only on the previous state $X_n$, and so we can model the system as a Markov chain. %What is exactly this state?
+
+If the chain is regular, i.e. if it is possible to start in any state $i$ and reach every other state $j$ given sufficient time, then, due to Kac's lemma (or basic limit theorem for Markov chains), the Markov chain will reach, for $t \to \infty$ a \textit{stationary state}, where the probability $\pi_i$ of being in state $i$ is given by:
+\begin{align*}
+    \pi_i = \frac{1}{\langle T_i \rangle} 
+\end{align*}
+where $T_i$ is the time it takes to visit state $i$ for the first time. 
+
+\medskip
+
+Assuming that the deterministic motion of the gas molecules can be regarded as random, then the probability that the gas is occupying half of the physical volume $V$ is given by:
+\begin{align*}
+    f
+\end{align*}
+
+%State i = all particles occupying left side of the box 
+%Suppose this corresponds to a point in volume A_0 in phase-space. How long does it take to come back to A0? 
+
+If the deterministic motion is sufficiently chaotic, on the long run it behaves like if it was random. 
+
+At stationarity, the probability of being in $A_0$ is equal to the ratio between the phase-space volume occupied by the states where the gas occupies only $V/2$. 
+
+\begin{align*}
+    \mathbb{P}(V/2) = \frac{\Omega(\mathcal{E}, V/2, N)}{\Omega(\mathcal{E}, V, N)} = \frac{(V/2)^N \Omega(\mathcal{E},1, N)}{V^N \Omega (\mathcal{E},1,N)} = 2^{-N}
+\end{align*}
+Here we are assuming an ideal gas. (ref. chapter 2)
+
+Ratio of areas. Launch 1000 coins in a carpet, and ask how many of them fall inside the carpet. Ratio of area of carpet to area of room. 
+
+Then we take the inverse of the stationary distribution to find the number of time units necessary for recurrence. However, we need to convert them to real units of time, and so we use a characteristic time. The only length at our disposal is $V^{1/3}$, and then we need a velocity, for example $\langle |v_x| \rangle$ (typical velocity in the system). 
+$\tau$ is the typical time that a molecule takes to go from one side of the box to the opposite one:
+\begin{align*}
+    \tau \approx \frac{V^{1/3}}{\langle |v_x| \rangle} 
+\end{align*}
+where:
+\begin{align*}
+    \langle |v_x| \rangle = \frac{1}{{\int_{\mathbb{R}} \dd{v_x} \exp\left(-\beta m \frac{v_x^2}{2} \right)}}  \int_{\mathbb{R}} \dd{v_x} |v_x| {\exp(-\beta m \frac{v_x^2}{2} )} = \sqrt{\frac{2 k_B T}{\pi m}} = \sqrt{\frac{2 R T}{\pi M_{\mathrm{mol}}} }
+\end{align*}
+And so:
+\begin{align*}
+    \langle T_{\frac{V}{2}} \rangle = \frac{\tau}{\mathbb{P}(V/2} \approx \frac{V^{1/3} 2^N}{\langle |v_x| \rangle} 
+\end{align*}%ref to kac's theorem
+
+Consider $\SI{1}{\mol}$ of $\rm{O}_2$ ($M_{\mathrm{O}_2} = \SI{32}{\g\per\mol}$), corresponding to $N=N_A = \num{6.2e23}$ molecules in a box of length $V^{1/3} \approx \SI{0.4}{\m}$, at atmospheric pressure $P=\SI{1}{atm}$ and room temperature $T= \SI{300}{\K}$. Then $\langle |v_x| \rangle \approx \SI{500}{\m\per\s}$, and $\langle T_{\frac{V}{2}} \rangle \approx 10^{1.86 \times 10^{23}-11}\,\rm{y}$, which is so much higher than the age of the universe $T_{\mathrm{univ}} = \SI{14e9}{y}$.
+
+\medskip
+
+So, based on this heuristic calculation, we might think that irreversibility is just a matter of time scales: everything is reversible, but we will never see it reverse any time soon.
+
+
+%Roba
+
+the probability of picking a point in the entire region $\Omega(\mathcal{E}, V, N)$ will result in ....
+
+
+\section{$3$ kinds of entropy}
+Introduce a new kind of entropy allowing to re-derive equilibrium SM with a variational principle.
+
+For example, in classical mechanics we define the action, which is a mysterious non-measurable quantity that, when extremised, can lead to Newton's equations of motion.
+
+This variational principle can be extended to relativistic mechanics, QM, QFT - and so it is a very important concept in theoretical physics.
+
+For equilibrium SM, entropy plays the role of the action - with the important difference that it is observable (at least, differences in entropy are measurable). This will lead to the MaxEnt principle.
+
+There are extensions for non-equilibrium SM, but no variational principles can be extended in general, but for several restricted problems, for example the movement of heat from equator to the poles of a planet. Unfortunately, there is no general theorem that work in every situation. 
+
+Max entropy can be used also for pattern recognition/reconstruction, and also very different applications.
+
+Then we will talk about the relation about information and energy. Landauer's principle will connect processes that deal with information with increase in entropy. %Ex. 5.7 simple but nice
+
+\begin{enumerate}
+    \item \textbf{Thermodynamic entropy}. In classical thermodynamics, entropy is a mysterious quantity introduced to characterize the second law.
+    
+    %Function of state
+
+    The difference in entropy $S(B) - S(A)$ between two equilibrium states $A$ and $B$ is defined as:
+    \begin{align}\label{eqn:entropy-CT}
+        S(B) - S(A) = \int_A^B \left(\frac{\dd{Q}}{T} \right)_R
+    \end{align}
+    where $A$ and $B$ are connected by a reversible transformation $R$. The system is at \textbf{equilibrium} at every point on the path $A \to B$, possessing a definite temperature $T_{\mathrm{sys}}$, and exchanging an infinitesimal amount of heat $\dd{Q}$ with a thermal bath at the \textit{same} temperature $T=T_{\mathrm{sys}}$.  
+
+    The second law of thermodynamics states that the same integral, if done along any path, will lead to a result which is \textit{lower} than that of the reversible case:   
+    \begin{align}\label{eqn:second-law}
+        \int_A^B \frac{\dd{Q}}{T} \leq S(B) - S(A) 
+    \end{align}
+    $T$ is the temperature of the heat bath in thermal contact with the system during the path $A \to B$. Note that if the latter does not traverse equilibrium points, then $T_{\mathrm{sys}}$ will not be defined. 
+    (\ref{eqn:second-law}) holds as an equality if and only if the transformation $A \to B$ is reversible.
+
+    \medskip
+
+    For an isolated system, $\dd{Q} \equiv 0$, and so (\ref{eqn:second-law}) leads to:
+    \begin{align*}
+        S(B) \geq S(A)
+    \end{align*}
+    with the equality holding only for \textbf{reversible} transformations.
+    
+    Thus, an isolated system is in thermal equilibrium if and only if it has the \textbf{maximum possible entropy} compatible with the given macroscopic constraints (e.g. energy, volume, number of particles...). In this case, in fact, it cannot do any other transformation to increase the entropy. A similar argument will prove to be the key for introducing the MaxEnt principle later on.
+
+    \item \textbf{Statistical Mechanics entropy}. 
+    
+    In Statistical Mechanics we define the entropy as the logarithm of the volume of microstates in phase-space corresponding to the observed macrostate (with definite macroscopic observables), scaled by $k_B$:
+    \begin{align}
+        S(\mathcal{E}, V, N) &= k_B \ln \Omega(\mathcal{E}, V, N) \label{eqn:S-SM}
+        \shortintertext{where:} \nonumber
+        \Omega(\mathcal{E}, V, N) &= \int_{\bm{\Gamma}} \dd{\Gamma} \delta(H(\mathbb{Q}, \mathbb{P}; N, V) - \mathcal{E})
+    \end{align}
+    The definition (\ref{eqn:S-SM}) is compatible with (\ref{eqn:entropy-CT}) because for both of them the following holds:
+    \begin{align*}
+        \dd{S} = \frac{\dd{\mathcal{E}}}{T} + \frac{P}{T} \dd{V} - \frac{\mu}{T} \dd{N}
+    \end{align*}
+    This means that the derivative of $S$ with respect to $\mathcal{E}$ at constant $V$ and $N$ is $1/T$, and similarly:
+    \begin{align*}
+        \left(\dv{S}{\mathcal{E}}\right)_{V,N} = \frac{1}{T}; \quad \left(\dv{S}{V}\right)_{\mathcal{E},N} = \frac{P}{T}; \quad \left(\dv{S}{N}\right)_{\mathcal{E},V} = -\frac{\mu}{T} 
+    \end{align*}
+    Furthermore, for an isolated system the only possible transformation (apart from chemical reactions, or nuclear decays) is a \textbf{free expansion}, where $V \to V' > V$.
+    The initial entropy is $S_{\mathrm{in}} = S(\mathcal{E}, V, N)$, and at the end it will be $S_{\mathrm{fin}}(\mathcal{E}, V', N)$. Note that:
+    \begin{align*}
+        \Omega(\mathcal{E}, V', N) &= \int_{\underbrace{\scriptstyle V' \times \cdots \times V'}_{N \text{ times}} } \dd{\mathbb{Q}} \int_{\mathbb{R}^{3N}} \dd{\mathbb{P}}\> \delta(H(\mathbb{Q}, \mathbb{P}; N) - \mathcal{E}) \\
+        &> \int_{\underbrace{\scriptstyle \textcolor{Red}{V} \times \cdots \times \textcolor{Red}{V}}_{N \text{ times}} } \dd{\mathbb{Q}} \int_{\mathbb{R}^{3N}} \dd{\mathbb{P}}\> \delta(H(\mathbb{Q}, \mathbb{P}; N) - \mathcal{E})
+    \end{align*}    
+    since the integration domain for the configuration space is \textit{larger} after the expansion ($V' > V$).  
+    
+    Taking the logarithm of both sides, we note:
+    \begin{align*}
+        S_{\mathrm{final}} > S_{\mathrm{initial}}
+    \end{align*}
+    which is exactly the result we would have obtained from classical thermodynamics. In other words, the entropy defined in (\ref{eqn:S-SM}) is compatible with the second law of thermodynamics.
+
+    \item \textbf{Information entropy}.  
+    %Elements of Information Theory, second edition, Thomas M. Cover, Joy A. THomas, Wiley ed. (very easy to follow)
+    %Article cited
+    A third definition of entropy comes from \textbf{information theory}.
+
+    Consider a discrete event space $E = \{i\}_{i=1,\dots, N}$, with probabilities $p_i \geq 0$, such that $\sum_i p_i = 1$.
+
+    We want to quantify the amount of information $I(p_i)$ acquired by the observation of event $i$ occurring. 
+
+    For example, if $p_i=1$, i.e. the event occurs with certainty, we will not gain any new information by its occurrence: we already knew that it would occur! In other words, if now the sky is free of clouds and it is a beautiful sunny day, the fact that it will be still sunny in $15$ minutes is almost sure, and it will not be surprising when it indeed happens. On the other hand, we would not expect that in $15$ minutes it will start to rain. Such a unlikely scenario, if it occurs, will give \textit{a lot} of new information to us: for example that we were ignoring little dark clouds on the horizon, or did not properly account of the air currents.  
+
+    Equivalently, we can quantify the \textit{gain in information} by measuring the minimum length of a message needed to precisely communicate to someone that a certain event has occurred. To \textit{optimize} the sending of data, we can in fact create a code such that the shorter combinations of characters refer to likely events, while the longer ones to \textit{unlikely} events. In this way, on average, we will have to send \textit{shorter} messages. Then, in this scenario, a likely event holds \textit{less information} becaus e it can be coded with \textit{shorter messages} (assuming that the code we are using for transmission is the \textit{most efficient} possible).
+
+    \medskip
+
+    \begin{subequations}
+        In other words, $I(p_i)$ encodes the amount of \textit{surprise} held by event $i$ occurring. Then, clearly a \textit{gain} in information must be non-negative:
+        \begin{align}
+            I(p) \geq 0 \label{eqn:ip1}
+        \end{align} 
+        It will be minimum ($0$) for an event that is completely expected:
+        \begin{align}
+            I(p=1) = 0 \label{eqn:ip2}
+        \end{align}
+        And it will be higher the rarer the event:
+        \begin{align} \label{eqn:ip3}
+            I(p) \text{ is a decreasing function of } p
+        \end{align}
+        Furthermore, if we have two independent events occurring with probability $p_1$ and $p_2$, it is reasonable that the gain of information obtained by both of them happening to be just the \textit{sum} of the information gains of each of them happening separately:
+        \begin{align}
+            I(\mathbb{P}[1 \land 2]) = I(p_1 \cdot p_2) = I(p_1) + I(p_2) \label{eqn:ip4}
+        \end{align} 
+        Assuming $I(p)$ to be differentiable, differentiating (\ref{eqn:ip4}) with respect to $p_2$ leads to:
+        \begin{align*}
+            p_1 \dv{x} I(x) \Big|_{x = p_1 p_2} = \dv{I}{p_2} (p_2)
+        \shortintertext{If we now set $p_2=1$ and $p_1 = x$ we get:}
+            x \dv{x} I(x) = I'(1) \Leftrightarrow I(x) = I'(1) \ln x + c
+        \end{align*}
+        By (\ref{eqn:ip2}) $I(1) = 0$, and so the integration constant $c$ must be $0$. From (\ref{eqn:ip1}) we also find that $I'(1) < 0$.
+
+        \medskip
+
+        We now define the \textbf{information entropy} of an ensemble (i.e. a pdf) as the \textbf{average} of $I(p)$. Suppose the set $E$ contains exactly $K$ elements (i.e. $|E| = K$), then:
+        \begin{align} \label{eqn:S-info}
+            S_I (p_1, \dots, p_k) = \langle I(p_1) \rangle = - |I'(1)| \sum_{i=1}^k p_i \ln p_i
+        \end{align}  
+        We will show that in order for (\ref{eqn:S-info}) to be compatible with (\ref{eqn:entropy-CT}) and (\ref{eqn:S-SM}) we have to choose:
+        \begin{align*}
+            I'(1) = - k_B
+        \end{align*}
+        Thus (\ref{eqn:S-info}) becomes: %Re-watch registration for this part
+        \begin{align}\label{eqn:S-info-discrete}
+            S_I (p_1, \dots, p_k) = \langle I(p_i) \rangle = - k_B \sum_{i=1}^k p_i \ln p_i
+        \end{align}
+        Or, in the continuum case:
+        \begin{align} \label{eqn:S-info-cont}
+            S_I[\rho] = - k_B \int_{\bm{\Gamma}} \dd{\Gamma} \rho(\mathbb{Q}, \mathbb{P}) \ln \rho(\mathbb{Q}, \mathbb{P})
+        \end{align}
+        Since $\lim_{x \to 0} x\ln x = 0$, we define, by continuity, $0 \ln 0 = 0$.
+    \end{subequations}  
+
+    We now show that (\ref{eqn:S-info-cont}) agrees with the Statistical Mechanics entropy (\ref{eqn:S-SM}).
+    \begin{itemize}
+        \item \textbf{Microcanonical case}. The microcanonical ensemble is given by:
+        \begin{align*}
+            \rho_{\mathrm{MC}}(\mathbb{Q}, \mathbb{P}) = \frac{\bb{1}_{[\mathcal{E}, \mathcal{E} + \delta \mathcal{E}]} (H(\mathbb{Q}, \mathbb{P}))}{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}
+        \end{align*} 
+        The information entropy is then:
+        \begin{align*}
+            S_I[\rho_{\mathrm{MC}}] &= -k_B \int_{\bm{\Gamma}} \dd{\Gamma} \frac{\bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}  [\ln \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H) - \ln \int_{\bm{\Gamma} }\dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)] =\\
+            &= k_B \ln\underbrace{ \int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}_{\Omega(\mathcal{E}, V, N) \delta \mathcal{E}} = k_B \ln \Omega(\mathcal{E}, V, N) + \underbrace{k_B \ln \delta \mathcal{E}}_{\mathclap{\text{Irrelevant constant}}}
+        \end{align*}
+        which is (\ref{eqn:S-SM}) up to a constant - which is not a problem, as only differences in entropy have physical significance.
+        \item \textbf{Canonical case}. The canonical ensemble is given by:
+        \begin{align*}
+            \rho_c(\mathbb{Q}, \mathbb{P}) = \frac{1}{Z(T, V, N)} e^{-\beta H(\mathbb{Q}, \mathbb{P})} \quad Z(T,V,N) = \int_{\bm{\Gamma}} \dd{\Gamma} e^{- \beta H(\mathbb{Q}, \mathbb{P})} = e^{-\beta A(T, V, N)}
+        \end{align*} 
+        where $A(T,V,N)$ is the Helmholtz \textbf{free energy}.
+        
+        The corresponding information entropy is then:
+        \begin{align*}
+            S_I[\rho_c] &= -k_B \int_{\bm{\Gamma}} \rho_c (\mathbb{Q}, \mathbb{P}) \ln \rho_c(\mathbb{Q}, \mathbb{P}) \dd{\Gamma} = \\
+            &= -k_B \int_{\bm{\Gamma}} \dd{\Gamma} \rho_c [-\beta H + \beta A] = \frac{1}{T} \langle H \rangle_c - \frac{1}{T} A 
+        \end{align*}
+        Recall that:
+        \begin{align*}
+            A = \langle H \rangle_c - T S_c \Rightarrow 
+        \end{align*}
+        and substituting above we obtain:
+        \begin{align*}
+            S_I(\rho_c) = S_c
+        \end{align*}
+        where:
+        \begin{align*}
+            S_c(T,V,N) = - \pdv{A}{T}(T,V,N)
+        \end{align*}
+    \end{itemize}
+    What is the max $S_I(p_1, \dots, p_k)$, given $\sum_i p_i = 1$?
+\end{enumerate}
+
+With Lagrange multipliers:
+\begin{align*}
+    0 &= \pdv{p_j} (S_I(\bm{p}) + \lambda \sum_i p_i) = -k_B \pdv{p_j} \left[\sum_i p_i \ln p_i - \frac{\lambda}{k_B} \sum_i p_i \right] =\\
+    &= -k_B \left[\ln p_j + p_j \cdot \frac{1}{p_j} - \frac{\lambda}{k_B}  \right] \Rightarrow \ln p_j = \frac{\lambda}{k_B} -1 \Rightarrow p_j = \exp\left(\frac{\lambda}{k_B}-1 \right) 
+\end{align*}
+etc.
+
+\begin{comment}
+    See Sethna ch. 5, sec. 5.3.2 and exercise 5.17
+    Suggested references:
+    -Statistical Mechanics in a nutshell, J. Rau, arxiv:physics/980524
+    Information theory, Cover & Thomas (Wiley)
+\end{comment}
+
+\end{document}

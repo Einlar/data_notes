@@ -45,15 +45,96 @@ Let $X$ be a \textit{continuous} random variable with probability distribution $
     \begin{align*}
         \int_{\mathbb{R}} p_i(x) \dd{x} \overset{?}{=}  1 \qquad \forall i=1,2,3
     \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. 
+    \begin{enumerate}
+        \item The distribution is already normalized:
+        \begin{align*}
+            \int_\mathbb{R} p_1(x) \dd{x} = \int_0^1 1 \dd{x} = 1
+        \end{align*}
+        The first two moments are:
+        \begin{align*}
+            \langle X \rangle &= \int_{\mathbb{R}} x\, p_1(x) = \int_0^1 x \dd{x} = \frac{x^2}{2} \Big|_0^1 = \frac{1}{2}  \\
+            \langle X^2 \rangle &= \int_{\mathbb{R}} x^2 p_1(x) = \int_0^1 x^2 \dd{x} = \frac{x^3}{3} \Big|_0^1 = \frac{1}{3} 
+        \end{align*}
+        And so the variance can be computed as:
+        \begin{align*}
+            \operatorname{Var}(X) = \langle X^2 \rangle - \langle X \rangle^2 = \frac{1}{3} - \frac{1}{4} = \frac{1}{12}   
+        \end{align*}
+        \item We proceed exactly in the same way:
+        \begin{align*}
+            \int_{\mathbb{R}} p_2(x) \dd{x} = \int_0^{+\infty} \frac{1}{m}\exp\left(-\frac{x}{m} \right) \dd{x}= - \exp\left(-\frac{x}{m} \right) \Big|_0^{+\infty} = 1 \span\\
+            \langle X \rangle &= \int_\mathbb{R} x\,p_2(x) \dd{x}= \int_0^{+\infty} \frac{x}{m} \exp\left(-\frac{x}{m} \right) \underset{(a)}{\dd{x}=} \\
+            &=\cancel{ -x \exp\left(-\frac{x}{m} \right) \Big|_0^{+\infty} }+ \int_0^{+\infty} \exp\left(-\frac{x}{m} \right) \dd{x}= -m \exp\left(-\frac{x}{m} \right)\Big|_0^{+\infty} = m\\
+            \langle X^2 \rangle &= \int_{\mathbb{R}} x^2\,p_2(x) = \int_0^{+\infty} \frac{x^2}{m} \exp\left(-\frac{x}{m} \right)  \dd{x} \underset{(b)}{=} \\
+            &= \cancel{-x^2 \exp\left(-\frac{x}{m} \right) \Big|_0^{+\infty}} -\cancel{2m x \exp\left(-\frac{x}{m} \right)\Big|_0^{+\infty} }+2m \int_0^{+\infty} \exp\left(-\frac{x}{m} \right)\dd{x} =\\
+            &=-2m^2 \exp\left(-\frac{x}{m} \right)\Big|_0^{+\infty} = 2m^2\\
+            \operatorname{Var}(X) &= \langle X^2 \rangle - \langle X \rangle^2 = 2m^2 - m^2 = m^2
+        \end{align*}
+        where in (a) and (b) we performed (multiple) integrations by parts.
+        \item As before:
+        \begin{align*}
+            \int_\mathbb{R} \frac{1}{\sigma \sqrt{2 \pi}} \exp\left(-\frac{(x-m)^2}{2 \sigma^2} \right)\dd{x}\> \underset{\mathclap{y=\frac{x-m}{\sqrt{2}\sigma}}}{=} \quad \int_{\mathbb{R}} \frac{\dd{y}}{\sqrt{ \pi}} e^{-y^2} = \frac{\sqrt{\pi}}{\sqrt{\pi}} = 1 \span \\
+            \langle X \rangle &= \int_{\mathbb{R}} \frac{x}{\sigma \sqrt{2 \pi}} \exp\left(-\frac{(x-m)^2}{2 \sigma^2} \right) \dd{x} = \int_{\mathbb{R}} \frac{\sqrt{2} \sigma y + m}{\sqrt{\cancel{2} \pi} \cancel{\sigma}} e^{-y^2} \cancel{\sqrt{2} \sigma }\dd{y} =\\
+            &\underset{(a)}{=}  \frac{m}{\sqrt{\pi}}  \int_{\mathbb{R}} e^{-y^2} = m
+            \shortintertext{In (a) we noted that the $y e^{-y^2}$ term is an \textit{odd} function integrated over a symmetric domain, and so it vanishes.}\\
+            \langle X^2 \rangle &= \int_{\mathbb{R}} \frac{x^2}{\sqrt{2\pi} \sigma} \exp\left(-\frac{(x-m)^2}{2 \sigma^2} \right) \dd{x} =  \int_{\mathbb{R}} \frac{(\sqrt{2} \sigma y + m)^2}{\sqrt{\cancel{2} \pi} \cancel{\sigma}} e^{-y^2} \cancel{\sqrt{2} \sigma }\dd{y} =\\
+            &= \int_{\mathbb{R}} \frac{2 \sigma^2}{\sqrt{\pi}} y^2 e^{-y^2} \dd{y} +\cancel{ \int_{\mathbb{R}} \frac{2 \sqrt{2} \sigma m}{\sqrt{\pi}} y e^{-y^2} \dd{y}} + m^2 \int_{\mathbb{R}} \frac{1}{\sqrt{\pi}} e^{-y^2} \dd{y} =\\
+            &= \frac{2 \sigma^2}{\sqrt{\pi}} \int_{\mathbb{R}} y^2 e^{-y^2} \dd{y} + m^2
+        \end{align*}
+        For the last integral, we note that:
+        \begin{align*}
+            \int_{\mathbb{R}} y^2 e^{-y^2}\dd{y} = - \dv{s} \int_{\mathbb{R}} e^{-sy^2} \dd{y} \Big|_{s=1}
+        \end{align*}
+        and:
+        \begin{align*}
+            \int_{\mathbb{R}} e^{-sy^2}\dd{y} \underset{t = \sqrt{s}y}{=}  \int_{\mathbb{R}} \frac{\dd{t}}{\sqrt{s}} e^{-t^2} = \sqrt{\frac{\pi}{s}} 
+        \end{align*}
+        meaning that:
+        \begin{align*}
+            \int_{\mathbb{R}} e^{-y^2} e^{-y^2} = -\dv{s} \sqrt{\frac{\pi}{s} } \Big|_{s=1} = \frac{\sqrt{\pi}}{2} s^{-3/2} \Big|_{s=1} = \frac{\sqrt{\pi}}{2} 
+        \end{align*}
+        Substituting in the previous expression we finally get:
+        \begin{align*}
+            \langle X^2 \rangle &= \frac{\bcancel{2} \sigma^2}{\sqrt{\cancel{\pi}}} \frac{\sqrt{\cancel{\pi}}}{\bcancel{2}} + m^2 = \sigma^2 + m^2 \\
+            \operatorname{Var}(X) &= \langle X^2 \rangle - \langle X \rangle^2 = \sigma^2
+        \end{align*}
+    \end{enumerate}
+     
 \end{exo}
 
 \begin{exo}[Variance properties]
     Show that:
     \begin{enumerate}
         \item $\operatorname{Var}(X) \equiv \langle (X-\langle X \rangle)^2 \rangle = \langle X^2 \rangle - \langle X^2 \rangle$
-        \item $\displaystyle \min_a \langle (X-a)^2 \rangle = \operatorname{Var}(X)$ 
+        \item $\displaystyle \min_a \langle (X-a)^2 \rangle = \operatorname{Var}(X)$ with $a \in \mathbb{R}$ 
     \end{enumerate}
     
+    \medskip
+
+    \textbf{Solution}.
+    \begin{enumerate}
+        \item By using the linearity of the average:
+        \begin{align*}
+            \operatorname{Var}(X) &= \langle (X - \langle X \rangle)^2 \rangle = \langle X^2 -  2 X \langle X \rangle + \langle X \rangle^2\rangle = \\
+            &=\langle X^2 \rangle - 2 \langle X \rangle \langle X \rangle + \langle X \rangle^2 = \langle X^2 \rangle - \langle X \rangle^2
+        \end{align*}
+        \item First we expand the square, and use again the linearity of the average:
+        \begin{align*}
+            \langle (X-a)^2 \rangle = \langle X^2 \rangle - 2a \langle X \rangle + a^2
+        \end{align*}
+        To \textit{minimize} this expression, we differentiate wrt $a$ and set the derivative to $0$:
+        \begin{align*}
+            \dv{a} [\langle X^2 \rangle -2a \langle X \rangle + a^2] = -2 \langle X \rangle + 2a \overset{!}{=} 0 \Rightarrow a = \langle X \rangle
+        \end{align*} 
+        And substituting in the expression above we have:
+        \begin{align*}
+            \min_a \langle (X-a)^2 \rangle = \langle X^2 \rangle - 2 \langle X \rangle \langle X \rangle + \langle X \rangle^2 = \langle X^2 \rangle-\langle X \rangle^2 = \operatorname{Var}(X) 
+        \end{align*}
+    \end{enumerate}
+     
 \end{exo}
 
 \begin{exo}
@@ -62,6 +143,44 @@ Let $X$ be a \textit{continuous} random variable with probability distribution $
         p(x) = (\alpha + 1) x^{-\alpha} \theta(x-1)
     \end{align*}
     For what values of $\alpha \in \mathbb{R}$ is it normalizable? Which moments $\langle x^k \rangle$, with $k \in \mathbb{R}$, are well defined?
+
+    \medskip
+
+    \textbf{Solution}. We start by checking the normalization:
+    \begin{align*}
+        \int_{\mathbb{R}} p(x) \dd{x} = \int_1^{+\infty} (\alpha + 1) x^{-\alpha} \dd{x}
+    \end{align*} 
+    If $\alpha =1$:
+    \begin{align*}
+        \int_{1}^{+\infty} \frac{1}{x} \dd{x} = \ln x \Big|_1^{+\infty} = +\infty 
+    \end{align*}
+    If $\alpha \neq 1$:
+    \begin{align*}
+        \int_1^{+\infty} \frac{1}{x^\alpha} \dd{x} = \frac{1}{1 - \alpha} x^{1 - \alpha} \Big|_{1}^{+\infty} = \begin{cases}
+            +\infty & \alpha < 1\\
+            -\frac{1}{1-\alpha} & \alpha > 1
+        \end{cases}
+    \end{align*}
+    And so the integral certainly converges to a non-zero value for $\alpha > 1$:
+    \begin{align*}
+        \int_{\mathbb{R}} p(x) \dd{x} = \frac{\alpha+1}{\alpha-1} = A  \qquad \alpha > 1
+    \end{align*}
+    meaning that $p(x)/A$ is normalized.
+
+    \medskip
+
+    Note that the integral converges also for $\alpha = -1$, where the prefactor $(\alpha + 1)$ vanishes. However, in this case the integral is $0$, and so it cannot be normalized to $1$.
+
+    \medskip
+
+    The $k$-th moment, with $k \in \mathbb{R}$ is given by:
+    \begin{align*}
+        \langle X^k \rangle = \int_1^{+\infty} (\alpha-1) x^{k - \alpha} \dd{x} \qquad \alpha > 1
+    \end{align*}
+    This converges if $-(k-\alpha) = -k + \alpha > 1$, i.e. if $k < \alpha-1$, to:
+    \begin{align*}
+        \langle X^k \rangle = -\frac{\alpha -1}{1-\alpha +k} 
+    \end{align*}
 \end{exo}
 
 \subsection{Discrete Random Variables}
@@ -127,6 +246,68 @@ Given an observable $O(X)$, its possible outcomes are $O(X=\omega) \equiv O_\ome
         &\approx \frac{\lambda^k}{k!} e^{-\lambda} 
     \end{align*} 
     which is a Poisson distribution (\ref{eqn:poisson-dist}). This argument can be made more precise using more sophisticated methods, by introducing a scalar product in the space of distributions and prove \textit{convergence in total variation}.
+    
+    \medskip
+
+    \textbf{Solution}. 
+    
+    \begin{enumerate}
+        \item $X=k$ if and only if there are exactly $k$ variables $X_i = 1$, and the others are $0$. This can happen in ${n \choose k}$ distinct ways. As the $X_i$ are independent, the probability of any configuration is just the product of the probabilities of each state. In the case we are interested on, we have always exactly $k$ states $X_i = 1$, and $n-k$ with $X_i=0$, and so the total probability of each configuration will be $p^k (1-p)^{n-k}$. Putting it all together we arrive to the binomial distribution:
+        \begin{align*}
+            p(k) = \mathbb{P}(X=k) = {n\choose k} p^k (1-p)^{n-k}    
+        \end{align*}
+        \item Applying the binomial theorem we have:
+        \begin{align*}
+            \sum_{k=0}^{n} \mathbb{P}(X=k) = \sum_{k=0}^{n} {n\choose k} p^k (1-p)^{n-k} = (p + [1-p])^n = 1^n = 1
+        \end{align*}
+        \item By direct computation:
+        \begin{align*}
+            \langle X \rangle &= \sum_{k=0}^{n} k\,  \mathbb{P}(X=k) = \sum_{k=0}^{n} \hlc{Yellow}{k} \frac{n!}{(n-k)!\hlc{Yellow}{ k !}} p^k(1-p)^{n-k} =\\
+            &= \sum_{k=\textcolor{Red}{1}}^{n} \frac{n(n-1)!}{(n-k)!\hlc{Yellow}{(k-1)!}} p^k(1-p)^{n-k} = \\
+            &= n\sum_{k=1}^{n} {n-1\choose k-1} p^k(1-p)^{n-k} =\\
+            \shortintertext{Now we factor out a $p$ and sum and subtract a $1$ so that everywhere we have $k-1$:}
+            &= n \textcolor{Red}{p}\sum_{k=1}^{n} {n-1\choose k-1} \textcolor{Red}{p^{k-1}} (1-p)^{(n\textcolor{Red}{-1}) - (k\textcolor{Red}{-1})}
+            \shortintertext{And finally we shift the index of summation:}
+            &=np \sum_{k=\textcolor{Red}{0}}^{n-1} {n-1\choose k} p^{k} (1-p)^{(n-1)-k} =
+            \shortintertext{Applying the binomial theorem leads to the result:}
+            &= np [p + (1-p)]^{n-1} = np 1^{n-1} = np
+        \end{align*}
+        For the second moment we repeat the first few steps:
+        \begin{align*}
+            \langle X^2 \rangle &= \sum_{k=0}^n k^2\, \mathbb{P}(X=k) = \sum_{k=0}^n k^2 \frac{n!}{(n-k)! k!} p^k (1-p)^{n-k} =\\
+            &=\sum_{k=1}^n k  \frac{n(n-1)!}{(n-k)! (k-1)!} p p^{k-1} (1-p)^{(n-1)-(k-1)} =\\
+            &= np \sum_{k=0}^{n-1} (k+1) {n-1\choose k} p^k (1-p)^{(n-1) -k}
+            \shortintertext{Expanding the multiplication:}
+            &= np \Big[\sum_{k=0}^{n-1} k {n-1 \choose k} p^k(1-p)^{(n-1)-k}  + \\
+            &\quad \>+\underbrace{\sum_{k=0}^{n-1} {n-1\choose k} p^k (1-p)^{(n-1)-k}}_{1} \Big] =\\
+            \shortintertext{Let $m =n-1$ for simplicity. Note that for the first term we can repeat the same trick as before:}
+            &= np \sum_{k=1}^{m} \cancel{k} \frac{m(m-1)!}{(m-k)! \cancel{k} (k-1)!} \textcolor{Red}{p} p^{\textcolor{Red}{k-1}} (1-p)^{(m-\textcolor{Red}{1})-(k\textcolor{Red}{-1})} + np=\\
+            &=np^2m \sum_{k=1}^m {m-1\choose k-1} p^{k-1} (1-p)^{(m-1)-(k-1)} + np =
+            \shortintertext{And we shift once again the index of summation:}
+            &= np^2m \underbrace{\sum_{k=\textcolor{Red}{0}}^{m-1} {m-1\choose k} p^k (1-p)^{(m-1)-k}}_{1}  + np =\\
+            &= n p^2 (n-1) + np = n^2 p^2 +np(1-p)
+        \end{align*}
+        Finally we can compute the variance:
+        \begin{align*}
+            \operatorname{Var}(X) = \langle X^2 \rangle - \langle X \rangle^2 = n^2 p^2 + np(1-p) - n^2 p^2 = np(1-p)
+        \end{align*}
+
+        Alternatively, we can re-derive the same results by using properties of the expectation and the variance. In fact $X$ is a sum of $X_i$, each with:
+        \begin{align*}
+            \langle X_i \rangle &= 0 \cdot (1-p) + 1 \cdot p = p\\
+            \langle X_i^2 \rangle &= 0^2 \cdot (1-p) + 1^2 \cdot p = p\\
+            \operatorname{Var}(X_i) &= \langle X_i^2 \rangle - \langle X_i \rangle^2 = p - p^2 = p(1-p)
+        \end{align*}
+        Then:
+        \begin{align*}
+            \langle X \rangle &= \sum_{i=1}^n \langle X_i \rangle = \sum_{i=1}^n p = np\\
+            \operatorname{Var}(X) &= \sum_{i=1}^n \operatorname{Var}(X_i) = \sum_{i=1}^n p(1-p) = np(1-p)  
+        \end{align*}
+        We can finally obtain the second moment from the variance:
+        \begin{align*}
+            \operatorname{Var}(X) = \langle X^2 \rangle - \langle X \rangle^2 \Rightarrow \langle X^2 \rangle = \operatorname{Var}(X) + \langle X \rangle^2 = n^2p^2 +np(1-p)
+        \end{align*}
+    \end{enumerate}
     
 \end{exo}
 
@@ -194,7 +375,7 @@ In general, for a given distribution $\langle X^k \rangle$ may or may not exist 
     Thanks to (\ref{eqn:moment-characteristic}) we can use $\varphi_m(\alpha)$ to compute the gaussian moments:
     \begin{align*}
         \langle X \rangle &= -i \pdv{\alpha} \varphi_{m}(\alpha) \Big|_{\alpha = 0} = m\\
-        \langle X^2 \rangle &= \left(-i \pdv{\alpha}\right) \varphi_m(\alpha) \Big|_{\alpha=0} = -i\pdv{\alpha} \left[(m + i \alpha \sigma^2) \exp\left(i \alpha m - \frac{\alpha^2 \sigma^2}{2} \right)\right]_{\alpha = 0}=\\
+        \langle X^2 \rangle &= \left(-i \pdv{\alpha}\right)^2 \varphi_m(\alpha) \Big|_{\alpha=0} = -i\pdv{\alpha} \left[(m + i \alpha \sigma^2) \exp\left(i \alpha m - \frac{\alpha^2 \sigma^2}{2} \right)\right]_{\alpha = 0}=\\
         &= m^2 + \sigma^2
     \end{align*}
     And finally the variance:
@@ -219,6 +400,41 @@ In general, for a given distribution $\langle X^k \rangle$ may or may not exist 
         \end{subequations}
     \end{enumerate}
     
+    \medskip
+
+    \textbf{Solution}.
+    \begin{enumerate}[label=\alph*.]
+        \item Following the definition (\ref{eqn:char-func}) we have:
+        \begin{align*}
+            \varphi_1(\alpha) &= \langle e^{i \alpha X} \rangle_{X \sim p_1(x)} = \int_\mathbb{R} \dd{x} p_1(x) e^{i \alpha x} = \int_0^1 \dd{x} e^{i \alpha x} =\\
+            &= \int_{\mathbb{R}} [\theta(x) - \theta(x-1)] e^{i \alpha x}\dd{x} \underset{(a)}{=} - \frac{1}{i \alpha} - \int_{\mathbb{R}} \theta(y) e^{i \alpha} e^{i \alpha y} \dd{y} =\\
+            &=- \frac{1}{i \alpha} + \frac{e^{i \alpha}}{i \alpha} = \frac{e^{i \alpha} - 1}{i \alpha}   
+        \end{align*}
+        where in (a) we used the Fourier transform of the Heaviside function $\theta(x)$:
+        \begin{align*}
+            \int_{\mathbb{R}} e^{i k x} \theta(x) \dd{x} = -\mathcal{P}\left(\frac{1}{ik}\right) + \pi \delta(k)
+        \end{align*}
+        and the substitution $y = x-1$. Note that we may ignore the $\delta(k)$ term because it happens at the \textit{domain boundary} of $p_1(x)$.
+
+        \medskip
+
+        We then compute the first moment:
+        \begin{align*}
+            \langle X \rangle &= -i \pdv{\alpha} \varphi_{1}(\alpha) \Big|_{\alpha = 0} = -i \frac{i e^{i \alpha} i \alpha - i (e^{i \alpha} - 1)}{- \alpha^2} \Big|_{\alpha = 0} = \\
+            &= -i \frac{-e^{i \alpha} ( \alpha + i) + i}{- \alpha^2}\Big|_{\alpha = 0} =\\
+            &\underset{(a)}{=}  \frac{i}{\alpha^2}\left[-(\alpha + i) \left(1+i \alpha - \frac{\alpha^2}{2} + O(\alpha^3) \right) + i\right]_{\alpha=0} =\\
+            &=\frac{i}{\alpha^2} \left[-\alpha -i \alpha^2 -i +\alpha + \frac{i \alpha^2}{2} +i +O(\alpha^3)  \right]_{\alpha=0} =\\
+            &= \frac{i}{\alpha^2} \left[-\frac{i}{2} \alpha^2  + O(\alpha^3)\right]  = \frac{1}{2} + O(\alpha) \Big|_{\alpha= 0} = \frac{1}{2}  
+        \end{align*}
+        where in (a) we expanded in series the exponential.
+
+        \medskip
+
+        For the second moment:
+        \begin{align*}
+            \langle X^2 \rangle = \left(-i \pdv{\alpha}\right)^2 \varphi_1(\alpha) \Big|_{\alpha=0}= \cancel{-i}\pdv{\alpha} \left[-\cancel{i} \frac{- e^{i \alpha} (\alpha + i) + i}{- \alpha^2} \right]_{\alpha=0}
+        \end{align*}
+    \end{enumerate} 
 \end{exo}
 
 \subsection{Generating functions}

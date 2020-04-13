@@ -1,0 +1,67 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Poincaré Recurrence Theorem}
+The \textbf{Poincaré Recurrence Theorem}\index{Theorem!Poincaré Recurrence} states that a mechanical system enclosed in a \textbf{finite volume} and possessing a \textbf{finite} amount of \textbf{energy} will, after a \textit{finite time}, return to an arbitrary small neighbourhood of almost any\footnote{Apart of a set of zero measure.} given initial state in phase-space. In general, the smaller the neighbourhood chosen, the larger will be the first arrival time.
+
+\begin{proof}
+    Omitted.
+\end{proof}
+
+In other words, the Poincaré Recurrence theorem states that everything is \textit{reversible}, given enough time.  
+This seems in \textbf{contradiction}  with experience. For example, suppose we start with a gas contained in one half of a box (state $A$), and let it expand freely in the entire box (state $B$). This process is clearly irreversible: the gas will not \textit{spontaneously} return to the initial state. 
+
+If we reverse time, we will obtain a motion $B \to A$ that it is still physically possible, but that in practice never happens. This clearly defines a \textit{preferred direction} for time evolution - a so-called \q{arrow of time}. 
+
+Similarly, if we see a video of an egg crashing on the floor, and that of an egg \q{recomposing} itself after being destroyed, we can surely tell which one has been time-reversed. 
+
+\medskip
+
+%Insert figure
+However, Poincaré Recurrence is mathematically proved - and indeed must happen. The key to resolve the apparent contradiction with experience lies in the \textit{amount} of time $T$ required to observe such recurrence. For any macroscopic system, $T$ is orders of magnitude larger than the age of the universe. So, while recurrence \textit{will happen}, it will do so \textit{so far in the future} that it will not matter anymore to anyone!
+
+\medskip
+
+Recurrence can be observed and verified for systems of few particles. For example, consider just $N=2$ particles, moving \textit{at random}\footnote{In classical mechanics, particles follow deterministic trajectories given by Hamilton equations. Here we are implicitly assuming that the resulting motions are comparable with random motion.} in a box. At a given moment, each of them is inside the left half of the box with probability $1/2$. So, the two will be in the left side with probability $1/4$. If we do not care about which side the particles are grouped in, we need to \textit{double} this result: the probability that $N=2$ particles lie in the same side of a box is $1/2$.
+
+\medskip
+
+If we repeat the same computation for $N=3$, we will obtain $p=1/8 * 2 = 1/4$. So, by adding more particles, the \q{grouping probability} quickly decreases. 
+
+
+\medskip
+
+%Add introduction
+%Correspondence with microcanonical
+%After long time, does Liouville flow "stir" system-points sufficiently "well", so that they are equiprobable? Ergodic hypothesis. It can be proved, under some hypotheses, ref. to following lecture. 
+
+Let $O(\mathbb{Q},\mathbb{P})$ be an observable, and consider its average at time $t$ over the initial conditions:
+\begin{align*}
+    \langle O(\mathbb{Q}(t), \mathbb{P}(t)) \rangle &= \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \> O(\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0), \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0)) =\\
+    \shortintertext{We change variables $(\mathbb{Q}(t), \mathbb{P}(t)) \to (\mathbb{Q}, \mathbb{P})$ by introducing two $\delta$\textit{s}:}
+    &= \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \textcolor{Red}{\int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} \delta^{3N}(\mathbb{Q}-\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0)) \delta^{3N}(\mathbb{P} - \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0))} O(\mathbb{Q},\mathbb{P}) =\\
+    \shortintertext{In this way we can bring $O(\mathbb{Q}, \mathbb{P})$ outside the inner integral:}
+    &= \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \delta^{3N} (\mathbb{Q}-\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0)) \> \delta^{3N}(\mathbb{P} - \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0)) =\\
+    \shortintertext{And so we have rewritten the average of $O$ in terms of the \textit{evolved} distribution $\rho(\mathbb{Q}, \mathbb{P}, t)$. We want to understand if, in the limit $t \to \infty$, this distribution becomes the one $\rho_{\mathrm{MC}}$ we introduced in the microcanonical ensemble:}
+    &\underset{(\ref{eqn:9})}{=}  \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \rho(\mathbb{Q}, \mathbb{P}, t)  \xrightarrow[t \to \infty]{?} \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \rho_{\rm{MC}}(\mathbb{Q}, \mathbb{P})  
+    \shortintertext{where:}
+    \rho_{\rm{MC}} &= \begin{cases}
+        \text{const} & \mathcal{E} \leq \mathcal{H}(\mathbb{Q}, \mathbb{P}) \leq \mathcal{E}+ \delta \mathcal{E}\\
+        0 & \text{otherwise}
+    \end{cases}
+\end{align*}
+
+
+
+We prepare many systems with different initial conditions distributed according to $\rho_{0}(\mathbb{Q}_0, \mathbb{P}_0)$, evolve each system according to Hamilton equations, compute the value of the observable and then average it.
+
+
+
+%Appr: Jaynes irreversibility with Liouville
+
+
+
+
+\end{document}
