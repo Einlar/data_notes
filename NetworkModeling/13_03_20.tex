@@ -1,0 +1,572 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\subsection{Characteristic Functions}
+Let $X$ be a random variable with (cumulative) distribution function $F$. We define its characteristic function $\phi_X$ as follows:
+\begin{align}\label{eqn:char}
+    \phi_X(t) = \int_{\mathbb{R}} e^{it \lambda} \dd{F(\lambda)} = \mathbb{E}[e^{it X}]
+\end{align}
+If $X$ is a \textbf{discrete} random variable,\marginpar{\vspace{2em}a. Discrete case} (\ref{eqn:char}) is equivalent to:
+\begin{align*}
+    \phi_X(t) = \sum_{k=0}^{+\infty} e^{it \lambda_k} \mathbb{P}[X = \lambda_k]
+\end{align*}
+where $\{\lambda_k\}_{k=0, \dots, \infty}$ are the possible values of $X$.
+
+On the other hand, if $X$ is a \textbf{continuous} random variable with pdf $p(x)$, (\ref{eqn:char}) becomes:\marginpar{\vspace{1em}b. Continuous case}
+\begin{align*}
+    \phi_X(t) = \int_{\mathbb{R}} e^{it \lambda} p(\lambda) \dd{\lambda}
+\end{align*} 
+
+So the characteristic function is just the Fourier transform of the probability distribution of a random variable. As a Fourier transform can be inverted, there is a \textbf{one-to-one relation}  between \textbf{characteristic}\marginpar{1. Characteristic $\leftrightarrow$ CDF}  functions and \textbf{distribution}  functions, meaning that given one we can uniquely compute the other. In particular, the equation which expresses the (cumulative) distribution function in terms of the respective characteristic function is known as \textit{Levy's inversion formula}.
+
+\medskip
+
+Moreover, characteristic functions have two important features:
+\begin{itemize}
+    \item If $X_1, \dots, X_n$ are independent random variables, the \marginpar{2. Characteristic of sums of independent r.v.}characteristic function of their \textbf{sum} is the \textbf{product} of their individual characteristic functions. In fact, by changing random variables it is possibly to show that the pdf for a sum of independent variables is the \textit{convolution} of their individual pdf\textit{s}, and the Fourier transform of a convolution is the product of Fourier transforms of the convolved arguments (by the \textit{convolution theorem}).
+    \item It is possible to\marginpar{3. Generating moments} compute the moments of a random variable $X$ (if they exist) by differentiating the characteristic function and evaluating it at $0$:
+    \begin{align} \label{eqn:char-gen-mom}
+        \mathbb{E}[X^k] = \frac{1}{i^k} \phi^{(k)} (0) 
+    \end{align}
+    Let's see this for the first two moments:
+    \begin{align*}
+        \phi'(t) &= \dv{t} \mathbb{E}[e^{itX}] = \mathbb{E}\left[\dv{e^{itX}}{t}\right] = \mathbb{E}[iX e^{itX}] \Rightarrow \phi'(0) = \mathbb{E}[iX] = i \mathbb{E}[X]\\
+        \phi''(t) &= \mathbb{E}[iX iX e^{itX}] \Rightarrow \phi''(0) = i^2 \mathbb{E}[X^2]
+    \end{align*}
+    (We can bring the derivative inside the expected value because of linearity).
+\end{itemize}
+
+\subsection{Probability generating function}
+For a discrete random variable whose only possible values are the \textbf{nonnegative integers} we can define its \textbf{probability generating function}:\index{Generating function!Probability}
+\begin{align}\label{eqn:prob-gen}
+    g(s) = \sum_{k=0}^\infty \underbrace{\mathbb{P}[X=k]}_{p_k}  s^k = \mathbb{E}[s^X] \qquad s \in \mathbb{C}
+\end{align}  
+Since $p_k \geq 0$ and $\sum_{k=0}^\infty p_k = 1$ (because they are probabilities), $g(s)$ converges inside $|s| \leq 1$, and is infinitely differentiable for $|s| < 1$.
+
+\medskip
+
+Note that the probability generating function is closely related to the characteristic function of the same random variable $X$. In fact:
+\begin{align*}
+    \phi(t) = \mathbb{E}[e^{itX}] = \mathbb{E}[(e^{it})^X] = g(e^{it})
+\end{align*}
+In particular, this means that it has the same features of a characteristic function: we can use it to recover the cdf; the generating function of a sum of independent r.v. is the \textit{product} of their individual generating function; we can differentiate it to compute (factorial) moments.
+
+\medskip
+
+Explicitly:\marginpar{Factorial moments from a (probability) generating function}
+\begin{align}\label{eqn:prob-gen-mom}
+    \mathbb{E}[X(X-1) \cdots (X-k)] = g^{(k+1)}(1)
+\end{align}
+Let's see this for the first two moments.
+\begin{align*}
+    \dv{g(s)}{s} &= \sum_{k=1}^{+\infty} k p_k s^{k-1} \Rightarrow \dv{g(s)}{s} \Big|_{s=1} = \sum_{k=1}^{+\infty} k p_k = \mathbb{E}[X]\\
+    g''(s) &= \sum_{k=2}^{+\infty} k(k-1) p_k s^{k-2} \Rightarrow g''(1) = \sum_{k=2}^{+\infty} k(k-1) p_k = \mathbb{E}[X(X-1)]
+\end{align*}
+
+\begin{example}[Sum of a random number of random variables]
+    Let $\{X_i\}_{i=1,\dots,N}$ be a set of \textbf{independent} and \textbf{identically} \textbf{distributed} r.v. (i.i.d. for short), which are discrete and non-negative integer-valued ($X_i \in \mathbb{N}$), with probability generating function $g(s)$. Let $N$ be another discrete r.v. with $N\in \mathbb{N}$ and generating function $g_N(s)$, which is \textit{independent} of all the $\{X_i\}$. We want to find the statistics of the \textit{sum} of the $N$ random variables:
+    \begin{align*}
+        R = X_1 + \dots + X_N
+    \end{align*} 
+    Note that we cannot directly apply the \q{convolution property} of the generating function, i.e. write:
+    \begin{align*}
+        g_R(s) = \mathbb{E}[s^R] = \prod_{i=1}^N g(s)
+    \end{align*}
+    because $N$ is a random variable, with no \textit{definite} value. 
+
+    However, we can compute $\mathbb{E}[s^R]$ for a \textit{fixed} value of $N$ - denoting the result as $\mathbb{E}[s^R|N]$ - and then \textit{average} this result over all possible choices of $N$. This procedure is just an application of the law of total probability, and in this way we can use the convolution property for all the averaged terms:
+    \begin{align*}
+        g_R(s) &= \mathbb{E}[s^R] = \mathbb{E}[s^{X_1 + \dots + X_N}] =\\
+        &= \mathbb{E}\{\mathbb{E}[s^{X_1+\dots + X_N}|N]\} =\\
+        \shortintertext{Expanding the \textit{outer} average:}
+        &= \sum_{n=0}^{+\infty} \mathbb{E}[s^{X_1+\dots+X_{\textcolor{Red}{n}}}|N=n] \mathbb{P}[N=n] =\\
+        \shortintertext{Since $\{X_i\}$ and $N$ are independent, $\mathbb{E}[s^{X_1+\dots + X_n}|N=n] = \mathbb{E}[s^{X_1+\dots+X_n}]$, and so:}
+        &= \sum_{n=0}^{+\infty} \hlc{Yellow}{\mathbb{E}[s^{X_1+\dots+X_n}]} \mathbb{P}[N=n] =
+        \shortintertext{Finally we can apply the convolution property:}
+        &= \sum_{n=0}^{+\infty} \hlc{Yellow}{g(s)^n} \mathbb{P}[N=n] =
+        \shortintertext{And we recognize the expression for the generating function of $N$:}
+        &= \mathbb{E}[g(s)^N] = g_N[g(s)]
+    \end{align*}  
+
+    We can now compute mean and variance by applying (\ref{eqn:prob-gen-mom}):
+    \begin{align*}
+        \mathbb{E}[R] = \dv{g_R(s)}{s}\Big|_{s=1} = g_N'[g(s)] \cdot g'(s) \Big|_{s=1} = g_N'[g(1)] \cdot \mathbb{E}[X]
+    \end{align*}
+    And note that:
+    \begin{align*}
+        g(1) = \sum_{k=0}^{+\infty} \mathbb{P}[X=k] = 1
+    \end{align*}
+    by normalization. So:
+    \begin{align*}
+        \mathbb{E}[R] = g_N'(1) \cdot \mathbb{E}[X] = \mathbb{E}[N] \cdot \mathbb{E}[X]
+    \end{align*}
+    Intuitively, if $N$ were fixed, the mean of $R$ would be exactly $N$ times the mean of each summed variable. Here $N$ is not fixed, and so we use its mean instead.
+
+    \medskip
+
+    For the variance, we first need the second (factorial) moment, and so we derive once again:
+    \begin{align*}
+        g_R''(s) &= g_N''[g(s)](g'(s))^2 + g_N'(g(s)) g''(s) 
+        \shortintertext{And then we evaluate at $s=1$:}
+        g_R''(1) &= g_N''[1] \mathbb{E}[X]^2 + g_N'(1) \mathbb{E}[X^2-X] =\\
+        &= \mathbb{E}[N^2-N] \cdot \mathbb{E}[X]^2 + \mathbb{E}[N] \cdot \mathbb{E}[X^2-X] =\\
+        &=  \mathbb{E}[N^2]\mathbb{E}[X]^2 \hlc{SkyBlue}{- \mathbb{E}[N] \mathbb{E}[X]^2 + \mathbb{E}[N] \mathbb{E}[X^2] }- \mathbb{E}[N] \mathbb{E}[X] =\\
+        &= \mathbb{E}[N^2] \mathbb{E}[X]^2 + \mathbb{E}[N] \operatorname{Var}(X) - \mathbb{E}[N] \mathbb{E}[X] 
+    \end{align*}
+    And finally:
+    \begin{align*}
+        \operatorname{Var}(R) &= \mathbb{E}[R^2] - \mathbb{E}[R]^2 =  g_R''(1) + g_R'(1) - (g_R'(1))^2 =\\
+        &= \mathbb{E}[N^2]\mathbb{E}[X]^2 + \mathbb{E}[N]\operatorname{Var}(X) - \cancel{\mathbb{E}[N] \mathbb{E}[X] }+ \cancel{\mathbb{E}[N] \mathbb{E}[X]} \\
+        &\quad \> - \mathbb{E}[N]^2 \mathbb{E}[X]^2 =\\
+        &= \mathbb{E}[N] \operatorname{Var}(X) + \mathbb{E}[X]^2 \operatorname{Var}(N)  
+    \end{align*}
+    If $N$ were fixed, the variance of $R$ would just be the sum of the variances of the $X_i$, i.e. $N$ times $\operatorname{Var}(X)$. So, as $N$ is not fixed, we would expect to see $\mathbb{E}[N] \operatorname{Var}(X)$ - which is indeed the first term. However, there is also $\mathbb{E}[X]^2 \operatorname{Var}(N)$. Intuitively, this is because the \textit{random number of elements in the sum introduces \q{more randomness}, making the distribution more \q{spread out}}.   
+\end{example}
+
+\section{Discrete Distributions}
+We now discuss some important examples of probability distributions, starting from the discrete case.
+
+\subsection{Bernoulli Distribution}
+Consider a random variable $X$ with only two possible values - $0$ and $1$. The resulting probability mass function is the \textbf{Bernoulli distribution}:
+\begin{align*}
+    \mathbb{P}(X=x) = \begin{cases}
+        p & x = 1\\
+        1-p & x = 0
+    \end{cases}
+\end{align*} 
+It can be shown that:
+\begin{align*}
+    \mathbb{E}[X] &= p\\
+    \operatorname{Var}(X) &= p(1-p) 
+\end{align*}
+Bernoulli r.v. can be constructed as \textbf{indicators} of events. For a generic event $A$, its indicator r.v. denoted with $\mathbb{1}(A)$ is defined as:
+\begin{align*}
+    \mathbb{1}(A) \equiv \mathbb{1}_A = \begin{cases}
+        1 & \text{if $A$ occurs}\\
+        0 & \text{if $A$ does \textit{not} occur}
+    \end{cases}
+\end{align*}
+
+\subsection{Binomial Distribution}
+Consider $n$ independents events $A_1, \dots, A_n$, all having the same probability $p=\mathbb{P}[A_i]$ of occurrence. Let $Y$ be the random variable which \textit{counts} the total number of events among $A_1, \dots, A_n$ that occur. In other words, $Y$ counts the number of \q{successes} in $n$ independent \textit{trials}, if each of them has a constant probability $p$ of success. 
+The distribution of $Y$ is called the \textbf{binomial distribution}, and is given by:
+\begin{align*}
+    p_Y(k) \equiv \mathbb{P}(Y=k) = \frac{n!}{k! (n-k)!} p^k (1-p)^{n-k} \quad \forall k = 0,1,\dots,n 
+\end{align*}  
+Note that we can rewrite $Y$ as the sum of $n$ Bernoulli r.v.:
+\begin{align*}
+    Y = \mathbb{1}(A_1) + \dots + \mathbb{1}(A_n)
+\end{align*}
+This allows to quickly compute mean and variance:
+\begin{align*}
+    \mathbb{E}[Y] &= \mathbb{E}[\bb{1}(A_1)] + \dots + \mathbb{E}[\bb{1}(A_n)] = np\\
+    \operatorname{Var}(Y) &= \operatorname{Var}[\bb{1}(A_1)] + \dots + \operatorname{Var}[\bb{1}(A_n)] = np(1-p)
+\end{align*} 
+
+\subsection{Geometric Distribution}
+Consider a number of i.i.d. events (e.g. a \textit{sequence of repeated experiments}) $\{A_i\}_{i=1,\dots,\infty}$. If $A_i$ occurs, we have a \textit{success}, while if it does not occur, we say it is a \textit{failure}. Let $Z$ be the number of failures before the first success in the sequence $A_1, \dots, A_n$. The distribution of such $Z$ is called \textbf{geometric distribution}.   
+
+\medskip
+
+Alternatively, we can consider the number $Z'$ of \textit{attemps} needed to get exactly one success. In this case, we are counting also the \textit{success at the end}, and so $Z' = Z+1$. Sometimes this is the case used to define the geometric distribution. Clearly the final result is the same - the only difference is of interpretation, and will be clarified in the context.
+
+\medskip
+
+The probability mass function of $Z$ can be directly found as:
+\begin{align*}
+    p_z(k) = \mathbb{P}[Z=k] = p(1-p)^k \qquad k\in \mathbb{N}
+\end{align*}
+In fact, as all events are \textbf{independent}, we can get the probability of a sequence by just multiplying the probabilities of each event happening or not. In this case the first $k$ events \textit{do not happen} (and so we have a $(1-p)^k$ term), but the $k+1$-th does happen (and so we need to multiply by $p$). 
+
+\medskip
+
+Let's compute the mean and variance of $Z$:
+\begin{align*}
+    \mathbb{E}[Z] = \sum_{k=0}^{+\infty} k p_k = \sum_{k=0}^{+\infty} k p(1-p)^k = p(1-p) \sum_{k=1}^{+\infty} k(1-p)^{k-1}
+\end{align*}
+Then we rewrite the sum as the derivative of a geometric series:
+\begin{align*}
+    \sum_{k=1}^{+\infty} ka^{k-1} = \dv{a} \left(\sum_{k=0}^{+\infty} a^k\right) = \dv{a} \frac{1}{1- a} = \frac{1}{(1-a)^2} \qquad a = 1-p < 1
+\end{align*}
+Substituting back:
+\begin{align*}
+    \mathbb{E}[Z] = \frac{p(1-p)}{(1-(1-p))^2} = \frac{p(1-p)}{p^2} = \frac{1-p}{p}   
+\end{align*}
+
+A similar procedure leads to the variance: %TO DO as exercise
+\begin{align*}
+    \operatorname{Var}(Z) = \frac{1-p}{p^2} 
+\end{align*}
+
+\subsubsection{Alternative method}
+Another way to compute $\mathbb{E}[Z]$, which will be useful also for later problems, is the following.
+
+\medskip
+
+Let $Z$ be a non-negative integer-valued random variable. Then its expectation is equal to the sum of its \textit{tail distribution}:
+\begin{align}\label{eqn:tails}
+    \mathbb{E}[Z] = \sum_{k=0}^{+\infty} \mathbb{P}[z > k] = \sum_{k=1}^{+\infty} \mathbb{P}[Z \geq k]
+\end{align} 
+In our specific case, $\mathbb{P}[Z \geq k] = (1-p)^k$ - as it is the probability of having \textit{at least} $k$ failures. Then:
+\begin{align*}
+    \mathbb{E}[Z] &= \sum_{k=1}^{+\infty} (1-p)^k \underset{(a)}{=} \sum_{k=\textcolor{Red}{0}}^{+\infty} (1-p)^{k+1} = (1-p) \sum_{k=0}^{+\infty} (1-p)^k =
+    \shortintertext{where in (a) we \textit{shifted} the index of summation. Note that the final expression is just a geometric series, and so:}
+    &= (1-p) \cdot \frac{1}{1-(1-p)} = \frac{1-p}{p} 
+\end{align*} 
+
+\medskip
+
+To understand why (\ref{eqn:tails}) is true, consider the following. We can rewrite the expectation of the r.v. $Z$ as follows:
+\begin{alignat*}{2}
+    \mathbb{E}[Z] &= \>&&\sum_{k=0}^{+\infty} k p_k = 0 \cdot p_0 + 1 \cdot p_1 + 2 \cdot p_2 + \dots 
+    \shortintertext{We then write the multiplications as repeated sums:}
+    &= &&\hlc{Yellow}{p_1} \> + \\
+    & &&\hlc{Yellow}{p_2} + \hlc{SkyBlue}{p_2}\> + \\
+    & &&\hlc{Yellow}{p_3} + \hlc{SkyBlue}{p_3} + \hlc{ForestGreen}{p_3} \> +\\
+    & &&\vdots \qquad \vdots \qquad \vdots
+    \shortintertext{Note that the first column is the sum of all $p_k$ with $k\geq 1$, and so is equal to $\mathbb{P}[Z > 0]$. The second column is $\mathbb{P}[Z>1]$, and so on:}
+    &= \sum_{k=0}^{+\infty} \mathbb{P}[Z > k] \span\span
+\end{alignat*}
+which proves (\ref{eqn:tails}).
+
+\subsection{Poisson Distribution}
+The Poisson distribution with parameter $\lambda > 0$ has the probability mass function:
+\begin{align}\label{eqn:poisson-dist}
+    p(k) = \frac{\lambda^k e^{-\lambda}}{k!} \qquad \forall k = 0, 1, \dots 
+\end{align}
+Using the series expansion for the exponential:
+\begin{align}\label{eqn:exp-taylor}
+    e^{\lambda} = 1 + \lambda + \frac{\lambda^2}{2!} + \frac{\lambda^3}{3!} + \dots  
+\end{align}
+we can see that (\ref{eqn:poisson-dist}) is correctly normalized:
+\begin{align*}
+    \sum_{k=0}^{+\infty} p_k = 1
+\end{align*}
+We can reuse (\ref{eqn:exp-taylor}) to compute mean and variance:
+\begin{align*}
+    \mathbb{E}[X] &= \sum_{k=0}^{+\infty} k \frac{\lambda^k e^{-\lambda}}{k!} = \lambda e^{-\lambda} \underbrace{\sum_{k=1}^{+\infty} \frac{\lambda^{k-1}}{(k-1)!}}_{e^{\lambda}}  =  1\\
+    \mathbb{E}[X(X-1)] &= \sum_{k=0}^{+\infty} k(k-1) p(k) = \sum_{k=2}^{+\infty} k(k-1) \frac{\lambda^k e^{-\lambda}}{k!} = \lambda^2 e^{-\lambda} \sum_{k=2}^{+\infty} \frac{\lambda^{k-2}}{(k-2)!} = \lambda^2  \\
+    \mathbb{E}[X^2] &= \mathbb{E}[X(X-1)] + \mathbb{E}[X] = \lambda^2 + \lambda \Rightarrow \operatorname{Var}[X] = \mathbb{E}[X^2] - \mathbb{E}[X]^2 = \lambda 
+\end{align*}
+
+It can be shown that a binomial distribution with parameters $n$ and $p$ converges to the Poisson with parameter $\lambda$ if $n \to \infty$ and $p \to 0$ in such a way that $np = \lambda$ remains constant. In other words, the Poisson distribution emerges as the distribution of a large number of trials, each with \textit{very little} probability of success. This is, in essence, the \textbf{law of rare events}.  
+
+\section{Continuous Distributions}
+
+\subsection{Normal distribution}
+The \textbf{normal distribution} (or gaussian) with mean $\mu$ and variance $\sigma^2$ is defined as:
+\begin{align*}
+    \phi(x; \mu, \omega^2) = \frac{1}{\sqrt{2 \pi} \sigma} \exp\left(-\frac{(x-\mu)^2}{2 \sigma^2} \right) 
+\end{align*} 
+We limit ourselves to this definition, as we will not use it often in this course.
+
+
+\subsection{Exponential distribution}
+A non-negative random variable $T$ is said to have an \textbf{exponential distribution} with parameter $\lambda > 0$ if its probability density function is:
+\begin{align*}
+    f_T (t) = \begin{cases}
+        \lambda e^{- \lambda t} & t \geq 0\\
+        0 & t < 0
+    \end{cases}
+\end{align*} 
+The corresponding distribution function (CDF) is:
+\begin{align*}
+    F_T(t) = \begin{cases}
+        1 - e^{-\lambda t} & t\geq 0\\
+        0 & t < 0
+    \end{cases}
+\end{align*}
+Mean and variance are:
+\begin{align*}
+    \mathbb{E}[T] = \frac{1}{\lambda}; \qquad \operatorname{Var}[T] = \frac{1}{\lambda^2}   
+\end{align*}
+In general:
+\begin{align*}
+    \mathbb{E}[T^k] = \frac{1}{\lambda^k} 
+\end{align*}
+We can show that by explicit computation:
+\begin{align*}
+    \mathbb{E}[T] = \int_0^{+\infty} t \lambda e^{-\lambda t} \dd{t} 
+\end{align*}
+which can be solved by integrating by parts. Alternatively, we can use the \textit{continuous} analogue of (\ref{eqn:tails}): 
+\begin{align*}
+    \mathbb{E}[T] = \int_0^{+\infty} \mathbb{P}[T > t] \dd{t} = \int_0^{+\infty} e^{- \lambda t} \dd{t} = \frac{e^{-\lambda t}}{-\lambda}\Big|_{0}^{+\infty} = \frac{1}{\lambda}  
+\end{align*}
+which is much simpler.
+
+\medskip
+
+The exponential distribution is often used to model \textit{lifetimes} - for example the mean working time of a machine before it breaks, or the time elapsed before a particle decays. 
+
+In particular, the exponential distribution is \textbf{memoryless} - in the sense that conditional probabilities such as $\mathbb{P}[T > t'|T > t]$ depend only on the \textit{difference} $t-t'$. For example, this means that if a particle is still \q{alive} at time $t$, the probability that it is still alive at a later time $t'$ does not depend on the entire \textit{history} of the particle, but only on the elapsed time $t'-t$.
+
+\medskip
+
+To see this explicitly, suppose that a particle's survival time follows the exponential distribution, and at time $t$ the particle still exists. Let $t' = t+x$, with $x > 0$, be a \textit{later time}. The probability that the particle still exists at $t'$ is given by:
+\begin{align*}
+    \mathbb{P}[T > t'=t+x|T>t] &= \frac{\mathbb{P}[T>t+x, T>t]}{\mathbb{P}[T > t]} =\\
+    \shortintertext{Where we applied the product rule for probabilities. As $x>0$, if the particle survives up to $t'$, then it definitely has survived up to $t < t'$, and so the joint probability at the numerator reduces to:}
+    &= \frac{\mathbb{P}[T > t+x]}{\mathbb{P}[T>t]}  = \frac{e^{-\lambda(t+x)}}{e^{-\lambda t}} = e^{-\lambda x} 
+\end{align*} 
+where $x = t'-t$. 
+
+\medskip
+
+In other words, the \textit{survival statistics} at any time are the same. A particle that is still alive at time $t$ behaves \textit{the same} as if it was just \q{born} - it has \q{forgot} all of its past. 
+
+\medskip
+
+In physics, many processes can be modelled as if they were \textit{memoryless}. For example, in statistical mechanics, the chaotic interactions with a thermal bath \textit{quickly destroy} any information about the starting state - meaning that the system has \q{little memory}, and so its statistics can be well approximated by using the exponential distribution.
+
+
+\subsection{Uniform distribution}
+A random variable $\mathcal{U}$ is uniformly distributed over the interval $[a,b]$, with $a < b$, if it has the probability density function:
+\begin{align*}
+    f_U(u) = \begin{cases}
+        \frac{1}{b-a} & a \leq u \leq b\\
+        0 & \text{elsewhere} 
+    \end{cases} 
+\end{align*}
+The corresponding CDF is:
+\begin{align*}
+    F_U(x) = \begin{cases}
+        0 & u \leq a\\
+        \frac{x-a}{b-a} & a < x \leq b\\
+        1 & x>b 
+    \end{cases}
+\end{align*}
+
+And its mean and variance are:
+\begin{align*}
+    \mathbb{E}[U] = \int_a^b \frac{u}{b-a} \dd{u} = \frac{b-a}{2}  \qquad \operatorname{Var}(U) = \frac{(b-a)^2}{12}   
+\end{align*}
+
+\subsection{Gamma distribution}
+The gamma distribution with parameters $\alpha > 0$ and $\lambda > 0$ has probability density function:
+\begin{align*}
+    f(x) = \frac{\lambda}{\Gamma(\alpha)} (\lambda x)^{\alpha-1} e^{-\lambda x} \qquad x > 0 
+\end{align*}
+Given an integer number $\alpha$ of independent exponentially distributed random variables $Y_1, \dots, Y_n$ having common parameter $\lambda$ (i.i.d.), then their sum $X_\alpha = Y_1 + \dots + Y_\alpha$ has the \textbf{gamma density}. Its moments are:
+\begin{align*}
+    \mathbb{E}[X_\alpha] = \frac{\alpha}{\lambda} \qquad \operatorname{Var}[X_\alpha] = \frac{\alpha}{\lambda^2}   
+\end{align*}  
+And this formulas hold for $\alpha \in \mathbb{R}$.
+
+%Sec. 5 and 6 to be read as exercises
+
+\section{Conditional probabilities}
+The probability of an event $A$ \textit{given} the occurrence of another event $B$ is defined as:
+\begin{align*}
+    \mathbb{P}[A|B] = \frac{\mathbb{P}[A \cap B]}{\mathbb{P}[B]} \text{ if $\mathbb{P}[B] \neq 0$} 
+\end{align*} 
+Rearranging we obtain the \textbf{product rule} for probabilities:
+\begin{align*}
+    \mathbb{P}[A \cap B] = \mathbb{P}[A|B] \mathbb{P}[B]
+\end{align*} 
+We can now state the \textbf{theorem of total probability} in its most common form. Let $B_i$ be a partition of the sample space $\Omega$, such that:
+\begin{align*}
+    \bigcup_{i} B_i = \Omega \qquad B_i \cap B_j = \varnothing \> \forall i \neq j
+\end{align*}
+Then:
+\begin{align*}
+    \mathbb{P}[A] = \sum_{i} \mathbb{P}[A \cap B_i] = \sum_i \mathbb{P}[A|B_i] \mathbb{P}[B_i]
+\end{align*}
+
+\subsection{Discrete distributions}
+Let $Y$ be a discrete random variable, and $X$ an arbitrary r.v. (discrete or continuous). We define the \textbf{conditioned distribution} of $X$ given $Y$ as  follows:
+\begin{align}\label{eqn:cond-dist-discrete}
+    F_{X|Y} (X|Y) = \frac{\mathbb{P}[X \leq x, Y=y]}{\mathbb{P}[Y=y]} \text{ if } \mathbb{P}[Y=y] \neq 0 
+\end{align} 
+$F_{X|Y}$ is a probability distribution in $x$ for all values of $y$, and just a function of $y$ if we fix the value of $x$ (not necessarily normalized, and so definitely not a distribution).
+
+\medskip
+
+The \textbf{joint (cumulative) distribution} of $X$ and $Y$ is given by:
+\begin{align*}
+    \mathbb{P}[X \leq x, Y \leq y] &= \sum_{\eta \leq y} \mathbb{P}[X \leq x, Y = \eta] = \sum_{\eta \leq y} F_{X|Y}(x|\eta) \mathbb{P}[Y=\eta] =\\
+    &= \int_{\eta \leq y}F_{X|Y} (x|\eta) \dd{F_Y(\eta)}
+\end{align*} 
+
+The marginal probability is obtained by setting $y=+\infty$, making the occurring of $Y$ certain:
+\begin{align*}
+    \mathbb{P}[X \leq x] = \sum_{\eta = -\infty}^{+\infty} F_{X|Y} (x|\eta) \mathbb{P}[Y=\eta] = \mathbb{E}[\mathbb{P}[X \leq x|Y]] = \int_{\mathbb{R}} F_{X|Y} (x|\eta) \dd{F_Y(\eta)}
+\end{align*}
+
+In general, we can compute the expected value of a function of $X$ as the \textit{average} over the same quantity \textit{conditioned over} $Y$:
+\begin{align*}
+    \mathbb{E}[g(X)] = \mathbb{E}[\mathbb{E}[g(X)|Y]] = \int_{\mathbb{R}} \mathbb{E}[g(X)|Y=\eta] \dd{F_Y(\eta)}
+\end{align*}  
+where the inner expectation is over the \textit{conditioned} distribution: 
+\begin{align}\label{eqn:cond-exp}
+    \mathbb{E}[g(X)|Y=\eta] = \int_{\mathbb{R}} g(x) \dd{F_{X|Y=\eta}}(x)
+\end{align}
+If $X$ is discrete, (\ref{eqn:cond-exp}) becomes:
+\begin{align*}
+    \mathbb{E}[g(X)|Y=\eta] = \sum_{x=-\infty}^{+\infty} g(x) \mathbb{P}[X=x|Y=\eta]
+\end{align*}
+On the other hand, if $X$ is continuous, (\ref{eqn:cond-exp}) can be written as:
+\begin{align*}
+    \mathbb{E}[g(X)|Y=\eta] = \int_{\mathbb{R}} g(x) f_{X|Y}(x|\eta) \dd{x}
+\end{align*}
+
+\begin{example}[Composition of binomials]
+    Let $X$ have a binomial distribution with parameter $p$ and $N$, where $N$ is again a r.v. with binomial distribution with parameters $q$ and $M$. What is the \textit{marginal distribution} of $X$?
+    
+    \medskip
+
+    \textbf{Solution}. We know how $X$ is distributed \textit{given a fixed} value of $N$:
+    \begin{align*}
+        p_{X|N}(k|n) = {n\choose k} p^k (1-p)^{n-k} \qquad k=0,1,\dots,n
+    \end{align*} 
+    And that $N$ is distributed as:
+    \begin{align*}
+        p_{N}(n) = {M\choose n} q^n (1-q)^{M-n} \qquad n=0,1,\dots,M
+    \end{align*}
+    To compute the distribution of $X$ we apply the law of total probability:
+    \begin{align*}
+        \mathbb{P}[X=k] &= \sum_{n=0}^{M} p_{X|N}(k|n) p_N(n) =\\
+        \shortintertext{Note that if $k>n$, $p_{X|N}(k|n) = 0$, as it's not possible to obtain more successes than trials. This restricts the sum from $k$ to $M$. Then, expanding the distributions we get:}
+        &= \sum_{n=\textcolor{Red}{k}}^M \frac{\cancel{n!}}{k!(n-k)!} p^k(1-p)^{n-k} \frac{M!}{\cancel{n! }(M-n)!} q^n (1-q)^{M-n} =\\
+        \shortintertext{We extract from the sum all terms that do not contain $n$:}
+        &=  \frac{M!}{k!} p^k (1-q)^M  \sum_{n = k}^M \frac{1}{(n-k)!(M-n)!} (1-p)^{n-k} q^n (1-q)^{-n} =\\
+        \shortintertext{The idea is to multiply and divide by a constant factor so that every exponent inside the sum is $n-k$:}
+        &= \frac{M!}{k!} p^k (1-q)^M \textcolor{Red}{\left(\frac{q}{1-q} \right)^k} \sum_{n = k}^M \frac{1}{(n-k)!(M-n)!} (1-p)^{n-k} \left(\frac{q}{1-q} \right)^{n\textcolor{Red}{-k}}
+        \shortintertext{Then we change the index of summation so that it starts from $0$, defining $j = n-k$:}
+        &= \frac{M!}{k!} p^k (1-q)^M {\left(\frac{q}{1-q} \right)^k} \sum_{j = 0}^{M-k} \frac{1}{j! (M-j-k)!} (1-p)^j \left(\frac{q}{1-q} \right)^j =\\
+        \shortintertext{Multiplying and dividing by $(M-k)!$ we can highlight a binomial coefficient:}
+        = \frac{M!}{k!} p^k \frac{(1-q)^M}{\textcolor{Red}{(M-k)!}} {\left(\frac{q}{1-q} \right)^k} \sum_{j = 0}^{M-k}\underbrace{\frac{\textcolor{Red}{(M-k)!}}{j! (M-k-j)!}}_{{M-k\choose j}} (1-p)^j \left(\frac{q}{1-q} \right)^j  \cdot \textcolor{Blue}{1^{M-k-j}} \span
+        \shortintertext{Note that the sum is a \textit{binomial sum}, which is equal to the power of a binomial:}
+        &= \frac{M!}{k!} p^k \frac{(1-q)^M}{{(M-k)!}} {\left(\frac{q}{1-q} \right)^k} \left(1+ \frac{q(1-p)}{1-q} \right)^{M-k} =\\
+        &= \frac{M!}{k! (M-k!)} (pq)^k (1-q)^{M-k} \left[1+\frac{q(1-p)}{1-q} \right]^{M-k} =\\
+        &= {M \choose k} (pq)^k (1-q)^{M-k} \left[\frac{1-\cancel{q}+\cancel{q}-pq}{1-q} \right]^{M-k} =\\
+        &= {M\choose k}(pq)^k (1-pq)^{M-k}
+    \end{align*}
+    Meaning that the distribution of $X$ is again a binomial distribution, with parameters $M$ and $pq$.
+
+    \medskip
+
+    This should be expected, as we defined $X$ as two \textit{binomial processes} one right after the other.  To see that, consider the following experiment. Suppose we have $M$ balls. For each of them we toss a dice, \textit{keeping} the ball with probability $q$, and otherwise discarding it. At the end we will have $N$ balls. Note that the distribution of $N$ is \textit{binomial} with parameters $M$ and $q$, by construction.
+
+    \medskip
+
+    Then, we repeat the same experiment starting with the $N$ balls, keeping each of them with probability $p$. The final number of balls will be $X$ - which follows a binomial distribution with parameters $N$ and $p$.
+
+    \medskip
+
+    Note that, equivalently, we can obtain $X$ from $M$ with a single pass, by keeping each ball with probability $p q$, which is equal to the probability of surviving both rounds of the former experiment. This proves that the statistic of $X$ is binomial with parameters $M$ and $pq$.
+\end{example}
+
+\begin{exo}[Composition of binomial and Poisson]
+    Suppose $X$ has a binomial distribution with parameters $p$ and $N$, where $N$ has a Poisson distribution with mean $\lambda$. What is the marginal distribution for $X$?
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}[Moments of random sums]
+    Assume that $\xi_k$ and $N$ have finite moments:
+    \begin{alignat*}{3}
+        \mathbb{E}[\xi_k] &= \mu;\quad && \operatorname{Var}[\xi_k] &= \sigma^2 \\
+        \mathbb{E}[N] &= \nu; && \operatorname{Var}[N] &= \tau^2 
+    \end{alignat*}
+    Show, by using conditional distributions, that the mean and variance of the sum $X= \xi_k + \dots + \xi_N$ are:
+    \begin{align*}
+        \mathbb{E}[X] = \mu \nu; \qquad \operatorname{Var}[X] = \nu \sigma^2 + \mu^2 \tau^2 
+    \end{align*}
+    which are the same results we obtained by using characteristic functions.
+
+    \medskip
+
+    \textbf{Solution}.  
+\end{exo}
+
+\subsection{Distribution of a Random Sum}
+Suppose that $\{\xi_i\}_{i=1,\dots,\infty}$ are continuous i.i.d. random variables having a probability density function $f(z)$. For $n \geq 1$, the probability density function for the fixed sum $\xi_1 + \dots + \xi_n$ is the $n$-fold \textbf{convolution} of the density $f(z)$, denoted by $f^{(n)}(z)$ and recursively defined by:
+\begin{align*}
+    f^{(1)}(z) = f(z)
+\end{align*} 
+and:
+\begin{align*}
+    f^{(n)}(z) = \int_{\mathbb{R}} f^{(n-1)}(z-u)f(u)\dd{u} \qquad \forall n> 1
+\end{align*}
+
+\begin{example}[Geometric sum of exponential r.v.]
+    Consider a set of i.i.d. random variables $\xi_i$ with exponential distribution:
+    \begin{align*}
+        f(z) = \begin{cases}
+            \lambda e^{- \lambda z} & z \geq 0\\
+            0 & z < 0
+        \end{cases}
+    \end{align*}
+    We consider the sum $Z = \xi_1 + \dots + \xi_N$, where $N$ is a discrete random variable with geometric distribution:
+    \begin{align}
+        p_N(n) = \beta(1-\beta)^{n-1} \qquad \forall n \in \mathbb{N} \setminus \{0\}\label{eqn:pn}
+    \end{align}
+    We already know that the distribution for the sum of a fixed number $n$ of exponential r.v. (i.e. the $n$-fold convolution of $f(z)$) is the Gamma density:
+    \begin{align}\label{eqn:gammafunc}
+        f^{(n)}(z) = \begin{cases}
+            \frac{\lambda^n}{(n-1)!} z^{n-1} e^{-\lambda z} & z \geq 0\\
+            0 & z < 0 
+        \end{cases}
+    \end{align}
+    So, to derive the pdf of $Z$ we apply the law of total probability, noting that $p_N(0) = 0$: %why? is it the number of trials?
+    \begin{align*}
+        f_X(z) &= \sum_{n=1}^{+\infty} f^{(n)} (z) p_N(n) =\\
+        &\underset{\substack{(\ref{eqn:gammafunc})\\(\ref{eqn:pn})}}{=}\sum_{n=1}^{+\infty} \frac{\lambda^n}{(n-1)!} z^{n-1} e^{-\lambda z} \beta(1-\beta)^{n-1} =\\
+        \shortintertext{We bring out some factors so that all exponents in the sum are $n-1$:}
+        &= \lambda \beta e^{-\lambda z} \sum_{n=1}^{+\infty} \sum_{n=1}^{+\infty} \frac{[\lambda(1-\beta)z]^{n-1}}{(n-1)!} = 
+        \shortintertext{Shifting to $0$ the index of summation we obtain the exponential series:}
+        &= \lambda \beta e^{-\lambda z} \sum_{n=0}^{+\infty} \frac{1}{n!} [\lambda(1-\beta)z]^{n-1} =\\
+        &= \lambda \beta e^{- \lambda z} e^{\lambda (1-\beta)z} = \lambda \beta e^{- \lambda \beta z} \qquad z \geq 0
+    \end{align*}
+    So $X$ has an exponential distribution with parameter $\lambda \beta$.
+
+    \medskip
+
+    Equivalently, we could do this with characteristic functions: %Add steps
+    \begin{align*}
+        g_N(s) &= \sum_{n=1}^{+\infty} \beta (1-\beta)^{n-1} s^k = \frac{\beta s}{1 - (1-\beta)s}\\
+        \phi(t) &= \mathbb{E}[e^{it \xi}] = \int_{0}^{+\infty} e^{it \xi - \lambda \xi} \lambda \dd{\xi} = \frac{\lambda}{\lambda - it} 
+    \end{align*}
+    The characteristic function of the random sum is obtained by \textit{composition}:
+    \begin{align*}
+        g_N(\phi(t)) &= \frac{\beta \frac{\lambda}{\lambda -it} }{1 - (1-\beta) \frac{\lambda}{\lambda - it} }  = \frac{\beta \lambda}{\cancel{\lambda} -it - (\cancel{1}-\beta)\lambda} =\\
+        &= \frac{\beta \lambda}{\beta \lambda - it} 
+    \end{align*} 
+    Comparing this result with $\phi(t)$ we see that they are characteristic functions of the \textit{same} distribution, with the substitution $\lambda \leftrightarrow \beta \lambda$. So, the distribution of the random sum is, in fact, an exponential distribution with parameter $\beta \lambda$.
+\end{example}
+
+\subsection{Continuous}
+If $Y$ is continuous, then $P[Y=y] = 0$ $\forall y$, and so we cannot use the previous definition for the conditioned distribution (\ref{eqn:cond-dist-discrete}). So, we instead define the \textbf{conditioned pdf}:
+\begin{align}\label{eqn:continuous-conditioned}
+    f_{X|Y}(x|y) &= \frac{f_{X|Y}(x,y)}{f_Y(y)} \text{ if } f_Y(y) \neq 0
+\end{align} 
+and then:
+\begin{align*}
+    F_{X|Y}(x|y) = \int_{-\infty}^x f_{X|Y} (\xi|y) \dd{\xi}
+\end{align*}
+
+The \textbf{joint distribution} of $X$ and $Y$ is then:
+\begin{align*}
+    \mathbb{P}[X \leq x, Y \leq y] &= \int_{-\infty}^x \dd{\xi} \int_{-\infty}^y \dd{\eta} f_{XY}(\xi, \eta) = \\
+    &= \int_{-\infty}^y \dd{\eta} f_Y(\eta) \int_{-\infty}^x \dd{x} f_{X|Y}(\xi | \eta) = \int_{-\infty}^y F_{X|Y} (x|y) f_{Y}(\eta)\dd{\eta} =\\
+    &= \int_{-\infty}^y F_{X|Y}(x|\eta) \dd{F_Y(\eta)}
+\end{align*}  
+
+With $y \to \infty$ we obtain the marginal distribution:
+\begin{align*}
+    \mathbb{P}[X \leq x] = \int_{-\infty}^{+\infty} F_{X|Y}(x|\eta) \dd{F_Y(\eta)}
+\end{align*}
+
+And again we can compute expected values of functions of only $X$ by averaging over the joint pdf:
+\begin{align*}
+    \mathbb{E}[g(X)] &= \int_{\mathbb{R}} \dd{\xi}\int_{\mathbb{R}} \dd{\eta} g(\xi) f_{XY}(X,\eta) =\\
+    &= \int_{\mathbb{R}} \underbrace{\dd{\eta} f_Y(\eta)}_{\dd{F_Y(\eta)}} \underbrace{\int_{\mathbb{R}} \dd{\xi} g(\xi) f_{X|Y}(\xi | \eta)}_{\mathbb{E}[g(X)|Y=\eta]} = \int_{\mathbb{R}} \mathbb{E}[g(X)|Y=\eta] \dd{F_Y(\eta)} =\\
+    &= \mathbb{E}[\mathbb{E}[g(X)|Y]]
+\end{align*}
+
+All these results are the same we had obtained in the discrete case, meaning that the new definition (\ref{eqn:continuous-conditioned}) is \textbf{consistent}. 
+\end{document}

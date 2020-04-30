@@ -1,0 +1,33 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\chapter{Ising Model and disorder}
+
+Introduction
+
+\section{Mean Field Ising Model}
+To be completed
+
+\section{Random Field Ising Model}
+Suppose that the spins are not immersed in the same field $h$, but each of them experiences a \textit{local field} $h_i$, where $h_i$ is sampled at random from a certain distribution $p(h)$. For a given realization $\bm{h}$ of the local fields, the system's energy in the state $\bm{S}$ is given by:\marginpar{\vspace{2.5em}RFIM energy}
+\begin{align}\label{eqn:disordered-energy}
+    H_{\bm{h}}[\bm{S}] = -\frac{J}{N} \sum_{i,j=1}^N S_i S_j - \sum_{i=1}^N h_i S_i
+\end{align}
+
+The system is now \textbf{disordered},\marginpar{Quenched disorder} as it has no symmetries nor uniformities. As the $h_i$ are fixed once and for all, i.e. they do not change over time, we call the disorder \textbf{quenched}.\index{Quenched disorder}  
+
+\medskip
+
+For simplicity, we choose the disorder distribution $p(h)$ to be gaussian:
+\begin{align*}
+    p(h_i) = \frac{1}{\sqrt{2 \pi \delta^2}} \exp\left(-\frac{h_i^2}{2 \delta^2} \right) \qquad \forall i=1,\dots,N
+\end{align*}
+We suppose that, for any given temperature $T$, we can choose a disorder \q{strong enough} (i.e. a $\delta$ high enough) so that (for a random choice of the disorder) the spins will (on average) \textbf{not} align all in the same direction - meaning that the local fields \textit{prevail} over the spin-spin interactions. Surprisingly, we can verify this fact \textit{analytically}.   
+
+\medskip
+
+
+
+\end{document}

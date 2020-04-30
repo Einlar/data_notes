@@ -1,0 +1,166 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.2'
+      jupytext_version: 1.3.2
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+```{python}
+# %matplotlib inline
+
+import numpy as np
+import tensorflow as tf
+import matplotlib.pyplot as plt
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv1D, MaxPooling1D, AveragePooling1D
+```
+
+```{python}
+str0 = 'ts_L60_Z12_A500_DX50_bias5_N10000.csv'
+fnamex = 'DATA/x_' + str0
+fnamey = 'DATA/y_' + str0
+
+x = np.loadtxt(fnamex, delimiter=",", dtype=float)
+N = len(x)
+print(N) #Number of samples
+
+xm = x.mean(axis=1)
+x = (x - xm[:, np.newaxis]) / 100
+
+plt.plot(x[0])
+plt.plot(x[1])
+plt.plot(x[2])
+plt.show()
+
+categ = np.loadtxt(fnamey, delimiter=',', dtype=int)
+n_class = 3 #0, 1 or 2
+
+y = np.zeros((N, n_class))
+
+y[np.arange(N),categ] = 1.
+
+perc_train = 0.8
+N_train = int(N * perc_train)
+
+x_train, x_val = x[:N_train], x[N_train:]
+y_train, y_val = y[:N_train], y[N_train:]
+
+N_val = len(y_val)
+
+L = len(x[0]) #features dimension
+print('N_train =', N_train, ' N_val =', N_val, ' L=', L, ' n_class=', n_class)
+```
+
+## Data reshaping
+
+```{python}
+x_train = x_train.reshape(x_train.shape[0], L, 1) #(N, L, 1) - 1 is the number of "channels"
+x_val   = x_val.reshape(x_val.shape[0], L, 1)
+
+input_shape = (L,1)
+```
+
+```{python}
+from tensorflow.keras import initializers, regularizers
+
+reg = regularizers.l1(0.1)
+
+np.random.seed(12345)
+
+ini = initializers.RandomNormal(mean = 0, stddev=0.05)
+
+NCONV = 1
+
+model = Sequential()
+if NCONV == 1: #kernel_size should be similar to the "pattern" size, which in our case is 12
+    model.add(Conv1D(filters=5, kernel_size=11, kernel_initializer=ini,
+                     kernel_regularizer=reg,
+                     activation='relu', input_shape=input_shape))
+    model.add(AveragePooling1D(5))
+    model.add(Conv1D(filters=5, kernel_size=7,  activation='relu'))
+    model.add(Flatten())
+    model.add(Dense(10, activation='relu'))
+    model.add(Dropout(0.2))
+
+model.add(Dense(n_class, activation='softmax'))
+
+model.summary()
+```
+
+```{python}
+from tensorflow.keras import optimizers
+
+opt = optimizers.SGD(lr=0.01, momentum=0.9, nesterov=True, decay=1e-6)
+
+opt2 = optimizers.RMSprop()
+
+opt3 = optimizers.Adam()
+
+opt4 = optimizers.Nadam()
+```
+
+```{python}
+model.compile(loss = tf.keras.losses.categorical_crossentropy, optimizer=opt3, metrics=['accuracy']) #use Adam
+```
+
+```{python}
+batch_size = 250
+epochs = 500
+
+fit = model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, validation_data=(x_val, y_val), verbose=2, shuffle=True)
+```
+
+```{python}
+for obs in ('accuracy', 'loss'):
+    plt.figure(figsize=(6,4))
+    plt.plot(fit.history[obs], 'r', label=obs+' of training data')
+    plt.plot(fit.history['val_'+obs], 'b--', label=obs+' of validation data')
+    plt.title(NCONV)
+    plt.ylabel(obs)
+    plt.xlabel('Epoch')
+    plt.legend()
+    plt.ylim(0)
+    plt.show()
+```
+
+```{python}
+c = ['k', 'r', 'y', 'b', 'm']
+def plot_w(w):
+    """Plot weights of convolutional layer"""
+    
+    plt.figure(figsize=(6,4))
+    for i in range(len(w)):
+        plt.plot(w[i][0], c[i], label=str(i))
+    
+    plt.title(NCONV)
+    plt.ylabel('weight')
+    plt.xlabel('index')
+    plt.legend()
+    plt.show()
+
+w0  = model.layers[0].get_weights()[0] #weights
+w01 = model.layers[0].get_weights()[1] #bias
+w0T = w0.T
+
+print('w0T =', w0T)
+print('w01 =', w01)
+print(len(w0))
+print(len(w0T))
+
+plot_w(w0T)
+
+plt.plot(w01, 'r', label=1)
+plt.ylabel('bias of layer 0')
+plt.xlabel('filter nr')
+plt.show()
+
+print(w01)
+```

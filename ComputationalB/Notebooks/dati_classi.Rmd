@@ -1,0 +1,103 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.2'
+      jupytext_version: 1.3.2
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+```{python}
+from docx2csv import extract_tables, extract
+tables = extract_tables('Francesco/CLASSI CON TUTORI  FATTIBELLO.docx')
+#tables = extract_tables('Francesco/CLASSI CON TUTOTRI SAN GIUSEPPE.docx')
+
+path = '/Primaria Comacchio Fattibello/as 2019-2020/{}^{} Fattibello'
+#path = '/Primaria San Giuseppe/as 2019-2020/{}^{} SG'
+```
+
+```{python}
+import pandas as pd
+import numpy as np
+```
+
+```{python}
+def decode_table(table):
+    """Use first row as header, UTF-8 encoding, return pandas DataFrame"""
+    return pd.DataFrame(np.char.decode(np.array(table)[1:,:], 'UTF-8'), columns=np.char.decode(table[0], 'UTF-8') )
+```
+
+```{python}
+#Read tables
+
+i = 0
+classe = None
+
+tabelle_classi = {}
+
+for table in tables:
+    try:
+        tabella = decode_table(table)
+        
+        classe = tabella['Classe'][0]
+        continue
+    except KeyError:
+        print(classe)
+        tabelle_classi[classe] = tabella
+    
+```
+
+```{python}
+def pick_email(strings):
+    mail = [sub for sub in strings if sub]
+    
+    if mail != []:
+        return mail[0]
+    else:
+        return ''
+
+def strip_nonalphabetic(string):
+    return ''.join([i for i in string if i.isalpha()])
+
+def converti_dati(tabella):
+    alunni = tabella.groupby(['Nome alunno', 'Cognome Alunno'])
+    
+    mail_tutori = np.array(alunni['Email'].apply(lambda x: pick_email(x)))
+    
+    emails = tabella['Nome alunno'].apply(str.lower).apply(strip_nonalphabetic) + '.' + tabella['Cognome Alunno'].apply(str.lower).apply(strip_nonalphabetic)
+
+    email, indices = np.unique(emails, return_index=True)
+    email += '@iccomacchio.edu.it'
+    
+    #print(len(email), len(mail_tutori))
+    nomi = tabella.iloc[list(indices)]['Nome alunno'].apply(str.title)
+    cognomi = tabella.iloc[list(indices)]['Cognome Alunno'].apply(str.title)
+    
+    final_table = pd.DataFrame({'First Name': nomi, 'Last Name': cognomi, 'Email Address': email, 'Password': 'primariafattibello',
+                                'Home Secondary Email': mail_tutori, 'Change Password at Next Sign-In': 'TRUE'})
+    
+    return final_table
+```
+
+```{python}
+for classe, tabella in tabelle_classi.items():
+    print(classe)
+    res = converti_dati(tabella).sort_values('Last Name')
+    
+    res['Org Unit Path'] = path.format(classe[0], classe[1])
+    
+    res.to_csv('{}.csv'.format(classe), index = False)
+```
+
+```{python}
+
+```
+
+```{python}
+
+```

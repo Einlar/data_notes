@@ -1,0 +1,118 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Introduction}
+Many interesting systems, such as the climate, cells and organisms, cities and societies, are inherently very difficult to model, and fall under the denomination of \textbf{complex systems}. 
+One of their key feature is \textbf{emergence}\index{Emergence}, i.e. the presence of \q{cooperative} behaviours that originate from interactions of the system's parts, and that cannot be explained by any single element of the system if set aside\footnote{The definitions here are deliberately fuzzy, as we are dealing with a huge class of very diverse systems. In fact, there is no single \q{clear-cut} definition for a \q{complex system}.}
+
+\medskip
+
+It does not suffice to create\marginpar{Complicated vs. complex} a large and \textit{complicated} system to create a \textit{complex} system. For example, a gas trapped in a piston is \textit{complicated} - as it involves a large number of molecules -, but not \textit{complex} - as it always reacts to changes in the same way: if the gas is compressed or expanded, the piston will just move towards the previous equilibrium state at a predictable rate.
+
+\medskip
+
+\marginpar{Examples of complex systems}
+True complex systems react \q{\textbf{globally}} to small perturbations.\marginpar{1. Living} Living organisms and packs of animals are one of the most evident case of complex system: for example see how \textbf{bird}/\textbf{fish flocks} alter their movement when approached by a predator. Most of them can't even \textit{see} the threat - yet they know, by observing each other, where to go next in order to avoid it.
+
+\medskip
+
+Non-living physical\marginpar{2. Physical} system at equilibrium can exhibit complex behaviours while being much simpler to analyse. One such example is given by \textbf{critical opalescence}, where a fluid is normally transparent to light, but if cooled below a certain \textit{critical temperature} $T_c$ it suddenly becomes opaque. As we will see, this is due the fact that, close to $T_c$, density fluctuations in the fluid become really high - producing internal boundaries that refract or reflect rays of light, so that they cannot cross the fluid unaffected.
+
+\medskip
+
+This behaviour depending on a \textbf{critical temperature}\marginpar{Critical temperature} is a feature shared by many complex system.
+
+For example, consider the \textbf{Ising model}, consisting in a set of locally interacting magnetic spins $\{S_i\}_{i=1,\dots,n}$. By simulation, we can show that, depending on the temperature, it exhibits two phases:
+\begin{itemize}
+    \item \textbf{High temperature}: the spins $S_i$ are randomly distributed, while the magnetization $m$, defined as:
+    \begin{align*}
+        m = \frac{1}{n} \sum_{i=1}^n S_i    
+    \end{align*}
+    is null. If the system is slightly perturbed, it relaxes quickly to $m=0$
+    \item \textbf{Low temperature}: the spins are all directed in the same direction, and a slight perturbation relaxes quickly to $m=1$.  
+\end{itemize}
+At the \textbf{critical temperature} $T_c$, exactly between the two phases, the system relaxes \textit{very slowly} after a perturbation - taking order of magnitudes more time to return to the equilibrium magnetization state ($m=0$). Spatially, the perturbation generates wild fluctuations of the spin states that propagate throughout the entire system, meaning that distant points become highly correlated, \textit{as if} they were directly interacting, even when there are \textit{no forces} between them). This is exactly what happens in the bird flock case, where the entire group \q{changes shape} at once reacting to the predator movement.
+So, in general, \textbf{locally perturbing} a complex system will produce changes over \textbf{all spatial} and \textbf{temporal scales}. 
+
+\medskip
+
+Thus, certain physical systems\marginpar{Living vs physical systems} at equilibrium behave, at the critical temperature, \textbf{similarly}  to complex living systems - and so become very interesting to study. 
+
+\subsection{Ingredients for a complex physical system}
+
+First of all, we wish to understand\marginpar{Ingredients of emergent behaviour} the \textit{ingredients} of \textbf{physical }complex systems, the key aspects that are needed for emergent behaviours, and that distinguish truly \textit{complex} systems from merely \textit{complicated} ones. From the previous examples we saw that we should focus on \textit{fluctuations}, and especially in how much the system changes (globally) after a perturbation. So, to have emergent behaviour we need:
+\begin{itemize}
+    \item \textbf{Many degrees of freedom} (not necessary elementary particles, but \q{properties} that can be changed).
+    \item \textbf{Interactions} among the degrees of freedom. The simplest kind is the pairwise \textit{symmetric} interaction - but there are also more complex possibilities (e.g. \textit{mediated} or \textit{many-body} interactions)
+    \item \textbf{Balance between Energy and Entropy}. A physical system \textbf{at equilibrium} exhibits long-range correlations, and thus complex behaviour, only when cooled at a \textbf{critical temperature} $T_c$, such that energy $\mathcal{E}$ and entropy $S$ are \q{balanced}:
+    \begin{align} \label{eqn:critical-temp}
+        \text{Energy}(T_c) \approx T_c \cdot \text{Entropy}(T_c)    
+    \end{align}
+    The \textbf{energy} is defined as $\mathcal{E} = U + K$,\marginpar{Energy}\index{Energy} where $K$ is the kinetic energy of the system's components, and $U$ the potential term given by the interactions. On the other hand, the \textbf{entropy}\marginpar{Entropy}\index{Entropy} $S$ is proportional to the number of configurations (\textit{realizations}) of the system's microstates that share the same macrostate, i.e. that lead to the same values of macroscopic observables (e.g. energy). In other words, $S$ increases if there are \q{more configurations} of the system's components that lead to the same \q{overall result}. 
+
+    \medskip
+
+    To give some intuition for (\ref{eqn:critical-temp}), consider a closed system (i.e. one that can exchange energy, but not particles) in a heat bath at constant temperature $T$. By consequence of the second law of thermodynamics, processes inside a closed system tend to maximise $S$ if $\mathcal{E}$ is constant, or minimize $\mathcal{E}$ if $S$ is constant\footnote{See \q{principle of minimum energy} and \q{principle of maximum entropy}.}. If $\mathcal{E}$ nor $S$ are constant, a \textit{compromise} must be done, and another quantity (a thermodynamic potential) is minimized instead. For example, in the case of a system of fixed volume $V$, it is the \textbf{Helmholtz free energy}\index{Free energy!Helmholtz}:\marginpar{\vspace{1em}Helmholtz free energy}
+    \begin{align} \label{eqn:free-energy}
+        F = \mathcal{E} - TS
+    \end{align}
+    Physically, $F$ quantifies the amount of the system's energy that can be used to perform useful work. 
+
+    \medskip 
+
+    Now, note that if $T$ is low,\marginpar{Intuition for criticality} $F$ is dominated by $\mathcal{E}$, meaning that the system at equilibrium will be in one of the minima of $\mathcal{E}$ (ordered state). However, if $T$ is sufficiently high, $S$ prevails, and the system will reorganize itself so to occupy one of the states with maximum $S$ - which are usually very different from the low energy ones (disordered state).
+    
+    The critical temperature $T_c$ sits at the boundary between these two phases, where little perturbations produce significant effects on the entire system's volume - which is exactly the kind of complex behaviour we are studying. In fact, fluctuations towards high $S$ produces \textit{disordered patches}, while ones in the opposite side lead to \textit{ordered patches} - which then influence the neighbouring regions through the local interactions between degrees of freedom. These \textit{wild fluctuations} allow the system to visit the regions of phase space that are specific of both low and high temperature (which are usually separated) \textit{at the same time}.
+
+    \medskip
+
+    In other words, a system at $T_c$ is \q{tuned to respond to change}, and it does so over all spatial and temporal scales.
+\end{itemize}
+
+Unfortunately, (\ref{eqn:critical-temp})\marginpar{The non-equilibrium problem} and the free energy (\ref{eqn:free-energy}) are only defined at \textbf{equilibrium}, leaving out all the interesting cases of non-equilibrium systems (e.g. living organisms). Finding a generalization of $F$ that works also in non-equilibrium states is one of the current goals of research in statistical mechanics. 
+
+\medskip
+
+The desire\marginpar{Universality} to do so can only increase after observing that \textbf{all} physical systems at \textbf{criticality} exhibit very similar emergent/cooperative behaviours, depending only on system's dimensionality, and the symmetry and range (long/short) of interactions. This is, in essence, the concept of \textbf{universality}\index{Universality}, one of the key ideas of theoretical physics. 
+
+\medskip
+
+Universality allows to study many different systems with \textbf{minimal models}\marginpar{Minimal models} (or \textit{null} models), where all the non-necessary details are left out, and only the \textit{few} parameters relevant for criticality are analysed. These are way simpler to solve and model than the full cases, and so provide the opportunity of a deeper theoretical understanding.
+
+\subsection{The non-equilibrium case}
+While physical systems\marginpar{Unanswered questions} at criticality and living organisms are both examples of complex systems, the latter show remarkable and yet unexplained differences, leading to a list of deep questions in the field of Statistical Mechanics.
+
+\medskip
+
+For examples, physical systems need to be \textit{fine-tuned} to show an emergent behaviour, because they need to be inside a very specific patch of the phase-space sitting between different phases. Living systems, however, need not this kind of tuning - they are, in a sense, \q{always critical}. For example, a bird flock does not need a specific temperature nor a certain wind speed to react readily to a predator: it just does.
+
+\medskip
+
+So, it is fair to ask at which point the analogy between non-equilibrium living organisms and equilibrium critical states must stop. \textit{Do bird flocks share the same core mechanism of an Ising model, with just another layer of complexity on top - or are they just superficially similar, but inherently completely different?} If the former is true, how can they \q{self-tune} to be \q{always critical}?
+
+\medskip
+
+More importantly: \textit{does universality even hold for non-equilibrium complex systems?} If this where true, it would enable a generation of theorists to model all of these magnificent behaviours with a single framework.
+
+\medskip
+
+In any case, even after confirming the analogy with critical systems, we must remember that we are not aiming for \textit{specific predictions}, but seeking a general, understandable, explanation for complex phenomena. For example, with the critical system analogy we do not wish to predict tomorrow's forecast, but rather unveil the typical patterns of  Earth's climate over millennia. For a specific application, such as weather forecasting or establishing the efficacy of a drug, it is best to use numerical models with thousands of parameters, \textit{fitting} reality to the further decimal place. On the other hand, modelling with few parameters a critical system can give insight on the behaviour of many non-equilibrium system (as we noted before), such as:\marginpar{Examples of systems with critical-like behaviours}
+\begin{itemize}
+    \item Bird and fish flocks
+    \item Certain kinds of brain activity
+    \item Ecosystems with high biodiversity (such as natural forests)
+    \item Written communication (mails, text messages, social connections, memes...)
+    \item River basins
+\end{itemize}
+
+\subsection{Statistical Mechanics}
+Statistical mechanics is the branch of physics that deals with many-body systems, borrowing concepts from statistics, probability theory and quantum mechanics. It can be divided in:
+\begin{itemize}
+    \item \textbf{Equilibrium Statistical Mechanics}, which extends classical thermodynamics, linking macroscopic observables (e.g. \textit{pressure}, \textit{temperature}) and thermodynamic quantities (e.g. \textit{heat capacity}) to microscopic behaviour. 
+    \item \textbf{Non-equilibrium Statistical Mechanics} (or Statistical Dynamics), which models irreversible processes driven by imbalances - such as chemical reactions or flows of particles/heat. 
+\end{itemize}
+In a more recent sense, Statistical Mechanics can be extended to generic (not necessarily inanimate) systems with many degrees of freedom formed by interacting parts. In this sense, Statistical Mechanics becomes the natural environment in which to study complex systems and emergent behaviour.
+
+\end{document}

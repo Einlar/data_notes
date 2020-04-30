@@ -1,0 +1,287 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\lesson{9}{7/4/20}
+
+\begin{example}[Recurrence of G/M/1 queue]
+    Let's now examine when the G/M/1 queue is positive recurrent. We already computed the transition probabilities in ():%Add reference
+    \begin{align*}
+        P_{i, i+1-j} &= \int_0^\infty e^{-\mu t} \frac{(\mu t)^j}{j!} \dd{G(t)} \qquad j=0,1,\dots,i \\
+        P_{i0} &= \int_0^\infty \sum_{k=i+1}^\infty e^{-\mu t} \frac{(\mu t)^k}{k!} \dd{G(t)} \qquad i \geq 0 
+    \end{align*}
+    The chain is irreducible, meaning that all states are in the same class, and also aperiodic. So, to prove positive recurrence, we just need to solve the stationarity equation:
+    \begin{align*}
+        \pi_k = \sum_{i} \pi_i P_{ik} \quad k \geq 0 \qquad \sum_{k} \pi_k = 1
+    \end{align*}
+    which in this case becomes:
+    \begin{align} \label{eqn:syst-gm1}
+        \pi_k = \sum_{i=k-1}^\infty \pi_i \int_0^\infty e^{-\mu t} \frac{(\mu t)^{i+1-k}}{(i+1-k)!} \dd{G(t)} \quad k \geq 1 \qquad \sum_0^\infty \pi_k = 1 
+    \end{align}
+    We ignore the case $k=0$, which is more complicated, as we will be able to compute $\pi_0$ by imposing normalization.
+
+    \medskip
+
+    To solve (\ref{eqn:syst-gm1}) we use the \textit{ansatz} $\pi_k = c \beta^k$, leading to:
+    \begin{align*}
+        c \beta^k &= c \sum_{i=k-1}^\infty \beta^i \int_0^\infty e^{-\mu t} \frac{(\mu t)^{i+1-k}}{(i+1-k)!} \dd{G(t)} =
+        \shortintertext{We exchange the integral and the sum (which is allowed because we are dealing with all non-negative terms, meaning that the partial sums are monotone functions, and we can apply Lebesgue's monotone convergence theorem). We also split $\beta^i$ in two factors, bringing one inside the inner sum, constructing an exponential:}
+        &= c \int_0^\infty e^{-\mu t} \beta^{k-1} \hlc{Yellow}{\sum_{i=k-1}^\infty \frac{(\beta \mu t)^{i+1-k}}{(i+1-k)!} }\dd{G(t)} =\\
+        &= c \int_0^\infty  e^{-\mu t} \beta^{k-1} \hlc{Yellow}{e^{\beta \mu t} }\dd{G(t)}
+    \end{align*} 
+    Rearranging:
+    \begin{align}\label{eqn:beta-eq}
+        \beta = \int_0^\infty e^{-\mu t(1-\beta)} \dd{G(t)}
+    \end{align}
+    Note that this result does not depend on $k$ - so if we find a solution for $\beta$ such that $\pi_k = c \beta^k$ is normalizable we would have the entire stationary distribution, proving positive recurrence.
+
+    Clearly it must be $0 < \beta < 1$, otherwise $\sum_k \pi_k = \sum_k c \beta^k$ would either be $0$ or diverge. 
+
+    We rewrite (\ref{eqn:beta-eq}) as follows:
+    \begin{align*}
+        \beta = \int_0^{+\infty} e^{- \mu t(1-\beta)} \dd{G(t)} = \mathbb{E}[e^{-\mu T (1-\beta)}] = A(\beta)
+    \end{align*}
+    and study the intersections of the curves $y = \beta$ and $y= A(\beta)$.
+
+    \medskip
+
+    First we examine the two extrema:
+    \begin{align*}
+        A(0) &= \int_0^{+\infty} e^{-\mu t} \dd{G(t)} > 0\\
+        A(1) &= \int_0^{+\infty} \dd{G(t)} = 1
+    \end{align*}
+    Then the first two derivatives:
+    \begin{align*}
+        A'(\beta) &= \int_0^{+\infty} \mu t e^{-\mu t(1-\beta)} \dd{G(t)} > 0 \qquad \forall \beta\\
+        A''(\beta) &= \int_0^{+\infty} (\mu t)^2 e^{-\mu t (1-\beta)} \dd{G(t)} > 0 \qquad \forall \beta
+    \end{align*}
+    Summarizing, $A(\beta)$ is strictly \textbf{increasing} and \textbf{convex}, and goes from $(0, A(0))$ with $A(0) > 0$ to ($1,1$). 
+
+    \medskip
+
+    So, with respect to $y = \beta$, there are only two possible behaviours, as illustrated in fig. \ref{fig:abeta-behaviours}:
+    \begin{enumerate}
+        \item $A(\beta)$ reaches $(1,1)$ \q{from above}, i.e. $A'(1) < 1$, meaning that:
+        \begin{align*}
+            A'(1) = \mu \mathbb{E}[T] = \frac{\mu}{\lambda} < 1 \Leftrightarrow \lambda > \mu
+        \end{align*}
+        where $\lambda = 1/\mathbb{E}[T]$ is the \textit{arrival rate} in the queue. 
+
+        In this case there are no intersections with $y = \beta$ except the trivial one at $(1,1)$, which is not acceptable (because we need $0<\beta < 1$). Thus (\ref{eqn:beta-eq}) has no solutions. 
+
+        Note that this \textit{does not prove} that the chain is not positive recurrent, but only that the \textit{ansatz} we started from is not valid. However, from other considerations, we know that the Markov chain is \textbf{transient} for $\lambda > \mu$ - because more people arrive than depart, and so the system's state will \q{escape towards infinity}.   
+
+        \item $A(\beta)$ reaches $(1,1)$ from below, i.e. $A'(1) > 1$. This happens if:
+        \begin{align*}
+            A'(1) = \mu \mathbb{E}[T] = \frac{\mu}{\lambda} > 1 \Leftrightarrow \lambda < \mu 
+        \end{align*}
+        In this case there is a non-trivial intersection with $y=\beta$, which is denoted as $\beta^* \in (0,1)$. This is a valid solution for (\ref{beta-eq}), thus proving both that our \textit{ansatz} was valid, and that the chain is positive recurrent. 
+
+        This case corresponds to an arrival rate $\lambda$ that is \textit{less} than that of departures, and so intuitively we expect the system to be stable, returning over and over to the same \q{low} states. 
+    \end{enumerate}
+
+In summary: we started with the stationarity equation (\ref{eqn:syst-gm1}), introduced an \textit{ansatz} leading to the integral equation (\ref{eqn:beta-eq}), for which we have found a solution in the case $\lambda < \mu$.
+
+As the chain is irreducible and aperiodic, if a stationary solution exists then it is unique, and corresponds to the limiting distribution. So, the solution we have found by \textit{guessing} its form is rigorous, and it's the only correct solution in its domain. 
+
+However, \textit{outside} that domain, we can only say that the \textit{ansatz} was not useful, and we need to employ other methods to actually draw any conclusion about the chain's recurrence.   
+    
+\medskip
+
+Finally, we spend some words on the \textit{critical case} $\lambda = \mu$, with $A'(1) = 1$. Here there is a \textit{double} intersection with $y=\beta$ at $(1,1)$, and so (\ref{eqn:beta-eq}) has no solution, and we cannot draw any conclusion with our method.
+
+However, it can be shown that in this case the chain is \textit{null recurrent}. So:
+\begin{itemize}
+    \item $\lambda < \mu$: chain is \textbf{positive recurrent} (or \textit{stable})
+    \item $\lambda = \mu$: chain is \textbf{null recurrent}
+    \item $\lambda > \mu$: chain is \textbf{transient} (or \textit{unstable})   
+\end{itemize}
+ 
+\end{example}
+
+\begin{figure}[htp]
+    \centering
+    %\includegraphics[width=0.6\textwidth]{}
+    \caption{There are only two possible behaviours for $A(\beta)$, resulting in either $0$ or exactly $1$ intersections with $y = \beta$.\label{fig:abeta-behaviours}}
+\end{figure}
+
+\subsection{Periodic generalization}
+We proved the existence of a limiting distribution for irreducible, positive recurrent, \textbf{aperiodic} Markov chains. In the \textbf{periodic} case, clearly the limiting distribution cannot exist:
+\begin{align*}
+    \not\exists \lim_{n \to \infty} P_{ij}^{(n)}
+\end{align*} 
+However, we can inspect $P_{ij}^{(n)}$ only for $n$ that are \textit{multiples} of the period $d$ of the chain. In this case, it can be shown that:
+\begin{align*}
+    \lim_{n \to \infty} P_{i i}^{(nd)} = \frac{d}{m_i} 
+\end{align*} 
+We can always consider the \textit{mean time} that the system spends in state $i$, and \textit{define} a \q{limiting distribution} as follows:
+\begin{align*}
+    \lim_{n \to \infty} \frac{1}{n} \sum_{m=0}^{n-1} P_{i i}^{(m)} \equiv \pi_i = \frac{1}{m_i}  
+\end{align*}
+In fact now the sum is over \textit{all states}, also the ones that are non-multiples of $d$. However, by periodicity we know that $P_{i i}^{n} = 0$ if $n$ is not a multiple of $d$, while $P_{i i}^{nd}  \xrightarrow[n \to \infty]{} d/m_i$. So, over one period, we find null values for $d-1$ terms, and $d/m_i$ for the last one, leading to an average of exactly $1/m_i$.
+
+Again, the $\pi_j$ so defined can be found as the unique nonnegative solution to the stationarity equations:
+\begin{align*}
+    \pi_j = \sum_{k=0} \pi_k P_{kj} \pi_k P_{kj} \qquad \sum_{j=0}^\infty \pi_j = 1
+\end{align*}
+
+\section{Reducible Markov chians}
+While most Markov chains encountered in stochastic modelling are irreducible, sometimes it can happen to deal with a reducible case.
+
+One such example is the following:
+\begin{align*}
+    \textbf{P} = \begin{Vmatrix}
+        \frac{1}{2} & \frac{1}{2} & 0 & 0\\
+        \frac{1}{4} & \frac{3}{4} & 0 & 0\\
+        0 & 0 & \frac{1}{3} & \frac{2}{3}\\
+        0 & 0 & \frac{2}{3} & \frac{1}{3}        
+    \end{Vmatrix} = \begin{Vmatrix}
+        \textbf{P}_1 & \mathbb{O}\\
+        \mathbb{O} & \textbf{P}_2  
+    \end{Vmatrix}
+    \qquad \textbf{P}_1 = \begin{Vmatrix}
+        \frac{1}{2} & \frac{1}{2}\\
+        \frac{1}{4} & \frac{3}{4}    
+    \end{Vmatrix};\> \textbf{P}_2 = \begin{Vmatrix}
+        \frac{1}{3} & \frac{2}{3}\\
+        \frac{2}{3} & \frac{1}{3}    
+    \end{Vmatrix} 
+\end{align*}
+This chain contains two \textit{isolate} classes, which can be modelled as two separate chains with transition matrices $\textbf{P}_1$ and $\textbf{P}_2$. Their evolution can be completely separated, and in fact:
+\begin{align*}
+    \textbf{P}^n = \begin{Vmatrix}
+        \textbf{P}_1^n & \mathbb{O}\\
+        \mathbb{O} & \textbf{P}_2^n   
+    \end{Vmatrix} 
+\end{align*} 
+In general, however, \textit{one-way transitions} between different classes can happen. 
+
+\medskip
+
+We can apply the basic limit theorem to any aperiodic \textbf{recurrent} class in a reducible Markov chain. As we previously noted, a \textit{recurrent class} must be \textit{isolate} from the others, meaning that if $i$ is in that class and $j$ in another, then $P_{ij}^{(n)} = 0$ $\forall n$. On the other hand, for states in the same class we have, in the long run:
+\begin{align} \label{eqn:basic-limit1}
+    \lim_{n \to \infty} P_{ij}^{(n)} = \frac{1}{m_j} \geq 0 
+\end{align}  
+
+If a class is \textbf{transient}, then the system will stay in it for a finite them, and then leave it and never return. So, for any transient state $j$ we have:
+\begin{align} \label{eqn:to-transient}
+    \lim_{n \to \infty} P_{ij}^{(n)} = 0 \quad \forall i
+\end{align}
+Summarizing, (\ref{eqn:basic-limit1}) covers transitions between recurrent states, and (\ref{eqn:to-transient}) the ones to a transient state.
+
+The only remaining case to examine is that of a {starting \textbf{transient} state} $i$, and final \textbf{recurrent} state $j$. 
+
+\medskip
+
+Let's see what happens with an example:
+\begin{align}\label{eqn:one-way1}
+    \textbf{P} = \begin{blockarray}{l*{4}{c}}
+        \begin{block}{l*{4}{>{\scriptstyle}c<{}}}
+            & 0 & 1 & 2 & 3\\
+        \end{block}
+        \begin{block}{>{\scriptstyle}r<{}||*{4}{c}||}
+            0 & \frac{1}{2}  & \frac{1}{2}  & 0 & 0\\
+            1 & \frac{1}{4}  & \frac{3}{4}  & 0 & 0\\
+            2 & \frac{1}{4}  & \frac{1}{4}  & \frac{1}{4}  & \frac{1}{4} \\
+            3 & 0 & 0 & 0 & 1 \\
+        \end{block}
+    \end{blockarray}
+\end{align}
+There are three classes: $A=\{0,1\}$, $B=\{2\}$ and $C=\{3\}$.
+
+Looking at the block diagram in fig. \ref{fig:one-way1}, we can see that:
+\begin{itemize}
+    \item If the system starts in $A$, it will remain there forever. Note that $A$ is \textit{aperiodic}, because of the non-zero probabilities of \textit{same-state} transitions $0 \to 0$ and $1\to 1$.
+      
+    We can then search for the stationary distribution:
+    \begin{align*}
+        \pi_j = \sum_{i=0}^1 \pi_i P_{ij} \quad j = 0,1 \qquad \pi_0 + \pi_1 = 1
+    \end{align*}
+    leading to the following system of equations:
+    \begin{align*}
+        \begin{cases}
+            \pi_0 = \pi_0 \cdot  \frac{1}{2}  + \pi_1 \cdot \frac{1}{4} \\
+            \pi_1 = \pi_0 \cdot \frac{1}{2} + \pi_1 \cdot \frac{3}{4}  
+        \end{cases}
+    \end{align*}
+    We need to solve only one of them, and then impose the normalization:
+    \begin{align*}
+        \pi_0 = \frac{\pi_1}{2}  \> \land \> \pi_0 + \pi_1 = 1 \Rightarrow \pi_0 = \frac{1}{3} \quad \pi_1 = \frac{2}{3}  
+    \end{align*}
+    And so $A$ is \textbf{positive recurrent}. 
+    \item $C$ is formed by a single \textbf{absorbing state}, and so here the chain's behaviour is trivial: the class is \textit{aperiodic}, \textit{positive recurrent}, with limiting probability merely given by $\pi_3 = 1$.   
+    \item Class $B$ is \textbf{transient}: its only state cannot ever be reached from different states, and it is not absorbing. Transitions $B \to C$ and $B \to A$ are possible, but \textit{one-way}. 
+    
+    In the long run, clearly $\pi_{2 2} \equiv \lim_{n \to \infty} P_{22}^{(n)} = 0$, because $2$ is transient. To get the other probabilities we can apply \textit{first-step analysis} to \textbf{classes}. Explicitly, let $u \equiv \pi_A$ denote the probability of absorption in class $A$ if the system starts at $2$. Then $1-u \equiv \pi_C$ is the probability of absorption in $C$. So:
+    \begin{align*}
+        u = (P_{20} + P_{21}) \cdot 1 + \frac{1}{4} \cdot u + \frac{1}{4} \cdot 0 = \frac{1}{2} + \frac{1}{4}u \Rightarrow u=\frac{2}{3}     
+    \end{align*}
+
+    In this case we could have just noted that, if starting at $2$, the probability of going to $C$ is \textit{half} that of going to $A$. Imposing normalization this leads directly to $\pi_{23} = 1/3$, and $\pi_A = \pi_{20} + \pi_{21} = 2/3$.
+
+    When the system is in $A$, the probabilities of being in $0$ or $1$ (in the limit), are the ones found before, i.e. $\pi_0$ and $\pi_1$.
+
+    So, to get from $2$ to $0$, we first need to move from $B$ to class $A$, and then to \textit{be} in the correct state in the limit: 
+    \begin{align*}
+        \pi_{20} = \lim_{n \to \infty} \mathbb{P}(X_n = 0|X_n \in A) \mathbb{P}(X_n \in A|X_0 = 2) = \pi_0 \cdot \pi_A = \frac{2}{3} \cdot \frac{1}{3} = \frac{2}{9}
+    \end{align*}
+    Similarly, for $2 \to 1$:
+    \begin{align*}
+        \pi_{21} &= \pi_A \cdot \pi_1 = \frac{2}{3} \cdot \frac{2}{3} = \frac{4}{9}
+    \end{align*}
+\end{itemize}
+
+Summarizing, the limiting distribution for the whole chain is given by:
+\begin{align*}
+    \lim_{n \to \infty} \textbf{P}^n =  \begin{blockarray}{l*{4}{c}}
+        \begin{block}{l*{4}{>{\scriptstyle}c<{}}}
+            & 0 & 1 & 2 & 3\\
+        \end{block}
+        \begin{block}{>{\scriptstyle}r<{}||*{4}{c}||}
+            0 & \pi_0  & \pi_1  & 0 & 0\\
+            1 & \pi_0  & \pi_1  & 0 & 0\\
+            2 & \pi_{20}  & \pi_{21}  & 0  & \pi_{23} \\
+            3 & 0 & 0 & 0 & 1 \\
+        \end{block}
+    \end{blockarray} = 
+    \begin{blockarray}{l*{4}{c}}
+        \begin{block}{l*{4}{>{\scriptstyle}c<{}}}
+            & 0 & 1 & 2 & 3\\
+        \end{block}
+        \begin{block}{>{\scriptstyle}r<{}||*{4}{c}||}
+            0 & \frac{1}{3}  & \frac{2}{3}  & 0 & 0\\
+            1 & \frac{1}{3}  & \frac{2}{3}  & 0 & 0\\
+            2 & \frac{2}{9}  & \frac{4}{9}  & 0  & \frac{1}{3} \\
+            3 & 0 & 0 & 0 & 1 \\
+        \end{block}
+    \end{blockarray}
+\end{align*}
+
+
+\begin{figure}[htp]
+    \centering
+    \begin{tikzpicture}[shorten >=1pt,node distance=3cm,auto]
+        \tikzstyle{every state}=[fill={rgb:black,1;white,10},font=\bfseries]
+        \tikzset{every loop/.style={min distance=5mm,looseness=5}}
+        \node[state] (q0) {0};
+        \node[state, below right of=q0, xshift=1cm] (q2) {2};
+        \node[state, below of=q0, yshift=-1cm] (q1) {1};
+        \node[state, right of=q2, accepting] (q3) {3};
+        \path[->]
+        (q0) edge[loop left] node{$0.5$} (q0)
+        (q1) edge[loop left] node{$0.75$} (q1)
+        (q2) edge[loop above] node{$0.25$} (q2)
+        (q3) edge[loop above] node{$1$} (q3)
+        (q0) edge[bend left, right] node{$0.5$} (q1)
+        (q1) edge[bend left, left] node{$0.25$} (q0)
+        (q2) edge[above, sloped] node{$0.25$} (q0)
+        (q2) edge[below, sloped] node{$0.25$} (q1)
+        (q2) edge[above] node{$0.25$} (q3)
+        ;
+    \end{tikzpicture}
+    \caption{Block diagram for the Markov chain in (\ref{eqn:one-way1}).\label{fig:one-way1}}
+\end{figure}
+
+
+\end{document}

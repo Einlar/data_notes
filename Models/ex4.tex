@@ -1,0 +1,552 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\begin{exo}
+    Show that the Master Equation:
+    \begin{align}\label{eqn:me1}
+        w_i(t_{n+1}) = \sum_{j} W_{ij}(t_n) w_j(t_n) \qquad 1 = \sum_{i} W_{ij}(t_n)
+    \end{align}
+    preserves the normalization, i.e. if:
+    \begin{align*}
+        \sum_{i} w_i(t_n) = 1
+    \end{align*}
+    when $n=0$, then it holds for all $n>0$. Idem for $\int \dd{x} w(x,t_n)$.
+
+    \medskip
+
+    \textbf{Solution}. By induction, we prove that if the normalization holds for $n$, then it holds for $n+1$. Then, as it holds for $n=0$, it must hold for any $n$.
+    \begin{align*}
+        \sum_{i} w_i(t_{n+1}) &\underset{(\ref{eqn:me1})}{=}   \sum_i \sum_j W_{ij}(t_n) w_j(t_n) =\\
+        &= \sum_j w_j(t_n) \underbrace{\sum_i W_{ij}(t_n)}_{1}  = \sum_j w_j(t_n) = 1
+    \end{align*}
+
+    In the case of $\int \dd{x} w(x,t_n)$, the same property holds for all the Riemann sums, and so it holds in the continuum limit.
+\end{exo}
+
+\begin{exo}
+Show that:
+\begin{align}\label{eqn:jump}
+    W(z|x,t) = F\left(\frac{z-\epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}} \qquad \int_{\mathbb{R}} \dd{y} F(y) = 1
+\end{align}
+imply the normalization condition:
+\begin{align*}
+    \int_{\mathbb{R}} \dd{z} W(+z|x,t_n) = 1
+\end{align*}   
+
+\medskip
+
+\textbf{Solution}. By direct computation:
+\begin{align*}
+    \int_{\mathbb{R}} \dd{z} W(z|x,t) = \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}} \int_{\mathbb{R}} \dd{x} F\left(\frac{z-\epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) \underset{(a)}{=} \int_{\mathbb{R}} \dd{y} F(y) = 1
+\end{align*} 
+where in (a) we performed the change of variables:
+\begin{align} \label{eqn:change}
+    y = \frac{z-\epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}}  \qquad \dd{z} = \sqrt{\epsilon \hat{D}(x,t)} \dd{y} 
+\end{align}
+\end{exo}
+
+\begin{exo}
+    Show the ansatz (\ref{eqn:jump}) together with:
+    \begin{align*}
+        \int_{\mathbb{R}} \dd{y} y F(y) = 0
+    \end{align*} 
+    imply:
+    \begin{align*}
+        \int_{\mathbb{R}} \dd{z} z W(z|x,t) &= \epsilon f(x,t)\\
+        \int_{\mathbb{R}} \dd{z} z^2 W(z|x,t) &= \epsilon \hat{D}(x,t) \int_{\mathbb{R}} \dd{y} y^2 F(y) + O(\epsilon^2)\\
+        \int_{\mathbb{R}} \dd{z} z^k W(z|x,t) &= O(\epsilon^{k/2}) \qquad k\geq 3
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. For the first moment:
+    \begin{align*}
+        \langle z \rangle &= \mu_1(x,t) = \int_{\mathbb{R}} \dd{z} z F\left(\frac{z - \epsilon f(x,t)}{\sqrt{\epsilon \hat{D}(x,t)}} \right) \frac{1}{\sqrt{\epsilon \hat{D}(x,t)}}  =\\
+        &\underset{(\ref{eqn:change})}{=} \int_{\mathbb{R}} \dd{y} \left(\epsilon f(x,t) + y \sqrt{\epsilon \hat{D}(x,t)}\right) F(y) =\\
+        &= \epsilon f(x,t) \underbrace{\int_{\mathbb{R}} F(y) \dd{y} }_{1}+ \sqrt{\epsilon \hat{D}(x,t)} \underbrace{\int_{\mathbb{R}} \dd{y} F(y)}_{0} = \epsilon f(x,t)
+    \end{align*} 
+    For the $n$-th order moment, with $n>1$, we use Newton's binomial formula:
+    \begin{align*}
+        \mu_n &= \int_{\mathbb{R}} \dd{z} z^n W(z|x,t) \underset{(\ref{eqn:change})}{=} \int_{\mathbb{R}} \dd{y} \left(\epsilon f(x,t) + y \sqrt{\epsilon \hat{D}(x,t)}\right)^n F(y) =\\
+        &= \int_{\mathbb{R}} \dd{y} F(y) \sum_{k=0}^n {n \choose k} (\epsilon f)^{n-k} (y^2 \epsilon \hat{D})^{k/2} =\\
+        &= \int_{\mathbb{R}} \dd{y} F(y) \sum_{k=0}^{n} {n\choose k} f^{n-k} (y^2 \hat{D})^{k/2} \epsilon^{n-k+k/2}
+    \end{align*}
+    For $n=2$ we get:
+    \begin{align*}
+        \mu_2 &= \epsilon \hat{D}(x,t) \int_{\mathbb{R}} \dd{y} y^2 F(y) + 2 \epsilon \sqrt{\epsilon} \hat{D} \underbrace{\int_{\mathbb{R}} \dd{y} y F(y)}_{0} +\underbrace{ \epsilon^2 f^2}_{ O(\epsilon^2)}\underbrace{ \int_{\mathbb{R}} \dd{y} F(y)}_{1} =\\
+        &= \epsilon \hat{D}(x,t) \int_{\mathbb{R}} \dd{y} y^2 F(y) + O(\epsilon^2)
+    \end{align*}
+    For $k > 2$, note that the exponent of the $\epsilon$ is:
+    \begin{align*}
+        n - k + \frac{k}{2} = \frac{2n-k}{2} \geq \frac{k}{2} > 1   
+    \end{align*}
+    And so all terms are of order $O(\epsilon^{k/2})$.
+\end{exo}
+
+\begin{exo}
+    Consider a spherical particle of radius $r$ subjected to the collisions of an ideal gas of $N$ particles in a volume $V$ at equilibrium at temperature $T$. If the number of collisions during a time interval $\Delta t$ satisfies the central limit theorem, determine the average number of collisions and its variance in a time interval $\Delta t$.
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}
+    Show that the statistical properties of the Brownian motion, $B(t)$, imply that $\langle \xi(t) \rangle = 0$ and $\langle \xi(t_1) \xi(t_2) \rangle = \delta(t_2 - t_1)$.
+
+    We have defined in a purely formal way $\xi(t) = \dd{B(t)}/\dd{t}$ in the following equation:
+    \begin{align*}
+        \dv{X}{t}(t) = \sqrt{2D} \xi(t) \qquad \dv{B}{t}(t) \equiv \xi(t)
+    \end{align*}
+    (Remember that the Brownian trajectories are not differentiable).
+    \medskip
+
+    \textit{Hint}: $\langle \Delta B_i \rangle = 0$ and $\langle \Delta B_i \Delta B_j \rangle = \Delta t_i \delta_{ij}$. This result is also consistent with the following formal expression for the $\xi$ trajectories:
+    \begin{align*}
+        \dd{\mathbb{P}}(\{\xi(\tau)\}) \propto \prod_{\tau} \dd{\xi(\tau)} \exp\left(-\frac{1}{2} \int \dd{\tau} \xi^2(\tau) \right)
+    \end{align*}
+    which can be deduced from the analogous expression for the $\dd{\mathbb{P}}(\{B(\tau)\})$.
+
+    \medskip
+
+    \textbf{Solution}. Consider a discretization $\{t_j\}_{j=1,\dots,n}$, with $\Delta t_i = t_i - t_{i-1}$, $f_i \equiv f(t_i)$, $t_n \equiv t$ fixed.
+    
+    Then, by definition, $\Delta B_i \equiv \Delta t_i \xi(t_i)$. Averaging for $i=n$:
+    \begin{align*}
+        0=\langle \Delta B_n \rangle = \Delta t_n \langle \xi_n \rangle  \Rightarrow \langle \xi(t_n) \rangle = 0  \xrightarrow[n \to \infty]{} \langle \xi(t) \rangle = 0
+    \end{align*} 
+    For the correlator, choose two instants $t_i$ and $t_j$ in the discretization, keeping them \textit{fixed} when doing the continuum limit. Then:
+    \begin{align*}
+        \Delta t_i \delta_{ij} = \langle \Delta B_i \Delta B_j \rangle = \Delta t_i \Delta t_j \langle \xi(t_i) \xi(t_j) \rangle
+    \end{align*} 
+    where we used the linearity of the average. Rearranging:
+    \begin{align*}
+        \langle \xi(t_i) \xi(t_j)\rangle = \frac{\Delta t_i \delta_{ij}}{\Delta t_i \Delta t_j } = \frac{\delta_{ij}}{\Delta t_j}  \xrightarrow[n \to \infty]{} \delta(t_i -t_j)
+    \end{align*}
+    This formula for the continuum limit of a Kronecker delta is a \q{discretization rule} (see \url{https://physics.stackexchange.com/questions/127705/where-does-the-delta-of-zero-delta0-come-from}).  Graphically, we can interpolate a discretized function by using the left-most points (as in Ito's prescription), so that:
+    \begin{align*}
+        \delta_{i0} \Rightarrow f(x) = \begin{cases} 
+            1 & 0 \leq x < \Delta t_0\\
+            0 & \text{otherwise}
+        \end{cases}
+    \end{align*}
+    So it has an \textit{area} of $\Delta t_0 \neq 1$, so it cannot be a Dirac Delta in the continuum limit, which is always normalized. So, the correct limit involves $\delta_{i0}/\Delta t_0$. %a graph would be nice
+\end{exo}
+
+\begin{exo}
+    Use the probability distribution for a Brownian trajectory:
+    \begin{align*}
+        \dd{\mathbb{P}}_{t_1,\dots,t_n}(B_1, \dots, B_n|B_0,t_0) = \exp\left(-\sum_{i=1}^n \frac{(B_i - B_{i-1})^2}{2 \Delta t_i} \right) \prod_{i=1}^n \frac{\dd{B_i}}{\sqrt{2 \pi \Delta t_i}} 
+    \end{align*}
+    to show that:
+    \begin{align*}
+        \langle (\Delta B_i)^2 (\Delta B_j)^2 \rangle = 3 \delta_{ij} \Delta t_i^2 + (1-\delta_{ij}) \Delta t_i \Delta t_j
+    \end{align*}
+    
+    \medskip
+
+    \textbf{Solution}. If $i \neq j$, as different increments are independent, we have:
+    \begin{align*}
+        \langle (\Delta B_i)^2 (\Delta B_j)^2 \rangle = \langle (\Delta B_i)^2 \rangle \langle (\Delta B_j)^2 \rangle = \Delta t_i \Delta t_j
+    \end{align*}
+    where we used $\langle ( \Delta B_i \Delta B_j  \rangle = \Delta t_i \Delta t_j \delta_{ij}$.
+
+    If $i = j$ we have:
+    \begin{align*}
+        \langle (\Delta B_i)^4 \rangle
+    \end{align*}
+    which can be computed through Wick's theorem. Here the number of factors is $4$, and so we have $(4-1)!! = 3$ possible partitions in couples, which are all equal:
+    \begin{align*}
+        \langle (\Delta B_i)^4 \rangle = 3 \langle (\Delta B_i)^2 \rangle = 3 \Delta t_i^2
+    \end{align*}
+    We can write both cases at the same time by using a Kronecker's delta:
+    \begin{align*}
+        \langle (\Delta B_i)^2 (\Delta B_j)^2 \rangle =\underbrace{ 3 \delta_{ij} \Delta t_i^2 }_{i=j}+ \underbrace{(1-\delta_{ij}) \Delta t_i \Delta t_j}_{i \neq j} 
+    \end{align*}
+\end{exo}
+
+\begin{exo}
+    Show that:
+    \begin{align*}
+        \langle \left[\sum_{i=1}^n \left((\Delta B_i)^2 - \Delta t_i\right)\right]^2 \rangle = 2 \sum_{i=1}^n (\Delta t_i)^2
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. We start by expanding the square:
+    \begin{align*}
+        \sum_{ij}^n \langle [\Delta t_i - (\Delta B_i)^2] [\Delta t_j - (\Delta B_j)^2]\rangle
+    \end{align*}
+    Then we highlight the case where $i = j$:
+    \begin{align} \label{eqn:dig}
+        = \sum_{i=1}^n \langle [\Delta t_i - (\Delta B_i)^2]^2 \rangle + \sum_{i \neq j}^n \langle [\Delta t_i - (\Delta B_i)^2] [\Delta t_j - (\Delta B_j)^2]\rangle
+    \end{align}
+    Note that for $i \neq j$ we can use the \textit{independence of increments} to factorize the average:
+    \begin{align*}
+        \langle [\Delta t_i - (\Delta B_i)^2] [\Delta t_j - (\Delta B_j)^2]\rangle = \langle [\Delta t_i - (\Delta B_i)^2] \rangle \langle \Delta t_j - (\Delta B_j)^2 \rangle
+    \end{align*} 
+    Recall that $\langle (\Delta B_i)^2 \rangle = \Delta t_i$, and so, by linearity:
+    \begin{align*}
+         \langle [\Delta t_i - (\Delta B_i)^2] \rangle=\Delta t_i -\langle (\Delta B_i)^2 \rangle = 0
+    \end{align*}
+    So we are left with the diagonal terms in (\ref{eqn:dig}). Expanding the square:
+    \begin{align} \label{eqn:dig2}
+        \sum_{i=1}^n \langle [\Delta t_i - (\Delta B_i)^2]^2 \rangle = \sum_{i=1}^n \left[\Delta t_i^2 - 2 \Delta t_i \langle \underbrace{(\Delta B_i)^2}_{\Delta t_i}  \rangle + \langle \Delta B_i^4 \rangle\right]
+    \end{align}
+    And by using Wick's theorem:
+    \begin{align*}
+        \langle (\Delta B_i)^4 \rangle = (4-1)!! \langle (\Delta B_i)^2 \rangle \langle (\Delta B_i)^2\rangle = 3 \Delta t_i^2
+    \end{align*}
+    Finally, substituting back in (\ref{eqn:dig2}) we arrive at the desired result:
+    \begin{align*}
+        \langle \left[\sum_{i=1}^n \left((\Delta B_i)^2 - \Delta t_i\right)\right]^2 \rangle &= \sum_{i=1}^n [\Delta t_i^2 - 2 \Delta t_i^2 + 3 \Delta t_i^2] =\\
+        &= 2 \sum_{i=1}^n (\Delta t_i)^2
+    \end{align*}
+\end{exo}
+
+\begin{exo}
+    Show that for the generic $\lambda$-prescription:
+    \begin{align}
+        S\equiv \int_0^t B(\tau) \dd{B(\tau)} = \frac{B^2(t) - B^2(t_0)}{2} + \frac{2\lambda - 1}{2} (t-t_0) \label{eqn:disc-B}
+    \end{align}
+    where we have considered a generic initial condition, $B(t_0)$ at $\tau = t_0$.
+
+    \medskip
+
+    \textbf{Solution}. Consider a \q{adapted} time discretization $\{t_i\}_{i=1,\dots, 2n}$, with $t_0$ and $t_{2n} \equiv t$ fixed, and:
+    \begin{align*}
+        t_{2j-1} = \lambda t_{2j} + (1-\lambda ) t_{2i-2}
+    \end{align*}
+    Graphically, this means that all \textit{odd points} $t_{2j-1}$ are fixed in the \textit{same relative position} in the intervals $[t_{2j-2}, t_{2j}]$, in the sense that, for example:
+    \begin{align*}
+        t_1 - t_0 = \lambda(t_2 - t_0)
+    \end{align*}
+
+    The integral (\ref{eqn:disc-B}) can be then discretized as follows:
+    \begin{align*}
+        S &= \lim_{n \to \infty} S_n\\
+        S_n &= \sum_{i=1}^{2n} [B_{2i-1}] (B_{2i} - B_{2i-2})
+    \end{align*}
+    We then approximate $B_{2i-1}$ \textit{as if} it were differentiable (this is a non-rigorous \textit{trick} to make computation faster):
+    \begin{align*}
+        S_n &= \sum_{i=1}^{2n} [\lambda B_{2i} + (1-\lambda) B_{2i-2}](B_{2i} - B_{2i-2}) =\\
+        &= ^{2n} [\lambda B_{2i} +B_{2i-2}-\lambda B_{2i-2}](B_{2i} - B_{2i-2}) =\\
+        &= \sum_{i=1}^{2n} \Big[\lambda(B_{2i}- B_{2i-2})(B_{2i}-B_{2i-2}) + \underbrace{B_{2i-2} (B_{2i} - B_{2i-2})}_{A} \Big]
+    \end{align*}
+    Now the \textit{odd} terms (middle points) do not appear anymore, and so these are effectively Ito's integrals. In particular the term in $A$ was already solved:
+    \begin{align*}
+        A = \int_{t_0}^t B(\tau) \dd{B(\tau)}\Big|_{\mathrm{Ito}} = \frac{B^2(t)-B^2(t_0)}{2} - \frac{(t-t_0)}{2} 
+    \end{align*}
+    So all that's left is to evaluate:
+    \begin{align*}
+        \lambda \sum_{i=1}^{2n} (B_{2i}-B_{2i-2})^2  \xrightarrow[n \to \infty]{}  \lambda \int_{t_0}^t  \dd{B(\tau)}^2 = \lambda \int_{t_0}^t \dd{\tau} = \lambda (t-t_0)
+    \end{align*}
+    Putting it all together:
+    \begin{align*}
+        S = \frac{B^2(t)-B^2(t_0)}{2} - \frac{(t-t_0)}{2} - \lambda(t-t_0) = \frac{B^2(t)-B^2(t_0)}{2} + \frac{2\lambda -1}{2}(t-t_0)  
+    \end{align*}
+    
+\end{exo}
+
+\begin{exo}
+    Show that, in the $\lambda$-prescription:
+    \begin{align*}
+        \int_{0}^t B(\tau) \dd{B(\tau)} \Big|_{\lambda} = \frac{B^2(t)-B^2(0)}{2} + \frac{2 \lambda -1}{2} (t-t_0)   
+    \end{align*}
+
+    \medskip
+
+    \textit{Hint}: Consider the time mesh $\{t_i\}_{i=0,\dots,2n}$ with $t_{2n} = t$, $t_{2i-1} = \lambda t_{2i} + (1-\lambda) t_{2i-2}$ and:
+    \begin{align*}
+        S_n = \sum_{i=1}^{2n} B_{2i-1} (B_{2i} - B_{2i-2})
+    \end{align*} 
+
+    \medskip
+
+    \textbf{Solution}. See the previous exercise. 
+
+\end{exo}
+
+
+\begin{exo}
+    Show that $(\dd{B(\tau)})^{k+2} = 0$ $\forall k > 0$. This is done in a similar way as in the proof of $(\dd{B(\tau)})^2 = \dd{\tau}$. You have to show that:
+    \begin{align*}
+        \int_{t_0}^t G(\tau) (\dd{B(\tau)})^{2+k} = 0
+    \end{align*}
+    using ms-convergence. Assume for simplicity that $G$ is bounded. On the same token derive also that:
+    \begin{align*}
+        \int_{t_0}^t G(\tau) \dd{B(\tau)}\dd{\tau} = 0
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. Let $G \colon \mathbb{R} \to \mathbb{R}$ be a \textit{non-anticipating} test function. We want to show that:
+    \begin{align*}
+        \int_0^t G(\tau) (\dd{B(\tau)})^k = \overset{\mathrm{m.s.} }{\lim_{n \to \infty}} \sum_{i=1}^n G_{i-1} (\Delta B_i)^k = 0
+    \end{align*} 
+    Expanding the definition of mean square limit, we need to show:
+    \begin{align*}
+        \langle \left(\sum_{i=1}^n G_{i-1} (\Delta B_i)^k\right)^2 \rangle  \xrightarrow[n \to \infty]{}  0
+    \end{align*}
+    Then we expand the square:
+    \begin{align*}
+        \langle \left(\sum_{i=1}^n G_{i-1} (\Delta B_i)^k\right)^2 \rangle = \langle \left(\sum_{i=1}^n G_{i-1} (\Delta B_i)^k\right) \left(\sum_{j=1}^n G_{j-1} (\Delta B_j)^k\right) \rangle
+    \end{align*}
+    We separate the case for which $i=j$:
+    \begin{align*}
+        = \sum_{i=1}^n \langle G_{i-1}^2 (\Delta B_i)^{2k} \rangle + 2 \sum_{i<j}^n \langle G_{i-1} G_{j-1} (\Delta B_i)^k (\Delta B_j)^k \rangle
+    \end{align*} 
+    We can factor all the averages exploiting the fact that $G$ is \textit{non-anticipating}, and that \textit{increments are independent}:
+    \begin{align} \label{eqn:last}
+        = \sum_{i=1}^n G_{i-1}^2 \hlc{Yellow}{\langle (\Delta B_i)^{2k} \rangle }+ 2 \sum_{i< j}^n \langle G_{i-1} G_{j-1} (\Delta B_i)^k \rangle\hlc{SkyBlue}{ \langle (\Delta B_j)^k \rangle}
+    \end{align}  
+    Recall that each increment $\Delta B_i$ follows a gaussian distribution, and that the $p$-th moment of $X \sim \mathcal{N}(\mu,\sigma)$ is:
+    \begin{align} \label{eqn:wick}
+        \mathbb{E}[(X-\mu)^p] = \begin{cases}
+            0 & p \text{ is odd}\\
+            \sigma^p(p-1)!! & p \text{ is even}
+        \end{cases}
+    \end{align}
+    So we have two cases:
+    \begin{itemize}
+        \item $k$ is odd: the blue term in (\ref{eqn:last}) vanishes, but the yellow one not. Recall that $\langle \Delta B_i^2 \rangle = \Delta t_i$, and so $\langle (\Delta B_i)^{2k} \rangle = (\Delta t_i)^k (2k-1)!!$ by using (\ref{eqn:wick}).
+        We then use the fact that $G$ is bounded, i.e.  $|G(\tau)| < K$ $\forall \tau \in \mathbb{R}$:
+        \begin{align*}
+            &= \sum_{i=1}^n G_{i-1}^2 (\Delta t_i)^k (2k-1)!! \leq K^2(2k-1)!!\sum_{i=1}^n (\Delta t_i)^k \leq\\
+            &\leq K^2(2k-1)!! \left(\max_{i \leq j \leq n} (\Delta t_i)^{k-1}\right) \underbrace{\sum_{i=1}^n \Delta t_i}_{t}  \xrightarrow[n \to \infty]{}  0
+        \end{align*}
+        In the last step, we use the fact that $\sum_i \Delta t_i$ is fixed, while $\max_i \Delta t_i \to 0$ in the continuum limit.
+        \item $k$ is even. We already now that the yellow term goes to $0$ (same argument as the same for $n$ odd). However, now the blue term does not vanish immediately. So, again, we use the fact that $G$ is bounded:
+        \begin{align} \label{eqn:last2}
+            (\ref{eqn:last}) = 2 \sum_{i<j}^n \langle \underbrace{G_{i-1} G_{j-1}}_{\leq K^2} (\Delta B_i)^k \rangle \langle (\Delta B_j)^k \rangle
+        \end{align}
+        By using (\ref{eqn:wick}):
+        \begin{align*}
+            \langle (\Delta B_i)^k \rangle = (\Delta t_i)^{k/2} (k-1)!!
+        \end{align*}
+        And so:
+        \begin{align*}
+            (\ref{eqn:last2}) &\leq 2 K^2 [(k-1)!!]^2 \sum_{i< j}^n \Delta t_i^{n/2} \Delta t_j^{n/2} \leq\\
+            &\leq  2K^2[(k-1)!!] \left(\max_{i\leq l \leq n} \Delta t_l\right)^{2(n/2-1)} \underbrace{\sum_{i<j}^n \Delta t_i \Delta t_j}_{\leq t^2}  \xrightarrow[n \to \infty]{}  0
+        \end{align*}
+
+
+    \end{itemize}
+
+\end{exo}
+
+\begin{exo}
+    Use the following Ito formula:
+    \begin{align}\label{eqn:Itof}
+        \int_{t_0}^t h'(x(\tau)) g(x(\tau),\tau) \dd{B(\tau)} &= h(x(t))-h(x(t_0))+\span \\ \nonumber
+        &- \left[h'(x(\tau)) f(x(\tau), \tau) + \frac{h''(x(\tau))}{2} g^2(x(\tau), \tau) \right]\dd{\tau} 
+    \end{align}
+    in order to give an expression in terms of ordinary integrals of:
+    \begin{align*}
+        \int_{t_0}^t G(x(\tau))\dd{B(\tau)}
+    \end{align*}
+    where $G$ is a non-anticipating function. The trajectory $x(\tau)$ satisfies the Langevin equation:
+    \begin{align*}
+        \dd{x(t)} = f(x(t),t) \dd{t} + g(x(t),t) \dd{B(t)}
+    \end{align*}
+    Explain the meaning of the obtained result. Has it to be considered an equality valid for any trajectory $x(\tau)$?
+
+    \medskip
+
+    \textbf{Solution}. We choose a function $h\colon \mathbb{R} \to \mathbb{R}$ so that:
+    \begin{align*}
+        G(x(\tau)) = h'(x(\tau)) g(x(\tau), \tau) \Rightarrow h'(x(\tau)) = \frac{G(x(\tau))}{g(x(\tau), \tau)} 
+    \end{align*}
+    Then:
+    \begin{align*}
+        h(x(t)) = \int_{t^*}^t \frac{G(x(\tau))}{g(x(\tau), \tau)}  \dd{\tau} \qquad h''(x(\tau)) = \frac{G'g - G g'}{g^2} 
+    \end{align*}
+    where $t^*$ can be any point.
+
+    Inserting in (\ref{eqn:Itof}) we get:
+    \begin{align*}
+        \int_{t_0}^t G(x(\tau))\dd{B(\tau)} &= \int_{t^*}^t \frac{G(x(\tau))}{g(x(\tau), \tau)}  \dd{\tau} - \int_{t^*}^{t_0} \frac{G(x(\tau))}{g(x(\tau), \tau)}  \dd{\tau} +\\
+        &\quad \> - \int_{t_0}^t \left[\frac{G(x(\tau))}{g(x(\tau), \tau)} f(x(\tau), \tau) + \frac{1}{2}[G'g - G g'] \right]\dd{\tau} =\\
+        = \int_{t_0}^t \frac{G(x(\tau))}{g(x(\tau), \tau)}  \dd{\tau} - \int_{t_0}^t \left[\frac{G(x(\tau))}{g(x(\tau), \tau)} f(x(\tau), \tau) + \frac{1}{2}[G'g - G g'] \right]\dd{\tau} = \span\\
+        &=\int_{t_0}^t \left(\frac{G}{g}(1-f) + \frac{1}{2}[G'g - Gg']  \right)\dd{\tau}
+    \end{align*}
+    
+\end{exo}
+
+\begin{exo}[Change of variables in $\lambda$ prescription]
+    Generalize the results for the change of variable formula for Ito integrals to the case of a generic $\lambda$-prescription and re-derive the result of problem 4.9.\\
+    
+    \textbf{Solution}. The main idea is to start from a Stochastic Differential Equation in $\lambda$-prescription, convert it to an equivalent formulation using the Ito prescription, apply Ito's formula for changing variables, and then go back to the former prescription.
+    
+    First, two SDEs have the same solution $x(t)$ if, for any realization $B(t)$ of the Brownian noise, their solutions (which can now be found by \textit{normal} integration) coincide.
+    
+    So, consider the usual SDE in Ito's prescription:
+    \begin{align*}
+        \dd{x(t)} = a(x(t),t) \dd{t} + b(x(t),t) \dd{B(t)}
+    \end{align*}
+    which has solution:
+    \begin{align*}
+        x(t) = x(t_0) + \int_{t_0}^t a(x(\tau),\tau) \dd{\tau} + \int_{t_0}^t b(x(\tau), \tau) \dd{B(\tau)}
+    \end{align*}
+    where the stochastic integral is formally defined as:
+    \begin{align*}
+        \int_{t_0}^t b(x(\tau),\tau) \dd{B(\tau)} \equiv \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^n b(x_{i-1}, t_i) \Delta B_i \qquad \Delta B_i = B_i - B_{i-1}
+    \end{align*}
+    We now consider a  SDE in the $\lambda$ prescription:
+    \begin{align*}
+        \dd{y(t)} = \alpha(y(t),t) \dd{t} + \beta(y(t),t) \dd{B(t)} \big|_{\lambda}
+    \end{align*}
+    which has solution:
+    \begin{align*}
+        y(t) = \int_{t_0}^t \alpha(y(\tau), \tau) \dd{\tau} + \int_{t_0}^t \beta(y(\tau), \tau) \dd{\tau} \Big|_{\lambda}
+    \end{align*}
+    Now, however, the stochastic integral has a different definition:
+    \begin{align*}
+        \int_{t_0}^t \beta(y(\tau), \tau) \dd{B(\tau)} \Big|_{\lambda} \equiv \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^n \beta\Big( (1-\lambda) x_{i-1} + \lambda x_i, t_{i-1}\Big) \Delta B_i
+    \end{align*}
+    We now impose that $y(t) = x(t)$ for every $t$, and search the mapping $a,b \mapsto \alpha, \beta$ that establishes a correspondence between an Ito SDE and a generic $\lambda$ prescription SDE.\\
+    
+    Let's focus on the argument of the $\lambda$-integral, and expand it about the left extremum of the discretization:
+    \begin{align} \nonumber
+        \beta(y_{i-1} - \lambda y_{i-1} + \lambda y_i, t_{i-1}) &= \beta(y_{i-1} + \lambda(y_i - y_{i-1}), t_{i-1}) =\\
+        &= \beta(y_{i-1}, t_{i-1}) + \partial_x \beta(y_{i-1}, t_{i-1}) \lambda (y_i - y_{i-1}) \label{eqn:beta1}
+    \end{align}
+    As the paths are the same, $y_i = x_i$, and the increments $\Delta y_i$ follow the rule:
+    \begin{align*}
+        \Delta y_i = a(x_{i-1}, t_{i-1}) \Delta t_i + b(x_{i-1}, y_{i-1}) \Delta B_i
+    \end{align*}
+    Leading to:
+    \begin{align*}
+        (\ref{eqn:beta1}) = \beta_{i-1} + \beta_{i-1}' \lambda [a_{i-1}\Delta t_i + b_{i-1} \Delta B_i]
+    \end{align*}
+    Substituting inside the integral we get:
+    \begin{align*}
+        \int_{t_0}^t \beta(y(\tau), \tau) \dd{B(\tau)} \Big|_{\lambda} &= \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^{n} \Big[\beta_{i-1} \Delta B_i + \lambda \beta'_{i-1} \Delta B_i [a_{i-1} \Delta t_i + b_{i-1} \Delta B_{i}] \Big] =\\
+        &=\overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^{n}\Big[
+        \beta_{i-1} \Delta B_i + \lambda \beta_{i-1}' b_{i-1} \Delta B_i^2 + O(\Delta B_i \Delta t_i)    
+        \Big]
+    \end{align*}
+    We already proved that:
+    \begin{align*}
+        \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^n G_{i-1} \Delta B_i^2 = \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^n G_{i-1} \Delta t_i
+    \end{align*}
+    And so we can use this result, setting $G_{i-1} = \lambda \beta'_{i-1} b_{i-1}$, justifying the usual $\dd{B}^2 = \dd{t}$ rule. So, this leads to:
+    \begin{align} \nonumber 
+        \int_{t_0}^t \beta(y(\tau), \tau) \dd{B(\tau)} \Big|_{\lambda} &= \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^{n} \Big[\beta_{i-1} \Delta B_i + \lambda \beta_{i-1}' b_{i-1} \Delta t_i \Big] = \\
+        &=\int_{t_0}^t \beta(y(\tau), \tau) \dd{B(\tau)} + \lambda \int_{t_0}^t b(y(\tau), \tau) \pdv{x} \beta(y(\tau), \tau) \dd{\tau}
+        \label{eqn:formula}
+    \end{align}
+    where the last two integrals are Ito integrals. We have now found a way to evaluate a $\lambda$-integral using an Ito integral (provided the paths are generated by a Ito SDE). We can find the explicit conversion rules by equating the solutions:
+    \begin{align*}
+        x(t) &= x(t_0) + \int_{t_0}^t a(x(\tau), \tau) \dd{\tau} + \int_{t_0}^t b(x(\tau), \tau) \dd{B(\tau)} =\\
+        &\overset{!}{=} x(t_0) + \int_{t_0}^t \alpha(x(\tau), \tau) \dd{\tau} + \int_{t_0}^t \beta(x(\tau), \tau) \dd{B(\tau)} =\\
+        &\underset{(\ref{eqn:formula})}{=} x(t_0) + \int_{t_0}^t \alpha(x(\tau), \tau) \dd{\tau} + \int_{t_0}^t \beta(x(\tau), \tau) \dd{B(\tau)} + \lambda \int_{t_0}^t b(x(\tau), \tau) \partial_x \beta(x(\tau), \tau) \dd{\tau}
+    \end{align*} 
+    leading to:
+    \begin{align*}
+        \begin{cases}
+            \alpha + \lambda b \partial_x \beta = a\\
+            b = \beta
+        \end{cases} \Rightarrow \begin{cases}
+            \alpha = a - \lambda b \partial_x \beta\\
+            \beta = b
+        \end{cases}
+    \end{align*}
+    where $(\alpha, \beta)$ are the coefficients in the $\lambda$ SDE, and $(a,b)$ the ones in the equivalent Ito SDE.
+    
+    Consider now a $\lambda$ SDE:
+    \begin{align*}
+        \dd{x} = \alpha \dd{t} + \beta \dd{B(t)}
+    \end{align*}
+    The equivalent Ito SDE is:
+    \begin{align}\label{eqn:newdx}
+        \dd{x} = (\alpha + \lambda \beta \partial_x \beta) \dd{t} + \beta \dd{B(t)}
+    \end{align}
+    Squaring:
+    \begin{align*}
+        \dd{x}^2 = \beta^2 \dd{t}
+    \end{align*}
+    Where we used $\dd{B}^2 = \dd{t}$ (as this is an Ito SDE), and ignored higher order terms. It is clear that $\dd{x}^n = 0$ with $n > 0$.
+    
+    Let $y=y(x)$ be a change of variables. The new differential will be:
+    \begin{align*}
+        \dd{y} = \dv{y}{x} \dd{x} + \frac{1}{2} \dv[2]{y}{x} \dd{x}^2 + \dots
+    \end{align*}
+    and we can ignore the higher order terms, as they will be $O(\dd{t})$. Substituting in (\ref{eqn:newdx}) we get:
+    \begin{align*}
+        \dd{y} &= \dv{y}{x} (\alpha + \lambda \beta \partial_x \beta) \dd{t} + \dv{y}{x} \beta \dd{B} + \frac{1}{2} \dv[2]{y}{x} \beta^2 \dd{t}  =\\
+        &= \left[\dv{y}{x}\left(\alpha+ \lambda \beta \partial_x \beta \right) + \frac{1}{2} \dv[2]{y}{x} \beta^2 \right]\dd{t} + \dv{y}{x} \beta \dd{B}
+    \end{align*}
+    To complete the change of variables, we need to express everything in terms of $y$ - in particular the derivatives. One trick is to use the inverse function theorem:
+    \begin{align*}
+        \dv{y}{x} = \left(\dv{x}{y}\right)^{-1} = \frac{1}{x'(y)} 
+    \end{align*}
+    For the second derivative, note that, if $f$ and $g$ are the inverse of each other:
+    \begin{align*}
+        g \circ f = \operatorname{id} &\Rightarrow g(f(x)) = x \underset{\rm d/dx}{\Rightarrow} g'(f(x)) f'(x) = 1\\
+         &\underset{\rm d/dx}{\Rightarrow} g''(f(x)) [f'(x)]^2 + g'(f(x)) f''(x) = 0 \\&\underset{y=f(x)}{\Rightarrow}  g''(y) = - \frac{g'(y) f''(x)}{f'(x)^2} = - \frac{f''(x)}{[f'(x)]^3}  
+    \end{align*}
+    And in our case:
+    \begin{align*}
+        \dv[2]{y}{x} = -\frac{x''(y)}{[x'(y)]^3} 
+    \end{align*}
+    One last thing:
+    \begin{align*}
+        \pdv{x} \beta = \dv{y}{x} \pdv{y} \beta = \frac{1}{x'(y)} \partial_y \beta 
+    \end{align*}
+    
+    This leads to:
+    \begin{align*}
+        \dd{y} = \underbrace{\left[\frac{\alpha}{x'(y)} + \frac{\lambda \beta \partial_y \beta}{[x'(y)]^2} - \frac{1}{2} \beta^2 \frac{x''(y)}{[x'(y)]^3}    \right]}_{a}  \dd{t} + \underbrace{\frac{\beta}{x'(y)}}_{b}  \dd{B} 
+    \end{align*}
+    
+    We can finally map this back to a $\lambda$ SDE and find the change of variable rule for that case. Applying the substitutions:
+    \begin{align*}
+        \dd{y} = \tilde{\alpha} \dd{t} + \tilde{\beta} \dd{B} \qquad \begin{cases}
+            \tilde{\alpha} &= a-\lambda b \partial_x b\\
+        \tilde{\beta} &= b
+        \end{cases}
+    \end{align*}
+    We arrive to:
+    \begin{align*}
+        \tilde{\alpha} &= \frac{\alpha}{x'(y)} + \frac{\lambda \beta \partial_y \beta}{[x'(y)]^2} - \frac{1}{2} \beta^2 \frac{x''(y)}{[x'(y)]^3} - \lambda \frac{\beta}{x'(y)} \partial_y \frac{\beta}{x'(y)}  =\\
+        &= \frac{\alpha}{x'(y)} + \cancel{\frac{\lambda \beta \partial_y \beta}{[x'(y)]^2}} - \frac{1}{2} \beta^2 \frac{x''(y)}{[x'(y)]^3} - \lambda \frac{\beta}{x'(y)}\left[\frac{\cancel{\partial_y \beta x'(y)} - x''(y) \beta}{[x'(y)]^2} \right] =\\
+        &= \frac{\alpha}{x'(y)} +\frac{2\lambda - 1}{2} \frac{\beta^2 x''(y)}{[x'(y)]^3}\\
+        \tilde{\beta} &= \frac{\beta}{x'(y)}\\
+        \dd{y} &= \left[\frac{\alpha}{x'(y)} +\frac{2\lambda - 1}{2} \frac{\beta^2 x''(y)}{[x'(y)]^3}\right] \dd{t} + \frac{\beta}{x'(y)} \dd{B} 
+    \end{align*}
+    Let's bring this result to the usual notation:
+    \begin{align*}
+        \alpha = f(x(\tau), \tau) \qquad \beta = g(x(\tau),\tau) \qquad \begin{dcases}
+            y = h(x(\tau))\\
+            \frac{1}{x'(y)} = \dv{h}{x} = h'(x(\tau))\\
+            -\frac{x''(y)}{[x'(y)]^3} = \dv[2]{h}{x} = h''(x(\tau)) 
+        \end{dcases}
+    \end{align*}
+    leading to:
+    \begin{align*}
+        \dd{h(x(\tau))} &= \left(f(x(\tau),\tau) h'(x(\tau)) + \frac{1-2 \lambda}{2} h''(x(\tau)) g(x(\tau), \tau)^2\right) \dd{\tau} +\\
+        &\quad \> + g(x(\tau), \tau) h'(x(\tau)) \dd{B(\tau)} \Big|_\lambda
+    \end{align*}
+    which is the formula for changing variables in the $\lambda$ prescription. Let's rearrange to isolate the $\dd{B}$ term:
+    \begin{align*}
+        gh' \dd{B} = \dd{h} - \left(f h' + \frac{1-2\lambda}{2} h'' g^2\right) \dd{\tau}
+    \end{align*}
+    Then we integrate, leading to the formula:
+    \begin{align*}
+        \int_{t_0}^t h'(x(\tau)) g(x(\tau), \tau) &= h(x(t))-h(x(t_0)) - \int_{t_0}^t h'(x(\tau))f(x(\tau), \tau) \dd{\tau}\\
+        &\quad \> -\frac{1-2 \lambda}{2}\int_{t_{0}}^t  h''(x(\tau)) g(x(\tau), \tau)^2 \dd{\tau} 
+    \end{align*}
+    Finally, set $g(x(\tau), \tau) \equiv 1$, and $h'(x(\tau)) = B(\tau)$, so that:
+    \begin{align*}
+        h = \frac{B^2}{2} \qquad h'' = 1 
+    \end{align*}
+    Substituting in the formula we can compute the desired integral:
+    \begin{align*}
+        \int_{t_0}^t B(\tau) \dd{B(\tau)} = \frac{B^2(t)-B^2(t_0)}{2} + \frac{2 \lambda - 1}{2} (t-t_0)  
+    \end{align*}
+    
+    \end{exo}
+\end{document}

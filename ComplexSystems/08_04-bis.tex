@@ -1,0 +1,103 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\begin{appr}\textbf{Alternative proof for Liouville's theorem} \cite[Chapter~4.1]{sethna}. 
+
+    \medskip
+
+    As particles move in \textit{continuous} trajectories, i.e. they do not \q{teleport} between spatially distant regions, the probability density describing their ensemble must be \textbf{locally conserved}. Mathematically, this means that $\rho(\mathbb{Q}, \mathbb{P})$ satisfies a \textit{continuity equation}:
+    \begin{align} \label{eqn:cont-p}
+        {\pdv{\rho}{t}} (\mathbb{Q}, \mathbb{P}) = - \grad \cdot \bm{J} (\mathbb{Q}, \mathbb{P}) = - \grad \cdot  [\rho(\mathbb{Q}, \mathbb{P}) \bm{v} (\mathbb{Q},\mathbb{P})]
+    \end{align}   
+    In other words, the local \textit{change} of $\rho$ over time is equal to the opposite of the \textit{outward flux} $\grad \cdot \bm{J}$ at that point, i.e. the rate of particles traversing a tiny closed surface encompassing $(\mathbb{Q}, \mathbb{P})$ in the outward direction (as consequence of Gauss' theorem). If that flux is positive, then \q{probability is escaping} $(\mathbb{Q}, \mathbb{P})$, and so $\rho$ will decrease. Otherwise, if the outward flux is negative, then \q{probability is gathering} at $(\mathbb{Q}, \mathbb{P})$, and so $\rho$ will rise.
+
+    \medskip
+
+    The flux field $\bm{J}$ is given by $\rho \bm{v}$, where $\bm{v} = (\dot{\mathbb{Q}}, \dot{\mathbb{P}})^T$. So (\ref{eqn:cont-p}) can be rewritten as:
+    \begin{align}\nonumber
+        \pdv{\rho}{t} &= - \sum_{\alpha=1}^{3N} \left(\pdv{(\rho \dot{q}_\alpha)}{q_\alpha} + \pdv{(\rho \dot{p}_\alpha)}{p_\alpha}\right) = \\
+        &= - \sum_{\alpha=1}^{3N} \left(\pdv{\rho}{q_\alpha} \dot{q}_\alpha + \rho \pdv{\dot{q}_\alpha}{q_\alpha}  + \pdv{\rho}{p_\alpha} \dot{p}_\alpha + \rho \pdv{\dot{p}_\alpha}{p_\alpha}\right) \label{eqn:cont-p2}
+    \end{align}
+    Using Hamilton equations (\ref{eqn:hamilton-eqs}) we can cancel two terms. In fact:
+    \begin{align*}
+        \pdv{\dot{q}_\alpha}{q_\alpha} \underset{(\ref{eqn:hamilton-eqs})}{=} \pdv{q_\alpha} \pdv{H}{p_\alpha} = \pdv[2]{H}{\textcolor{Red}{q_\alpha}}{\textcolor{Blue}{p_\alpha}} \underset{(a)}{=} \pdv[2]{H}{\textcolor{Blue}{p_\alpha}}{\textcolor{Red}{q_\alpha}} = \pdv{p_\alpha} \pdv{H}{q_\alpha} \underset{(\ref{eqn:hamilton-eqs})}{=} \pdv{p_\alpha} (-\dot{p}_\alpha) = - \pdv{\dot{p}_\alpha}{p_\alpha}
+    \end{align*}
+    And so (\ref{eqn:cont-p2}) becomes:
+    \begin{align*}
+        \pdv{\rho}{t} + \sum_{\alpha=1}^{3N} \left( \pdv{\rho}{q_\alpha} \dot{q}_\alpha + \pdv{\rho}{p_\alpha} \dot{p}_\alpha\right) = \dv{\rho}{t} = 0
+    \end{align*}
+    which is Liouville's theorem.
+\end{appr}
+
+\subsection{Consequences of Liouville's theorem}
+As system-points flow like an incompressible fluid,\marginpar{Microcanonical ensemble is stationary} a \textit{uniform ensemble} will remain \textit{uniform} indefinitely. Intuitively, a uniform ensemble is just a fluid with a constant definite density. Hamiltonian dynamics just \q{stir} around that fluid, but cannot change its local density anywhere: there cannot be points becoming \q{denser} or \q{more rarefied}. This means that a uniform ensemble (i.e. the \textbf{microcanonical ensemble}) is \textbf{stationary} - and thus is suitable to describe the equilibrium condition. However, at least for now, nothing guarantees that a generic isolate system at equilibrium will reach exactly the stationary state given by the microcanonical. We have proved that it is a \textit{possible solution}, but not \textit{the unique solution}!
+
+\medskip
+
+An other interesting consequence\marginpar{Damping with no attractors} of incompressible flow is that there are no \textbf{attractors}, there are no points in phase space to which many paths \q{converge} over time. So, when we observe a pendulum stopping due to friction in the same place independently of initial conditions, it must not be because it is converging to some definite region of phase-space. Rather, the phase-space paths in which the pendulum loses energy to random air particles are \textit{so much more} than the few where all molecules \q{hit the pendulum at the right times} to keep it going indefinitely.  
+
+\medskip
+
+Liouville's theorem also provides an intuitive explanation for the \textit{second law of thermodynamics}, following an argument by Jaynes \cite{jaynes-secondlaw}\cite{jaynes2}.
+
+Consider a physical system evolving from a macrostate $A$ to another macrostate $B$. If the process $A \to B$ is reproducible, then the volume $W_A$ of microstates compatible with $A$ must \textit{fit} in the volume $W_B$ of microstates compatible with $B$, i.e. $W_A \leq W_B$. In fact, if it were instead $W_A > W_B$, the evolution $A \to B$ would not be reliable: at any $t$, the volume $W_t$ of the evolved ensemble $A(t)$ is the same as $W_A$ (by Liouville's theorem) - and so 
+if we require all of $A(t)$ to end up in $B$ (which is necessary for the evolution to happen reliably), then we would be trying to \q{squeeze} too much (incompressible) \q{fluid} $W_A$ in a \q{too small bucket} $W_B$.
+
+\medskip
+
+Entropy in Statistical Mechanics is the logarithm of the volume in phase-space associated with a certain macrostate, and so from $W_A \leq W_B$ follows $S_A \leq S_B$, i.e. the second law of thermodynamics.
+
+\medskip
+
+In the case the inequality holds strictly, then the inverse process $B \to A$ cannot happen reliably. We can estimate the \q{rate of success} of an inverse transition as the ratio $W_A/W_B$. Intuitively, if we try to fill a bucket of $\SI{1}{\l}$ with $\SI{3}{\l}$ of water, only $1$ in $3$ molecules will make it to the end - and the others will be left outside the bucket. Then, we note that even the tiniest difference in entropy would make $W_A/W_B$ negligible, because $S = k_B \ln W$, and so the ratio decays exponentially:
+\begin{align*}
+    p = \frac{W_A}{W_B} = \exp\left(-\frac{S_B - S_A}{k_B} \right) 
+\end{align*}
+This means that not only the process $B \to A$ cannot happen reliably, but that it is \textit{so} unreliable that it never happens! 
+
+\section{Poincaré Recurrence Theorem}
+The \textbf{Poincaré Recurrence Theorem}\index{Theorem!Poincaré Recurrence} states that a mechanical system enclosed in a \textbf{finite volume} and possessing a \textbf{finite} amount of \textbf{energy} will, after a \textit{finite time}, return to an arbitrary small neighbourhood of almost any\footnote{Apart of a set of zero measure.} given initial state in phase-space. In general, the smaller the neighbourhood chosen, the larger will be the first arrival time.
+
+\begin{proof}
+    Omitted.
+\end{proof}
+
+In other words, the Poincaré Recurrence theorem states that everything is \textit{reversible}, given enough time.  
+This seems in \textbf{contradiction}  with experience. For example, suppose we start with a gas contained in one half of a box (state $A$), and let it expand freely in the entire box (state $B$). This process is clearly irreversible: the gas will not \textit{spontaneously} return to the initial state. 
+
+If we reverse time, we will obtain a motion $B \to A$ that it is still physically possible, but that in practice never happens. This clearly defines a \textit{preferred direction} for time evolution - a so-called \q{arrow of time}. 
+
+Similarly, if we see a video of an egg crashing on the floor, and that of an egg \q{recomposing} itself after being destroyed, we can surely tell which one has been time-reversed. 
+
+\medskip
+
+%Insert figure
+However, Poincaré Recurrence is mathematically proved - and indeed must happen. The key to resolve the apparent contradiction with experience lies in the \textit{amount} of time $T$ required to observe such recurrence. For any macroscopic system, $T$ is orders of magnitude larger than the age of the universe. So, while recurrence \textit{will happen}, it will do so \textit{so far in the future} that it will not matter anymore to anyone!
+
+\medskip
+
+Recurrence can be observed and verified for systems of few particles. For example, consider just $N=2$ particles, moving \textit{at random}\footnote{In classical mechanics, particles follow deterministic trajectories given by Hamilton equations. Here we are implicitly assuming that the resulting motions are comparable with random motion.} in a box. At a given moment, each of them is inside the left half of the box with probability $1/2$. So, the two will be in the left side with probability $1/4$. If we do not care about which side the particles are grouped in, we need to \textit{double} this result: the probability that $N=2$ particles lie in the same side of a box is $1/2$.
+
+\medskip
+
+If we repeat the same computation for $N=3$, we will obtain $p=1/8 * 2 = 1/4$. So, by adding more particles, the \q{grouping probability} quickly decreases. 
+
+
+\medskip
+
+%Add introduction
+%Correspondence with microcanonical
+%After long time, does Liouville flow "stir" system-points sufficiently "well", so that they are equiprobable? Ergodic hypothesis. It can be proved, under some hypotheses, ref. to following lecture. 
+
+
+
+
+
+%Appr: Jaynes irreversibility with Liouville
+
+
+
+
+\end{document}

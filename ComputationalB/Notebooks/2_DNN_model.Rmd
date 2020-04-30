@@ -1,0 +1,157 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.2'
+      jupytext_version: 1.3.2
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+```{python}
+# %matplotlib inline
+
+import math
+import csv
+import numpy as np
+from tensorflow.keras.models import Sequential #tf.keras is best!
+from tensorflow.keras.layers import Dense, Dropout 
+
+#reproducibility
+np.random.seed(12345)
+
+#number of digits
+D = 9
+
+#percentage of data for training set
+perc_train = 0.8
+```
+
+```{python}
+fname = 'secretkeys.csv' #file with data
+
+dataset = np.loadtxt(fname, delimiter=',', dtype=int) #load data
+
+N = len(dataset)
+
+s = dataset[:,0]  #features
+y = dataset[:,-1] #labels
+
+#length of features vector
+L = len(str(s[0]))
+print('features dimension', L)
+
+print('-----Samples-----')
+for i in range(10):
+    print(s[i], y[i])
+    
+N_train = int(perc_train * N) #number of training samples
+print(f'data: {N}\ntrain: {N_train}')
+```
+
+```{python}
+#For each sample, we store each digit as a one-hot vector of dimension D. For example, if the first digit is 3, we will store it
+#as [0,0,1,0,0,0,0,0,0]
+#So each sample will require L * D elements in an array (1d)
+
+LD = L*D
+print('data per sample', LD)
+
+def expand(S):
+    string = str(S)
+    
+    if (len(string) != L): #check for dimension consistency
+        print('mismatch!')
+        return []
+    
+    positions = np.array([int(e)-1 for e in list(string)]) #need to shift [1,9] to [0,8] for indexing
+    offsets   = D * np.arange(L) #first digit is stored in positions [0,8], second one in [9, 17] and so on
+    
+    x = np.zeros(L*D, dtype=int)
+    x[positions+offsets] = 1
+    
+    return x
+
+print(s[0],   '-->', expand(s[0]))
+print(111111, '-->', expand(111111))
+print(999999, '-->', expand(999999))
+```
+
+## Split training and test data
+
+```{python}
+x_all = np.array([expand(x) for x in s])
+print(x_all[0])
+
+x_train, y_train = x_all[0:N_train], y[0:N_train]
+x_test,  y_test  = x_all[N_train:],  y[N_train:]
+
+print(len(x_train), '\t', len(x_test))
+```
+
+```{python}
+x_train
+```
+
+## Define the model with Keras
+
+```{python}
+model = Sequential()
+model.add(Dense(LD, input_shape=(LD,), activation='relu'))
+model.add(Dense(max(10, int(LD/2)),    activation='relu'))
+model.add(Dense(max(6, int(LD/4)),     activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(1, activation='sigmoid'))
+
+model.summary()
+```
+
+## Optimization method and cost function
+
+```{python}
+model.compile(loss = 'binary_crossentropy',
+              optimizer='adam',
+              metrics=['accuracy'])
+```
+
+## Training
+
+```{python}
+fit = model.fit(x_train, y_train,
+                epochs = 80, batch_size = 20,
+                validation_data = (x_test, y_test))
+```
+
+```{python}
+import matplotlib.pyplot as plt
+
+#plot accuracy for training and validation
+plt.plot(fit.history['accuracy'], label='train')
+plt.plot(fit.history['val_accuracy'], label='val')
+plt.title('Model accuracy')
+
+plt.ylabel('accuracy')
+plt.xlabel('epochs')
+
+plt.legend()
+```
+
+```{python}
+#plot loss
+plt.plot(fit.history['loss'], label='train')
+plt.plot(fit.history['val_loss'], label='val')
+plt.title('Model loss')
+
+plt.ylabel('loss')
+plt.xlabel('epochs')
+
+plt.legend()
+```
+
+```{python}
+
+```

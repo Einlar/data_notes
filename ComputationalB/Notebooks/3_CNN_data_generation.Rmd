@@ -1,0 +1,132 @@
+---
+jupyter:
+  jupytext:
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.2'
+      jupytext_version: 1.3.2
+  kernelspec:
+    display_name: Python 3
+    language: python
+    name: python3
+---
+
+```{python}
+# %matplotlib inline
+
+import random
+import math
+import matplotlib.pyplot as plt
+```
+
+```{python}
+random.seed(12345)
+```
+
+We simulate a Brownian process where the distribution of increments $x$ is given by:
+$$p(x) = \mathcal{A} \exp\left( - \frac{|x-b|}{D} \right)$$
+where $b \in \mathbb{R}$ is the bias, $D \in \mathbb{R}$ the scale of the process, and $\mathcal{A}$ the normalization factor:
+$$\mathcal{A}^{-1} = \int_{\mathbb{R}} \exp\left( - \frac{|\rm{x}-b|}{D} \right) \rm{d}x = 2 D $$
+To sample from this distribution we use the inverse transform method:
+$$p \overset{!}{=} \rm{CDF}(x) = \int_{-\infty}^x \frac{1}{2D} \exp\left(-\frac{|x-b|}{D}\right) \rm{d}x = \begin{cases}
+\frac{1}{2} \exp\left( \frac{x-b}{D} \right) & x < b\\
+1 - \frac{1}{2} \exp\left(-\frac{(x-b)}{D}\right) & x \geq b
+\end{cases}$$
+Inverting:
+$$x = \begin{cases}
+D \ln (2 p) + b & 0 < p < \frac{1}{2}\\
+-D \ln(2[1-p]) + b & \frac{1}{2} \leq p < 1
+\end{cases}$$
+We can *unify* both cases in the same formula by first generating a random number $a \sim \mathcal{U}(0,1/2)$ in the half interval, and then "tossing a coin" and, depending on the results, take $p = a$ (left side) or $1-p = a$ (right side). Note that, in both cases, $2p$ and $2(1-p)$ are uniformly distributed over the unit interval $[0,1]$, and so we can directly generate a uniform number for the $\log$ argument. Then the only difference is in the sign of $D$. To produce this, we generate a random integer in $[0,1]$, subtract $-0.5$ and double the result, obtaining the two cases $\{\pm 1\}$.
+
+```{python}
+dx = lambda DX, bias: int( (math.log(random.random()) * DX) * 2 * (random.randint(0,1)-0.5) + bias)
+
+for i in range(10):
+    print(dx(50, 5))
+```
+
+```{python}
+#We create a specific pattern to add to the signals
+def pattern(i, z, a):
+    return int(a * math.sin((math.pi*i)/z))
+```
+
+```{python}
+random.seed(12345)
+
+#Amplitude
+A = 500
+
+#length of patterns
+Z = 12
+
+#sample length
+L = 60
+
+#number of samples to generate
+N = 10000
+
+#parameters
+DX = 50
+bias = 5
+
+y = [0] * N
+x = [[0] * L for i in range(N)]
+
+for i in range(N):
+    if i > 0:
+        x[i][0] = x[i-1][-1] #first element of a sample is the last of the previous one
+    
+    for j in range(1,L):
+        x[i][j] = x[i][j-1] + dx(DX, bias) #generate the time series
+    
+    y[i] = i % 3 #select one third of the samples (0 = no pattern, 1 = +pattern, 2 = -pattern)
+    if y[i]>0: 
+        j0 = random.randint(0, L-1-Z) #position of the pattern
+        sign = 3-2*y[i] #select sign for the pattern
+        
+        for j in range(Z): #add the pattern
+            x[i][j0+j] += sign * pattern(j, Z, A)
+
+for i in range(3): #print first 3 samples
+    print(x[i], y[i])
+```
+
+```{python}
+plt.plot(x[0])
+plt.plot(x[1])
+plt.plot(x[2])
+plt.show()
+```
+
+```{python}
+plt.plot([pattern(j, Z, A) for j in range(Z)])
+```
+
+```{python}
+import subprocess, csv
+
+subprocess.run(["mkdir", "DATA"])
+```
+
+```{python}
+str0 = f'ts_L{L}_Z{Z}_A{A}_DX{DX}_bias{bias}_N{N}.csv'
+print(str0)
+```
+
+```{python}
+fname = 'DATA/x_' + str0
+
+with open(fname, mode='w') as myfile:
+    writer = csv.writer(myfile, delimiter=',', lineterminator = '\n')
+    for i in range(N):
+        writer.writerow(x[i])
+
+fname = 'DATA/y_' + str0
+with open(fname, mode='w') as myfile:
+    writer = csv.writer(myfile, delimiter=',', lineterminator = '\n')
+    for i in range(N):
+        writer.writerow([y[i]])
+```

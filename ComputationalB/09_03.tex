@@ -1,0 +1,115 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Gradient Descent}
+Suppose we have a \textbf{cost function}, or \textit{energy}, $E(\bm{x})$ that we want to numerically minimize. One way to do so is to start from a random point $\bm{x_0}$ and \textit{move} in the direction of lower $E$, until a minimum is reached. Physically, this corresponds to the motion of a particle starting at $\bm{x_0}$ and immersed in the potential $E(\bm{x})$, in the \textit{overdamped limit} (i.e. as if it were moving in a very viscous fluid, so that it does not \textit{oscillate} around minima).  
+
+\medskip
+
+Consider a one-dimensional case, where $E$ depends only on one parameter $\theta$. The gradient descent algorithm consists in an \textit{iteration} of \textit{steps} towards the closest minimum (i.e. the opposite of the gradient):
+\begin{align*}
+    \theta_{t+1} = \theta_t - \eta \nabla_\theta E(\theta_t)
+\end{align*}  
+The \textbf{learning rate} $\eta$ is a \textit{small} parameter (in $[10^{-6}, 10^{-2}]$) that regulates the \textit{size} of each step. A $\eta$ too small makes the algorithm slow, while a $\eta$ too large \q{overshoots} and never reaches the minimum. So, it is important to correctly choose the right $\eta$ - which, in practice, is done by trial and error.
+
+\medskip
+
+This trivial strategy, however, will often stop at \textit{local minima}, without finding the \textit{global minimum} that we are interested on. So, one idea is to \q{add momentum} to the particle, so that it becomes possible to \textit{surpass} local minima, and move towards \q{deeper} ones. This motion can be modelled, in general, with a Langevin equation. For example, in one dimension, we have:
+\begin{align*}
+    m \ddot{x} = - \gamma \dot{x} - \pdv{E}{x} + \xi(x)
+\end{align*} 
+where $\xi$ is some random noise, simulating the effect of thermal fluctuations on the particle.
+
+\medskip
+
+The simplest way to \textit{add momentum}\marginpar{Gradient Descent with Momentum} to gradient descent is to \textit{assign} a velocity to the \q{moving particle} that depends on the previous value of the velocity (it \q{remembers} the size of the previous step):
+\begin{align*}
+    \begin{cases}
+        v_{t} = \gamma v_{t-1} + \eta \nabla_\theta E(\theta_{t-1}) \qquad \gamma = [0,1]\\
+        \theta_{t} = \theta_{t-1} - v_{t} \cdot 1
+    \end{cases}
+\end{align*} 
+So the change of the position after one timestep is just $-v_t$.
+
+The parameter $\gamma$ represents \textit{how much} the algorithm \textit{remembers} the size of the previous step. $\gamma=1$ is perfect recall, and $\gamma=0$ is gradient descent without momentum. In general, a middle value of $\gamma$ is best, and needs to be tuned for the specific problem (again by trial and error).
+
+\medskip
+
+A \textit{variation} of this algorithm is given by the \textbf{Nesterov}\marginpar{NAG} trick, in which we evaluate the gradient not at $\theta_{t-1}$, but at a point \textit{slightly ahead} $\theta_{t-1} - \gamma v_{t-1}$:
+\begin{align*}
+    \begin{cases}
+        v_t = \gamma v_{t-1} + \eta \nabla_\theta E(\theta_{t-1} - \gamma v_{t-1})\\
+        \theta_{t} = \theta_{t-1} - v_t
+    \end{cases}
+\end{align*} 
+
+\section{Stochastic Gradient Descent}
+In Supervised Learning, the cost function $E(\bm{\theta})$, \textit{measures} how much a model parametrized by $\bm{\theta}$ \textit{maps \q{well}} a set of data $\bm{x}$ to some labels $\bm{y}$. So, in general, $E$ depends also on $\bm{x}$ - which could be a very large dataset, meaning that computing $E$ (and its gradient) is a very expensive process.
+
+\medskip
+
+One idea is to use a \textit{minibatch} $B$ of data, chosen at random from the full dataset. This amounts to a \textit{new} cost function $E_B$, that is generally \textit{close to} $E$ (as the minibatch is \textit{representative} of the full dataset), but not exactly equal:
+\begin{align*}
+    E_B = E + \Delta E_B
+\end{align*}  
+So, the gradient of $E_B$ points \textit{generally} in the same direction of that of $E$, with a small stochastic component produced by the random choice of the minibatch:
+\begin{align*}
+    \nabla E_B(\bm{\theta}) = \nabla E(\bm{\theta}) + \xi_B
+\end{align*} 
+The added noise $\xi_B$ can actually \textit{improve} the algorithm, by \q{smearing} local minima, making a complex \q{spiky} energy landscape more \q{smooth}.
+
+\medskip
+
+In analogy, we can see the size (amount of data) of the minibatch as the equivalent of an inverse temperature $\beta = 1/T$, as the size of fluctuations $\xi_B$ is proportional to $T$. The greater is the minibatch (i.e. the closer to the full dataset) the lower is the temperature (smaller fluctuations), and conversely the smaller is the minibatch, the higher is the temperature (higher fluctuations).
+
+\section{Second moment of the gradient}
+In the multidimensional case, sometimes the components of the gradient are of very different scales. This could mean that the same $\eta$ is correct for one of them, but leads to instabilities for the other. To correct this behaviour, we wish to \q{normalize} the gradient components:
+\begin{align*}
+    \bm{g} = \grad_{\bm{\theta}}(E); \quad \hat{g}^{(i)} =\frac{g^{(i)}}{\norm{g^{(i)}}_2} 
+\end{align*}
+
+One algorithm implementing this idea is \textbf{RMSProp}. We start from the gradient:
+\begin{align*}
+    g_t^{(i)} = \nabla_{\theta}^{(i)} E(\theta_t) = \pdv{E}{\theta_i} (\theta_t)
+\end{align*} 
+And we update the \textit{square} of the gradient components: 
+\begin{align*}
+    S_t^{(i)} = \beta S_{t-1} + (1-\beta) |g^{(i)}_t|^2
+\end{align*}
+where $\beta$ is a \textit{decay parameter}. Finally, we update the model's parameters with:
+\begin{align*}
+    \theta_{t+1}^{(i)} = \theta_t^{(i)} - \eta \frac{g_t^{(i)}}{\sqrt{S_t^{(i)}+\epsilon}} 
+\end{align*} 
+where $\epsilon = 10^{-8}$ is a very small regularization parameter, used to avoid a division by zero.
+
+\medskip
+
+RMSProp does not employ moment. If we add it, we obtain the \textbf{ADAM} algorithm, which is often the default for optimization. Again we start with the gradient:
+\begin{align*}
+    g_t^{(i)} = \pdv{E}{\theta_i} (\theta_t)
+\end{align*} 
+And we extend it by \textit{inserting some \q{memory}} (the momentum part): 
+\begin{align*}
+    m_t^{(i)} = \beta_1 m_{t-1}^{(i)} + (1-\beta_1) g_t^{(i)}
+\end{align*}
+We also \textit{remember} its norm, as it will be necessary for normalization of the components:
+\begin{align*}
+    S_t^{(i)} = \beta_2 S_{t-1}^{(i)} + (1-\beta_2)|g_t^{(i)}|^2
+\end{align*} 
+Then we do a rescaling:
+\begin{align*}
+    \hat{m}_t^{(i)} = \frac{m_t^{(i)}}{1-\beta_1^t}; \qquad \hat{S}_t^{(i)} = \frac{S_t^{(i)}}{1-\beta_2^t}  
+\end{align*}
+Note that $\beta_{1,2}^t \to 0$  for $t \to \infty$, so this rescaling only acts as a \textit{boost} of the gradient for the first few steps. 
+
+\medskip
+The final update step is:
+\begin{align*}
+    \theta_{t+1}^{(i)} = \theta_t^{(i)} - \eta \frac{\hat{m}_t^{(i)}}{\sqrt{\hat{S}_t^{(i)}+ \epsilon}} 
+\end{align*}
+
+ADAM is very fast for most situations. However, if $\hat{S}_t^{(i)}$ becomes sufficiently small (which can happen after a sufficient time), it acts as a \textit{boost} for the learning rate $\eta$, making the algorithm unstable. This can be solved with another correction, denoted \textbf{ADAmax} - which however is slower than ADAM. 
+
+\end{document}

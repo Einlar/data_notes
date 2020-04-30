@@ -1,0 +1,238 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+Since $V_i$ and $N_i$ with $i=1,2$ are conserved, we will not write them explicitly to simplify the notation. Then:
+\begin{align} \label{eqn:omega-full}
+    \Omega(\mathcal{E}) = \int_{\mathbb{R}^{6N}} \dd{\Gamma_1} \dd{\Gamma_2} \delta(\mathcal{E}-H_1(\mathbb{Q},\mathbb{P}) - H_2(\mathbb{Q}_2, \mathbb{P}_2) - \Delta U(\mathbb{Q}))
+\end{align}
+with:
+\begin{align*}
+    \dd{\Gamma_i} = \frac{1}{h^{3N_i}} \dd[3N_i] \mathbb{Q}_i \dd[3N_i] \mathbb{P}_i
+\end{align*}
+
+In order to proceed we assume that the forces resulting from $\Delta U(\mathbb{Q})$, the interactions between the two systems $1$ and $2$, are short-range. This implies that the only interacting particles will be the ones in proximity of the wall separating $1$ and $2$. Thus we have the following order of magnitudes:
+\begin{align*}
+    H_i \sim V_i \sim N_i \text{ whereas } \Delta U \sim \text{ area of the wall } V_i^{2/3}
+\end{align*}
+Then for macroscopic systems $V_i$ is large, and so $V_i^{2/3}/V_i = V_i^{-1/3} \to 0$. Thus $\Delta U$ is important to reach equilibrium in the entire system, but we can neglect it in the following! Let us evaluate (\ref{eqn:omega-full}). Using (\ref{eqn:omega-ext}) for $\Omega_1$ and $\Omega_2$, and simplifying the notation we get:
+\begin{align}\label{eqn:52}
+    \Omega(\mathcal{E}) &= \int_{\mathbb{R}^{6N}} \dd{\bm{\Gamma}} \delta(\mathcal{E}-H) \underset{\Delta U \approx 0}{=} \int_{\mathbb{R}^{6N_1}} \dd{\bm{\Gamma_1}} \int_{\mathbb{R}^{3N_2}} \dd{\bm{\Gamma_2}} \delta(\mathcal{E}-H_1 - H_2) =\\ \nonumber
+    &= \int_{\mathbb{R}^{6N_1}} \dd{\bm{\Gamma_1}} \int_{\mathbb{R}^{3N_2}} \dd{\bm{\Gamma_2}} \delta(\mathcal{E}-H_1 -H_2) \textcolor{Red}{\int_{\mathbb{R}} \dd{\mathcal{E}_1} \delta(\mathcal{E}_1 - H_1)} =\\ \nonumber
+    &= \int_{\mathbb{R}} \dd{\mathcal{E}_1} \int_{\mathbb{R}^{3N_2}} \dd{\bm{\Gamma_2}}  \int_{\mathbb{R}^{6N_1}} \dd{\bm{\Gamma_1}} \underbrace{\delta(\mathcal{E}-H_1-H_2) \delta(E_1-H_1)}_{\delta(\mathcal{E}-\mathcal{E}_1-H_2) \delta(\mathcal{E}_1-H_1)}  =\\ \nonumber
+    &= \int_{\mathbb{R}}\dd{\mathcal{E}_1} \underbrace{\int_{\mathbb{R}^{6N_2}} \dd{\bm{\Gamma_2}} \delta(\mathcal{E}-\mathcal{E}_1-H_2)}_{\hlc{Yellow}{\scriptstyle \Omega_2(\mathcal{E}-\mathcal{E}_1)}}  \underbrace{\int_{\mathbb{R}^{6N_1}} \dd{\bm{\Gamma_1}} \delta(\mathcal{E}_1 - H_1)}_{\hlc{SkyBlue}{\scriptstyle \Omega_1(\mathcal{E}_1)}} =\\ \nonumber
+    &\underset{(\ref{eqn:omega-ext})}{=}  \int_{\mathbb{R}} \dd{\mathcal{E}_1} \hlc{Yellow}{\exp\left(N_2 s_2 \left[\frac{\mathcal{E}-\mathcal{E}_1}{N_2}\right] \right) }\hlc{SkyBlue}{\exp\left( N_1 s_1 \left[\frac{\mathcal{E}_1}{N_1}  \right]\right)}
+\end{align}
+Let $N=N_1+N_2$, $\epsilon = \mathcal{E}/N$, $n_i = N_i/N$ fixed with $N \gg 1$. With the change of variables $\epsilon_i = E_i/N_i$ we have:
+\begin{align}\label{eqn:omega-saddle}
+    \Omega(\mathcal{E}) &= N_1 \int_{\mathbb{R}} \dd{\epsilon_1} \exp\left\{ N \left[n_2 s_2 \left(\frac{\epsilon - \epsilon_1 n_1}{n_2} \right) + n_1 s_1)\epsilon_1\right]\right\} =
+    \shortintertext{We then perform a saddle-point approximation:} \nonumber
+    &\underset{N \gg 1}{=} K \frac{N_1}{\sqrt{N}} \exp\left\{N\left[n_2 s_2 \left(\frac{\epsilon-\bar{\epsilon}_1n_1}{n_2} \right) + n_1 s_1(\bar{\epsilon}_1) \right]\right\} \left(1+O\left(\frac{1}{N} \right)\right)
+\end{align}
+where:
+\begin{align*}
+    K &= \left\{2 \pi \pdv[2]{\epsilon_1} \left[n_2 s_2 \left(\frac{\epsilon - \epsilon_1 n_1}{n_2} \right) + n_1 s_1(\epsilon_1)\right]_{\epsilon_1 = \bar{\epsilon}_1}\right\}^{-1}\\
+    \bar{\epsilon}_1 &\colon 0 =\pdv{\epsilon_1} \left[n_2 s_2 \left(\frac{\epsilon - \epsilon_1 n_1}{n_2} \right) + n_1 s_1 (\epsilon_1)\right]_{\epsilon_1 = \bar{\epsilon}_1} =\\
+    &= n_1[-s_2'(\bar{\epsilon}_2) + s_1'(\bar{\epsilon}_1)]\\
+    s_i'(x) \equiv \pdv{x} s_i(x); \qquad \bar{\epsilon}_2 = \frac{\epsilon-\bar{\epsilon}_1 n_1}{n_2} \span
+\end{align*}
+The last condition:
+\begin{align*}
+    s_1'(\bar{\epsilon}_1) = s_2'(\bar{\epsilon}_2)
+\end{align*} 
+is equivalent to (remember eq. (48)):
+\begin{align*}
+    \frac{1}{N_1} \pdv{\epsilon_1} \ln \Omega_1(N_1 \epsilon_1, V_1, N_1)\Big|_{\bar{\epsilon}_1}  = \frac{1}{N_2} \pdv{\epsilon_2} \ln \Omega_2(N_2 \epsilon_2, V_2, N_2)\Big|_{\bar{\epsilon}_2} 
+\end{align*}
+And reversing the change of variables we get:
+\begin{align}\label{eqn:ln-eq}
+    \pdv{\mathcal{E}_1} \ln \Omega_1(\mathcal{E}_1, V_1, N_1)\Big|_{\bar{\mathcal{E}}_1} = \pdv{\mathcal{E}_2} \ln \Omega_2(\mathcal{E}_2, V_2, N_2)\Big|_{\bar{\mathcal{E}}_2} \qquad \bar{\mathcal{E}}_2 = \mathcal{E}- \bar{\mathcal{E}}_1
+\end{align}
+Using (\ref{eqn:omega-saddle}) and (\ref{eqn:ln-eq}) we arrive to:
+\begin{align}\label{eqn:omega-eq}
+    \underbrace{\ln \Omega(\mathcal{E}, V, N)}_{O(N)}  = \underbrace{\ln \Omega_1(\bar{\mathcal{E}}_1, V_1, N_1)}_{O(N_1)}  + \underbrace{\ln \Omega_2(\bar{\mathcal{E}}_2, V_2, N_2)}_{O(N_2)}  + O(\ln N_i)
+\end{align}
+This result is telling us that $\ln \Omega$ is an extensive quantity, exactly like energy, volume or entropy, opposed to intensive quantities such as temperature, pressure or chemical potential. The other important result is (\ref{eqn:ln-eq}). It tells us that systems in equilibrium and in thermal contact have in common the value of\footnote{We highlight only the $\mathcal{E}$ dependence, since $N_i$ and $V_i$ are kept constant}:
+\begin{align*}
+    \beta_i(\bar{\mathcal{E}}_i) \equiv \pdv{\mathcal{E}_i} \ln \Omega_i(\mathcal{E}_i, N_i, V_i)\Big|_{\bar{\mathcal{E}}_i}
+\end{align*}
+that is:
+\begin{align*}
+    \beta_1(\bar{\mathcal{E}}_1) = \beta_2(\mathcal{E}- \bar{\mathcal{E}}_1)
+\end{align*}
+where $\mathcal{E}$ is the energy of the entire system, which is fixed a priori. Since for systems in thermal contact the only thing in common is the temperature, we must have that $\beta_i(\bar{\mathcal{E}}_i) = \beta(T)$, that is $\beta$ is some function of the temperature. Since it does not depend on the system identity (the above derivation is for generic system $1$ and $2$) it is enough that we determine $\beta(T)$ using the simplest system that comes to our mind: the ideal gas. We will do it later on.
+
+\medskip
+
+One of the consequences of (\ref{eqn:52}) (\ref{eqn:omega-eq}) is that:
+\begin{align*}
+    \Omega(\mathcal{E}) = \int_{\mathbb{R}} \dd{\mathcal{E}_1} \Omega_1(\mathcal{E}_1) \Omega_2(\mathcal{E}- \mathcal{E}_1) = \Omega_1(\bar{\mathcal{E}}_1) \Omega_2 (\mathcal{E}-\bar{\mathcal{E}_1}) \cdot (\text{Sub-dominant terms in $N_i$})
+\end{align*}
+This means that among all possible energies that the two systems $1$ and $2$ can have, such as their sum is $\mathcal{E}$ (which is reflected by the $\int \dd{\mathcal{E}_1}$) there is only one energy, $\bar{\mathcal{E}}_1$, for system $1$ and $\bar{\mathcal{E}}_2 = \mathcal{E}- \bar{\mathcal{E}}_1$ for system $2$, that dominate the integral when $N_i, N \gg 1$, i.e. for macroscopic systems.
+
+This is due to the extensivity property of $\Omega$ (\ref{eqn:omega-extensive}) and (\ref{eqn:omega-ext}), which has been used in (\ref{eqn:omega-saddle}) together with the saddle-point approximation.
+
+\medskip
+
+Later on we will evaluate the fluctuation of $\mathcal{E}_1$ and $\mathcal{E}_2$ around the corresponding $\bar{\mathcal{E}}_1$ and $\bar{\mathcal{E}}_2$.
+
+\section{Entropy}
+
+We are now ready to identify the entropy $S(\mathcal{E}, V, N)$.
+
+\medskip
+
+From the I law of thermodynamics, we have that for an infinitesimal transformation with fixed $N$:
+\begin{align*}
+    \dd{\mathcal{E}} = \delta W + \delta Q
+\end{align*}
+From the II law of thermodynamics, if the infinitesimal transformation is between two equilibrium states, then:
+\begin{align*}
+    \delta Q = T \dd{S}
+\end{align*}
+On the other hand we have also $\delta W = - P \dd{V}$, and thus:
+\begin{align}\label{eqn:first-law}
+    \dd{\mathcal{E}} = T \dd{S} - P \dd{V}
+\end{align}
+or, equivalently:
+\begin{align}\label{eqn:61}
+    \dd{S} = \frac{1}{T} \dd{E} + \frac{P}{T} \dd{V}  
+\end{align}
+For fixed $N$:
+\begin{align}\label{eqn:62}
+    \dd{S}(\mathcal{E}, V, N) = \pdv{S}{\mathcal{E}} \dd{\mathcal{E}} + \pdv{S}{V} \dd{V}
+\end{align}
+From (\ref{eqn:61}) and (\ref{eqn:62}) we derive:
+\begin{align}\label{eqn:thermo-temp}
+    \left(\pdv{S}{\mathcal{E}}\right)_{VN} = \frac{1}{T} \qquad \left(\pdv{S}{V}\right)_{EN} = \frac{P}{T} 
+\end{align}
+For the microcanonical ensemble we have just derived that:
+\begin{align}\label{eqn:microcanonical-temp}
+    \pdv{\ln \Omega (\mathcal{E}, V, N)}{\mathcal{E}} = \beta(T)
+\end{align}
+Comparing (\ref{eqn:thermo-temp}) and (\ref{eqn:microcanonical-temp}) suggest to identify the thermodynamic entropy as:
+\begin{align}\label{eqn:entropy}
+    S(\mathcal{E}, V, N) = k_B \ln \Omega(\mathcal{E}, V, N) \Leftrightarrow \Omega(\mathcal{E}, V, N) = \exp\left(\frac{S(\mathcal{E}, V, N)}{k_B} \right)
+\end{align}
+and thus:
+\begin{align}\label{eqn:beta-t}
+    \beta(T) = \frac{1}{k_B T} \qquad \pdv{\mathcal{E}}(k_B \ln \Omega) = \frac{1}{T}  
+\end{align}
+where $k_B$ is the Boltzmann constant, which we have already anticipated is related to the gas constant $R$ (see below how it is identified in a more satisfactory way).
+
+\medskip
+
+The constant $k_B$ is introduced in (\ref{eqn:entropy}) in order to give to $S$ the correct dimension, since $\ln \Omega$ is dimensionless. From (\ref{eqn:first-law}) we have:
+\begin{align*}
+    [TS] = \si{\J} \Rightarrow [S] = \frac{\si{\J}}{\si{\K}}  = [k_B]
+\end{align*}
+Thus, according to (\ref{eqn:ln-eq}), the energies $\bar{\mathcal{E}}_i$ of two systems in mutual equilibrium are such that:
+\begin{align*}
+    \frac{1}{T_1} = \pdv{\mathcal{E}_1} S_1(\mathcal{E}_1, V_1, N) \Big|_{\mathcal{E}_1} = \pdv{\mathcal{E}_2} S_2(\mathcal{E}_2, V_2, N_2) \Big|_{\bar{\mathcal{E}}_2 = \mathcal{E}- \bar{\mathcal{E}}_1} = \frac{1}{T_2} 
+\end{align*}
+where $\mathcal{E}$ is the total energy of the combined system.
+
+\medskip
+
+Notice that $S_1$ is a function which is different from $S_2$. The functional form of $S_i$ depends on the \textit{specificity} of the system $i$.
+
+\medskip
+
+Then, from (\ref{eqn:omega-ext}) we have:
+\begin{align*}
+    S(\mathcal{E}, V, N) = N S\left(\frac{\mathcal{E}}{N}, \frac{V}{N}, 1  \right)
+\end{align*}
+which is the extensivity property for $S$.
+
+\begin{appr}
+    Notice that $\Omega$ as defined in (\ref{eqn:omega-redef}) has still a \q{residual} dimensionality, that is $[\Omega] = [\mathcal{E}^{-1}]$ since $S(\mathcal{E}-H)$ has dimension $[1/\mathcal{E}]$. %Why?
+
+    Thus one should define $S = k_B \ln (\Omega \cdot \delta \mathcal{E})$, where $\delta \mathcal{E}$ was introduced in (6) and (7). $\Omega \delta \mathcal{E}$ is now dimensionless. However, this definition of $S$ differs from (\label{eqn:entropy}) only by a constant $k_B \ln \delta \mathcal{E}$, which is not relevant since we are interested only in variations of $S$.
+\end{appr}
+
+For the specific case of the IG, eq. (46) gives:
+\begin{align*}
+    S_{\mathrm{IG}} = k_B N \left\{\frac{3}{2} + \ln\left[\frac{V}{N} \left(\frac{\mathcal{E}}{N} \right)^{3/2} \frac{4 \pi m}{h^3}  \right] + \textcolor{Red}{\ln N}  \right\}
+\end{align*}
+Which leads to:
+\begin{align*}
+    \frac{1}{T} = \pdv{S_{\mathrm{IG}}}{\mathcal{E}} = \frac{3}{2} k_B N \text{ or } \frac{\mathcal{E}}{N} = \frac{3}{2} k_B T    
+\end{align*}
+which we have already derived using the Maxwell velocity distribution and the IG equation of state (see eq. (34)).
+
+\medskip
+
+(The red term shouldn't be there, and we will see how to remove it in a later lecture.)
+
+\begin{exo}[6]
+    Do exercise 3.8 of the textbook on the energy fluctuation in the combined system on page 15. Hint: use the correction to the saddle point approximation, just the quadratic one!
+\end{exo}
+
+\textit{Exercise 3.5 and 3.7 in the textbook are very interesting}. \textit{Exercise 3.6 is what we have done above... can you recognize it?}
+
+\section{Pressure}
+The next goal is to show that identification (\ref{eqn:entropy}) of the entropy is consistent with the thermodynamic relation (\ref{eqn:thermo-temp}):
+\begin{align*}
+    \left(\pdv{S}{V}\right)_{\mathrm{EN}} = \frac{P}{T} 
+\end{align*}
+In the Hamiltonian we must include the presence of a piston of surface area $\Sigma$:
+\begin{align*}
+    H(\mathbb{Q}, \mathbb{P}, x) = \frac{\norm{\mathbb{P}}^2}{2m} + U(\mathbb{Q}) + \sum_{i=1}^N \mathcal{V}(q_{ix} - x) 
+\end{align*}%Insert figures (TO DO)
+$\mathcal{V}$ is a potential like in the figure, which simply keeps the particles on the left of the piston. $q_{ix}$ is the $x$-coordinate of the position of the $i$-th particle, which are all positive in this case. Then:
+\begin{align*}
+    -\pdv{q_{ix}} \mathcal{V}(q_{ix}-x) &= \text{force on the $i$-th particle due to the piston} = \\
+    &=\pdv{x} \mathcal{V}(q_{ix} - x) < 0
+\end{align*}
+The total force on the system due to the piston is therefore:
+\begin{align*}
+    \bm{F}_{\mathrm{syst}} = \bm{\hat{x}} \sum_{i=1}^N \pdv{x} \mathcal{V}(q_{ix}-x) = \bm{\hat{x}} \pdv{H}{x}
+\end{align*}
+where $\bm{\hat{x}}$ is the unit vector pointing in the $x$ direction.
+
+\medskip
+
+Thus by the third Newton's law, the force on the piston is $-\bm{F}_{\mathrm{syst}}$, and its microcanonical average is:
+\begin{align*}
+    -\langle \pdv{H}{x} \rangle = P \cdot \Sigma
+\end{align*}
+Since $V = x \Sigma$, this is equivalent to:
+\begin{align*}
+    P = - \langle \pdv{H}{V} \rangle = \frac{1}{\Omega} \int_{\mathbb{R}^{6N}} \dd{\bm{\Gamma}} \delta(\mathcal{E}-H) \left(-\pdv{H}{V}\right)
+\end{align*}
+where:
+\begin{align*}
+    \pdv{V} = \frac{1}{\Sigma} \pdv{x} 
+\end{align*}
+
+On the other hand:
+\begin{align*}
+    \pdv{V} \ln \Omega(\mathcal{E}, V, N) &= \frac{1}{\Omega} \pdv{V} \int_{\mathbb{R}^{6N}} \dd{\bm{\Gamma}} \delta(\mathcal{E}- H) = \frac{1}{\Omega} \int_{\mathbb{R}^{6N}} \left(-\pdv{H}{V}\right) \pdv{\mathcal{E}} \delta(\mathcal{E}-H) =\\
+    &= \frac{1}{\Omega} \pdv{\mathcal{E}} \int_{\mathbb{R}^{6N}} \dd{\bm{\Gamma}} \left(-\pdv{H}{V}\right) \delta(\mathcal{E}-H) = \frac{1}{\Omega} \pdv{\mathcal{E}}(\Omega P) 
+\end{align*}
+Using (65) and (66) the previous equation becomes:
+\begin{align*}
+    \left(\pdv{S}{V}\right)_{\mathrm{EN}} = k_B \frac{1}{\Omega} \pdv{\mathcal{E}}(\Omega P) = \frac{1}{T} P + k_B \pdv{P}{\mathcal{E}}  
+\end{align*}
+which is exactly (\ref{eqn:thermo-temp})! Since we are considering a system with $N \gg 1$ and $\mathcal{E}/N = \epsilon$ fixed, the last term:
+\begin{align*}
+    \pdv{P}{\mathcal{E}} = \frac{1}{N} \pdv{P}{\epsilon}  \xrightarrow[N \to \infty]{}  0
+\end{align*}
+Thus for very large systems we have verified that (\ref{eqn:thermo-temp}) holds with $S$ given by (\ref{eqn:entropy}), which coincides with what we expected from thermodynamics. Notice however that, at least in principle, we are also able to calculate deviation from the thermodynamics when the system is not too large.
+
+\medskip
+
+What happens when we apply (\ref{eqn:thermo-temp}) to the IG? We use eq. (69), or even more simply (23) since we are interested in the $V$-dependence, and so:
+\begin{align*}
+    S_{\mathrm{IG}}(\mathcal{E}, V, N) = k_B \ln \Omega_{\mathrm{IG}} (\mathcal{E}, V, N) = k_B \ln V^N + \text{ terms independent of $V$}
+\end{align*}
+And from (\ref{eqn:thermo-temp}) we have:
+\begin{align*}
+    \frac{P}{T} = \pdv{V} S_{\mathrm{IG}} = \frac{N k_B}{V} = \underbrace{\frac{N}{N_A}}_{n} \underbrace{ N_A k_B}_{R}  \frac{1}{V} \Leftrightarrow PV = nRT
+\end{align*}
+Thus for the simplest case of the IG the microcanonical ensemble gives us the correct equation of state.
+
+\section{Summary}
+
+\end{document}

@@ -1,0 +1,73 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]
+    \tikzstyle{every state}=[fill={rgb:black,1;white,10},font=\bfseries]
+    \tikzset{every loop/.style={min distance=4mm,looseness=4}}
+    \node[state] (q0) {0};
+    \node[state, above right of=q0] (q1) {1};
+    \node[state, right of=q1] (q2) {2};
+    \node[state, below right of=q2] (q3) {3};
+    \node[state, below left of=q3] (q4) {4};
+    \node[state, below right of=q0] (q5) {5};
+    \path[->]
+    (q0) edge [above left] node{$1$} (q1)
+    (q1) edge [above] node{$1$} (q2)
+    (q2) edge [above right] node{$1$} (q3)
+    (q3) edge [below right] node{$1$} (q4)
+    (q4) edge [below] node{$1$} (q5)
+    (q5) edge [below left] node{$1$} (q0);
+\end{tikzpicture}
+
+
+\begin{tikzpicture}[shorten >=1pt,node distance=3cm,auto]
+    \tikzstyle{every state}=[fill={rgb:black,1;white,10},font=\bfseries]
+    \tikzset{every loop/.style={min distance=4mm,looseness=4}}
+    \node[state] (q0) {0};
+    \node[state, below right of=q0] (q1) {1};
+    \node[state, right of=q0, xshift=1.3cm] (q2) {2};
+    \fill[draw=black, pattern=north east lines] (7,1) rectangle (9,-1);
+    \path[->]
+    (q2) edge [loop above] node{$c$} (q2)
+    (q0) edge [bend left] node{$1$} (q1)
+    (q1) edge [bend left] node{$1$} (q0)
+    (q2) edge [above] node{$a$} (q0)
+    (q2) edge [below, pos=0.4] node{$b$} (q1)
+    (q2) edge [above] (7,0)
+    (7,0) edge[above] (q2);
+\end{tikzpicture}
+
+
+
+
+
+
+
+
+\begin{tikzpicture}[shorten >=1pt,node distance=2cm,auto]
+    \tikzstyle{every state}=[fill={rgb:black,1;white,10},font=\bfseries]
+    \tikzset{every loop/.style={min distance=4mm,looseness=4}}
+    \node[state] (q5) {5};
+    \node[state, right of=q5] (q4) {4};
+    \node[state, right of=q4] (q3) {3};
+    \node[state, right of=q3] (q2) {2};
+    \node[state, right of=q2] (q1) {1};
+    \node[state, right of=q1, accepting] (q0) {0};
+    \path[->]
+    (q5) edge [loop above] node{$\sfrac{3}{8}$} (q5)
+    (q4) edge [loop above] node{$\sfrac{3}{7}$} (q4)
+    (q3) edge [loop above] node{$\sfrac{1}{2}$} (q3)
+    (q2) edge [loop above] node{$\sfrac{3}{5}$} (q2)
+    (q1) edge [loop above] node{$\sfrac{3}{4}$} (q1)
+    (q0) edge [loop above] node{$1$} (q0)
+    (q5) edge [bend right, below] node{$\sfrac{5}{8}$} (q4)
+    (q4) edge [bend right, below] node{$\sfrac{4}{7}$} (q3)
+    (q3) edge [bend right, below] node{$\sfrac{1}{2}$} (q2)
+    (q2) edge [bend right, below] node{$\sfrac{2}{5}$} (q1)
+    (q1) edge [bend right, below] node{$\sfrac{1}{4}$} (q0);
+\end{tikzpicture}
+
+
+\end{document}
