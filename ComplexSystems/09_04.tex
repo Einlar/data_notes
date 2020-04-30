@@ -3,27 +3,49 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
-In certain cases, the nature of a process allows to infer the \textit{direction} of evolution  %Ability to distinguish forward movie from backward one.
+\section{Asymptotic Evolution}
+Liouville's theorem showed us that a uniform ensemble, such as the \textit{microcanonical ensemble} for a isolate system, is \textbf{stationary}, thus suitable to describe equilibrium.
 
-But Recurrence theorem allows the inverse process to happen. But how much do we need to wait? Irreversibility = recurrence of macroscopic systems takes more than the age of the universe, and so we don't observe it.
-%Mathematical Statistical Mechanics, Thompson
+However, we would like to prove that it \textit{is} in fact, the only suitable description. Intuitively, this requires that the Liouville's evolution \q{throughly stirs} phase-space, so that the trajectory followed by \textit{almost}\footnote{Up to a set of null measure} any point in phase-space passes arbitrarily close to any other point in phase-space. In such case, it can be shown that all states can be treated \q{equally}, and so we can compute the expected values of observables by using the microcanonical ensemble, as we previously postulated. A system satisfying this condition is said to be \textbf{ergodic}. Unfortunately, it is usually very difficult to prove.
 
-Average value of observable is over the initial conditions (the only thing that we don't know precisely, as the evolution is deterministic). %Can move previous section here
+\medskip
 
-This average can be done over the initial conditions, by using the equation of motion, or over the \textit{evolved} ensemble.
+To make the argument formal, consider any observable $O(\mathbb{Q},\mathbb{P})$ and compute its average at time $t$ over all the initial conditions compatible with some ensemble $\rho_0$:
+\begin{align} \nonumber
+    \langle O(\mathbb{Q}(t), \mathbb{P}(t)) \rangle = \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \> O(\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0), \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0)) = \span \\
+    \nonumber
+    \shortintertext{We change variables $(\mathbb{Q}(t), \mathbb{P}(t)) \to (\mathbb{Q}, \mathbb{P})$ by introducing two $\delta$\textit{s}:}  \nonumber
+    &= \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \cdot \\ \nonumber
+    &\quad\> \cdot \textcolor{Red}{\int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} \delta^{3N}(\mathbb{Q}-\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0)) \delta^{3N}(\mathbb{P} - \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0))} O(\mathbb{Q},\mathbb{P}) = \\ \nonumber
+    \shortintertext{In this way we can bring $O(\mathbb{Q}, \mathbb{P})$ outside the inner integral:} \nonumber
+    &= \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \cdot\\ \nonumber
+    &\quad \> \cdot \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \delta^{3N} (\mathbb{Q}-\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0)) \> \delta^{3N}(\mathbb{P} - \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0)) =\\ \nonumber
+    \shortintertext{And so we have rewritten the average of $O$ in terms of the \textit{evolved} distribution $\rho(\mathbb{Q}, \mathbb{P}, t)$:} \nonumber
+    &\underset{(\ref{eqn:9})}{=}  \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \rho(\mathbb{Q}, \mathbb{P}, t)  
+    \shortintertext{For an ergodic system, in the limit $t \to \infty$ this is equivalent to using the microcanonical ensemble:}
+    \langle O(\mathbb{Q}(t), \mathbb{P}(t)) \rangle  \xrightarrow[t \to \infty]{} \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \rho_{\rm{MC}}(\mathbb{Q}, \mathbb{P}) \label{eqn:limit}  \span
+    \shortintertext{where:} \nonumber
+    \rho_{\rm{MC}} = \begin{cases}
+        \text{const} & \mathcal{E} \leq \mathcal{H}(\mathbb{Q}, \mathbb{P}) \leq \mathcal{E}+ \delta \mathcal{E}\\
+        0 & \text{otherwise}
+    \end{cases} \span
+\end{align}
+This is equivalent to saying that the time average of an observable over a single trajectory is equal to the microcanonical ensemble average, which is the argument used in \cite[Chapter 4.2]{sethna}:
+\begin{align}\label{eqn:time-averages}
+    \lim_{T \to \infty} \frac{1}{T} \int_0^T O(\mathbb{Q}(t), \mathbb{P}(t)) \dd{t} = \int_{\bm{\Gamma}} \dd{\Gamma} O(\mathbb{Q}(t), \mathbb{P}(t)) \rho_{\mathrm{MC}}(\mathbb{Q}, \mathbb{P})
+\end{align}
 
-When $t \to \infty$ (towards equilibrium), does $\rho(\mathbb{Q},\mathbb{P},t)$ tend to the microcanonical ensemble? This is what we assume in SM. 
-
-%\rho_MC def
-
-In other terms we are asking if:
+The full proof that (\ref{eqn:limit}) and (\ref{eqn:time-averages}) follow from \textit{ergodicity} is quite involved. Here, we focus only on its last part. Namely, we suppose that:
 \begin{enumerate}
     \item Hamilton dynamics lead, in the large time limit, to a \textit{stationary distribution} $\rho_{\mathrm{st}}$: 
     $\displaystyle \lim_{t \to \infty} \rho(\mathbb{Q}, \mathbb{P}, t) = \rho_{\mathrm{st}}(\mathbb{Q}, \mathbb{P})$
-    \item The stationary distribution coincides with the microcanonical ensemble: $\rho_{\mathrm{st}} = \rho_{\mathrm{MC}}$ %Chapter 4, ergodicity in the Sethna book. There they follow only one system for infinite time, and average over time, while here we follow an ensemble of systems, evolve them at t and average over them. The two approaches are equivalent.
 \end{enumerate}
-
-Point $1$ is very difficult to prove in general, and is known to hold only for certain toy models that are far from real cases. However, if we assume that $1$ holds, then we can use Liouville's theorem to prove $2$. In fact, as consequence of (\ref{eqn:Liouville}), the local probability density is a constant of motion:
+And then show that:
+\begin{enumerate}
+    \setcounter{enumi}{1}
+    \item The stationary distribution coincides with the microcanonical ensemble: $\rho_{\mathrm{st}} = \rho_{\mathrm{MC}}$
+\end{enumerate}
+This can be done by using Liouville's theorem (\ref{eqn:Liouville}), which states that the local probability density is a constant of motion:
 \begin{align*}
     \dv{t} \rho_{\mathrm{st}}(\mathbb{Q}(t), \mathbb{P}(t)) = 0
 \end{align*}
@@ -239,10 +261,13 @@ Then we will talk about the relation about information and energy. Landauer's pr
         \end{align*} 
         The information entropy is then:
         \begin{align*}
-            S_I[\rho_{\mathrm{MC}}] &= -k_B \int_{\bm{\Gamma}} \dd{\Gamma} \frac{\bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}  [\ln \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H) - \ln \int_{\bm{\Gamma} }\dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)] =\\
+            S_I[\rho_{\mathrm{MC}}] &= -k_B \int_{\bm{\Gamma}} \dd{\Gamma} \frac{\bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}  [\cancel{\ln \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)} - \ln \int_{\bm{\Gamma} }\dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)] =\\
+            \shortintertext{Note that $\bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]} \ln \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}$ is either $1 \log 1 = 0$ if $(\mathbb{Q}, \mathbb{P})$ is inside the energy shell, or $0 \log 0 = 0$ otherwise. The logarithm of the integral does not depend on the integration variables, and so can be factored out:}
+            &= k_B \left[\ln \int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H) \right]
+            \frac{\cancel{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}}{\cancel{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}}  \\ 
             &= k_B \ln\underbrace{ \int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}_{\Omega(\mathcal{E}, V, N) \delta \mathcal{E}} = k_B \ln \Omega(\mathcal{E}, V, N) + \underbrace{k_B \ln \delta \mathcal{E}}_{\mathclap{\text{Irrelevant constant}}}
         \end{align*}
-        which is (\ref{eqn:S-SM}) up to a constant - which is not a problem, as only differences in entropy have physical significance.
+        leading to (\ref{eqn:S-SM}) up to a constant, which is irrelevant, as only differences in entropy have physical meaning.
         \item \textbf{Canonical case}. The canonical ensemble is given by:
         \begin{align*}
             \rho_c(\mathbb{Q}, \mathbb{P}) = \frac{1}{Z(T, V, N)} e^{-\beta H(\mathbb{Q}, \mathbb{P})} \quad Z(T,V,N) = \int_{\bm{\Gamma}} \dd{\Gamma} e^{- \beta H(\mathbb{Q}, \mathbb{P})} = e^{-\beta A(T, V, N)}

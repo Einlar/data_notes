@@ -1,0 +1,63 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\usepackage{graphicx}
+
+\begin{document}
+
+\chapter{Ising Model}
+The \textbf{Ising Model} is a paradigmatic model of Statistical Mechanics, originally created to explain the phenomenon of \textbf{paramagnetism}. It is exactly solvable in $d=1$ or $d=2$, but no exact solutions exist for higher dimension.   
+
+Let us start with the grand canonical formulation of a fluid:
+\begin{align*}
+    H_{N}(\mathbb{Q}, \mathbb{P}) = \sum_{i=1}^N \frac{P_i^2}{2m} + V_N(\mathbb{Q}) 
+\end{align*}
+The grand canonical partition function is given by:
+\begin{align*}
+    e^{\beta PV} = \sum_N \frac{1}{N!} \int \prod_i \frac{\dd[3]{\bm{q_i} \dd[3]{\bm{p_i}}}}{h^3} e^{-\beta [H_N(\mathbb{Q}, \mathbb{P}) - \mu N]} 
+\end{align*}
+The integral:
+\begin{align*}
+    \int \frac{\dd[3N]{\mathbb{P}}}{h^{3N}}  \exp\left(-\sum_{i=1}^N \frac{P_i^2}{2m} \beta \right) = \left(\frac{2 \pi m}{\beta h} \right)^{\frac{3N}{2}} = \lambda^{-3N} \qquad \left[\frac{\dd[3]{\bm{p}}}{h^3} \right] = \frac{1}{\si{\m^3}} 
+\end{align*}
+The quantity $\lambda$ is the thermal wavelength:
+\begin{align*}
+    \lambda = \left(\frac{2\pi \hbar^2}{m k_B T} \right)^{\frac{1}{2}} 
+\end{align*}
+and:
+\begin{align*}
+    z \equiv \frac{e^{\beta \mu}}{\lambda^3} 
+\end{align*}
+Notice that in the previous chapter we were definining $z = e^{\beta \mu}$.
+
+\begin{align}
+    e^{\beta}
+\end{align}
+
+Space is discretized as a cubic lattice (or, more generally, a $d$-dimensional lattice) of $V$
+We know consider the lattice gas approximation. Each site in the lattice is described by an integer $d$-dimensional vector
+
+...pag.3...
+
+Each cell can be occupied by at most one particle. If there is, $\sigma_x = 1$, otherwise $\sigma_x = -1$. The lattice spacing $a$ becomes the unit distance in the model. 
+
+\begin{align*}
+    V_N(\mathbb{Q}) = \sum_{i< j} v(q_{ij}) 
+\end{align*}
+When two particles are occupying nearest neighbour sites, they are interacting, and sit in the \textit{minimum} of the interaction potential. Let $V(a) = -\epsilon_0$. Then:
+\begin{align*}
+    V_N(\mathbb{Q}) = -\epsilon_0 \sum_{\langle x,y \rangle} \frac{1+\sigma_x}{2} \frac{1+\sigma_y}{2}  
+\end{align*}
+where $\langle x,y \rangle$ represents the sum over neighbouring elements, i.e. on pairs $(x,y)$ such that $|\bm{x}-\bm{y}| = a$. Note that if both $\sigma_x$ and $\sigma_y$ are $1$, then the product will be $1$. Otherwise, the result will be $0$.
+
+In a finite system, sites at the boundaries have fewer neighbours than sites in the bulk, and so \q{interact less}, leading to \textbf{open} boundary conditions. Boundaries can be removed by applying \textbf{periodic} boundary conditions, i.e. connecting the different boundaries so that the particle at one side \textit{interacts} with the particles in the opposite side (as if the $d=1$ system were a \textit{ring}, or the $d=2$ a \textit{torus}). This leads to a system that is completely translationally invariant.   %topology
+%TO DO: add pictures
+
+...
+
+
+
+
+
+\end{document}
+

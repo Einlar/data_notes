@@ -1,0 +1,287 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\subsection{Derivation of the C ensemble}
+In the case of the \textbf{canonical ensemble} we do not need any limiting procedure, as we are not dealing with a \q{infinitely thin} hyper-surface of constant energy, meaning that Dirac Deltas appear and all functions are well behaved.
+
+\medskip
+
+So, let's consider a system with fixed volume $V$ and number of particles $N$ that is put in thermal contact with a larger environment at a fixed temperature $T$. As energy exchanges are now possible, the system's energy $H$ will not be conserved. However, experimentally, we see that at equilibrium the \textit{average} value of $H$ is \textit{well defined}, with $\operatorname{Var}(H)$ vanishingly small. 
+
+\medskip
+
+We represent this situation with a constraint of the first class (\ref{eqn:13a}):
+\begin{align} \label{eqn:33}
+    U \overset{!}{=}  \langle H \rangle = \int_\Gamma \underbrace{\dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}}}_{\dd{\bm{\Gamma}}}  H(\mathbb{Q}, \mathbb{P}) \rho(\mathbb{Q}, \mathbb{P})
+\end{align}
+And the usual normalization constraint (second class):
+\begin{align}\label{eqn:norm}
+    1 \overset{!}{=} \int_{\Gamma} \dd{\bm{\Gamma}} \rho(\mathbb{Q}, \mathbb{P})
+\end{align}
+However, now we are dealing with a \textit{continuous} pdf $\rho$, and not discrete probabilities $p_i$ or $\rho_i$ as seen in the previous cases, meaning that we need to introduce some results from the calculus of variations\footnote{See \url{www2.math.uconn.edu/~gordina/NelsonAaronHonorsThesis2012.pdf} for a re-
+fresher}.
+
+\medskip
+
+In fact, the information entropy $S_I$ is now a functional, i.e. a mapping between functions (which, in this case, are pdf\textit{s} over phase-space $\rho \colon \Gamma \to [0,1]$) and real numbers, defined by:
+\begin{align}
+    S_I[\rho] = -k_B \int_{\Gamma} \dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}} \rho(\mathbb{Q}, \mathbb{P}) \ln \rho(\mathbb{Q}, \mathbb{P})
+\end{align}
+We want to maximize $S_I[\rho]$ subject to the constraints (\ref{eqn:33}) and (\ref{eqn:norm}). The method of Lagrange multipliers naturally extends to the maximization of functionals, by just replacing derivatives with \textit{functional} derivatives.
+
+\medskip
+
+Recall that the functional derivative (or \textit{Gateaux derivative}, or \textit{first variation}) of a functional $\mathcal{F}$ evaluated at $\rho$ is defined as:
+\begin{align}\label{eqn:func-der}
+    \delta \mathcal{F}[\rho] = \lim_{\tau \to 0} \frac{f(\rho + \tau s) - f(\rho)}{\tau} = \dv{\tau} f(\rho + \tau s) \Big|_{\tau = 0} 
+\end{align}
+where $s \colon \Gamma \to \mathbb{R}$ is a \q{perturbation of $\rho$}, i.e. some function vanishing at $\infty$.
+
+\medskip
+
+Thus, the Lagrange multipliers method leads to:
+\begin{align*}
+    0 &\overset{!}{=}  \delta[S_I[\rho] - \lambda_1 \int_{\Gamma} \dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}} \rho \cdot H - \lambda_0 \int_{\Gamma} \dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}} \rho] 
+\end{align*}
+The functional derivative is linear (as the usual one), and so we may compute separately the variation of each term, starting from $\delta S_{I}[\rho]$:
+\begin{align} \label{eqn:variation-calc}
+    \delta S_{I}[\rho] &\underset{(\ref{eqn:func-der})}{=} \dv{\tau} S_{I}(\rho + \tau s) \Big|_{\tau = 0} = -k_B \dv{\tau} \int_{\Gamma} \dd{\bm{\Gamma}} (\rho + \tau s) \ln (\rho + \tau s) \Big|_{\tau = 0}=\\ \nonumber
+    &= -k_B \int_{\Gamma} \dd{\bm{\Gamma}} [s \ln (\rho + \tau s) + \frac{s}{\cancel{\rho + \tau s}} \cancel{(\rho + \tau s)} ] \Big|_{\tau = 0} =\\ \nonumber
+    &= -k_B \int_{\Gamma} \dd{\bm{\Gamma}} s[1+\ln(\rho)]\\ \nonumber
+    \delta \lambda_1 \int_{\Gamma} \dd{\bm{\Gamma}} \rho H &= \lambda_1 \dv{\tau} \int_{\Gamma} \dd{\bm{\Gamma}} (\rho + \tau s) H \Big|_{\tau = 0} = \lambda_1 \int_{\Gamma} \dd{\bm{\Gamma}} s H\\ \nonumber
+    \delta \lambda_0 \int_{\Gamma} \dd{\bm{\Gamma}} \rho &= \lambda_0 \dv{\tau} \int_{\Gamma} \dd{\bm{\Gamma}} (\rho + \tau s) \Big|_{\tau = 0} = \lambda_0 \int_{\Gamma} \dd{\bm{\Gamma}}s
+\end{align}
+Putting everything back together leads to:
+\begin{align*}
+    0 \overset{!}{=} \int_{\Gamma} \dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}} s(\mathbb{Q}, \mathbb{P}) [-k_B - k_B \ln \rho(\mathbb{Q}, \mathbb{P}) - \lambda_1 H(\mathbb{Q}, \mathbb{P}) - \lambda_0]
+\end{align*}
+This relation holds for \textit{any} possible $s \colon \Gamma \to \mathbb{R}$ (that vanishes at $\infty$), which can only happen if the function multiplying $s$ vanishes everywhere:
+\begin{align}\nonumber
+    0 &\overset{!}{=}  -k_B - k_B \ln \rho(\mathbb{Q}, \mathbb{P}) - \lambda_1 H(\mathbb{Q}, \mathbb{P}) - \lambda_0
+    \shortintertext{And rearranging leads to:} \label{eqn:rho-qpc}
+    \rho(\mathbb{Q}, \mathbb{P}) &= \exp\left(-1 - \frac{\lambda_0}{k_B} \right) \exp\left(-\frac{\lambda_1}{k_B} H(\mathbb{Q}, \mathbb{P}) \right)
+\end{align}
+
+As $\lambda_1$ is the conjugate variable of the energy, $\lambda_1 = 1/T$, and so $\lambda_1/k_B = 1/(k_B T) \equiv \beta$, which is generally known by experiment (it is easier to measure the temperature $T$ of the environment than the energy of the system). To find $\lambda_0$ we only need to impose the normalization constraint (\ref{eqn:norm}):
+\begin{align*}
+    1 \overset{!}{=} \int_{\Gamma} \dd{\bm{\Gamma}} \rho(\mathbb{Q}, \mathbb{P}) = \exp\left(-1 -\frac{\lambda_0}{k_B} \right)\underbrace{ \int_{\Gamma} \dd{\bm{\Gamma}} \exp\left(- \beta H(\mathbb{Q}, \mathbb{P}) \right)}_{Z(T,V,N)}\\
+     \Rightarrow \exp\left(1+\frac{\lambda_0}{k_B} \right) = Z(T,V,N) \span
+\end{align*} %Where does A come from here? Get the reference
+
+Substituting back in (\ref{eqn:rho-qpc}) we get:
+\begin{subequations}
+    \begin{align} \label{eqn:35a}
+        \rho(\mathbb{Q}, \mathbb{P}) = \frac{e^{-\beta H(\mathbb{Q}, \mathbb{P})}}{Z(T, V, N)} 
+    \end{align}
+    with:
+    \begin{align*}
+        \beta = \frac{1}{k_B T} \qquad Z = \int_{\Gamma} \dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}} e^{-\beta H(\mathbb{Q}, \mathbb{P})}  = e^{-\beta A(T,V,N)}
+    \end{align*}
+    From (\ref{eqn:25c}-\ref{eqn:25g}) and (\ref{eqn:35}): %TO DO
+    \begin{align}
+        P &= -{\pdv{A}{V}}(T,V,N) \qquad \mu = {\pdv{A}{N}} (T, V, N) \label{eqn:35b}\\
+        \mathcal{E} &= \langle H \rangle = - \pdv{\ln Z}{\beta} = \pdv{\beta} [\beta A(T, V, N)] \label{eqn:35c}
+    \end{align}
+\end{subequations}
+
+The maximum entropy is then:
+\begin{align*}
+    S_I[\rho] &= -k_B \int_{\Gamma} \dd{\bm{\Gamma}} \rho \ln \rho \underset{(\ref{eqn:35a})}{=}  -k_B \int_{\Gamma} \dd{\bm{\Gamma}} \frac{e^{-\beta H}}{Z} (-\beta H - \log Z) =\\
+    &= -k_B \Bigg[\int_{\Gamma} \dd{\bm{\Gamma}} \frac{e^{- \beta H}}{Z} (- \beta H) - \log Z\underbrace{\int_{\Gamma} \dd{\bm{\Gamma}} \frac{e^{-\beta H}}{Z}}_{1}  \Bigg]=\\
+    &= -k_B (-\beta \langle H \rangle_{\rho} - \log Z) = \frac{1}{k_B T} k_B \langle H \rangle_\rho + k_B \log Z =\\
+    &= \frac{\langle H \rangle}{T} + k_B \log Z 
+\end{align*}
+
+\begin{exo}[2]
+    Fix the correct constants for the volume element $\dd{\bm{\Gamma}} \propto \dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}}$ and the case of identical particles.
+
+    \medskip
+
+    \textbf{Solution}. As only differences in entropy are physical, $Z$ is defined up to a multiplicative constant. So we can divide the volume element $\dd{\bm{\Gamma}}$ by $h^{3N}$, making it dimensionless. In this way, $Z$ becomes proportional the number of \textit{cells} of hyper-volume $h^{3N}$ occupied by the ensemble in phase-space (this choice can be fully motivated by quantum mechanical arguments, as it amounts to a \q{quantization} of $\Gamma$).
+
+    \medskip
+
+    Moreover, to resolve the Gibbs paradox, we need to count all permutations of identical particles as one. So, for a system of $N$ particles, this amounts to rescaling $\dd{\bm{\Gamma}}$ by $N!$
+
+    \medskip
+
+    At the end, the final definition of $Z(T,V,N)$ becomes:
+    \begin{align*}
+        Z(T,V,N) = \int_{\Gamma} \frac{\dd[3N]{\mathbb{Q}} \dd[3N]{\mathbb{P}}}{h^{3N} N!} e^{-\beta H(\mathbb{Q}, \mathbb{P})} 
+    \end{align*}
+\end{exo}
+
+\subsection{Derivation of the G-C ensemble}
+In the \textbf{grandcanonical ensemble} we consider a system exchanging both heat $Q$ and particles $\delta N$ with a larger environment. Let's assume, for simplicity, that all particles are identical.
+
+\medskip
+
+At equilibrium, it is experimentally observed that the average number of particles $\langle N \rangle$ inside the system is fixed to a certain value $\mathcal{N}$, and does not fluctuate much. This is similar to what happened with energy in the canonical ensemble, and so we need to add a similar \textit{soft} constraint:
+\begin{align}\label{eqn:36}
+    \langle H_N \rangle \overset{!}{=}  \mathcal{E}; \qquad \langle N  \rangle \overset{!}{=}  \mathcal{N}
+\end{align}
+where:
+\begin{align*}
+    H_N(\mathbb{Q}_N, \mathbb{P}_N) = \frac{\norm{\mathbb{P}}^2}{2m} + U(\mathbb{Q}_N)  \qquad \mathbb{Q}_N, \mathbb{P}_N \in \mathbb{R}^{3N}
+\end{align*}
+is the Hamiltonian of $N$ particles interacting with with the potential $U$.
+
+We search for a distribution $\rho_N(\mathbb{Q}, \mathbb{P})$ such that:
+\begin{align}\label{eqn:37}
+    \rho_N(\mathbb{Q}_N, \mathbb{P}_N) \frac{\dd{\Gamma_N}}{N! h^{3N}} = \parbox{20em}{\footnotesize \centering Probability to find $N$ particles of the system with coordinates within a volume element $\dd[3N]{\mathbb{Q}_N} \dd[3N]{\mathbb{P}_N} \equiv \dd{\Gamma_N}$ in phase space}
+\end{align}
+The normalization constraint (\ref{eqn:13b}) is:
+\begin{align}\label{eqn:38}
+    1 \overset{!}{=}  \sum_{N=0}^\infty \int_{\Gamma_N} \rho_N(\mathbb{Q}_N, \mathbb{P}_N) \frac{\dd{\Gamma_N}}{N! h^{3N}}  \equiv \langle 1 \rangle_{\mathrm{g.c.}}
+\end{align}
+whereas the constraints in (\ref{eqn:36}) become:
+\begin{subequations}
+    \begin{align}
+        \mathcal{E} &\overset{!}{=} \langle H_N \rangle = \sum_{N=0}^\infty \int_{\Gamma_N} \rho_N(\mathbb{Q}_N, \mathbb{P}_N) H_N(\mathbb{Q}_N, \mathbb{P}_N) \frac{\dd{\Gamma_N}}{N! h^{3N}} \label{eqn:39a}\\
+        \mathcal{N} &\overset{!}{=}  \langle N \rangle  = \sum_{N=0}^\infty N \underbrace{\int_{\Gamma_N} \rho_N(\mathbb{Q}_N, \mathbb{P}_N) \frac{\dd{\Gamma_N}}{N! h^{3N}}}_{\parbox{10em}{\centering \scriptsize Marginalized distribution: probability that the system contains $N$ particles}}  \label{eqn:39b}
+    \end{align}
+\end{subequations}
+The grand-canonical average of a generic observable $O_N(\mathbb{Q}_N, \mathbb{P}_N)$ is:
+\begin{align}\label{eqn:40}
+    \langle O \rangle_{\mathrm{g.c.}} = \sum_{N=0}^\infty \int_{\Gamma_N} \rho_N(\mathbb{Q}_N, \mathbb{P}_N) O_N(\mathbb{Q}_N, \mathbb{P}_N) \frac{\dd{\Gamma_N}}{N! h^{3N}} 
+\end{align}
+In the case of $O_N=\log \rho_{N}$ the average is the information entropy:
+\begin{align}\label{eqn:41}
+    S_I[\rho_{\mathrm{g.c.}}] = -k_B \sum_{N=0}^{\infty} \int_{\Gamma_N} \frac{\dd{\Gamma_N}}{h^{3N}N!}  \rho_N(\mathbb{Q}_N, \mathbb{P}_N) \ln \rho_N(\mathbb{Q}_N, \mathbb{P}_N)
+\end{align}
+The Lagrange multipliers equations are:
+\begin{align} \nonumber
+    0 &\overset{!}{=}  \delta[S_I[\rho_{\mathrm{g.c.}}] - \lambda_0 \langle 1 \rangle_{\mathrm{g.c.}} - \lambda_1 \langle H \rangle_{\mathrm{g.c.}} - \lambda_2 \langle N \rangle_{\mathrm{g.c.}}] =\\ 
+    \intertext{With similar calculations as in (\ref{eqn:variation-calc}) we get:} \nonumber
+      &= -\sum_{N=0}^\infty \int_{\Gamma_N} \frac{\dd{\Gamma_N}}{N! h^{3N}}  \delta \rho_N(\mathbb{Q}_N, \mathbb{P}_N) \Big [k_B + k_B \ln \rho_N(\mathbb{Q}_N, \mathbb{P}_N) + \lambda_0 +\\
+      &\hspace{14.5em} \> + \lambda_1 H_N(\mathbb{Q}_N, \mathbb{P}_N )+ \lambda_2 N) \Big]
+      \label{eqn:variation-gc}
+\end{align} 
+where $\delta \rho_N \colon \Gamma \to \mathbb{R}$ is a \q{perturbation} of $\rho_N$. 
+
+\medskip
+
+Equation (\ref{eqn:variation-gc}) holds for any $\delta \rho_N$, meaning that the expression in the square brackets must vanish everywhere:
+\begin{align*}
+    0 \overset{!}{=} k_B + k_B \ln \rho_N(\mathbb{Q}_N, \mathbb{P}_N) + \lambda_0 + \lambda_1 H_N(\mathbb{Q}_N, \mathbb{P}_N) + \lambda_2 N
+\end{align*}
+leading to:
+\begin{align*}
+    \rho_N(\mathbb{Q}_N, \mathbb{P}_N) = \underbrace{\exp\left(-\frac{\lambda_0 + 1}{k_B} \right) }_{1/\Theta}\exp\left(-\frac{\lambda_1}{k_B} H_N(\mathbb{Q}_N, \mathbb{P}_N) - \frac{\lambda_2}{k_B} N  \right)
+\end{align*}
+$\lambda_1$ is the conjugate variable to the energy, and so $\lambda_1 \equiv -1/T$. On the other hand, $\lambda_2$ is the conjugate variable of the number of particles $N$, and so we define $\lambda_2 \equiv -\mu/T$, where $\mu$ is called \textbf{chemical potential}. %Add reference 
+
+So we can rewrite $\rho_N$ as follows:
+\begin{align}\label{eqn:42}
+    \rho_N(\mathbb{Q}_N, \mathbb{P}_N) = \frac{1}{\Theta} \exp \Big(-\beta H_N(\mathbb{Q}_N, \mathbb{P}_N) + \beta \mu N \Big); \qquad \beta = \frac{1}{k_B T} 
+\end{align}
+Then, from the normalization constraint (\ref{eqn:38}):
+\begin{align*}
+    1 &\overset{!}{=}  \sum_{N=0}^\infty \int_{\Gamma_N} \rho_N(\mathbb{Q}_N, \mathbb{P}_N) \frac{\dd{\Gamma_N}}{N! h^{3N}} =\\
+    &= \frac{1}{\Theta} \sum_{N=0}^\infty \int_{\Gamma_N} \frac{\dd{\Gamma_N}}{N! h^{3N}} \exp \Big(-\beta H_N(\mathbb{Q}_N, \mathbb{P}_N) + \beta \mu N \Big)
+\end{align*}
+Rearranging:
+\begin{align} \nonumber
+    \exp\left(1+ \frac{\lambda_0}{k_B} \right) &\equiv \Theta(T, \mu, V) =\\ \nonumber
+    &= \sum_{N=0}^\infty \int_{\Gamma_N} \frac{\dd{\Gamma_N}}{h^{3N}N!} \exp \Big(-\beta H_N(\mathbb{Q}_N, \mathbb{P}_N)\Big)\exp ( + \beta \mu N )=\\
+    &= \sum_{N=0}^\infty [\underbrace{e^{\beta \mu}}_{z}]^N \underbrace{\int_{\Gamma_N} \frac{\dd{\Gamma_N}}{h^{3N} N!} \exp \Big( -\beta H_N(\mathbb{Q}_N, \mathbb{P}_N)\Big)}_{Z(T,V,N)} \\
+    &=  \sum_{N=0}^\infty z^N Z(T,V,N); \qquad z=e^{\beta \mu} \label{eqn:44}
+\end{align}
+$\Theta(T,\mu,V)$ is the \textbf{grand canonical partition function}. $Z(T,V,N)$ is the partition function of a canonical ensemble of $N$ particles in a volume $V$ at temperature $T$, with corresponding Helmholtz free energy $A_N(T,V,N)$:
+And so:
+\begin{align}\label{eqn:46}
+    Z(T,V,N) = \int_{\Gamma_N} \frac{\dd{\Gamma_N}}{h^{3N}N!} e^{-\beta H_N(\mathbb{Q}_N, \mathbb{P}_N)} \equiv e^{-\beta A_N(T, V, N)} 
+\end{align}
+Finally, we can find $T$ and $\mu$ (related to the Lagrange multipliers $\lambda_1$ and $\lambda_2$) by imposing the constraints (\ref{eqn:39a}-\ref{eqn:39b}), leading to:
+\begin{align}\label{eqn:47}
+    \mathcal{N} &\overset{!}{=}  \langle N \rangle = k_B T \pdv{\mu}\ln \Theta(T, \mu, V)\\
+    \mathcal{E} &\overset{!}{=}  \langle H \rangle = - \pdv{\beta} \ln \Theta(T, \mu, V) \label{eqn:48}
+\end{align}
+as it is immediate to verify using the definitions (\ref{eqn:40}) and (\ref{eqn:44}).
+
+\medskip
+
+The maximum entropy can be obtained by substituting $\rho_N$ given by (\ref{eqn:42}) in the formula for $S_I$ (\ref{eqn:41}):
+\begin{align*}
+    \max_\rho S_I[\rho] \equiv S_{\mathrm{GC}}(T, \mu, V) = k_B \ln \Theta(T, \mu, V) + \frac{\langle H \rangle}{T} - \frac{\mu}{T} \langle N \rangle  
+\end{align*}
+
+We then define: %why? probably has to do something about eqn:47-48
+\begin{align}
+    \label{eqn:49}
+    \Phi(T, \mu, V) \equiv -k_B T \ln \Theta = \mathcal{E}- T S_{\mathrm{GC}} - \mu \mathcal{N}
+\end{align}
+
+\subsubsection{Large $V$ limit}
+From (\ref{eqn:44}) and (\ref{eqn:46}) we have:
+\begin{align}\label{eqn:50}
+    e^{-\beta \Phi(T, \mu, V)} = \Theta = \sum_{N=0}^\infty e^{\beta(\mu N - A (T, V, N))}
+\end{align}
+
+Then from (\ref{eqn:25c}-\ref{eqn:25g}):
+\begin{align}
+    P &= \pdv{V} \Phi(T, \mu, V) \label{eqn:51}\\
+    \langle H \rangle &= \pdv{\beta} [\beta \Phi(T, \mu, V)] = \mathcal{E}(T, \mu, V) \label{eqn:52}\\
+    \langle N \rangle &= - \pdv{\mu} \Phi(T, \mu, V) = \mathcal{N}(T, \mu, V) \label{eqn:53}
+\end{align}
+where the last two equations coincide with (\ref{eqn:47}) and (\ref{eqn:48}).
+
+\medskip
+
+Since $\mathcal{E}$ and $\mathcal{N}$ in (\ref{eqn:52}) and (\ref{eqn:53}) are expected to be extensive, whereas $\mu$ and $\beta$ are intensive, we must have that $\Phi$ is extensive, i.e.:
+\begin{align}\label{eqn:54}
+    \Phi(T, \mu, V) = V \varphi(T, \mu)
+\end{align}
+Using (\ref{eqn:51}) we have $\varphi(T, \mu) = - P$, the grand canonical pressure (since it depends on $\mu$ and $T$). 
+
+Thus we have:
+\begin{align}\label{eqn:55}
+    e^{-\beta PV} \underset{\substack{(\ref{eqn:44})\\(\ref{eqn:49})}}{=} \sum_N e^{\beta \mu N - A(T, V, N)}
+\end{align}
+
+\subsubsection{The large $V$ limit}
+From (\ref{eqn:35b}) the canonical chemical potential is:
+\begin{align*}
+    \mu_C(T, V, N) = \pdv{N} A(T,V,N)
+\end{align*}
+which is intensive since both $N$ and $A$ are intensive:
+\begin{align*}
+    \mu_c(T,V,N) \equiv \mu_c (T, V) + O\left(\frac{1}{N} \right)
+\end{align*}
+
+\begin{exo}[2]
+    Prove the last chain using:
+    \begin{align*}
+        A(T,V,N) = N a\left(T, \frac{V}{N} \right) + O(\ln N)
+    \end{align*}
+    as was shown in chapter $2$.
+\end{exo}
+
+In (\ref{eqn:53}) we can replace the sum $\sum_{N=0}^\infty$ with an integration $\int_0^\infty \dd{N}$ as the leading contributions are the large $N$, and we can verify \q{a posteriori} that if $V$ is macroscopic, then $N/V \to \text{const.}$ when $V \to \infty$. Then, applying the saddle-point approximation:
+
+\begin{align*}
+    -\beta \Phi = \beta P(\mu, T) V = \beta[\mu \bar{N} - A(T, V, \bar{N})] + O(\ln V)
+\end{align*}
+and so $\bar{N}$ is such that:
+\begin{align*}
+    \mu &= \pdv{N} A(T,V,N)\Big|_{N = \bar{N}} = \mu_c (T, V, N) \Big|_{\bar{N}} =\\
+    &= \mu_c(T,V) + O\left(\frac{1}{N} \right)
+\end{align*}
+Then:
+\begin{align*}
+    PV = \mu \bar{N} - A(T, V, \bar{N})
+\end{align*}
+with $\bar{N}$ satisfying:
+\begin{align*}
+    \mu = \pdv{A}{N}(T,V,N)\Big|_{N = \bar{N}}
+\end{align*}
+
+Finally, from (\ref{eqn:53}):
+\begin{align*}
+    \mathcal{N} &= \langle N \rangle = -\pdv{\mu} \Phi = \pdv{\mu} (PV) =\\
+    &= \bar{N} + \underbrace{\pdv{N} \left(\mu N - A(T, V, N)\right)\Big|_{N = \bar{N}}}_{=0}  \pdv{\bar{N}}{\mu} = \bar{N}
+\end{align*}
+What remains to be proved is that this is really a maximum, by computing the second derivative. 
+\end{document}
