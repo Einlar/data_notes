@@ -3,7 +3,9 @@
 \documentclass[../template.tex]{subfiles}
 \begin{document}
 
+
 \chapter{MoTP Exercises 2019/20}
+\begin{comment}
 \section{Stochastic Processes and Path Integrals}
 
 \begin{exo}[Stirling's approximation]
@@ -156,8 +158,193 @@
         that decreases with $t$. Calculate it and determine its behavior in the two regimes $t \ll x_0^2/D$ and $t \gg x_0^2/D$. Why $x_0^2/D$ is a relevant time scale?\\
         (Hint: use the fact that $e^{\pm ikx}$ are eigenfunctions of $\partial_x^2$ corresponding to the same eigenvalue and choose an appropriate linear combination of them so to satisfy the bc for the two cases. Be aware to ensure that the eigenfunctions so determined are orthonormal. Use also the fact that $\int_{\mathbb{R}} e^{iqx} \dd{x} = \delta(q)$  )
     \end{enumerate}
-           
+
+
 \end{exo}
+
+\end{comment}
+
+\section{SDE}
+\begin{exo}[Change of variables in $\lambda$ prescription]
+Generalize the results for the change of variable formula for Ito integrals to the case of a generic $\lambda$-prescription and re-derive the result of problem 4.9.\\
+
+\textbf{Solution}. The main idea is to start from a Stochastic Differential Equation in $\lambda$-prescription, convert it to an equivalent formulation using the Ito prescription, apply Ito's formula for changing variables, and then go back to the former prescription.
+
+First, two SDEs have the same solution $x(t)$ if, for any realization $B(t)$ of the Brownian noise, their solutions (which can now be found by \textit{normal} integration) coincide.
+
+So, consider the usual SDE in Ito's prescription:
+\begin{align*}
+    \dd{x(t)} = a(x(t),t) \dd{t} + b(x(t),t) \dd{B(t)}
+\end{align*}
+which has solution:
+\begin{align*}
+    x(t) = x(t_0) + \int_{t_0}^t a(x(\tau),\tau) \dd{\tau} + \int_{t_0}^t b(x(\tau), \tau) \dd{B(\tau)}
+\end{align*}
+where the stochastic integral is formally defined as:
+\begin{align*}
+    \int_{t_0}^t b(x(\tau),\tau) \dd{B(\tau)} \equiv \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^n b(x_{i-1}, t_i) \Delta B_i \qquad \Delta B_i = B_i - B_{i-1}
+\end{align*}
+We now consider a  SDE in the $\lambda$ prescription:
+\begin{align*}
+    \dd{y(t)} = \alpha(y(t),t) \dd{t} + \beta(y(t),t) \dd{B(t)} \big|_{\lambda}
+\end{align*}
+which has solution:
+\begin{align*}
+    y(t) = \int_{t_0}^t \alpha(y(\tau), \tau) \dd{\tau} + \int_{t_0}^t \beta(y(\tau), \tau) \dd{\tau} \Big|_{\lambda}
+\end{align*}
+Now, however, the stochastic integral has a different definition:
+\begin{align*}
+    \int_{t_0}^t \beta(y(\tau), \tau) \dd{B(\tau)} \Big|_{\lambda} \equiv \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^n \beta\Big( (1-\lambda) x_{i-1} + \lambda x_i, t_{i-1}\Big) \Delta B_i
+\end{align*}
+We now impose that $y(t) = x(t)$ for every $t$, and search the mapping $a,b \mapsto \alpha, \beta$ that establishes a correspondence between an Ito SDE and a generic $\lambda$ prescription SDE.\\
+
+Let's focus on the argument of the $\lambda$-integral, and expand it about the left extremum of the discretization:
+\begin{align} \nonumber
+    \beta(y_{i-1} - \lambda y_{i-1} + \lambda y_i, t_{i-1}) &= \beta(y_{i-1} + \lambda(y_i - y_{i-1}), t_{i-1}) =\\
+    &= \beta(y_{i-1}, t_{i-1}) + \partial_x \beta(y_{i-1}, t_{i-1}) \lambda (y_i - y_{i-1}) \label{eqn:beta1}
+\end{align}
+As the paths are the same, $y_i = x_i$, and the increments $\Delta y_i$ follow the rule:
+\begin{align*}
+    \Delta y_i = a(x_{i-1}, t_{i-1}) \Delta t_i + b(x_{i-1}, y_{i-1}) \Delta B_i
+\end{align*}
+Leading to:
+\begin{align*}
+    (\ref{eqn:beta1}) = \beta_{i-1} + \beta_{i-1}' \lambda [a_{i-1}\Delta t_i + b_{i-1} \Delta B_i]
+\end{align*}
+Substituting inside the integral we get:
+\begin{align*}
+    \int_{t_0}^t \beta(y(\tau), \tau) \dd{B(\tau)} \Big|_{\lambda} &= \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^{n} \Big[\beta_{i-1} \Delta B_i + \lambda \beta'_{i-1} \Delta B_i [a_{i-1} \Delta t_i + b_{i-1} \Delta B_{i}] \Big] =\\
+    &=\overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^{n}\Big[
+    \beta_{i-1} \Delta B_i + \lambda \beta_{i-1}' b_{i-1} \Delta B_i^2 + O(\Delta B_i \Delta t_i)    
+    \Big]
+\end{align*}
+We already proved that:
+\begin{align*}
+    \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^n G_{i-1} \Delta B_i^2 = \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^n G_{i-1} \Delta t_i
+\end{align*}
+And so we can use this result, setting $G_{i-1} = \lambda \beta'_{i-1} b_{i-1}$, justifying the usual $\dd{B}^2 = \dd{t}$ rule. So, this leads to:
+\begin{align} \nonumber 
+    \int_{t_0}^t \beta(y(\tau), \tau) \dd{B(\tau)} \Big|_{\lambda} &= \overset{\rm m.s.}{\lim_{n \to +\infty}} \sum_{i=1}^{n} \Big[\beta_{i-1} \Delta B_i + \lambda \beta_{i-1}' b_{i-1} \Delta t_i \Big] = \\
+    &=\int_{t_0}^t \beta(y(\tau), \tau) \dd{B(\tau)} + \lambda \int_{t_0}^t b(y(\tau), \tau) \pdv{x} \beta(y(\tau), \tau) \dd{\tau}
+    \label{eqn:formula}
+\end{align}
+where the last two integrals are Ito integrals. We have now found a way to evaluate a $\lambda$-integral using an Ito integral (provided the paths are generated by a Ito SDE). We can find the explicit conversion rules by equating the solutions:
+\begin{align*}
+    x(t) &= x(t_0) + \int_{t_0}^t a(x(\tau), \tau) \dd{\tau} + \int_{t_0}^t b(x(\tau), \tau) \dd{B(\tau)} =\\
+    &\overset{!}{=} x(t_0) + \int_{t_0}^t \alpha(x(\tau), \tau) \dd{\tau} + \int_{t_0}^t \beta(x(\tau), \tau) \dd{B(\tau)} =\\
+    &\underset{(\ref{eqn:formula})}{=} x(t_0) + \int_{t_0}^t \alpha(x(\tau), \tau) \dd{\tau} + \int_{t_0}^t \beta(x(\tau), \tau) \dd{B(\tau)} + \lambda \int_{t_0}^t b(x(\tau), \tau) \partial_x \beta(x(\tau), \tau) \dd{\tau}
+\end{align*} 
+leading to:
+\begin{align*}
+    \begin{cases}
+        \alpha + \lambda b \partial_x \beta = a\\
+        b = \beta
+    \end{cases} \Rightarrow \begin{cases}
+        \alpha = a - \lambda b \partial_x \beta\\
+        \beta = b
+    \end{cases}
+\end{align*}
+where $(\alpha, \beta)$ are the coefficients in the $\lambda$ SDE, and $(a,b)$ the ones in the equivalent Ito SDE.
+
+Consider now a $\lambda$ SDE:
+\begin{align*}
+    \dd{x} = \alpha \dd{t} + \beta \dd{B(t)}
+\end{align*}
+The equivalent Ito SDE is:
+\begin{align}\label{eqn:newdx}
+    \dd{x} = (\alpha + \lambda \beta \partial_x \beta) \dd{t} + \beta \dd{B(t)}
+\end{align}
+Squaring:
+\begin{align*}
+    \dd{x}^2 = \beta^2 \dd{t}
+\end{align*}
+Where we used $\dd{B}^2 = \dd{t}$ (as this is an Ito SDE), and ignored higher order terms. It is clear that $\dd{x}^n = 0$ with $n > 0$.
+
+Let $y=y(x)$ be a change of variables. The new differential will be:
+\begin{align*}
+    \dd{y} = \dv{y}{x} \dd{x} + \frac{1}{2} \dv[2]{y}{x} \dd{x}^2 + \dots
+\end{align*}
+and we can ignore the higher order terms, as they will be $O(\dd{t})$. Substituting in (\ref{eqn:newdx}) we get:
+\begin{align*}
+    \dd{y} &= \dv{y}{x} (\alpha + \lambda \beta \partial_x \beta) \dd{t} + \dv{y}{x} \beta \dd{B} + \frac{1}{2} \dv[2]{y}{x} \beta^2 \dd{t}  =\\
+    &= \left[\dv{y}{x}\left(\alpha+ \lambda \beta \partial_x \beta \right) + \frac{1}{2} \dv[2]{y}{x} \beta^2 \right]\dd{t} + \dv{y}{x} \beta \dd{B}
+\end{align*}
+To complete the change of variables, we need to express everything in terms of $y$ - in particular the derivatives. One trick is to use the inverse function theorem:
+\begin{align*}
+    \dv{y}{x} = \left(\dv{x}{y}\right)^{-1} = \frac{1}{x'(y)} 
+\end{align*}
+For the second derivative, note that, if $f$ and $g$ are the inverse of each other:
+\begin{align*}
+    g \circ f = \operatorname{id} &\Rightarrow g(f(x)) = x \underset{\rm d/dx}{\Rightarrow} g'(f(x)) f'(x) = 1\\
+     &\underset{\rm d/dx}{\Rightarrow} g''(f(x)) [f'(x)]^2 + g'(f(x)) f''(x) = 0 \\&\underset{y=f(x)}{\Rightarrow}  g''(y) = - \frac{g'(y) f''(x)}{f'(x)^2} = - \frac{f''(x)}{[f'(x)]^3}  
+\end{align*}
+And in our case:
+\begin{align*}
+    \dv[2]{y}{x} = -\frac{x''(y)}{[x'(y)]^3} 
+\end{align*}
+One last thing:
+\begin{align*}
+    \pdv{x} \beta = \dv{y}{x} \pdv{y} \beta = \frac{1}{x'(y)} \partial_y \beta 
+\end{align*}
+
+This leads to:
+\begin{align*}
+    \dd{y} = \underbrace{\left[\frac{\alpha}{x'(y)} + \frac{\lambda \beta \partial_y \beta}{[x'(y)]^2} - \frac{1}{2} \beta^2 \frac{x''(y)}{[x'(y)]^3}    \right]}_{a}  \dd{t} + \underbrace{\frac{\beta}{x'(y)}}_{b}  \dd{B} 
+\end{align*}
+
+We can finally map this back to a $\lambda$ SDE and find the change of variable rule for that case. Applying the substitutions:
+\begin{align*}
+    \dd{y} = \tilde{\alpha} \dd{t} + \tilde{\beta} \dd{B} \qquad \begin{cases}
+        \tilde{\alpha} &= a-\lambda b \partial_x b\\
+    \tilde{\beta} &= b
+    \end{cases}
+\end{align*}
+We arrive to:
+\begin{align*}
+    \tilde{\alpha} &= \frac{\alpha}{x'(y)} + \frac{\lambda \beta \partial_y \beta}{[x'(y)]^2} - \frac{1}{2} \beta^2 \frac{x''(y)}{[x'(y)]^3} - \lambda \frac{\beta}{x'(y)} \partial_y \frac{\beta}{x'(y)}  =\\
+    &= \frac{\alpha}{x'(y)} + \cancel{\frac{\lambda \beta \partial_y \beta}{[x'(y)]^2}} - \frac{1}{2} \beta^2 \frac{x''(y)}{[x'(y)]^3} - \lambda \frac{\beta}{x'(y)}\left[\frac{\cancel{\partial_y \beta x'(y)} - x''(y) \beta}{[x'(y)]^2} \right] =\\
+    &= \frac{\alpha}{x'(y)} +\frac{2\lambda - 1}{2} \frac{\beta^2 x''(y)}{[x'(y)]^3}\\
+    \tilde{\beta} &= \frac{\beta}{x'(y)}\\
+    \dd{y} &= \left[\frac{\alpha}{x'(y)} +\frac{2\lambda - 1}{2} \frac{\beta^2 x''(y)}{[x'(y)]^3}\right] \dd{t} + \frac{\beta}{x'(y)} \dd{B} 
+\end{align*}
+Let's bring this result to the usual notation:
+\begin{align*}
+    \alpha = f(x(\tau), \tau) \qquad \beta = g(x(\tau),\tau) \qquad \begin{dcases}
+        y = h(x(\tau))\\
+        \frac{1}{x'(y)} = \dv{h}{x} = h'(x(\tau))\\
+        -\frac{x''(y)}{[x'(y)]^3} = \dv[2]{h}{x} = h''(x(\tau)) 
+    \end{dcases}
+\end{align*}
+leading to:
+\begin{align*}
+    \dd{h(x(\tau))} &= \left(f(x(\tau),\tau) h'(x(\tau)) + \frac{1-2 \lambda}{2} h''(x(\tau)) g(x(\tau), \tau)^2\right) \dd{\tau} +\\
+    &\quad \> + g(x(\tau), \tau) h'(x(\tau)) \dd{B(\tau)} \Big|_\lambda
+\end{align*}
+which is the formula for changing variables in the $\lambda$ prescription. Let's rearrange to isolate the $\dd{B}$ term:
+\begin{align*}
+    gh' \dd{B} = \dd{h} - \left(f h' + \frac{1-2\lambda}{2} h'' g^2\right) \dd{\tau}
+\end{align*}
+Then we integrate, leading to the formula:
+\begin{align*}
+    \int_{t_0}^t h'(x(\tau)) g(x(\tau), \tau) &= h(x(t))-h(x(t_0)) - \int_{t_0}^t h'(x(\tau))f(x(\tau), \tau) \dd{\tau}\\
+    &\quad \> -\frac{1-2 \lambda}{2}\int_{t_{0}}^t  h''(x(\tau)) g(x(\tau), \tau)^2 \dd{\tau} 
+\end{align*}
+Finally, set $g(x(\tau), \tau) \equiv 1$, and $h'(x(\tau)) = B(\tau)$, so that:
+\begin{align*}
+    h = \frac{B^2}{2} \qquad h'' = 1 
+\end{align*}
+Substituting in the formula we can compute the desired integral:
+\begin{align*}
+    \int_{t_0}^t B(\tau) \dd{B(\tau)} = \frac{B^2(t)-B^2(t_0)}{2} + \frac{2 \lambda - 1}{2} (t-t_0)  
+\end{align*}
+
+
+
+
+
+\end{exo}
+
+
 
 \listoftheorems
 

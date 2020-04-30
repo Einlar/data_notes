@@ -1,0 +1,157 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+\begin{document}
+
+\section{Gravitational Waves - part 3}
+\lesson{?}{10/01/20}
+
+\begin{expl}\textbf{The photon has two degrees of freedom}. Recall that:
+    \begin{align*}
+        \bm{B} = \bm{\nabla} \times \bm{A} \qquad \bm{E} = -\bm{\nabla}\Phi - \pdv{t} \bm{A}
+    \end{align*} 
+Where $A^\mu = (\Phi, \bm{A})$. Note that nothing changes in the \textit{physical quantities} $\bm{E}, \bm{B}$ if we change $A_\mu \to A_\mu + \partial_\mu \xi$, with $\xi(x)$ being a scalar function. It is possible to show that the existence of this symmetry \textit{defines} electromagnetism: it constraints the Lagrangian to that of a certain type, for which the equation of motion will be Maxwell's equation. So, in a certain sense, \textit{laws of nature} are consequences of \textit{symmetries}. 
+
+\medskip
+
+We can fix the gauge with $\partial_\mu A_\mu = 0$ (Lorentz gauge). However there is still some freedom left: if $\square \xi = 0$, then $\partial_\mu A_\mu \to \partial_\mu A_\mu + \square \xi$ remains the same. To fix this we impose another constraint: $A^0 = 0$. So now the original $4$ degrees of freedom we have $4-1-1=2$. 
+\end{expl}
+
+To \textbf{detect} gravitational waves we use \textbf{interferometers}, as they are able to give the \textit{most accurate measurements of distance}. They work by measuring a difference $\Delta L$ between two paths by splitting light through both of them, and reflecting it back to the same point. This will lead to interference: if $\Delta L = n \lambda$ it will be constructive, if $\Delta L = (n+1/2) \lambda$ it will be destructive. In practice, $\Delta L \ll \lambda$, and so we will never get full destructive interference in detecting G.W. However, it is possible to observe a \textit{tiny} reduction in the overall power, and then to reconstruct $\Delta L$ (and thus the $h$ that caused it). 
+
+Mirrors are suspended, so they are free to move (to first order) in the horizontal direction (and we ignore movement along other axes). As their mass is negligible, they work as \textit{test masses} that move along geodesics. Suppose we have two mirrors at $\bm{x_1}$ and $\bm{x_2}$, oriented so that $\bm{x_2 }- \bm{x_1 }$ is the $\hat{x}$ axis. Their physical distance is:
+\begin{align*}
+    d = \int_{x_1}^{x_2} \dd{x} \sqrt{g_{11} } 
+\end{align*}
+In principle, a G.W. can change $d$ by changing $x_1, x_2$, or $\sqrt{g_{11} }$, or both. 
+\medskip
+We now show that G.W. does not modify $x_1$ nor $x_2$ at linear order $O(h)$ ($h$ is very small, $\sim 10^{-21}$, so it is safe to ignore all higher powers).
+
+We start by considering the mirror at a fixed position in Minkowski Spacetime (no G.W.). Its $4$-velocity will be $u^\alpha (\tau=0) = (1,\bm{0})$. Suppose that now a G.W. arrives, and the mirror moves according to the geodesics equation:
+\begin{align*}
+    \dv{u^\alpha}{\tau} + \Gamma^\alpha_{\beta \gamma} u^\beta u^\gamma = 0
+\end{align*}
+We want to study what happens to the spatial components at order $h$:
+\begin{align*}
+    \dv{u^i}{\tau}\Big|_{O(h)} = - \Gamma^i_{\beta \gamma}u^\beta u^\gamma \Big|_{O(h)}
+\end{align*}
+Note that $\Gamma^i_{\beta \gamma}$ is already linear in $h$ (in order $0$ it is $0$, because Minkowski space is flat). So, this means that we need to take the $4$-velocities of order $h^0$:
+\begin{align*}
+    \dv{u^i}{\tau}\Big|_{O(h)} = -\Gamma^i_{\beta \gamma}\Big|_{O(h)} u^\beta \Big|_{O(h^0)} u^\gamma \Big|_{O(h^0)}
+\end{align*}
+And so we can substitute $u^\alpha = (1,\bm{0})$. Then the only non-vanishing term is:
+\begin{align*}
+    = - \Gamma_{00}^i \Big|_{O(h)}
+\end{align*}
+But:
+\begin{align*}
+    \Gamma^i_{00} \Big|_{O(h)} = \frac{1}{2} \eta^{i \lambda} (h_{\lambda 0,0} + h_{0 \lambda,0}  - h_{00,\lambda}) = 0 
+\end{align*}
+as $h_{00} = h_{0i} \equiv 0$. Substituting back:
+\begin{align*}
+    \dv{u^i}{\tau}\Big|_{O(h)} = 0 \Rightarrow u^i(\tau) \Big|_{O(h)} = 0
+\end{align*}
+and so the mirror does not move. Note that this result depends in the choice of the gauge we made. However, at the end, we know that any physical result (i.e. measurable quantities, such as the distance) will not depend on the gauge.
+
+\medskip
+
+Now, let's examine the effect on $g_{11}$. Consider two mirrors, one at $\bm{x_1 }$ and the other at $\bm{x_2 } = \bm{x_1 } + T \hat{L}_{12}$, with $\hat{L}_{12}$ being the unit vector pointing in the direction of the path between the two mirrors (the arm of the interferometer). Let $T$ be the unperturbed time from $\bm{x}_1$ to $\bm{x}_2$. As we take $c=1$, this is equal to the unperturbed physical distance between them.
+
+The worldline of light is given by:
+\begin{align*}
+    \begin{dcases}
+        t = t_1 + \lambda\\
+        \bm{x} = \bm{x_1} + \hat{L}_{12} \lambda
+    \end{dcases}
+\end{align*}
+where $\lambda$ is an affine coordinate $\lambda \in [0,T]$, and $t_1$ the time when light is at $\bm{x}_1$. 
+
+Recall that photon moves at:
+\begin{align*}
+    0 = \dd{s^2}  &= - \dd{t^2} + (\delta_{ij} + h_{ij}(t, \bm{x})) \dd{x^i}\dd{x^j} =\\
+    &= -\dd{t^2} + (\delta_{ij} + h_{ij}(t, \bm{x})) \hat{L}_{12}^i \dd{\lambda} \hat{L}_{12}^j \dd{\lambda} =\\
+    &= -\dd{t^2} + \underbrace{\delta_{ij} \hat{L}_{12}^i \hat{L}_{12}^j}_{1} (\dd{\lambda})^2 + h_{ij}(t,\bm{x}) \hat{L}_{12}^i \hat{L}_{12}^j (\dd{\lambda})^2
+\end{align*}
+and so:
+\begin{align*}
+    \dd{t} = \sqrt{1 + \hat{L}_{12}^i \hat{L}_{12}^j h_{ij}(t,\bm{x})} \dd{\lambda} \approx \left[1+\frac{1}{2} \hat{L}_{12}^i \hat{L}_{12}^j h_{ij}(t,\bm{x}) \right]\dd{\lambda}
+\end{align*}
+Let's compute the time $T_{12}$ in the perturbed case. We will use the plane wave solution for the G.W.:
+\begin{align*}
+    T_{12} = \int_0^T \dd{\lambda} \left[1+\frac{1}{2} \hat{L}_{12}^i \hat{L}_{12}^j \sum_{r = + ,\times} h_r e_{ij,r} \cos(k(t_1+ \lambda) - \bm{k}(\bm{x}_1 + \hat{L}_{12} \lambda)) \right]
+\end{align*}
+Where the phases $\varphi_r = 0$. Evaluating:
+\begin{align*}
+    T_{12} = T + \frac{1}{2} \hat{L}_{12}^i \hat{L}_{12}^j \sum_{r = +, \times} h_r e_{ij,r} \int_0^T \dd{\lambda} \cos[kt_1 + k \lambda - \bm{k}\cdot \bm{x}_1 - \bm{k} \cdot \hat{L}_{12} \lambda] 
+\end{align*}
+where $T$ is the unperturbed time. We make another approximation, the \textit{small frequency / short arm} approximation:
+\begin{align*}
+    \kappa \lambda, |\bm{k} \cdot \bm{\hat{L}_{12}}| \lambda < kT
+\end{align*} 
+And we work in the limit $kT \ll 1$, meaning that we can remove the \textit{difficult} terms in the cosine argument:
+\begin{align*}
+    T_{12} \approx T + \frac{1}{2} \hat{L}_{12}^i \hat{L}_{12}^j \sum_{r = +, \times} h_r e_{ij,r} \cos(kt - \bm{k}\cdot \bm{x}_1) \int_0^T \dd{\lambda} = T\left[1+ \sum_{r = +,\times} h_r e_{ij,r} \frac{\hat{L}_{12}^i \hat{L}_{12}^j}{2} \cos(k t_1 - \bm{k} \cdot \bm{x}_1)\right] 
+\end{align*}  
+Let's justify this approximation. Recall that $f=k/(2\pi)$. We know that $f_{\mathrm{LIGO}}, f_{\mathrm{Virgo}}, f_{\mathrm{Kagla}} \approx \SI{100}{\hertz}$ (most sensitive frequency). Also $L_{\mathrm{Ligo}} = \SI{4}{\kilo\m}$, $L_{\mathrm{Virgo}} = L_{\mathrm{Kagla}} = \SI{3}{\kilo\m}$. For Virgo, then $kT \sim 2\pi \SI{4}{\kilo\m} \cdot \SI{100}{\per\s} \sim \SI{24e5}{\m\per\s}$. But we work in natural units, and so we evaluate $kT/c \approx 10^{-2} \ll 1$. 
+
+\medskip
+
+We finally consider the full case of an interferometer. Consider three mirrors at $\bm{x}_1$, $\bm{x}_2$ and $\bm{x}_3$. The two paths are: $\bm{x}_1 \to \bm{x}_2 \to \bm{x}_1$  and $\bm{x}_1 \to \bm{x}_3 \to \bm{x}_1$. Practically, light moves back and forth many times before it is collected (\textit{finesse} factor, $\sim 100-200$). Here, for simplicity, we just compute the times $\bm{x}_1 \to \bm{x}_2$ and compare it to that $\bm{x}_1 \to \bm{x}_3$. Let $\Delta T \equiv T_{12} - T_{13}$, and we consider $\Delta T/T$ (dimensionless quantity):
+\begin{align*}
+    \frac{\Delta T}{T}  = \cos(kt_1 - \bm{k} \cdot \bm{x}_1) \sum_{r = +,\times} h_r e_{ij,r} \frac{\hat{L}_{12}^i \hat{L}_{12}^j - \hat{L}_{13}^i \hat{L}_{13}^j}{2} 
+\end{align*} 
+For simplicity, let's consider the interferometer's arms as perpendicular, and the G.W. travelling along the $\hat{z}$ direction, orthogonal to the plane of the interferometer. Then:
+\begin{align*}
+    \hat{L}_{12} = (\cos \alpha, \sin \alpha, 0) \qquad \hat{L}_{13} = (\cos(\alpha + 90^\circ), \sin(\alpha + 90^\circ), 0)
+\end{align*}
+We then evaluate the sum:
+\begin{align*}
+    \sum_{r, + , \times} h_r e_{ij,r} \frac{\hat{L}_{12}^i \hat{L}_{12}^j - \hat{L}_{13}^i \hat{L}_{13}^j}{2} = \frac{h_+}{2} (\cos \alpha, \sin \alpha, 0) \left(\begin{array}{ccc}
+    1 & 0 & 0 \\ 
+    0 & -1 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right)  \left(\begin{array}{c}
+    \cos \alpha \\ 
+    \sin \alpha \\ 
+    0
+    \end{array}\right) +\\
+    + \frac{h_\times}{2} (\cos \alpha, \sin \alpha, 0) \left(\begin{array}{ccc}
+    0 & 1 & 0 \\ 
+    1 & 0 & 0 \\ 
+    0 & 0 & 0
+    \end{array}\right) \left(\begin{array}{c}
+    \cos \alpha \\ 
+    \sin \alpha \\ 
+    0
+    \end{array}\right) - (\text{Same with $\alpha \to \alpha + 90^\circ$}) =\\
+    =\frac{1}{2} \left(\begin{array}{cc}
+    \cos \alpha & \sin \alpha 
+    \end{array}\right) \left(\begin{array}{cc}
+    h_+ & h_\times \\ 
+    h_\times & h_+
+    \end{array}\right) \left(\begin{array}{c}
+    \cos \alpha \\ 
+    \sin \alpha
+    \end{array}\right) - (\alpha \to \alpha + 90^\circ) =\\
+    = \frac{1}{2} \left(\begin{array}{cc}
+    \cos \alpha & \sin \alpha
+    \end{array}\right) \left(\begin{array}{c}
+    h_+ \cos \alpha + h_\times \sin \alpha \\ 
+    h_\times \cos \alpha - h_+ \sin \alpha
+    \end{array}\right) - (\alpha \to \alpha + 90^\circ) =\\
+    = \frac{1}{2} [h_+ \cos^2 \alpha + h_\times \cos \alpha \sin \alpha + h_\times \sin \alpha \cos \alpha - h_+ \sin^2 \alpha] - (\alpha \to \alpha+ 90^\circ   ) =\\
+    = \frac{1}{2}[h_+ \cos(2 \alpha) + h_\times \sin(2 \alpha)] - (\text{same with } \alpha \to \alpha +90^\circ) =\\
+    = h_+ \cos(2 \alpha) + h_\times \sin (2 \alpha) 
+\end{align*}
+Substituting back:
+\begin{align*}
+    \frac{\Delta T}{T} = \cos(kt_1 - \bm{k}\cdot \bm{x}_1) [h_+ \cos(2 \alpha) + h_\times \sin(2 \alpha)] 
+\end{align*}
+Note that we can write:
+\begin{align*}
+    \cos(2 \alpha) = \sin(2 (\alpha + 45^\circ))
+\end{align*}
+So we see again that one polarization is just the \textit{rotated} version of the other.  
+
+
+\end{document}
