@@ -1,0 +1,79 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+
+\begin{document}
+
+\section{Examples}
+In many situations we can compare the results of numerical stochastic simulations with analytical results. Let's see some examples.
+
+\subsection{Radioactive decay}
+Consider a population $A$, whose members \textit{decay} with rate $\lambda$ to a new species $B$. This system can be model with a mean-field differential equation, leading to a fully deterministic solution. 
+\begin{align*}
+    \dot{A} = - \lambda A \Rightarrow A(t) = A_0 e^{-\lambda t}
+\end{align*}
+Equivalently, we can model this kind of system in a stochastic way. We will have initially only one species $N=1$, with one possible reaction $M = 1$. The transition probability $W(A \to A-1) = \lambda A$, and so the Master Equation is given by:
+\begin{align*}
+    \pdv{t} \mathbb{P}(A,t) &= W(A+1 \to A) \mathbb{P}(A+1, t) - W(A \to A-1) \mathbb{P}(A,1) =\\
+    &= \lambda (A + 1) \mathbb{P}(A+1,t) - \lambda A \mathbb{P}(A,t)
+\end{align*}
+The stationary solution is $\delta(A, 0)$, i.e. when all particles have decayed, the system will remain in the same state, forever.
+
+\medskip
+
+More in general, we consider \textbf{contact processes}, such as \textit{epidemic processes}, in which there is a population of \textbf{active} particles $A$ that can \textit{activate} other \textbf{inactive} particles $I$. In the epidemic case, $A$ represents the infected individuals, and $I$ the \textit{susceptible} individuals. Then $N = A + I$, and we have the following two reactions:
+\begin{align*}
+    A + I \xrightarrow[]{\lambda} A + A; \qquad A \xrightarrow[]{\lambda} I
+\end{align*}       
+(Note that here we are not considering \textit{acquired immunity}, i.e. a third non-susceptible state, reachable by the reaction $A \xrightarrow[]{r} R$. This leads to the more complex SIR model.)
+
+In this case, the relevant transition probabilities are:
+\begin{align*}
+    W(A \to A+1) = \lambda A \frac{N-A}{N}; \quad W(A \to A-1) = \mu A 
+\end{align*}
+leading to the Master Equation:
+\begin{align*}
+    \pdv{t} \mathbb{P}(A,t) &= W(A+1 \to A) \mathbb{P}(A+1,t) - W(A \to A-1) \mathbb{P}(A,t) + \\
+    &\> + W(A-1 \to A) \mathbb{P}(A-1, t) - W(A \to A+1) \mathbb{P}(A,t) =\\
+    &= \lambda (A-1) \frac{N-A-1}{N} \mathbb{P}(A-1,t) + \mu(A+1)\mathbb{P}(A+1,t) +\\
+    &\> - \left[\lambda \frac{A(N-A)}{N} + \mu A\right] \mathbb{P}(A,t) 
+\end{align*}
+which holds for any $A > 0$. For $A = 0$ we just have:
+\begin{align*}
+    \dot{\mathbb{P}}(0,t) = \mu \mathbb{P}(1,t)
+\end{align*}
+which means $A=0$ is an absorbing state, and in fact the stationary distribution is $\rho_{\mathrm{st}} = \delta_{A,0}$.
+
+\medskip
+
+To find some non-trivial meta-stable state, we consider the mean-field deterministic equations:
+\begin{align*}
+    \begin{cases}
+        \dv{A}{t} = \lambda \frac{A I}{N} - \mu A = \lambda \frac{A(N-A)}{N} - \mu A\\
+        N = I + A   
+    \end{cases}
+\end{align*}
+
+Dividing everything by $N$, and denoting $X \equiv A=N$ leads to:
+\begin{align*}
+    \dv{t} \frac{A}{N} = \lambda \frac{A}{N} \left(1- \frac{A}{N} \right)   - \mu \frac{A}{N} \Rightarrow \dot{X} = \lambda X(1-X) - \mu X 
+\end{align*}
+And the stationary distribution is obtained by solving:
+\begin{align*}
+    \dot{X} = 0 \Rightarrow X(\lambda (1-X) - \mu) = 0 \Rightarrow \begin{cases}
+        X^* = 0\\
+        X^* = 1-\frac{\mu}{\lambda} & \lambda > \mu 
+    \end{cases}
+\end{align*}
+%Insert graph
+
+This non-trivial equilibrium exists only in the mean-field model, and is completely destroyed in the stochastic model by the presence of fluctuations (that inevitably lead to the absorbing state at $A = 0$). To observe it, we need to consider statistics of simulations run \textit{long enough} to \q{forget} the initial state and exit the transient, but not \textit{too long} to be \q{sucked in} the absorbing state.
+
+\section{Networks}
+%Recover from slides
+
+
+
+
+
+\end{document}

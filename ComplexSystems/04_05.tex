@@ -1,0 +1,151 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+
+\begin{document}
+
+\textbf{Final remark on previous lecture}
+Consider the general problem of finding the global minimum in a very complex energy landscape. Often there are many minima that are \textit{close} to the optimal solution, where algorithms such as Metropolis or Wolff can remain stuck. To deal with this problem, one technique is that of \textbf{simulated annealing}. The idea is to start with a \textit{high} temperature $T$, meaning that \q{big jumps} are probable, and then \textit{slowly} reduce $T$ at each iteration. In the limit of an infinitely slow \q{cooling}, it can be shown that this algorithm leads to the global minimum.
+
+In summary:
+\begin{itemize}
+    \item Start with a certain configuration $c = c_{\mathrm{int}}$.
+    \item For each $T$ starting from $T_{\max}$ and going to $T_{\min}$ with steps $\Delta T$, compute the energy $\mathcal{E}_c = \mathcal{E}(c)$, and make a local move $c \to c'$...
+\end{itemize} 
+
+\section{Stochastic Simulation of Chemical Kinetics}
+%Ref. Ann. Rev. Phy. Gillespie 2007
+In this lecture we will show a method useful for simulating Master Equations, which often arise in non-equilibrium problems in many different contexts (physics, chemistry, ecology, epidemics...).
+
+\medskip
+
+Consider a set of \textbf{different species} (e.g. $a$, $b$, $c$, $\dots$) with several possible reactions $r_i$ happening between them (e.g. $a+b \to c+ c$, $c + c \to a$, etc.). 
+
+We can treat this problem with a \textit{mean-field} approach, in the limit of infinitely many particles $N \to \infty$. In this case, stochastic fluctuations disappear, and the system's evolution can be written as a system of differential equations dealing with the different concentrations $\rho_i$ of each species.
+
+\medskip
+
+However, if the particles are few (e.g. in a small system), the mean-field solution cannot capture the full behavioural details. So we have to deal with the random motion of particles, and thus resort to a \textbf{stochastic simulation}. Let's assume that the system $m$ is \textbf{well-mixed}, meaning that every particle can interact with any other particle, in a fixed volume $\Omega$.
+
+Let $N$ be the number of chemical species $(s_1, \dots, s_N)$, with $M$ chemical reactions happening between them. We denote with $x_i(t)$ the number of particles of species $i$ at instant $t$.
+
+\medskip
+
+Given an initial state $\{x_i(t=0)\}_{i=1}^N \equiv \bm{x}(t=0)$, we want to determine the \textit{average}  evolution $\{x_i(t)\}_{i=1}^t \equiv \bar{x}(t)$ $t>0$.
+
+\medskip
+
+We define the \textbf{state change vector} $\bm{v}_{j} = (v_{1j}, \dots, v_{Nj})$, with $j = 0,\dots,M$, with $v_{ij}$ being the change in population of $s_i$ after reaction $j$ occurs:
+\begin{align*}
+    \bm{x} \xrightarrow[]{j} \bm{x} + \bm{v_j}
+\end{align*}
+
+For example, suppose we have only one reaction $A \to \Phi$, and we start with $(N=1, M=1)$. Then $v_1 = -1$. 
+
+Second example...
+
+\medskip
+
+We then introduce the \textbf{propensity rate} $a_j(\bm{x})$ such that $a_j(\bm{x}) \Delta t$ is the probability that reaction $j$ occurs. 
+
+In the case of a uni-molecular reaction $r_j$, i.e. one that requires only \q{one reagent}, i.e. $s_1 \to \cdots$, we can write:
+\begin{align*}
+    a_j \Delta t = c_j x_1 \cdot \Delta t 
+\end{align*}
+where $c_j$ is the probability per unit of time and per particle for the reaction $j$ to occur. 
+
+\medskip
+
+For a bi-molecular reaction $r_j$ of the form $s_1 + s_2 \to \cdots$ we have instead:
+\begin{align*}
+    a_j \Delta t \propto c_j x_1 x_2 \Delta t 
+\end{align*}
+We need to normalize with the volume, because the chance of a particle from $s_1$ to encounter one from $s_2$ is inversely proportional to the volume:
+\begin{align*}
+    a_j = c_j x_1 \frac{x_2}{\Omega}  \Delta t
+\end{align*}
+
+For a general reaction, involving $N$ reagents:
+\begin{align*}
+    a_j(\bm{x}) = c_j \frac{x_1 x_2 \cdot \dots \cdot x_N}{\Omega^{N-2}}
+\end{align*}
+where the normalization constant is necessary so that $\bm{a_j}(\bm{x})$ is an extensive quantity.
+
+\medskip
+
+Note that $a_j$ is difficult to evaluate experimentally - one would need to perfectly separate all reactions, which often happen on top of each other.
+
+\medskip
+
+We can now write an expression for the \textbf{stochastic evolution} of the system, i.e. for the conditional probability:
+\begin{align*}
+    \mathbb{P}(\bm{x}, t|\bm{x_0}, t_0)
+\end{align*} 
+Starting from $\bm{x}(t)$, the system can move to another state according to some reaction, following an \textit{outgoing probability flux}. Conversely, there are \textit{incoming fluxes} coming into $\bm{x}(t)$. If we combine the effect of both, we can obtain the probability of the system being in state $\bar{x}$ at time $t$, given an initial condition $(\bm{x_0}, t_0)$, which is given by the Master Equation:
+\begin{align*}
+    \pdv{t} \mathbb{P}(\bm{x},t|\bm{x_0},t_0) = \underbrace{\sum_{j=1}^M a_j (\bm{x} - \bm{v}_t) \mathbb{P}(\bm{x}-\bm{v}_j,t|x_0,t_0)}_{\text{Incoming flux}} - \underbrace{\sum_{j=1}^M a_j(\bar{x}) \mathbb{P}(\bar{x}, t|\bar{x}_0, t_0)}_{\text{Outgoing flux}}  
+\end{align*}
+
+In general, solving a ME is very difficult, and so numerical methods are needed. 
+
+So we want to simulate trajectories of $\bm{x}(t)$ whose statistical properties obey the ME. The key point is to rewrite $\mathbb{P}(\bm{x},t|\bm{x_0},t_0)$ as function of $\mathbb{P}(\tau,j|\bm{x},t)$, where $\mathbb{P}(\tau, j|\bm{x},t)\dd{\tau}$ is the probability that, given the state of the system $\bm{x}(t)$, the next reaction will occur in the time interval $(t+\tau, t+\tau + \dd{\tau})$ and it will be reaction $j$. We also define $P_0(\tau|\bm{x},t)$ as the probability that no reaction occurs up to time $\tau$, so that.
+
+As the probability of any reaction occurring in $\dd{\tau}$ is just:
+\begin{align*}
+    \sum_{j=1}^M a_j(\bm{x}) \dd{\tau}
+\end{align*}
+we have:
+\begin{align*}
+    \mathbb{P}_0(\tau|\bm{x},t) = \left[1 - \sum_{j=1}^M a_j(\bm{x}) \dd{\tau}\right]^K
+\end{align*}
+where $\dd{\tau} = \tau/K$ (i.e. the product of no reaction happening in every time interval from $t$ to $t+ \tau$), and so:
+\begin{align*}
+    = \left[1- \frac{\tau}{K} \sum_{j=1}^M a_j(\bm{x}) \right]^K \underset{\substack{\dd{\tau} \ll 1\\K \to \infty}}{\approx} \exp\left(-\sum_{j=1}^M a_J(\bm{x})\right) = \mathbb{P}_0(\tau|\bm{x}, t)
+\end{align*}
+And finally:
+\begin{align*}
+    \mathbb{P}(\tau, j|\bm{x},t) &= \mathbb{P}_0(\tau|\bm{x},t) a_j(\bm{x}) \dd{\tau}
+\end{align*}
+Multiplying by $\dd{\tau}$:
+\begin{align*}
+    \mathbb{P}(\tau, j|\bar{x},t) \cancel{\dd{\tau}} = \exp\left(-\sum_{j=1}^M a_j(\bm{x}) \tau \right) a_j(\bm{x}) \cancel{\dd{\tau}}
+\end{align*}
+which is an exponential pdf.
+
+Then the probability of any reaction occurring in $[t+\tau, t+\tau + \dd{\tau}]$ is:
+\begin{align*}
+    \sum_{j=1}^M \mathbb{P}(\tau, j |\bar{x},t)
+\end{align*}
+which is thus an exponential random distribution with mean $a_0(\bm{x}) = \sum_{j=1}^M a_j(\bm{x})$.
+
+So we obtain the probability of reaction $j$ occurring by normalizing:
+\begin{align*}
+    \frac{\mathbb{P}(\tau, j|\bar{x}, t)}{\sum_j \mathbb{P}(\tau, j|\bm{x},t)} 
+\end{align*}
+which is an i.i.d. random variable with probability $a_j(\bm{x})/a_0(\bm{x})$.
+
+Summarizing, the pseudo-algorithm for Gillespie is:
+\begin{enumerate}
+    \item Initialize the system state $\bm{x} = \bm{x}(t=0)$. We know the species $(s_1, \dots, s_N)$ and the reactions $(r_1, \dots, r_M)$.
+    \item Evaluate $a_j(\bm{x})$ for each reaction $j$ and $a_0(\bm{x}) = \sum_{j=1}^M a_j(\bm{x})$
+    \item Calculate the time at which the next reaction will occur (from the exponential pdf with mean $1/a_0(\bm{x})$:
+    \begin{align*}
+        \tau = \frac{1}{a_0(\bm{x})}  \log\left(\frac{1}{r_1} \right) \qquad r_1 \in \mathcal{U}[0,1]
+    \end{align*}
+    \item Calculate which is the next reaction. Note that $a_j(\bm{x})/a_0(\bm{x}) \in [0,1]$, and their sum over $j$ is $1$. So, by taking a random number $r$ between $[0,1]$, we select $j$ as the smallest integer satisfying the relation:
+    \begin{align*}
+        \sum_{k=1}^j a_k(\bm{x}) > r a_0(\bm{x})
+    \end{align*}
+    \item Update the state of the system $\bm{x} \to \bm{x} + \bm{v_j}$, and $t \to t+ \tau$.
+    \item Go back to $1$.
+\end{enumerate}
+
+Note that at every state there is a reaction, and so the algorithm is efficient. 
+
+
+
+
+
+
+
+\end{document}

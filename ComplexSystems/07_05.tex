@@ -1,0 +1,82 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+
+\begin{document}
+
+%Dal clustering in poi
+
+The clustering coefficient represents the probability that any two nodes connected to a certain node $A$ are connected to each other (e.g. two friends of $A$ are friends to each other).
+
+\medskip
+
+Let $l_{ij}$ be the fraction of edges in a network that connect a vertex of type $i$ to one of type $j$. For an undirected network $l_{ij} = l_{ji}$. Then denote with $a_i$ the fraction of each type of end of an edge that are attached \textbf{to} vertices of type $i$, and similarly $b_i$ for the \textbf{from} connections. In formulas:
+\begin{align*}
+    a_i = \sum_j l_{ij} \quad b_j = \sum_i l_{ij}
+\end{align*} 
+
+%Add some graphics
+
+The assortativity coefficient is then:
+\begin{align*}
+    r = \frac{ \sum_i l_{i i} - \sum_{i} a_i b_i}{ 1 - \sum_{i} a_i b_i}
+\end{align*}
+In matrix form, if $E$ is the matrix with entries $l_{ij}$, then:
+\begin{align*}
+    r = \frac{\operatorname{Tr}(E) - \norm{E^2} }{1 - \norm{E^2}} 
+\end{align*}
+where $\norm{E} = \sum_{ij} E_{ij}$.
+
+\medskip
+
+If $r=0$, there is no assortative mixing, and so $l_{ij} = a_i b_j$. If $r=1$ the matrix is perfectly assortative. 
+
+\medskip
+
+There various choice for the \textit{labelling} of nodes. One possibility is:
+\begin{align*}
+    \mu = \frac{\sum_{ij} A_{ij} x_i}{\sum_{ij} A_{ij}} = \frac{1}{2L} \sum_i x_i k_i 
+\end{align*} 
+leading to the assortativity coefficient:
+\begin{align*}
+    \rho(x_i, x_j) = \frac{1}{2m} \sum_{ij} \left(A_{ij} - \frac{k_i k_j}{2m} \right) x_i x_j
+\end{align*}
+where $2m$ is the total number of links. We can take for example $x_i = k_i$, leading to:
+\begin{align*}
+    \rho = ... 
+\end{align*}
+
+To be completed
+
+\section{Random networks}
+
+\subsection{Erdos-Renyi Random Graph}
+Let $p$ be the probability that two nodes are connected. Then the degree $k$ of any node in a network of $N$ nodes follows a Bernoulli distribution:
+\begin{align*}
+    p(k) = {N-1 \choose k} p^k (1-p)^{N-1-k}
+\end{align*}
+This follows from the following facts:
+\begin{enumerate}
+    \item Each node is connected with any other $N-1$ vertices with equal and independent probability $p$
+    \item For a node there are ${N-1 \choose k}$ ways to choose other $k$ vertices with which to connect. 
+    \item The probability to be connected with a particular group of $k$ nodes is $p^k(1-p)^{N-1-k}$
+\end{enumerate}
+For $N \to \infty$, $p(k)$ tends to a Poisson distribution:
+\begin{align*}
+    p(k) = e^{-\langle k \rangle} \frac{\langle k \rangle^k}{k!} 
+\end{align*}
+where $\langle k \rangle$ is the average node degree:
+\begin{align*}
+    \langle k \rangle = p(N-1)
+\end{align*}
+The clustering coefficient, i.e. the probability that two nodes are interconnected if they share a common connection with a node $A$, is just $p$ - because all connections are independent:
+\begin{align*}
+    c = p = \frac{\langle k \rangle}{N-1} \xrightarrow[]{N \gg 1} 0 
+\end{align*}
+
+For E-R newtorks, the graph diameter scales as $\log N$ (and this can be proved analytically).
+
+
+
+
+\end{document}
