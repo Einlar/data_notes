@@ -1,0 +1,75 @@
+\documentclass[border=4pt]{standalone}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{mathdots}
+\usepackage{yhmath}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{siunitx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+\usetikzlibrary{shadows.blur}
+\usetikzlibrary{shapes}
+
+
+\begin{document}
+
+
+
+% Pattern Info
+ 
+\tikzset{
+pattern size/.store in=\mcSize, 
+pattern size = 5pt,
+pattern thickness/.store in=\mcThickness, 
+pattern thickness = 0.3pt,
+pattern radius/.store in=\mcRadius, 
+pattern radius = 1pt}
+\makeatletter
+\pgfutil@ifundefined{pgf@pattern@name@_ag7fr8nri}{
+\pgfdeclarepatternformonly[\mcThickness,\mcSize]{_ag7fr8nri}
+{\pgfqpoint{0pt}{-\mcThickness}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{
+\pgfsetcolor{\tikz@pattern@color}
+\pgfsetlinewidth{\mcThickness}
+\pgfpathmoveto{\pgfqpoint{0pt}{\mcSize}}
+\pgfpathlineto{\pgfpoint{\mcSize+\mcThickness}{-\mcThickness}}
+\pgfusepath{stroke}
+}}
+\makeatother
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,267); %set diagram left start at 0, and has height of 267
+
+%Shape: Parallelogram [id:dp62433311079371] 
+\draw  [pattern=_ag7fr8nri,pattern size=6pt,pattern thickness=0.75pt,pattern radius=0pt, pattern color={rgb, 255:red, 0; green, 0; blue, 0}] (252.33,90.73) -- (252.33,229.33) -- (288.33,169.93) -- (288.33,31.33) -- cycle ;
+%Straight Lines [id:da9052699785879981] 
+\draw [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ]   (271.33,120) -- (338.33,119.35) ;
+\draw [shift={(340.33,119.33)}, rotate = 539.45] [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ][line width=0.75]    (10.93,-3.29) .. controls (6.95,-1.4) and (3.31,-0.3) .. (0,0) .. controls (3.31,0.3) and (6.95,1.4) .. (10.93,3.29)   ;
+%Shape: Rectangle [id:dp6374986597427688] 
+\draw  [color={rgb, 255:red, 65; green, 117; blue, 5 }  ,draw opacity=1 ][dash pattern={on 0.84pt off 2.51pt}] (125.5,31.33) -- (288.33,31.33) -- (288.33,169) -- (125.5,169) -- cycle ;
+%Shape: Rectangle [id:dp02048101883199749] 
+\draw  [color={rgb, 255:red, 65; green, 117; blue, 5 }  ,draw opacity=1 ][dash pattern={on 0.84pt off 2.51pt}] (89.5,90.73) -- (252.33,90.73) -- (252.33,228.4) -- (89.5,228.4) -- cycle ;
+%Shape: Parallelogram [id:dp32475174446770794] 
+\draw  [color={rgb, 255:red, 65; green, 117; blue, 5 }  ,draw opacity=1 ][dash pattern={on 0.84pt off 2.51pt}] (89.5,89.8) -- (89.5,228.4) -- (125.5,169) -- (125.5,30.4) -- cycle ;
+
+% Text Node
+\draw (331,104) node    {$\hat{n}$};
+% Text Node
+\draw (275,224) node    {$A$};
+% Text Node
+\draw (174,243) node    {$|\vec{v} |\Delta t$};
+
+
+\end{tikzpicture}
+\end{document}

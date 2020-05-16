@@ -1,0 +1,238 @@
+%&latex
+%
+\documentclass[../template.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Variational methods}
+Exactly solvable models are rare.\lesson{21}{27/04/20} For example, the Ising Model, describing in a very simplified manner a discrete set of local interacting binary variables, has been exactly solved only for $d=1$ in general, and for $d=2$ only in absence of an external field ($h=0$). The latter, in particular, requires long and sophisticated derivations.
+
+Even for other models, the trend is the same: whenever we wish to study \textit{emergent phenomena} the problem usually becomes analytically intractable.
+
+\medskip
+
+One possibility is then to resort to \textbf{numerical simulations}. However, these are often time-consuming, require significant computational power, and can be hard to interpret - as interesting \q{high level} characteristics (such as the conditions for phase transitions) are drowned in lots of irrelevant \q{low-level} data. 
+
+\medskip
+
+So we may resort to \textbf{approximate computations} instead. The idea is to find a simple model that is able to capture, at least \textit{qualitatively}, features from a more complex one, while still admitting an exact solution. This can then give hints on \textit{what to look for} in a full numerical simulation, thus allowing a deeper understanding. 
+
+\medskip
+
+One quick way to compute approximations is through \textbf{variational methods}. In essence, we consider some parametrized pdf $f_{\bm{\theta}}(\bm{x})$, and tweak the parameters $\bm{\bm{\theta}}$ so that it becomes \q{closer and closer} to the target pdf $f(\bm{x})$ of the full model. If we choose a sufficiently \textit{simple} form for $f_{\bm{\theta}}$, we will be able to perform exact computations, while still retaining some sort of \q{correspondance} with the more complex model.
+
+\medskip
+
+In the following, we will first introduce a notion of \q{\textbf{distance}} between pdf\textit{s} (\textbf{relative entropy}), giving a mathematical meaning to the notion of \q{closeness} between probability distributions. Then we will explicitly state the \textit{variational method} as a \textbf{minimization problem}, and, using the Ising Model as an example, we will see a popular choice for the parametrization of $f_{\bm{\theta}}$: the \textbf{mean-field approximation}.  
+
+\subsection{Relative Entropy}
+Given two (discrete) probability distributions $\{p_i\}_{i \in \mathcal{D}}$ and $\{q_i\}_{i \in \mathcal{D}}$, with $p_i, q_i > 0$ and $\sum_i p_i = \sum_i q_i = 1$, we define the \textbf{relative entropy} (or Kullback–Leibler divergence) of $\{p_i\}$ with respect to $\{q_i\}$ as follows:
+\begin{align}
+    S_R(\{p_i\}, \{q_i\}) = -\sum_{i \in \mathcal{D}} p_i \ln \frac{p_i}{q_i} \leq 0 \label{eqn:relative-entropy}
+\end{align}  
+In a sense, relative entropy measures the \textit{closeness} between the two distributions - as it is maximum ($S_R=0$) when the two coincide, i.e. $p_i = q_i$ $\forall i$. Note, however, that $S_R$ is not a \textit{distance function} in the proper sense, as it does not satisfy the triangular inequality. 
+
+\medskip
+
+The fact that $S_R=0$ is the maximum point of $S_R$,\marginpar{Proof that $S_R \leq 0$} i.e. $S_R \leq 0$, can be proven as follows. First we define an auxiliary function $f(x)$ over $(0,\infty)$:
+\begin{align*}
+    f(x) = -x \ln x \qquad x > 0
+\end{align*}
+Such function $f(x)$ is \textbf{concave}. In fact: 
+\begin{align*}
+    f'(x) &= -1 - \ln x\\
+    f''(x) &= -\frac{1}{x}  < 0 \qquad x > 0
+\end{align*}
+So, we may apply Jensen's inequality. For any choice of a set of non-negative numbers $\{\lambda_i\}$ summing to $1$, the following relation holds: %TO DO Add reference to 15/04 lecture (after adding ex. 5.17 and verification of Shannon Entropy's 3 defining properties)
+\begin{align*}
+    f\left(\sum_i \lambda_i x_i\right) \geq \sum_i f(x_i) \lambda_i \qquad \sum_i \lambda_i = 1 \> \land \> \lambda_i \geq 0
+\end{align*}
+And letting $\lambda_i = q_i$ and $x_i = p_i / q_i$ completes the proof:
+\begin{align*}
+    S_R = \sum_i q_i f\left(\frac{p_i}{q_i} \right) \leq f\left(\sum_i \bcancel{q_i} \frac{p_i}{\bcancel{q_i}} \right) = f(1) = 0
+\end{align*}
+with the equality holding if and only if $p_i = q_i$.
+
+\subsection{Approximation as an optimization problem}
+Let's consider, for simplicity, a system with \textbf{discrete} states $\{\bm{\sigma_i}\}_{i \in \mathcal{D}}$, each with energy $\mathcal{H}(\bm{\sigma_i})$, and an associated probability $q_i$ given by a Boltzmann distribution:
+\begin{align*}
+    \rho(\bm{\sigma_i}) \equiv q_i = \frac{e^{-\beta \mathcal{H}(\bm{\sigma_i})}}{Z} = e^{-\beta(\mathcal{H}(\bm{\sigma})-F)} \qquad Z = \sum_{\{\bm{\sigma}\}} e^{-\beta \mathcal{H}(\bm{\sigma})}\equiv e^{-\beta F}
+\end{align*}
+where $F$ is the system's \textbf{free energy} function.
+
+\medskip
+
+In general, the $\{q_i\}$ are difficult to explicitly compute, because $Z$ is generally a sum over a huge number of terms ($2^V$ in the case of the Ising Model) with no analytical form.
+
+\medskip
+
+So, the idea is to approximate $\rho$ with another \q{easier} distribution $\rho_0$, the \textbf{variational ansatz}, which is parametrized as a Boltzmann distribution with a different Hamiltonian $\mathcal{H}_0$ (and so also a different free energy $F_0$):
+\begin{align}\label{eqn:variational-ansatz}
+    \rho_0(\bm{\sigma_i}) \equiv p_i = \frac{e^{-\beta \mathcal{H}_0(\bm{\sigma_i})}}{Z_0} = e^{-\beta(\mathcal{H}_0(\bm{\sigma})-F_0)} \qquad Z_0 = \sum_{\{\bm{\sigma}\}} e^{-\beta \mathcal{H}_0(\bm{\sigma})} \equiv e^{-\beta F_0}
+\end{align}
+
+The \textit{closeness} of $\{p_i\}$ to $\{q_i\}$ is given by their \textbf{relative entropy} (\ref{eqn:relative-entropy}):
+\begin{align} \nonumber
+    0 \leq \sum_i p_i \ln \frac{p_i}{q_i} &= \sum_{\{\bm{\sigma}\}} \frac{e^{-\beta \mathcal{H}_0 (\bm{\sigma})}}{Z_0} \ln \frac{e^{-\beta \mathcal{H}_0(\bm{\sigma}) }}{\underbrace{Z_0}_{e^{-\beta F_0}} } \frac{\overbrace{Z}^{e^{-\beta F}} }{e^{-\beta \mathcal{H}(\bm{\sigma})}}  = \\
+    &=  \nonumber
+    \frac{1}{Z_0} \sum_{\{\bm{\sigma}\}} e^{-\beta H_0(\bm{\sigma})} \beta[\mathcal{H}(\bm{\sigma}) - \mathcal{H}_0(\bm{\sigma}) - F + F_0] =\\
+    &= \beta \langle \mathcal{H}-\mathcal{H}_0 \rangle_0 - \beta (F-F_0) \label{eqn:rel-entr}
+\end{align} 
+where $\langle \cdots \rangle_0$ denotes the average according to the ansatz distribution:
+\begin{align*}
+    \langle f(\bm{\sigma}) \rangle_0 \equiv \frac{1}{Z_0} \sum_{\{\bm{\sigma}\}} e^{-\beta \mathcal{H}_0(\sigma)} f(\bm{\sigma})
+\end{align*}
+The expression (\ref{eqn:rel-entr}) is called the \textbf{Gibbs-Bogoliubov-Feynman inequality}\footnote{Physically, it is completely equivalent to the second law of thermodynamics.}, and holds as an equality if and only if $\rho = \rho_0 \Leftrightarrow \mathcal{H} = \mathcal{H}_0$. 
+
+\medskip
+
+Rearranging (\ref{eqn:rel-entr}):
+\begin{align}\label{eqn:ineq-1}
+    \beta F \leq \beta F_0 + \beta \langle \mathcal{H} - \mathcal{H}_0 \rangle_0 = \beta \langle \mathcal{H} \rangle_0 + \beta {(F_0 - \langle \mathcal{H}_0 \rangle_0)}
+\end{align}
+Note that $F_0$ does not depend on $\bm{\sigma}$, as it's $\propto \ln Z_0$, and so we can bring it inside the average, and expand it:
+\begin{align*}
+    \beta (F_0 - \langle \mathcal{H}_0 \rangle_0) = \beta \langle F_0 - \mathcal{H}_0 \rangle_0 =  \sum_{\{\bm{\sigma}\}} \rho_0(\bm{\sigma}) \hlc{Yellow}{\beta(F_0 - \mathcal{H}_0(\bm{\sigma}))}
+\end{align*}
+Then, from (\ref{eqn:variational-ansatz}) note that:
+\begin{align*}
+    \rho_0(\bm{\sigma}) = e^{-\beta (\mathcal{H}_0(\bm{\sigma}) - F_0)} \Rightarrow \hlc{Yellow}{\ln \rho_0(\bm{\sigma})} = \beta(F_0 - \mathcal{H}_0(\bm{\sigma}))
+\end{align*}
+and substituting above:
+\begin{align}\label{eqn:s-entropy}
+    \beta (F_0 - \langle \mathcal{H}_0 \rangle_0) =\textcolor{Red}{-}\frac{1}{\textcolor{Red}{k_B}}\underbrace{\Big( \textcolor{Red}{-k_B} \sum_{\{\bm{\sigma}\}} \rho_0(\bm{\sigma}) \ln \rho_0(\bm{\sigma})\Big)}_{S[\rho_0]}  = -\frac{S[\rho_0]}{k_B} 
+\end{align}
+where $S[\rho_0]$ is the \textbf{information entropy} of $\rho_0$:
+\begin{align*}
+    S[\rho_0] = -k_B \sum_{\{\bm{\sigma}\}} \rho_0(\bm{\sigma}) \ln \rho_0(\bm{\sigma})
+\end{align*} 
+
+Thus, substituting (\ref{eqn:s-entropy}) back in the inequality (\ref{eqn:ineq-1}) leads to:
+\begin{align}\label{eqn:var-principle}
+    \beta F \leq  \beta \langle \mathcal{H} \rangle_0 -\frac{S[\rho_0]}{k_B} = \beta \langle \mathcal{H} \rangle_0 - {\beta T S[\rho_0]}
+\end{align}
+And dividing by $\beta$:
+\begin{align*}
+    F \leq F_V \equiv \langle \mathcal{H} \rangle_0 - T S[\rho_0]
+\end{align*}
+where $F_V$ is called the \textbf{Variational Free Energy} (VFE). 
+
+So,  the true free energy $F$ is always less or equal to the variational one $F_V$. An optimal estimate of $F$ is obtained by minimizing $F_V$ with respect to $\rho_0$.
+
+\medskip
+
+Clearly, if we do not require any constraint on $\rho_0$, thus allowing arbitrary complexity, then the minimum is obtained when $\rho_0 = \rho$: the most accurate approximation of a model is the model itself. Realistically $\rho$ is mathematically intractable, and we need to \textit{bound} the \q{complexity} of $\rho_0$, with the effect that it won't be able to perfectly replicate $\rho$, and so the minimum for $F_V$ will be larger than $F$ (but hopefully still somewhat close).
+
+\medskip
+
+One possible way to constrain the \q{complexity} of $\rho_0$ is to \textit{force it} to be separable: 
+\begin{align}\label{eqn:mean-field}
+    \rho_0(\bm{\sigma}) = \prod_x \rho_x (\sigma_x)
+\end{align} 
+In this way, all degrees of freedom of the system become \textbf{decoupled}. In a sense, correlations and complex behaviours are \q{averaged} between each component - and in fact the approximation in (\ref{eqn:mean-field}) is known as the \textbf{mean field} ansatz. 
+
+\section{Mean Field Ising Model}
+Consider a $d$-dimensional nearest-neighbour Ising Model, where we allow each spin to interact with a \textbf{local} magnetic field $b_x$, leading to the Hamiltonian:
+\begin{align*}
+    \mathcal{H}(\bm{\sigma}) = -J \sum_{\langle x,y \rangle} \sigma_x \sigma_y - \sum_x b_x \sigma_x
+\end{align*}
+To understand its behaviour, we use the \textbf{mean-field} approximation (\ref{eqn:mean-field}), and choose a parametrization inspired by the non-interacting Ising Model (\ref{eqn:rho1-m}, pag. \pageref{eqn:rho1-m}):
+\begin{align} \label{eqn:mfi}
+    \rho_0(\bm{\sigma}) = \prod_x \rho_x(\sigma_x) \qquad \rho_x(\sigma_x) = \frac{1+\textcolor{Blue}{m_x} \sigma_x}{2} \quad m_x \in [-1,1]
+\end{align}
+where the $\{m_x\}$ are the \textit{variational parameters} that will be \textit{tweaked} to make $\rho_0(\bm{\sigma})$ closer to the real probability distribution $\rho(\bm{\sigma})$ of the Ising Model, by minimizing the \textbf{variational free energy} $F_V$. The constraint $m_x \in [-1,1]$ comes from requiring all probabilities to be non-negative $\rho_x(\sigma_x) \geq 0$.
+
+Before proceeding, note that (\ref{eqn:mfi}) is already normalized:
+\begin{align*}
+    \sum_{\sigma_x = \pm 1}\rho_x(\sigma_x) = \frac{1+m_x}{2} + \frac{1-m_x}{2} = \frac{1}{2} + \frac{1}{2} = 1    
+\end{align*}
+
+and that each \textit{variational parameter} $m_x$ corresponds to the \textbf{local magnetization} of spin $\sigma_x$ \textit{in the mean-field model}: 
+\begin{align}\nonumber
+    \langle \sigma_x \rangle_0 &= \sum_{\{\bm{\sigma}\}} \rho_0(\bm{\sigma}) \sigma_x = \sum_{\{\bm{\sigma}\}} \prod_y \frac{1+m_y \sigma_y}{2} \sigma_x =  \\ \nonumber
+    &\underset{(a)}{=}  \sum_{\sigma_x = \pm 1} \Bigg(\prod_{y \neq x} \underbrace{\sum_{\sigma_y = \pm 1} \frac{1+m_y \sigma_y}{2}}_{1} \Bigg) \frac{1+m_x \sigma_x}{2} \sigma_x =\\ 
+    &=
+    \sum_{\sigma_x = \pm 1} \sigma_x \frac{1+m_x \sigma_x}{2} = \frac{1+m_x}{2} - \frac{1-m_x}{2} =  m_x \label{eqn:local-average}
+\end{align}
+where in (a) we split the product in the case $y \neq x$ and $y = x$. Also note that the average is over $\rho_0$ and not the \q{true} pdf $\rho$.
+
+\begin{expl}\textbf{Choice of parametrization}.  
+    The distribution $\rho_x(\sigma_x)$ in (\ref{eqn:mfi}) is the most general discrete distribution for a binary variable such as $\sigma_x$, just rewritten to highlight the average $m_x$.
+
+    In fact, consider a generic \textbf{binary} variable $\sigma$. Its distribution is:
+    \begin{align*}
+        \mathbb{P}[\sigma = +1] = p_+ \qquad \mathbb{P}[\sigma=-1] = p_-
+    \end{align*}
+    Due to normalization, $p_+ + p_- = 1$, and so there is only \textbf{one free parameter} needed to completely specify the pdf:
+    \begin{align*}
+        \mathbb{P}[\sigma = +1] = p \qquad \mathbb{P}[\sigma = -1] = 1-p
+    \end{align*}  
+    
+    If we then rewrite $p$ as function of the average $\langle \sigma \rangle = m$, we get:
+    \begin{align*}
+        m = \sum_{\sigma = \pm 1} \sigma\mathbb{P}[\sigma] = p - (1-p) = 2p + 1 \Rightarrow p = \frac{1+m}{2} 
+    \end{align*}
+    And so:
+    \begin{align*}
+        \mathbb{P}[\sigma = +1] = \frac{1+m}{2} \qquad \mathbb{P}[\sigma = -1] = \frac{1-m}{2}  
+    \end{align*}
+    Which can be rewritten more compactly as:
+    \begin{align*}
+        \rho(\sigma) = \frac{1+m \sigma}{2} 
+    \end{align*}
+    So we are not making any additional hypothesis other than that of a separable $\rho(\bm{\sigma})$ (given by the mean field approximation).
+\end{expl}
+
+
+For simplicity, we work with $\beta F_V$, denoting $\beta J \equiv K$ and $\beta b_x \equiv h_x$. From the variational principle (\ref{eqn:var-principle}):
+\begin{align}
+    \beta F \leq  
+    \min_{\bm{m}} \beta F_V(\bm{m}, \bm{h}) = \min_{\bm{m}} \left(
+      \beta \langle \mathcal{H} \rangle_0 -\frac{S[\rho_0]}{k_B} \right) 
+      \label{eqn:ising-variational}
+\end{align}
+The average of $\mathcal{H}$ according to the ansatz is:
+\begin{align*}
+    \langle \mathcal{H} \rangle_0 = \langle -J \sum_{\langle x,y \rangle} \sigma_x \sigma_y - \sum_x b_x \sigma_x \rangle_0 = -J \sum_{\langle x,y \rangle} \langle \sigma_x \sigma_y \rangle_0 - \sum_x b_x \langle \sigma_x \rangle_0
+\end{align*}
+We already computed $\langle \sigma_x \rangle_0 = m_x$ in (\ref{eqn:local-average}). For the two-point correlation, as $\rho_0$ is separable and thus $\sigma_x$ and $\sigma_y$ are decoupled, we get:
+\begin{align*}
+    \langle \sigma_x \sigma_y \rangle_0 = \langle \sigma_x \rangle_0 \langle \sigma_y \rangle_0 = \sum_{\sigma_x} \frac{1+m_x \sigma_x}{2} \sigma_x \sum_{\sigma_y} \frac{1+m_y \sigma_y}{2} \sigma_y = m_x m_y
+\end{align*}
+Thus:
+\begin{align}\label{eqn:H0avg}
+    \langle \mathcal{H}(\bm{\sigma}) \rangle_0 = -J \sum_{\langle x,y \rangle} m_x m_y - \sum_x b_x m_x = \mathcal{H}(\bm{m})
+\end{align}
+This is valid more in general when applying the mean field approximation to even more complex Hamiltonians, as it is a consequence of the separability of $\rho_0$.
+
+\medskip
+
+On the other hand, the entropy of $\rho_0$ can be directly computed. Noting that $\rho_x(\sigma_x)$ is exactly the same pdf we used in the non-interacting Ising Model, we can borrow the results (\ref{eqn:lstep}) and (\ref{eqn:lstepb}, pag. \pageref{eqn:lstep}) from there:
+\begin{align}\nonumber
+    -\frac{S[\rho_0]}{k_B} &= \sum_{\{\bm{\sigma}\}} \rho_0(\bm{\sigma}) \ln \rho_0(\bm{\sigma}) = \sum_x \sum_{\sigma_x} \frac{1+m_x \sigma_x}{2} \ln \frac{1+m_x \sigma_x}{2} =\\ \label{eqn:rho0-ent}
+    &= \sum_x \left(\frac{1+m_x}{2} \ln \frac{1+m_x}{2} + \frac{1-m_x}{2} \ln \frac{1-m_x}{2} \right)  \equiv \sum_x s_0(m_x)
+\end{align}
+where we defined a \textit{local entropy} $s_0$ as: 
+\begin{align*}
+    s_0(m) \equiv \frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2}    
+\end{align*}
+Substituting these results (\ref{eqn:H0avg}) and (\ref{eqn:rho0-ent}) back in (\ref{eqn:ising-variational}) we arrive to:
+\begin{align*}
+    \beta F_V(\bm{m}, \bm{h}) &= \beta H(\bm{m}) + \sum_x s_0(m_x) =\\
+    &= -K \sum_{\langle x,y \rangle} m_x m_y - \sum_x h_x m_x + \sum_x \left[\frac{1+m_x}{2} \ln \frac{1+m_x}{2} + \frac{1-m_x}{2} \ln \frac{1-m_x}{2}    \right]
+\end{align*}
+where the first line holds for a generic Hamiltonian $\mathcal{H}(\bm{\sigma})$, and the second is specific for the Ising Model we are studying.
+
+\medskip
+
+Then, we minimize $F_V(\bm{m}, \bm{h})$ with respect to $\bm{m}$, denoting the minimum as $F_V(\bm{M}, \bm{h})$:
+\begin{align*}
+    \pdv{m_x} \beta F_V \Big|_{\bm{m} = \bm{M}} = 0 \Leftrightarrow M_x = \tanh \left[K \sum_{y \in \langle y, x\rangle} M_y + h_x\right]
+\end{align*} %Complete the computation
+where the sum is over all nodes $y$ neighbouring $x$, i.e. the ones included in some pair of neighbours $\langle y,x \rangle$ involving $x$.
+
+\subsection{Physical meaning of the variational parameters $M_x$}
+
+
+
+\end{document}

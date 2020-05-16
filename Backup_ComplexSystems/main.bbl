@@ -1,0 +1,269 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.8 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \sortlist[entry]{none/global/}
+    \entry{sethna}{book}{}
+      \name{author}{1}{}{%
+        {{hash=9d58cd546416fed4ae6aed7087183f34}{%
+           family={Sethna},
+           familyi={S\bibinitperiod},
+           given={James\bibnamedelima P.},
+           giveni={J\bibinitperiod\bibinitdelim P\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Oxford University Press}%
+      }
+      \strng{namehash}{9d58cd546416fed4ae6aed7087183f34}
+      \strng{fullhash}{9d58cd546416fed4ae6aed7087183f34}
+      \strng{authornamehash}{9d58cd546416fed4ae6aed7087183f34}
+      \strng{authorfullhash}{9d58cd546416fed4ae6aed7087183f34}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{9780198566779}
+      \field{title}{Statistical Mechanics: Entropy, Order Parameters, and Complexity}
+      \field{year}{2006}
+    \endentry
+    \entry{mathsm}{book}{}
+      \name{author}{1}{}{%
+        {{hash=05d04f102e47354aaf8c76b138ebbda5}{%
+           family={Thompson},
+           familyi={T\bibinitperiod},
+           given={Colin\bibnamedelima J.},
+           giveni={C\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Princeton University PRess}%
+      }
+      \strng{namehash}{05d04f102e47354aaf8c76b138ebbda5}
+      \strng{fullhash}{05d04f102e47354aaf8c76b138ebbda5}
+      \strng{authornamehash}{05d04f102e47354aaf8c76b138ebbda5}
+      \strng{authorfullhash}{05d04f102e47354aaf8c76b138ebbda5}
+      \field{sortinit}{2}
+      \field{sortinithash}{0aa614ace9f3a40ef5a67e7f7a184048}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Mathematical Statistical Mechanics}
+      \field{year}{1972}
+    \endentry
+    \entry{proofdet}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=5ce3a0acaaef5ee296026dd59ec1f3ec}{%
+           family={(https://math.stackexchange.com/users/3060/nick-alger)},
+           familyi={(\bibinithyphendelim a\bibinitperiod},
+           given={Nick\bibnamedelima Alger},
+           giveni={N\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+      }
+      \strng{namehash}{5ce3a0acaaef5ee296026dd59ec1f3ec}
+      \strng{fullhash}{5ce3a0acaaef5ee296026dd59ec1f3ec}
+      \strng{authornamehash}{5ce3a0acaaef5ee296026dd59ec1f3ec}
+      \strng{authorfullhash}{5ce3a0acaaef5ee296026dd59ec1f3ec}
+      \field{sortinit}{3}
+      \field{sortinithash}{197da6d6c34c6b20ce45c4d4baace5a4}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{howpublished}{Mathematics Stack Exchange}
+      \field{note}{(version: 2017-06-27)}
+      \field{title}{Why is determinant a multilinear function?}
+      \verb{eprint}
+      \verb https://math.stackexchange.com/q/2283168
+      \endverb
+      \verb{url}
+      \verb https://math.stackexchange.com/q/2283168
+      \endverb
+    \endentry
+    \entry{jaynes-secondlaw}{article}{}
+      \name{author}{1}{}{%
+        {{hash=60cf9e44033fe2d5e8d20578f696e158}{%
+           family={Jaynes},
+           familyi={J\bibinitperiod},
+           given={E.\bibnamedelimi T.},
+           giveni={E\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{60cf9e44033fe2d5e8d20578f696e158}
+      \strng{fullhash}{60cf9e44033fe2d5e8d20578f696e158}
+      \strng{authornamehash}{60cf9e44033fe2d5e8d20578f696e158}
+      \strng{authorfullhash}{60cf9e44033fe2d5e8d20578f696e158}
+      \field{sortinit}{6}
+      \field{sortinithash}{02bbed3ed82f61ae046619460488516d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{American Journal of Physics}
+      \field{number}{5}
+      \field{title}{Gibbs vs Boltzmann Entropies}
+      \field{volume}{33}
+      \field{year}{1965}
+      \field{pages}{391\bibrangedash 398}
+      \range{pages}{8}
+      \verb{doi}
+      \verb 10.1119/1.1971557
+      \endverb
+      \verb{eprint}
+      \verb https://doi.org/10.1119/1.1971557
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1119/1.1971557
+      \endverb
+    \endentry
+    \entry{jaynes2}{misc}{}
+      \name{author}{1}{}{%
+        {{hash=60cf9e44033fe2d5e8d20578f696e158}{%
+           family={Jaynes},
+           familyi={J\bibinitperiod},
+           given={E.\bibnamedelimi T.},
+           giveni={E\bibinitperiod\bibinitdelim T\bibinitperiod}}}%
+      }
+      \strng{namehash}{60cf9e44033fe2d5e8d20578f696e158}
+      \strng{fullhash}{60cf9e44033fe2d5e8d20578f696e158}
+      \strng{authornamehash}{60cf9e44033fe2d5e8d20578f696e158}
+      \strng{authorfullhash}{60cf9e44033fe2d5e8d20578f696e158}
+      \field{sortinit}{7}
+      \field{sortinithash}{6ac7fe70cdec8cba8f65694411ce2532}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{The Second Law as Physical Fact and as Human Inference}
+      \field{year}{1998}
+    \endentry
+    \entry{ferromagnets}{book}{}
+      \name{author}{1}{}{%
+        {{hash=238796882a3c18156b8e0234deb607d7}{%
+           family={Aharoni},
+           familyi={A\bibinitperiod},
+           given={Amikan},
+           giveni={A\bibinitperiod}}}%
+      }
+      \strng{namehash}{238796882a3c18156b8e0234deb607d7}
+      \strng{fullhash}{238796882a3c18156b8e0234deb607d7}
+      \strng{authornamehash}{238796882a3c18156b8e0234deb607d7}
+      \strng{authorfullhash}{238796882a3c18156b8e0234deb607d7}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{isbn}{978-0198508090}
+      \field{month}{11}
+      \field{title}{An Introduction to the Theory of Ferromagnetism}
+      \field{year}{2000}
+      \field{pages}{6\bibrangedash 7}
+      \range{pages}{2}
+      \verb{url}
+      \verb https://archive.org/details/introductiontoth00ahar/page/6
+      \endverb
+    \endentry
+    \entry{huang}{book}{}
+      \name{author}{1}{}{%
+        {{hash=62f547896fdd964afa696ab3f717dfa8}{%
+           family={Huang},
+           familyi={H\bibinitperiod},
+           given={Kerson},
+           giveni={K\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons}%
+      }
+      \strng{namehash}{62f547896fdd964afa696ab3f717dfa8}
+      \strng{fullhash}{62f547896fdd964afa696ab3f717dfa8}
+      \strng{authornamehash}{62f547896fdd964afa696ab3f717dfa8}
+      \strng{authorfullhash}{62f547896fdd964afa696ab3f717dfa8}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2}
+      \field{title}{Statistical Mechanics}
+      \field{year}{1987}
+    \endentry
+    \entry{low-exp}{article}{}
+      \name{author}{2}{}{%
+        {{hash=86cbfefa4373de687abff72527acf04c}{%
+           family={Lee},
+           familyi={L\bibinitperiod},
+           given={S.-F},
+           giveni={S\bibinithyphendelim F\bibinitperiod}}}%
+        {{hash=4310c9227c9efb2b5bce6541adfd1f67}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={K.-Y},
+           giveni={K\bibinithyphendelim Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{a56eff05a326a414c579bba07567b07a}
+      \strng{fullhash}{a56eff05a326a414c579bba07567b07a}
+      \strng{authornamehash}{a56eff05a326a414c579bba07567b07a}
+      \strng{authorfullhash}{a56eff05a326a414c579bba07567b07a}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{01}
+      \field{title}{Low-temperature series expansions for the square-lattice Ising model with first and second neighbour interactions}
+      \field{volume}{34}
+      \field{year}{1996}
+      \field{pages}{1261\bibrangedash 1269}
+      \range{pages}{9}
+    \endentry
+    \entry{ising-low}{article}{}
+      \name{author}{3}{}{%
+        {{hash=e7b29c7b4de9158f64c78d32a2848441}{%
+           family={Enting},
+           familyi={E\bibinitperiod},
+           given={I\bibnamedelima G},
+           giveni={I\bibinitperiod\bibinitdelim G\bibinitperiod}}}%
+        {{hash=838b136a0d85a94c6c0599a6090f581a}{%
+           family={Guttmann},
+           familyi={G\bibinitperiod},
+           given={A\bibnamedelima J},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=04d15653a65505c38b3f3e286c79c72c}{%
+           family={Jensen},
+           familyi={J\bibinitperiod},
+           given={I},
+           giveni={I\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {{IOP} Publishing}%
+      }
+      \strng{namehash}{bd62264ce903c80498dcb0c290b5b43c}
+      \strng{fullhash}{bd62264ce903c80498dcb0c290b5b43c}
+      \strng{authornamehash}{bd62264ce903c80498dcb0c290b5b43c}
+      \strng{authorfullhash}{bd62264ce903c80498dcb0c290b5b43c}
+      \field{sortinit}{1}
+      \field{sortinithash}{27a2bc5dfb9ed0a0422134d636544b5d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Physics A: Mathematical and General}
+      \field{month}{11}
+      \field{number}{21}
+      \field{title}{Low-temperature series expansions for the spin-1 Ising model}
+      \field{volume}{27}
+      \field{year}{1994}
+      \field{pages}{6987\bibrangedash 7005}
+      \range{pages}{19}
+      \verb{doi}
+      \verb 10.1088/0305-4470/27/21/014
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1088%2F0305-4470%2F27%2F21%2F014
+      \endverb
+    \endentry
+  \endsortlist
+\endrefsection
+\endinput
+

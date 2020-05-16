@@ -1,6 +1,7 @@
 %&latex
 %
-\documentclass[12pt]{report} %Modalità draft settata qui
+\providecommand{\main}{.}
+\documentclass[12pt,a4paper]{report} %Modalità draft settata qui
 
 %---General---%
 \usepackage{subfiles} %Modular structure
@@ -8,6 +9,8 @@
 \usepackage[english]{babel}
 \usepackage{microtype}
 \usepackage[nointegrals]{wasysym} %fonts support
+\usepackage[a4paper,inner=20mm,outer=49mm,top=20mm,bottom=25mm,%
+            marginparsep=6mm,marginparwidth=30mm]{geometry}
 
 \renewcommand{\rmdefault}{ppl} % rm
 \linespread{1.05}        % Palatino needs more leading
@@ -15,11 +18,11 @@
 \usepackage{courier} % tt
 \usepackage{mathpazo} 
 
-
 %---Encoding---%
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
+\usepackage{csquotes}
 
 %---Math---%
 \usepackage{amsmath,amsthm,amstext,amsbsy,amsfonts,amssymb,stackengine}
@@ -33,7 +36,6 @@
 \usepackage{yhmath}
 \usepackage{gensymb}
 \usepackage{blkarray}
-\usepackage{xfrac}
 
 \newcommand\myop{\ensuremath\mathrel{\raisebox{1pt}{\stackunder{$<$}{\rotatebox{-27}{\resizebox{7pt}{2pt}{$\sim$}}}}}}
 \setstackgap{S}{-1.5pt}
@@ -50,10 +52,6 @@ separate-uncertainty = true
 %---Tables---%
 \usepackage{booktabs}
 \usepackage{multirow}
-\usepackage{adjustbox}
-\usepackage{chngpage}
-\usepackage{setspace}
-
 
 \setlength{\aboverulesep}{0pt} %removes annoying spaces in booktabs tables
 \setlength{\belowrulesep}{0pt}
@@ -64,23 +62,20 @@ separate-uncertainty = true
 \usepackage{graphicx}
 \usepackage[usenames, dvipsnames, table]{xcolor} %colori
 \usepackage{color}
-\usepackage{float}
 \usepackage{wrapfig}
+
 \usepackage[font=footnotesize, labelfont=bf,
-            format=hang, labelformat=parens,
+            labelformat=parens,
             labelsep=endash, justification=raggedright,
             singlelinecheck=on]{caption} %fancy captions
 \usepackage{subcaption} 
 \captionsetup[sub]{font=footnotesize,
-            labelsep=endash, justification=raggedright}
+            labelsep=endash, justification=centering}
 
 \usepackage{pgf,tikz}
-\usetikzlibrary{automata, positioning, arrows}
+\usetikzlibrary{arrows}
 \usetikzlibrary{tikzmark}
 \usetikzlibrary{patterns}
-\usetikzlibrary{calc}
-\usepackage{epstopdf}
-\usepackage{gnuplottex}
 \usepackage{soul}
 \usepackage[framemethod=tikz]{mdframed}
 \usepackage{fancybox}
@@ -99,11 +94,20 @@ separate-uncertainty = true
 
 \definecolor{mygray}{gray}{0.6}
 
+
 %---Indeces, links, bibliography---%
-\usepackage{makeidx} %Indice analitico
+\usepackage{imakeidx} %Indice analitico
 \usepackage[stable]{footmisc}
-\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref} %hyperref va caricato sempre dopo footmisc, altrimenti le footnotes si buggano e riportano tutte alla prima pagina
+
+%\usepackage{xr-hyper}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}  %hyperref va caricato sempre dopo footmisc, altrimenti le footnotes si buggano e riportano tutte alla prima pagina
+
 \usepackage[symbol=$\wedge$,numberlinked=false]{footnotebackref}
+\makeindex[columns=2, title=Analytical index, options= -s indexstyle.ist]
+
+\usepackage[backend=biber,sorting=none]{biblatex}
+\renewbibmacro{in:}{}
+\addbibresource{bibliography.bib}
 
 %---Utilities---%
 \usepackage{comment}
@@ -115,8 +119,7 @@ separate-uncertainty = true
 \usepackage{etoolbox}
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage{lipsum}  
-
-\newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
+\usepackage{float}
 
 %---Additional symbols---%
 %\bigcdot
@@ -169,16 +172,11 @@ headformat={\cornersize*{2pt}\ovalbox{\NAME~\NUMBER\ifstrequal{\NOTE}{}{\relax}{
 bodyfont=\normalfont,
 ]{exobreak}
 
-
 \declaretheorem[style=exobreak, name=Exercise,%
-numberwithin = chapter, %
+numberwithin = section, %
 postheadhook=\leavevmode\myleftbar, %
 prefoothook = \endmyleftbar]{exo}
 
-\usepackage{etoolbox}
-\usepackage{needspace}
-\AtBeginEnvironment{exo}{\Needspace{10\baselineskip}}% Impedisce l'inserimento di una domanda a fondo pagina e la risposta alla pagina successiva
-%\AtEndEnvironment{domanda}{\nopagebreak}
 %show just the name in theorem list
 \makeatletter
 %\show\ll@problem gives default definition:
@@ -190,6 +188,7 @@ prefoothook = \endmyleftbar]{exo}
 }
 \makeatother
 
+\usepackage[type={CC}, lang=english, modifier={by-nc-sa}, version={4.0}]{doclicense}
 %Chapter division in theorem list
 %\colorlet{shadecolor}{lightgray!25}
 
@@ -219,6 +218,10 @@ prefoothook = \endmyleftbar]{exo}
 postheadhook=\leavevmode\myleftbar, %
 prefoothook = \endmyleftbar]{example}
 
+\usepackage{etoolbox}
+\usepackage{needspace}
+\AtBeginEnvironment{exo}{\Needspace{10\baselineskip}}% Impedisce l'inserimento di una domanda a fondo pagina e la risposta alla pagina successiva
+\AtBeginEnvironment{example}{\Needspace{10\baselineskip}}
 
 %---Custom commands---%
 \newcommand{\q}[1]{``#1''}              %quotes
@@ -237,28 +240,43 @@ prefoothook = \endmyleftbar]{example}
 \newcommand{\greendot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[green,fill=green] (0,0) circle (.5ex);}}
 \newcommand{\orangedot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[orange,fill=orange] (0,0) circle (.5ex);}}
 
-%---Geometry (Normal pages)---%
-\usepackage[a4paper]{geometry}
-\newgeometry{inner=20mm,
-            outer=49mm,% = marginparsep + marginparwidth 
-                       %   + 5mm (between marginpar and page border)
-            top=20mm,
-            bottom=25mm,
-            marginparsep=6mm,
-            marginparwidth=30mm}
- 
-%\newgeometry{top=20mm, bottom=25mm, inner=20mm, outer=30mm}
 
 %---Fancy stuff---%
-\usepackage[Bjornstrup]{fncychap}
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyhead{} % clear all header fields
-\renewcommand{\headrulewidth}{0pt} % no line in header area
-\fancyfoot{} % clear all footer fields
+%\usepackage[Bjornstrup]{fncychap}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhead{} % clear all header fields
+%\renewcommand{\headrulewidth}{0pt} % no line in header area
+%\fancyfoot{} % clear all footer fields
 %\fancyfoot[R]{A.A. 2018/19} % other info in "inner" position of footer line
-\cfoot{\thepage}
+%\cfoot{\thepage}
 
+\makeatletter
+\def\thickhrulefill{\leavevmode \leaders \hrule height 1ex \hfill \kern \z@}
+\def\@makechapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedleft \reset@font
+            \scshape \@chapapp{} \thechapter
+        \par\nobreak
+        \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    %\vspace*{1\p@}%
+    \hrulefill
+    \par\nobreak
+    \vskip 100\p@
+  }}
+\def\@makeschapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedleft \reset@font
+            \scshape \vphantom{\@chapapp{} \thechapter}
+        \par\nobreak
+        \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    %\vspace*{1\p@}%
+    \hrulefill
+    \par\nobreak
+    \vskip 100\p@
+  }}
 
 %---Theorems---%
 \theoremstyle{plain}
@@ -275,8 +293,6 @@ prefoothook = \endmyleftbar]{example}
 \newenvironment{expl}{\begin{mdframed}[hidealllines=true,backgroundcolor=green!20,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt]}{\end{mdframed}} %Box di colore verde
 \newenvironment{appr}{\begin{mdframed}[hidealllines=true,backgroundcolor=blue!10,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt]}{\end{mdframed}} %Approfondimenti matematici (box di colore blu)
 
-
-
 %Raggedright marginpar
 \makeatletter
 \renewcommand{\@marginparreset}{%
@@ -286,86 +302,110 @@ prefoothook = \endmyleftbar]{example}
   \@setminipage
 }
 \makeatother
-\makeindex
 
-\allowdisplaybreaks
+
+\allowdisplaybreaks %allow pagebreaks in align enviroments
+
 \begin{document}
-%---Frontpage---%
-%Custom geometry for the frontpage
-%\newgeometry{total={170mm,257mm}, left=20mm, top=20mm}
 
+\newgeometry{total={170mm,257mm}, left=20mm, top=20mm}
+%Maybe add some space there
 \begin{center}
                 \line (1,0){350} \\
-                \textsc{\normalsize Trascrizione degli appunti delle lezioni di}\\
-                [0.25in]
-                \huge{\bfseries Istituzioni di fisica nucleare e subnucleare}\\
+                \huge{\bfseries Statistical Mechanics of Complex Systems}\\
                 [2mm]
-                \textsc{\normalsize Tenute dal Prof.ssa \textit{Donatella Lucchesi}}
+                \textsc{\normalsize Prof. \textit{Amos Maritan}}
                 \vspace{-0.5em}\\
-                \textsc{\normalsize Presso l'Università di Padova}\\
+                \textsc{\normalsize University of Padova}\\
                 \vspace{-1em}
                 \line (1,0){350} \\
         [0.2cm]
-        \textsc{\normalsize A cura di: \textit{Francesco Manzali}}\\
-                \textsc{\normalsize Anno accademico 2018-2019}\\ 
-        {\scriptsize Compilato il \today}
+        \textsc{\normalsize Written by: \textit{Francesco Manzali}}\\
+                \textsc{\normalsize Academic Year 2019/20}\\ 
+        {\scriptsize Compiled on \today}\\
+        [0.2cm]
+        {\scriptsize \doclicenseLongText}
 \end{center}
 
 %---Frontpage End---%
 
-%---Geometry (Normal pages)---%
-\newgeometry{inner=20mm,
-            outer=49mm,% = marginparsep + marginparwidth 
-                       %   + 5mm (between marginpar and page border)
-            top=20mm,
-            bottom=25mm,
-            marginparsep=6mm,
-            marginparwidth=30mm}
-
-\makeatletter
-\renewcommand{\@marginparreset}{%
-  \reset@font\small
-  \raggedright
-  \slshape
-  \@setminipage
-}
-\makeatother
-
 \tableofcontents 
 \clearpage
-\chapter*{Introduzione}
-Buonsalve!\\
-In questo documento ho cercato di riordinare gli appunti del corso di Istituzioni di fisica nucleare e subnucleare tenuto dalla professoressa Donatella Lucchesi presso il Dipartimento di Fisica dell'Università di Padova nel corso del secondo semestre del 2018-19.\\
-Potrebbero esserci errori di formattazione, parentesi saltate, o peggio, coefficienti/esponenti/segni errati in giro (ma non dovrebbero essere tanti). Se ne sgamate qualcuno, fatemi sapere. Ditemi anche (se avete tempo e non vi scoccia) se ci sono passaggi non chiari.\\
-Prima di iniziare, ultimo disclaimer (che dovrebbe essere scontato dato che non ho una laurea): questi appunti non sono da intendere come sostituzione delle lezioni, o di altre dispense già presenti.\\
-Buon viaggio! :)
+\section*{Introduction}
+If you find any mistake/typo/missing thing, please write at \textit{francesco.manzali@studenti.unipd.it} (or even just for feedback).
 
 \begin{flushright}
 \textit{Francesco Manzali}, 20/02/2019
 \end{flushright}
-\clearpage
-\section*{Aggiornamenti}
-\begin{table}[hb]
-    \centering
-    \begin{tabular}{|cm{3cm}m{5cm}m{3cm}|}\toprule
-        Data & Aggiunte & Errata corrige & Commenti\\\midrule
-        \textbf{23/10/2018} & Prima pubblicazione & & \\
-        \bottomrule
-    \end{tabular}
-    \caption{Cronologia di modifiche/aggiornamenti agli appunti}
-    \label{updates}
-\end{table}
+
+
+\begin{appr}
+\textbf{About the missing lectures}. Lectures 18/03, 19/03, 23/03, 25/03 and 26/03 are still missing, because of lack of time. I will try to keep up with the new lectures (especially the ones about different topics), and then return back to these lessons. If you want to help with transcription, please write to \textit{francesco.manzali@studenti.unipd.it}
+\end{appr}
+
+\begin{flushright}
+\textit{The contract is complete. Your wish has surpassed entropy. Now release your new power!}\\
+-Kyubey - Puella Magi Madoka Magica
+\end{flushright}
+
+\subsection*{Aknowledgments}
+Thanks to Alice Pagano for providing corrections and realizing several figures in tikz. Thanks to Karan K.H.M., Marco Ballarin (and everyone that I am regretfully forgetting) for all the feedback on typos and exercises.
 
 \clearpage
+            
+\restoregeometry
 
-\chapter{Test}\label{test}
+\chapter{Statistical Mechanics}
+
+%---First part (3CFU)---%
+\subfile{Lectures/Maritan/09_03_20.tex}
+\subfile{Lectures/Maritan/11_03_20.tex}
+\subfile{Lectures/Maritan/12_03_20.tex}
+\subfile{Lectures/Maritan/16_03_20.tex}
+
+%TO Review:
+%\subfile{Lectures/Maritan/18_03_20.tex}
+%\subfile{Lectures/Maritan/19_03_20.tex}
+
+%TO COPY:
+%\subfile{Lectures/Maritan/23_03_20.tex}
+%\subfile{Lectures/Maritan/25_03_20.tex}
+%\subfile{Lectures/Maritan/26_03_20.tex}
+%\subfile{Lectures/Maritan/30_03_20.tex}
+%\subfile{Lectures/Maritan/01_04_20.tex}
+%\subfile{Lectures/Maritan/02_04_20.tex}
+%\subfile{Lectures/Maritan/06_04_20.tex}
+
+%---Second part (6CFU)---%
+\subfile{Lectures/Maritan/08_04_20.tex}
+\subfile{Lectures/Maritan/09_04_20.tex}
+
+%Finish review:
+\subfile{Lectures/Maritan/15_04_20.tex}
+\subfile{Lectures/Maritan/16_04_20.tex}
+\subfile{Lectures/Maritan/20_04_20.tex}
+
+\subfile{Lectures/Maritan/22_04_20.tex}
+\subfile{Lectures/Maritan/23_04_20.tex}
+
+%To copy:
+%\subfile{Lectures/Maritan/27_04_20.tex}
+%\subfile{Lectures/Maritan/29_04_20.tex}
+
+%Suweiss part (to be copied):
+%\subfile{Lectures/Suweiss/30_04_20.tex}
+%\subfile{Lectures/Suweiss/04_05_20.tex}
+%\subfile{Lectures/Suweiss/06_05_20.tex}
+%\subfile{Lectures/Suweiss/07_05_20.tex}
+
+%To copy:
+%\subfile{Lectures/Maritan/11_05_20.tex}
+
 
 
 %---Bibliography---%
 \clearpage
-\begin{thebibliography}{9}
-
-\end{thebibliography}
+\printbibliography
 
 %---Analytical Index---%
 \printindex

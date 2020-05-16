@@ -1,0 +1,73 @@
+%&latex
+%
+\providecommand{\main}{../..}
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+\lesson{12}{2/4/20}
+
+\chapter{Stochastic processes}
+%Small introduction on diffusion and why we study it
+
+\section{Discrete time Random Walk}
+We start our analysis with the simplest possible case: that of a particle moving with \textbf{discrete steps} inside a \textbf{one dimensional} uniform \textbf{lattice}. 
+
+Think of a particle that can only visit some pre-defined positions $\{x_i\}_{i \in \mathbb{Z}}$, separated by a constant distance $x_{i}-x_{i-1} \equiv \delta x$ $\forall i$. For simplicity, we suppose the $x_i$ to be ordered, i.e. $x_{i-1} < x_i$ $\forall i$, for example $x_i \equiv i \cdot \delta x$.
+
+We measure the particle's position at \textit{discrete} instants $t_n$, and find that it always moves by exactly one step at a time, going \textit{to the right} (i.e. from $x_i$ to $x_{i+1}$) with probability $p$, and \textit{to the left} with probability $q = 1-p$.   
+
+%TO DO [Picture of the 1-d lattice]
+
+We denote with $\mathbb{P}_N(r)$ the probability that the particle is found at position $r \equiv x_r$ after $N$ steps, given it was initially ($t=0$) at $r_0$. As we said, at each time-step the particle can only move to the left or to the right, and so:
+\begin{align}\label{eqn:ME1}
+    \mathbb{P}_N(r) = p \mathbb{P}_{N-1}(r-1) + q \mathbb{P}_{N-1}(r+1) \qquad r \in \mathbb{Z},\>  N \geq 1
+\end{align}
+with:
+\begin{align}
+    \mathbb{P}_0(r) = \delta_{r,r_0} \label{eqn:boundaryME}
+\end{align}
+The \textit{recursive} relation (\ref{eqn:ME1}) along with the boundary condition (\ref{eqn:boundaryME}) completely specifies the behaviour of the randomly-moving particle, and is denoted as the \textbf{Master Equation}. We can solve it by using characteristic functions (see chapter 2 of [])%Add cite to "Stochastic Processes in Cell Biology" Paul C. Bressloff
+or with some combinatorics, as we now see.
+
+\medskip
+
+Consider a particle starting at $x=0$, and suppose that it is observed at position $r$ after $N$ steps. Let $n_-$ and $n_+$ be the number of steps \textit{to the left} and \textit{to the right} done by the particle during its motion. Clearly, it must be:
+\begin{align}
+    n_+ + n_- = N; \qquad n_+ - n_- = r \label{eqn:npm}
+\end{align}  
+The first equation comes from the fact that the particle makes exactly $N$ steps in total, and the second one by observing that the particle's position\footnote{Here we are identifying the index $i$ with the position $x_i$. Equivalently, rescale $\delta x$ to $1$.} rises by $1$ after each step to the \textit{right}, and lowers by $1$ after each steps to the \textit{left}. So, the final position $r$ will just be the difference between the total number of right steps $n_+$ and that of left steps $n_-$.  
+
+\medskip
+
+Solving (\ref{eqn:npm}) for $n_\pm$ we get:
+\begin{align*}
+    n_\pm = \frac{N \pm r}{2} 
+\end{align*}
+Note that $n_\pm$ must be integers (the particle cannot make a \q{half-step}), meaning that $N$ and $r$ must have the same parity (both odd or both even). Immediately:
+\begin{align*}
+    \mathbb{P}_N(r) = 0 \quad \text{ if $N$ and $r$ have different parity}
+\end{align*}
+If $N$ and $r$ share the same parity, then in general $\mathbb{P}_N(r) \neq 0$.
+
+To arrive at $r$, the \textit{order} of steps does not matter - it suffices to make $N$ steps in total, with exactly $n_+$ steps to the right, however distributed. So there are are ${N \choose n_+}$ possible combinations to choose from, each happening with probability $p^{n_+} q^{n_-}$ (according to the binomial distribution), meaning that the final $N$-step transition probability from $0$ to $r$ is given by:
+\begin{align}
+    \mathbb{P}_{N}(r) = \begin{dcases}
+        {N \choose \frac{N+r}{2}} p^{\frac{N+r}{2}} q^{\frac{N-r}{2}} & \text{$N$ and $r$ with same parity}\\
+        0 & \text{$N$ and $r$ with different parity}
+    \end{dcases} \label{eqn:pnr}
+\end{align}
+Equivalently, we could have counted the possible ways to arrange $n_-$ steps \textit{to the left}. This would have lead to the same result, because:
+\begin{align*}
+    {N\choose \frac{N+r}{2}} = {N\choose \frac{N-r}{2}}
+\end{align*} 
+
+To compute averages, it is convenient to use the \textit{probability generating function} for (\ref{eqn:pnr}), given by:
+\begin{align*}
+    \hat{P}_N(z) &\equiv {\sum_{r=-N}^N}' P_N(r) z^r = \sum_{m=0}^N {N\choose m} p^m q^{N-m} z^{2m - N} =\\
+    &= \left(pz + \frac{q}{z} \right)^N
+\end{align*}
+where the sum is only over the values of $r$ with the same parity of $N$. 
+...
+
+
+\end{document}

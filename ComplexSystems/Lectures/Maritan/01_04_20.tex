@@ -1,0 +1,60 @@
+%&latex
+%
+\providecommand{\main}{../..}
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Ultraviolet Catastrophe - part 2}
+To resolve the ultraviolet catastrophe we need to \textit{quantize} energy, leading to:
+\begin{align*}
+    \langle \epsilon_\nu \rangle = \frac{\hbar \omega}{e^{\beta \hbar \omega} - 1} = \frac{h \nu}{e^{\beta h \nu} - 1}  
+\end{align*} 
+where we have removed the constant $\hbar \omega/2$ (zero point energy) since it does not contribute to energy differences.
+
+In summary:
+\begin{align*}
+    u_\nu(\nu, T) &= \frac{8 \pi \nu^2}{c^3} \frac{h \nu}{e^{\beta h \nu} - 1} = \begin{cases}
+        \frac{8 \pi \nu^2}{c^3} k_B T & k_B T \gg h \nu\\
+        \frac{8 \pi \nu^2}{c^3} h \nu e^{- \beta h \nu} & k_B T \ll h \nu  
+    \end{cases}  \\
+    u_\lambda(\lambda,T) &= \frac{8 \pi}{\lambda^5} h c \frac{1}{e^{\beta h c/\lambda} - 1} = \begin{cases}
+        \frac{8 \pi}{\lambda^4} k_B T & k_B T \gg \frac{hc}{\lambda} \\
+        \frac{8 \pi}{\lambda^5} h c \exp\left(-\frac{\beta h c}{\lambda} \right) & k_B T \ll \frac{hc}{\lambda} 
+    \end{cases}  
+\end{align*}
+and in particular:
+\begin{align*}
+    T \lambda_{\mathrm{max}} = \text{const.}
+\end{align*}
+which is known as Wien's law.
+
+\medskip
+
+The flux in the range $(\lambda, \lambda + \dd{\lambda})$ from a small hole in the black-body cavity is given by:
+\begin{align*}
+    \frac{c}{4} u_\lambda (\lambda, T) \dd{\lambda}
+\end{align*}
+This equation follows from the usual formula for the flux:
+\begin{align*}
+    \rm{flux} = \rm{density} \cdot \rm{velocity}
+\end{align*}
+The density term is $u_\lambda(\lambda, T)\dd{\lambda}$, corresponding to the density of energy of electromagnetic waves with wavelength in $(\lambda, \lambda+\dd{\lambda})$. EM waves propagate at the speed of light ($c$). Finally, the $1/4$ factor comes from the \textit{geometry} of the system, taking into account that the radiation inside the box is \textbf{isotropically distributed}, and only a fraction of it can exit from a \textit{small} hole. 
+
+%Insert picture
+
+In fact, consider a small volume $\dd{V}$ inside the cavity. Radiation emitted by $\dd{V}$ can exit from a hole of area $A$ during a time interval $\Delta t$ only if $\dd{V}$ is \textit{sufficiently close} to the hole - i.e. if its distance $r$ is in $(0, c \Delta t)$. Radiation is emitted \textit{isotropically}, i.e. with no preferred direction. So the energy directed toward the hole is the one contained in the \textit{solid angle} subtended by $A$ \q{as seen} by $\dd{V}$:
+\begin{align*}
+    \dd{V} u_\lambda (\lambda, T) \dd{\lambda} \underbrace{\frac{A \cos \theta}{r^2} \frac{1}{4 \pi}  }_{\parbox{5em}{\centering \scriptsize Fraction of solid angle subtended by $A$ as seen by $\dd{V}$}} 
+\end{align*}  %Complete
+
+\begin{exo}[8]
+    
+\end{exo}
+
+\begin{exo}[9]
+    
+\end{exo}
+
+
+\end{document}

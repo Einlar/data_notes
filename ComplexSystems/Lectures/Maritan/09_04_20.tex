@@ -1,0 +1,260 @@
+%&latex
+%
+\providecommand{\main}{../..}
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+\lesson{14}{9/4/20}
+\section{Asymptotic Evolution}
+Liouville's theorem showed us that a uniform ensemble, such as the \textit{microcanonical ensemble} for a isolate system, is \textbf{stationary}, thus suitable to describe equilibrium.
+
+However, we would like to prove that it \textit{is} in fact, the only suitable description. Intuitively, this requires that the Liouville's evolution \q{throughly stirs} phase-space, so that the trajectory followed by \textit{almost}\footnote{Up to a set of null measure} any point in phase-space passes arbitrarily close to any other point in phase-space. In such case, it can be shown that all states can be treated \q{equally}, and so we can compute the expected values of observables by using the microcanonical ensemble, as we previously postulated. A system satisfying this condition is said to be \textbf{ergodic}. Unfortunately, it is usually very difficult to prove.
+
+\medskip
+
+To make the argument formal, consider any observable $O(\mathbb{Q},\mathbb{P})$ and compute its average at time $t$ over all the initial conditions compatible with some ensemble $\rho_0$:
+\begin{align} \nonumber
+    \langle O(\mathbb{Q}(t), \mathbb{P}(t)) \rangle = \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \> O(\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0), \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0)) = \span \\
+    \nonumber
+    \shortintertext{We change variables $(\mathbb{Q}(t), \mathbb{P}(t)) \to (\mathbb{Q}, \mathbb{P})$ by introducing two $\delta$\textit{s}:}  \nonumber
+    &= \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \cdot \\ \nonumber
+    &\quad\> \cdot \textcolor{Red}{\int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} \delta^{3N}(\mathbb{Q}-\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0)) \delta^{3N}(\mathbb{P} - \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0))} O(\mathbb{Q},\mathbb{P}) = \\ \nonumber
+    \shortintertext{In this way we can bring $O(\mathbb{Q}, \mathbb{P})$ outside the inner integral:} \nonumber
+    &= \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \cdot\\ \nonumber
+    &\quad \> \cdot \int_{\bm{\Gamma}} \dd[3N]{\bm{q_0}} \dd[3N]{\bm{p_0}} \rho_0(\mathbb{Q}_0, \mathbb{P}_0) \delta^{3N} (\mathbb{Q}-\mathbb{Q}(t; \mathbb{Q}_0, \mathbb{P}_0)) \> \delta^{3N}(\mathbb{P} - \mathbb{P}(t; \mathbb{Q}_0, \mathbb{P}_0)) =\\ \nonumber
+    \shortintertext{And so we have rewritten the average of $O$ in terms of the \textit{evolved} distribution $\rho(\mathbb{Q}, \mathbb{P}, t)$:} \nonumber
+    &\underset{(\ref{eqn:9})}{=}  \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \rho(\mathbb{Q}, \mathbb{P}, t)  
+    \shortintertext{For an ergodic system, in the limit $t \to \infty$ this is equivalent to using the microcanonical ensemble:}
+    \langle O(\mathbb{Q}(t), \mathbb{P}(t)) \rangle  \xrightarrow[t \to \infty]{} \int_{\bm{\Gamma}} \dd[3N]{\bm{q}} \dd[3N]{\bm{p}} O(\mathbb{Q}, \mathbb{P}) \rho_{\rm{MC}}(\mathbb{Q}, \mathbb{P}) \label{eqn:limit}  \span
+    \shortintertext{where:} \nonumber
+    \rho_{\rm{MC}} = \begin{cases}
+        \text{const} & \mathcal{E} \leq \mathcal{H}(\mathbb{Q}, \mathbb{P}) \leq \mathcal{E}+ \delta \mathcal{E}\\
+        0 & \text{otherwise}
+    \end{cases} \span
+\end{align}
+This is equivalent to saying that the time average of an observable over a single trajectory is equal to the microcanonical ensemble average, which is the argument used in \cite[Chapter 4.2]{sethna}:
+\begin{align}\label{eqn:time-averages}
+    \lim_{T \to \infty} \frac{1}{T} \int_0^T O(\mathbb{Q}(t), \mathbb{P}(t)) \dd{t} = \int_{\bm{\Gamma}} \dd{\Gamma} O(\mathbb{Q}(t), \mathbb{P}(t)) \rho_{\mathrm{MC}}(\mathbb{Q}, \mathbb{P})
+\end{align}
+
+The full proof that (\ref{eqn:limit}) and (\ref{eqn:time-averages}) follow from \textit{ergodicity} is quite involved. Here, we focus only on its last part. Namely, we suppose that:
+\begin{enumerate}
+    \item Hamilton dynamics lead, in the large time limit, to a \textit{stationary distribution} $\rho_{\mathrm{st}}$: 
+    $\displaystyle \lim_{t \to \infty} \rho(\mathbb{Q}, \mathbb{P}, t) = \rho_{\mathrm{st}}(\mathbb{Q}, \mathbb{P})$
+\end{enumerate}
+And then show that:
+\begin{enumerate}
+    \setcounter{enumi}{1}
+    \item The stationary distribution coincides with the microcanonical ensemble: $\rho_{\mathrm{st}} = \rho_{\mathrm{MC}}$
+\end{enumerate}
+This can be done by using Liouville's theorem (\ref{eqn:Liouville}), which states that the local probability density is a constant of motion:
+\begin{align*}
+    \dv{t} \rho_{\mathrm{st}}(\mathbb{Q}(t), \mathbb{P}(t)) = 0
+\end{align*}
+For a generic system, there are only $7$ possible constants of motion: the energy $H$, three components of the total momentum $\bm{P}$ and the three components of the angular momentum $\bm{L}$. So $\rho_{\mathrm{st}}$ is necessarily a function of them:
+\begin{align*}
+    \rho_{\mathrm{st}}(\mathbb{Q}, \mathbb{P}) = \mathcal{F}(H, \bm{L}, \bm{P})
+\end{align*}
+However, if our system is at rest and not rotating, $\bm{P} = \bm{0} = \bm{L}$, and so the only remaining constant is $H$:
+\begin{align*}
+    \rho_{\mathrm{st}}(\mathbb{Q}, \mathbb{P}) = \mathcal{F}(H)
+\end{align*}
+For an isolated system the energy is constant: $H(\mathbb{Q}(t), \mathbb{P}(t)) \equiv \mathcal{E}$, and thus $\rho_{\mathrm{st}} = \text{const}$ on the hypersurface $H=\mathcal{E}$, implying that:
+\begin{align*}
+    \rho_{\mathrm{st}} = \rho_{\mathrm{MC}}
+\end{align*}
+(In fact, recall that we chose $\rho_{\mathrm{MC}}$ as the uniform distribution in phase-space over the hypersurface $H=\mathcal{E}$).
+
+\section{Three kinds of entropy}
+In its classical and original interpretation, \textbf{entropy} quantifies the \textbf{irreversibility} of a process. More precisely, it is a function of state, depending on macroscopic observables of an equilibrium system. For a reversible process, the \textit{total} entropy - i.e. that of the system and anything it has interacted with - remains the same. For any irreversible transformation, however, it increases. The more the process is \q{difficult} to reverse, the more the total entropy will rise.
+
+\medskip
+
+It is not clear from this definition alone \textit{where does entropy come from}, or if it is a real \q{physical} quantity and not some mathematical abstraction.
+
+Fortunately, decades of analysis have given entropy new and clearer meanings. Boltzmann proved a connection between the thermodynamical $S$ and the amount of \textit{states} in phase-space available to a system, leading to the interpretation of entropy as some sort of \q{disorder}. Irreversibility is then merely the fact that while \q{macroscopically ordered states} are few, states of \q{maximum disorder} are the most - by an incredible margin. So, inevitably, any system will tend to explore the latter, just as an artifact of chance.
+
+\medskip
+
+An even more general interpretation of entropy comes from \textit{information theory}, where $S$ is a measure of the experimenter's ignorance about the system. Shifting from an ontological property to an epistemological one has several benefits: for example it allows to search for \textit{the most general} probability distributions compatible with some given conservation laws and experimental results. This is done by \textit{maximizing} the experimenter's ignorance - rejecting every bias except a few experimentally observable \q{truths}. Surprisingly, this \textit{MaxEnt} principle provides a variational re-derivation of all equilibrium statistical mechanics, where \textit{informational entropy} plays the role the \textit{action} had in re-deriving classical mechanics (or, with some extensions, even relativistic mechanics, QM or QFT).
+
+\medskip
+
+Informational entropy can be defined also for non-equilibrium states - but its respective variational principle does not hold anymore in general. It can be adapted to a few restricted cases - such as the flow of heat from the equator to the poles of a planet - but unfortunately not to general complex systems.
+
+\medskip
+
+Even if MaxEnt is not the desired solution to non-equilibrium dynamics, it still can be applied in a variety of situations outside statistical mechanics: for example in pattern recognition tasks, or in image reconstruction.
+
+\medskip
+
+In this section, we will start by revising the first two definitions of entropy - the one from classical thermodynamics, and that from statistical mechanics. Then we will introduce the third kind of entropy - \textit{information entropy} - and motivate its definition as the only function satisfying some reasonable requirements. We will then introduce the MaxEnt principle, and employ it to re-derive statistical mechanics, and in particular all the results we previously got for the microcanonical and canonical ensembles. We will then go even further, deriving and discussing the \textbf{grandcanonical ensemble}, in which we allow both energy and particles to flow in and out the system. 
+
+\medskip
+
+Finally, we will examine the relation linking \textit{entropy} and \textit{information} in the first place - demonstrating with Landauer's principle that even an \q{irreversible processing of information}, such as erasing a bit-sized register, \textit{increase} the entropy of the universe! %Ex.5.7
+
+\begin{enumerate}
+    \item \textbf{Thermodynamic entropy}. In classical thermodynamics, entropy is a mysterious quantity introduced to characterize the second law.
+    
+    %Function of state
+
+    The difference in entropy $S(B) - S(A)$ between two equilibrium states $A$ and $B$ is defined as:
+    \begin{align}\label{eqn:entropy-CT}
+        S(B) - S(A) = \int_A^B \left(\frac{\dd{Q}}{T} \right)_R
+    \end{align}
+    where $A$ and $B$ are connected by a reversible transformation $R$. The system is at \textbf{equilibrium} at every point on the path $A \to B$, possessing a definite temperature $T_{\mathrm{sys}}$, and exchanging an infinitesimal amount of heat $\dd{Q}$ with a thermal bath at the \textit{same} temperature $T=T_{\mathrm{sys}}$.  
+
+    The second law of thermodynamics states that the same integral, if done along any path, will lead to a result which is \textit{lower} than that of the reversible case:   
+    \begin{align}\label{eqn:second-law}
+        \int_A^B \frac{\dd{Q}}{T} \leq S(B) - S(A) 
+    \end{align}
+    $T$ is the temperature of the heat bath in thermal contact with the system during the path $A \to B$. Note that if the latter does not traverse equilibrium points, then $T_{\mathrm{sys}}$ will not be defined. 
+    (\ref{eqn:second-law}) holds as an equality if and only if the transformation $A \to B$ is reversible.
+
+    \medskip
+
+    For an isolated system, $\dd{Q} \equiv 0$, and so (\ref{eqn:second-law}) leads to:
+    \begin{align*}
+        S(B) \geq S(A)
+    \end{align*}
+    with the equality holding only for \textbf{reversible} transformations.
+    
+    Thus, an isolated system is in thermal equilibrium if and only if it has the \textbf{maximum possible entropy} compatible with the given macroscopic constraints (e.g. energy, volume, number of particles...). In this case, in fact, it cannot do any other transformation to increase the entropy. A similar argument will prove to be the key for introducing the MaxEnt principle later on.
+
+    \item \textbf{Statistical Mechanics entropy}. 
+    
+    In Statistical Mechanics we define the entropy as the logarithm of the volume of microstates in phase-space corresponding to the observed macrostate (with definite macroscopic observables), scaled by $k_B$:
+    \begin{align}
+        S(\mathcal{E}, V, N) &= k_B \ln \Omega(\mathcal{E}, V, N) \label{eqn:S-SM}
+        \shortintertext{where:} \nonumber
+        \Omega(\mathcal{E}, V, N) &= \int_{\bm{\Gamma}} \dd{\Gamma} \delta(H(\mathbb{Q}, \mathbb{P}; N, V) - \mathcal{E})
+    \end{align}
+    The definition (\ref{eqn:S-SM}) is compatible with (\ref{eqn:entropy-CT}) because for both of them the following holds:
+    \begin{align*}
+        \dd{S} = \frac{\dd{\mathcal{E}}}{T} + \frac{P}{T} \dd{V} - \frac{\mu}{T} \dd{N}
+    \end{align*}
+    This means that the derivative of $S$ with respect to $\mathcal{E}$ at constant $V$ and $N$ is $1/T$, and similarly:
+    \begin{align*}
+        \left(\dv{S}{\mathcal{E}}\right)_{V,N} = \frac{1}{T}; \quad \left(\dv{S}{V}\right)_{\mathcal{E},N} = \frac{P}{T}; \quad \left(\dv{S}{N}\right)_{\mathcal{E},V} = -\frac{\mu}{T} 
+    \end{align*}
+    Furthermore, for an isolated system the only possible transformation (apart from chemical reactions, or nuclear decays) is a \textbf{free expansion}, where $V \to V' > V$.
+    The initial entropy is $S_{\mathrm{in}} = S(\mathcal{E}, V, N)$, and at the end it will be $S_{\mathrm{fin}}(\mathcal{E}, V', N)$. Note that:
+    \begin{align*}
+        \Omega(\mathcal{E}, V', N) &= \int_{\underbrace{\scriptstyle V' \times \cdots \times V'}_{N \text{ times}} } \dd{\mathbb{Q}} \int_{\mathbb{R}^{3N}} \dd{\mathbb{P}}\> \delta(H(\mathbb{Q}, \mathbb{P}; N) - \mathcal{E}) \\
+        &> \int_{\underbrace{\scriptstyle \textcolor{Red}{V} \times \cdots \times \textcolor{Red}{V}}_{N \text{ times}} } \dd{\mathbb{Q}} \int_{\mathbb{R}^{3N}} \dd{\mathbb{P}}\> \delta(H(\mathbb{Q}, \mathbb{P}; N) - \mathcal{E})
+    \end{align*}    
+    since the integration domain for the configuration space is \textit{larger} after the expansion ($V' > V$).  
+    
+    Taking the logarithm of both sides, we note:
+    \begin{align*}
+        S_{\mathrm{final}} > S_{\mathrm{initial}}
+    \end{align*}
+    which is exactly the result we would have obtained from classical thermodynamics. In other words, the entropy defined in (\ref{eqn:S-SM}) is compatible with the second law of thermodynamics.
+
+    \item \textbf{Information entropy}.  
+    %Elements of Information Theory, second edition, Thomas M. Cover, Joy A. THomas, Wiley ed. (very easy to follow)
+    %Article cited
+    A third definition of entropy comes from \textbf{information theory}.
+
+    Consider a discrete event space $E = \{i\}_{i=1,\dots, N}$, with probabilities $p_i \geq 0$, such that $\sum_i p_i = 1$.
+
+    We want to quantify the amount of information $I(p_i)$ acquired by the observation of event $i$ occurring. 
+
+    For example, if $p_i=1$, i.e. the event occurs with certainty, we will not gain any new information by its occurrence: we already knew that it would occur! In other words, if now the sky is free of clouds and it is a beautiful sunny day, the fact that it will be still sunny in $15$ minutes is almost sure, and it will not be surprising when it indeed happens. On the other hand, we would not expect that in $15$ minutes it will start to rain. Such a unlikely scenario, if it occurs, will give \textit{a lot} of new information to us: for example that we were ignoring little dark clouds on the horizon, or did not properly account of the air currents.  
+
+    Equivalently, we can quantify the \textit{gain in information} by measuring the minimum length of a message needed to precisely communicate to someone that a certain event has occurred. To \textit{optimize} the sending of data, we can in fact create a code such that the shorter combinations of characters refer to likely events, while the longer ones to \textit{unlikely} events. In this way, on average, we will have to send \textit{shorter} messages. Then, in this scenario, a likely event holds \textit{less information} becaus e it can be coded with \textit{shorter messages} (assuming that the code we are using for transmission is the \textit{most efficient} possible).
+
+    \medskip
+
+    \begin{subequations}
+        In other words, $I(p_i)$ encodes the amount of \textit{surprise} held by event $i$ occurring. Then, clearly a \textit{gain} in information must be non-negative:
+        \begin{align}
+            I(p) \geq 0 \label{eqn:ip1}
+        \end{align} 
+        It will be minimum ($0$) for an event that is completely expected:
+        \begin{align}
+            I(p=1) = 0 \label{eqn:ip2}
+        \end{align}
+        And it will be higher the rarer the event:
+        \begin{align} \label{eqn:ip3}
+            I(p) \text{ is a decreasing function of } p
+        \end{align}
+        Furthermore, if we have two independent events occurring with probability $p_1$ and $p_2$, it is reasonable that the gain of information obtained by both of them happening to be just the \textit{sum} of the information gains of each of them happening separately:
+        \begin{align}
+            I(\mathbb{P}[1 \land 2]) = I(p_1 \cdot p_2) = I(p_1) + I(p_2) \label{eqn:ip4}
+        \end{align} 
+        Assuming $I(p)$ to be differentiable, differentiating (\ref{eqn:ip4}) with respect to $p_2$ leads to:
+        \begin{align*}
+            p_1 \dv{x} I(x) \Big|_{x = p_1 p_2} = \dv{I}{p_2} (p_2)
+        \shortintertext{If we now set $p_2=1$ and $p_1 = x$ we get:}
+            x \dv{x} I(x) = I'(1) \Leftrightarrow I(x) = I'(1) \ln x + c
+        \end{align*}
+        By (\ref{eqn:ip2}) $I(1) = 0$, and so the integration constant $c$ must be $0$. From (\ref{eqn:ip1}) we also find that $I'(1) < 0$.
+
+        \medskip
+
+        We now define the \textbf{information entropy} of an ensemble (i.e. a pdf) as the \textbf{average} of $I(p)$. Suppose the set $E$ contains exactly $K$ elements (i.e. $|E| = K$), then:
+        \begin{align} \label{eqn:S-info}
+            S_I (p_1, \dots, p_k) = \langle I(p_1) \rangle = - |I'(1)| \sum_{i=1}^k p_i \ln p_i
+        \end{align}  
+        We will show that in order for (\ref{eqn:S-info}) to be compatible with (\ref{eqn:entropy-CT}) and (\ref{eqn:S-SM}) we have to choose:
+        \begin{align*}
+            I'(1) = - k_B
+        \end{align*}
+        Thus (\ref{eqn:S-info}) becomes: %Re-watch registration for this part
+        \begin{align}\label{eqn:S-info-discrete}
+            S_I (p_1, \dots, p_k) = \langle I(p_i) \rangle = - k_B \sum_{i=1}^k p_i \ln p_i
+        \end{align}
+        Or, in the continuum case:
+        \begin{align} \label{eqn:S-info-cont}
+            S_I[\rho] = - k_B \int_{\bm{\Gamma}} \dd{\Gamma} \rho(\mathbb{Q}, \mathbb{P}) \ln \rho(\mathbb{Q}, \mathbb{P})
+        \end{align}
+        Since $\lim_{x \to 0} x\ln x = 0$, we define, by continuity, $0 \ln 0 = 0$.
+    \end{subequations}  
+\end{enumerate}
+
+We now show that (\ref{eqn:S-info-cont}) agrees with the Statistical Mechanics entropy (\ref{eqn:S-SM}).
+\begin{itemize}
+    \item \textbf{Microcanonical case}. The microcanonical ensemble is given by:
+    \begin{align*}
+        \rho_{\mathrm{MC}}(\mathbb{Q}, \mathbb{P}) = \frac{\bb{1}_{[\mathcal{E}, \mathcal{E} + \delta \mathcal{E}]} (H(\mathbb{Q}, \mathbb{P}))}{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}
+    \end{align*} 
+    The information entropy is then:
+    \begin{align*}
+        S_I[\rho_{\mathrm{MC}}] &= -k_B \int_{\bm{\Gamma}} \dd{\Gamma} \frac{\bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}  [\cancel{\ln \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)} - \ln \int_{\bm{\Gamma} }\dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)] =\\
+        \shortintertext{Note that $\bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]} \ln \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}$ is either $1 \log 1 = 0$ if $(\mathbb{Q}, \mathbb{P})$ is inside the energy shell, or $0 \log 0 = 0$ otherwise. The logarithm of the integral does not depend on the integration variables, and so can be factored out:}
+        &= k_B \left[\ln \int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H) \right]
+        \frac{\cancel{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}}{\cancel{\int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}}  \\ 
+        &= k_B \ln\underbrace{ \int_{\bm{\Gamma}} \dd{\Gamma} \bb{1}_{[\mathcal{E}, \mathcal{E}+ \delta \mathcal{E}]}(H)}_{\Omega(\mathcal{E}, V, N) \delta \mathcal{E}} = k_B \ln \Omega(\mathcal{E}, V, N) + \underbrace{k_B \ln \delta \mathcal{E}}_{\mathclap{\text{Irrelevant constant}}}
+    \end{align*}
+    leading to (\ref{eqn:S-SM}) up to a constant, which is irrelevant, as only differences in entropy have physical meaning.
+    \item \textbf{Canonical case}. The canonical ensemble is given by:
+    \begin{align*}
+        \rho_c(\mathbb{Q}, \mathbb{P}) = \frac{1}{Z(T, V, N)} e^{-\beta H(\mathbb{Q}, \mathbb{P})} \quad Z(T,V,N) = \int_{\bm{\Gamma}} \dd{\Gamma} e^{- \beta H(\mathbb{Q}, \mathbb{P})} = e^{-\beta A(T, V, N)}
+    \end{align*} 
+    where $A(T,V,N)$ is the Helmholtz \textbf{free energy}.
+    
+    The corresponding information entropy is then:
+    \begin{align*}
+        S_I[\rho_c] &= -k_B \int_{\bm{\Gamma}} \rho_c (\mathbb{Q}, \mathbb{P}) \ln \rho_c(\mathbb{Q}, \mathbb{P}) \dd{\Gamma} = \\
+        &= -k_B \int_{\bm{\Gamma}} \dd{\Gamma} \rho_c [-\beta H + \beta A] = \frac{1}{T} \langle H \rangle_c - \frac{1}{T} A 
+    \end{align*}
+    Recall that:
+    \begin{align*}
+        A = \langle H \rangle_c - T S_c \Rightarrow 
+    \end{align*}
+    and substituting above we obtain:
+    \begin{align*}
+        S_I(\rho_c) = S_c
+    \end{align*}
+    where:
+    \begin{align*}
+        S_c(T,V,N) = - \pdv{A}{T}(T,V,N)
+    \end{align*}
+\end{itemize}
+What is the max $S_I(p_1, \dots, p_k)$, given $\sum_i p_i = 1$?
+
+%Add references
+
+\end{document}

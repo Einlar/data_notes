@@ -1,0 +1,77 @@
+\documentclass[border=4pt]{standalone}
+
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{mathdots}
+\usepackage{yhmath}
+\usepackage{cancel}
+\usepackage{color}
+\usepackage{siunitx}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{tabularx}
+\usepackage{booktabs}
+\usetikzlibrary{fadings}
+\usetikzlibrary{patterns}
+
+
+\begin{document}
+
+
+
+% Pattern Info
+ 
+\tikzset{
+pattern size/.store in=\mcSize, 
+pattern size = 5pt,
+pattern thickness/.store in=\mcThickness, 
+pattern thickness = 0.3pt,
+pattern radius/.store in=\mcRadius, 
+pattern radius = 1pt}
+\makeatletter
+\pgfutil@ifundefined{pgf@pattern@name@_km1rtlkwk}{
+\pgfdeclarepatternformonly[\mcThickness,\mcSize]{_km1rtlkwk}
+{\pgfqpoint{0pt}{0pt}}
+{\pgfpoint{\mcSize+\mcThickness}{\mcSize+\mcThickness}}
+{\pgfpoint{\mcSize}{\mcSize}}
+{
+\pgfsetcolor{\tikz@pattern@color}
+\pgfsetlinewidth{\mcThickness}
+\pgfpathmoveto{\pgfqpoint{0pt}{0pt}}
+\pgfpathlineto{\pgfpoint{\mcSize+\mcThickness}{\mcSize+\mcThickness}}
+\pgfusepath{stroke}
+}}
+\makeatother
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
+
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,300); %set diagram left start at 0, and has height of 300
+
+%Shape: Axis 2D [id:dp4882095180995458] 
+\draw  (86,238) -- (357.5,238)(109.5,38) -- (109.5,261) (350.5,233) -- (357.5,238) -- (350.5,243) (104.5,45) -- (109.5,38) -- (114.5,45) (139.5,233) -- (139.5,243)(169.5,233) -- (169.5,243)(199.5,233) -- (199.5,243)(229.5,233) -- (229.5,243)(259.5,233) -- (259.5,243)(289.5,233) -- (289.5,243)(319.5,233) -- (319.5,243)(104.5,208) -- (114.5,208)(104.5,178) -- (114.5,178)(104.5,148) -- (114.5,148)(104.5,118) -- (114.5,118)(104.5,88) -- (114.5,88)(104.5,58) -- (114.5,58) ;
+\draw   ;
+%Curve Lines [id:da3826391261342994] 
+\draw [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ][line width=2.25]    (151.5,129) .. controls (215.5,154) and (224.5,158) .. (260.5,219) ;
+%Curve Lines [id:da36143270025553975] 
+\draw [color={rgb, 255:red, 208; green, 2; blue, 27 }  ,draw opacity=1 ][line width=2.25]    (155.5,74) .. controls (236.5,97) and (294.5,146) .. (316.5,201) ;
+%Straight Lines [id:da2517758627737692] 
+\draw [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ]   (155.5,74) -- (151.5,126) ;
+%Straight Lines [id:da9743801248699686] 
+\draw [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ]   (316.5,201) -- (260.5,219) ;
+%Shape: Arc [id:dp22366194327022648] 
+\draw  [draw opacity=0][pattern=_km1rtlkwk,pattern size=6pt,pattern thickness=0.75pt,pattern radius=0pt, pattern color={rgb, 255:red, 208; green, 2; blue, 27}] (139.57,112.53) .. controls (138.11,105.76) and (138.61,99.89) .. (141.38,95.36) .. controls (152.82,76.65) and (198.65,88.12) .. (243.73,120.98) .. controls (288.82,153.85) and (316.09,195.66) .. (304.65,214.38) .. controls (299.63,222.58) and (288.01,224.99) .. (272.74,222.33) -- (223.01,154.87) -- cycle ; \draw  [color={rgb, 255:red, 255; green, 255; blue, 255 }  ,draw opacity=1 ] (139.57,112.53) .. controls (138.11,105.76) and (138.61,99.89) .. (141.38,95.36) .. controls (152.82,76.65) and (198.65,88.12) .. (243.73,120.98) .. controls (288.82,153.85) and (316.09,195.66) .. (304.65,214.38) .. controls (299.63,222.58) and (288.01,224.99) .. (272.74,222.33) ;
+
+% Text Node
+\draw (344,257) node    {$\mathbb{Q} \ \in \mathbb{R}^{3N}$};
+% Text Node
+\draw (71,68) node    {$\mathbb{P} \ \in \mathbb{R}^{3N}$};
+% Text Node
+\draw (239,215) node    {$\textcolor[rgb]{0.82,0.01,0.11}{\mathcal{E}}$};
+% Text Node
+\draw (338,215) node    {$\textcolor[rgb]{0.82,0.01,0.11}{\mathcal{E}+\delta \mathcal{E}}$};
+
+
+\end{tikzpicture}
+\end{document}
