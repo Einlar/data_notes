@@ -440,9 +440,10 @@ So, in any finite lattice we won't be able to see any phase-transition. Converse
         m = \tanh h = \frac{t + 1/t}{t-1/t} = \dfrac{\frac{t^2-1}{\bcancel{t}}}{\frac{t^2+1}{\bcancel{t}}} \Rightarrow m(t^2 +1) = t^2 - 1 \\ \Rightarrow t^2 (m-1) = -(m+1) \Rightarrow t= \pm \sqrt{\frac{1+m}{1-m} } \span
     \end{align*}
     As $t = e^h > 0$, only the positive solution is acceptable, leading to:
-    \begin{align*}
+    \begin{align}
+        \label{eqn:inv_tanh}
         e^h = \sqrt{\frac{1+m}{1-h}} \Rightarrow h = \ln \sqrt{\frac{1+m}{1-h} } = \frac{1}{2} \ln \frac{1+m}{1-m}  
-    \end{align*}
+    \end{align}
     Substituting back:
     \begin{align}\label{eqn:hm}
         h = \beta b = \tanh^{-1} m = \frac{1}{2} \ln \frac{1+m}{1-m} \qquad -1 < m < +1 

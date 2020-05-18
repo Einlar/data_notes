@@ -14,3 +14,9 @@
 *.fdb*
 *.fls
 *.ipynb
+*.bbl
+*.bcf
+*.blg
+*.xml
+*.gz
+*.dvi

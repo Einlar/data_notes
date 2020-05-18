@@ -218,21 +218,169 @@ where we defined a \textit{local entropy} $s_0$ as:
     s_0(m) \equiv \frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2}    
 \end{align*}
 Substituting these results (\ref{eqn:H0avg}) and (\ref{eqn:rho0-ent}) back in (\ref{eqn:ising-variational}) we arrive to:
-\begin{align*}
+\begin{align} \label{eqn:var-free-energy}
     \beta F_V(\bm{m}, \bm{h}) &= \beta H(\bm{m}) + \sum_x s_0(m_x) =\\
-    &= -K \sum_{\langle x,y \rangle} m_x m_y - \sum_x h_x m_x + \sum_x \left[\frac{1+m_x}{2} \ln \frac{1+m_x}{2} + \frac{1-m_x}{2} \ln \frac{1-m_x}{2}    \right]
-\end{align*}
+    &= -K \sum_{\langle x,y \rangle} m_x m_y - \sum_x h_x m_x + \sum_x \left[\frac{1+m_x}{2} \ln \frac{1+m_x}{2} + \frac{1-m_x}{2} \ln \frac{1-m_x}{2}    \right] \nonumber
+\end{align}
 where the first line holds for a generic Hamiltonian $\mathcal{H}(\bm{\sigma})$, and the second is specific for the Ising Model we are studying.
 
 \medskip
 
 Then, we minimize $F_V(\bm{m}, \bm{h})$ with respect to $\bm{m}$, denoting the minimum as $F_V(\bm{M}, \bm{h})$:
-\begin{align*}
-    \pdv{m_x} \beta F_V \Big|_{\bm{m} = \bm{M}} = 0 \Leftrightarrow M_x = \tanh \left[K \sum_{y \in \langle y, x\rangle} M_y + h_x\right]
-\end{align*} %Complete the computation
+\begin{align}
+    \label{eqn:minimize}
+    \pdv{m_x} \beta F_V \Big|_{\bm{m} = \bm{M}} \overset{!}{=}  0 \span \\ \nonumber
+    0 &\overset{!}{=} \pdv{m_x} \left[-K \sum_{\langle x,y \rangle} m_x m_y - \sum_x h_x m_x + \sum_x \left(\frac{1+m_x}{2} \ln \frac{1+m_x}{2} + \frac{1-m_x}{2} \ln \frac{1-m_x}{2}    \right) \right]_{\quad\mathclap{\bm{m} = \bm{M}}} =\\ \nonumber
+    &=-K\sum_{y \in \langle x,y \rangle} M_y - h_x + \frac{1}{2}\ln \frac{1+M_x}{2} + \cancel{\frac{1+M_x}{2} \frac{2}{1+M_x}\frac{1}{2}} - \frac{1}{2} \ln \frac{1-M_x}{2} - \cancel{\frac{1-M_x}{2} \frac{2}{1-M_x}\frac{1}{2}} =\\ \nonumber
+    &= -K\sum_{y \in \langle x,y \rangle} M_y -h_x + \frac{1}{2} \ln\left(\frac{1+M_x}{\cancel{2}} \frac{\cancel{2}}{1-M_x}  \right) 
+\end{align} 
 where the sum is over all nodes $y$ neighbouring $x$, i.e. the ones included in some pair of neighbours $\langle y,x \rangle$ involving $x$.
 
+Using the identity (\ref{eqn:inv_tanh}, pag. \pageref{eqn:inv_tanh})
+\begin{align*}
+    \tanh^{-1} M_x = \frac{1}{2} \ln \frac{1+M_x}{1-M_x}  
+\end{align*}
+and rearranging leads to:
+\begin{align}\label{eqn:variational-sol}
+    M_x(\bm{h}, K) = \tanh \left[K \sum_{y \in \langle y, x\rangle} M_y + h_x\right]
+\end{align}
+
 \subsection{Physical meaning of the variational parameters $M_x$}
+
+It would be interesting to associate some physical meaning to the variational solution, and in particular understand what the $M_x$ represent. 
+
+\medskip
+
+So, we found that:
+\begin{align*}
+    \min_{\bm{m}} F_V(\bm{m}, \bm{h}) \equiv F_V(\bm{M}, \bm{h})
+\end{align*}
+with the $\bm{M}$ given by solving the $N$ equations (\ref{eqn:variational-sol}), one for each node. 
+
+\medskip
+
+The \textit{magnetization} given by the variational free energy is:
+\begin{align} \nonumber
+    \langle \sigma_x \rangle_V &\underset{\mathclap{(\ref{eqn:magnetization})}}{=} -\pdv{h_x} [\beta F_V(\bm{M}, \bm{h})] = -\beta \Bigg[\underbrace{\sum_y {\pdv{F_V}{m_y}}(\bm{m}, \bm{h})}_{0\> (\ref{eqn:minimize})} \pdv{m_y}{h_x} - \underbrace{{\pdv{F_V}{h_x}}(\bm{m}, \bm{h})}_{M_x \> (\ref{eqn:var-free-energy})}\Bigg]_{\bm{m} = \bm{M}} =\\
+    &= M_x \label{eqn:MX-meaning}
+\end{align} 
+Note that the variational free energy $F_V$ \textbf{is not} the \textit{ansatz free energy} $F_0$, and so $\langle \sigma_x \rangle_V$ and $\langle \sigma_x \rangle_0$ are different averages, and (\ref{eqn:MX-meaning}) should not be confused with (\ref{eqn:local-average}). 
+
+\medskip
+
+So, $M_X$ is the best estimate of the \textit{true magnetization} $\sigma_x$, as it is obtained with the $F_V$ \textit{closest} to the real $F$.
+
+\subsection{Uniform case}
+Suppose the magnetic field is uniform $h_x \equiv h$. In this case, the system is \textbf{translationally invariant}. So, it is reasonable to consider the \textit{ansatz} where also all the local magnetizations are the same: $m_x \equiv m$, and search for a single value of $m$.
+
+\medskip
+
+Given these assumptions, (\ref{eqn:var-free-energy}) becomes:
+\begin{align*}
+    \beta F_V(m, h) &= -K m^2 \sum_{\langle x,y \rangle} 1 - mh\sum_x1 + \left[\frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2} \right] \sum_x 1 
+\end{align*}
+Then $\sum_x 1$ is just the number of nodes $N$, and $\sum_{\langle x,y \rangle} 1$ is the number of possible pairs, which is $N d$ for a $d$-dimensional cubic lattice (each node contributes with one pair for every possible \textit{direction}). Dividing by $N$:
+\begin{align}\label{eqn:FV-uniform}
+    \beta \frac{F_V(m,h)}{h} = - K d m^2 + \frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2} - hm   
+\end{align}
+
+The equation for $M_X$ (\ref{eqn:variational-sol}) becomes:
+\begin{align*}
+    M(h, K) = \tanh \left[KM \sum_{y \in \langle y, x\rangle} 1 + h\right]
+\end{align*}
+The sum is over all \textit{neighbours} of $x$, which are $2d$ for a $d$-dimensional cubic lattice ($2$ for every \textit{direction}), leading to:
+\begin{align}
+    \label{eqn:uniform-variational-eq}
+    M(h,K) = \tanh(2dKM + h)
+\end{align} 
+
+Let's start with the case of no external field $h=0$. \marginpar{Case 1. $h=0$}
+In this case, the variational free energy (\ref{eqn:FV-uniform}) is an \textbf{even}  function of $m$: 
+\begin{align*}
+    F_V(m,0) = F_V(-m,0)
+\end{align*}
+We can then study the solutions of (\ref{eqn:uniform-variational-eq}):
+\begin{align}\label{eqn:h0case}
+    \textcolor{Blue}{M} = \tanh(2dK\textcolor{Blue}{M}) \qquad M(K,0) \equiv M(K)
+\end{align}
+Clearly $M=0$ is always a solution. Depending on $2dK$, there can be two more solutions, as can be seen by plotting each side and looking for intersections (\ref{fig:uniformh0}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{uniformh0.png}
+    \caption{Solutions of (\ref{eqn:uniform-variational-eq}) are intersections of the two curves.}
+    \label{fig:uniformh0}
+\end{figure}
+
+The plots in (\ref{fig:uniformh0}) can be obtained by expanding $\tanh x$ in Taylor series around $x = 0$. The first three derivatives are:
+\begin{align*}
+    \dv{x} \tanh x &= 1- \tanh^2 x\\
+    \dv[2]{x} \tanh x &= -2 \tanh x(1-\tanh^2 x)\\
+    \dv[3]{x} \tanh x &= -2(1-\tanh^2 x ) + 4\tanh^2 x (1-\tanh^2 x)
+\end{align*}
+So:
+\begin{align*}
+    \tanh x &= \tanh 0 +x \dv{x}\tanh x\Big|_{x=0} + \frac{x^2}{2} \dv[2]{x} \tanh x\Big|_{x=0} + \frac{x^3}{3!}\dv[3]{x} \tanh x\Big|_{x=0} + \dots = \\
+    &= x -\frac{2x^3}{3\cdot 2 \cdot 1} + O(x^5) = x -\frac{x^3}{3} + O(x^5) 
+\end{align*}
+For small $x$, $\tanh x$ is linear, and in particular $\tanh(2d K M)$ is a line passing through the origin with slope $2dK$. It that slope is \textbf{less}  than te one of $y=M$, i.e. $1$, then the only intersection is at $M=0$ (left of fig. \ref{fig:uniformh0}). However, if $2dK > 1$, then there will be two other solutions (right of fig. \ref{fig:uniformh0}). 
+
+In summary:
+\begin{itemize}
+    \item $2dK < 1 \Rightarrow K < K_c \equiv 1/2d$, (\ref{eqn:h0case}) has only one solution $M=0$.
+    \item If $2dK > 1 \Rightarrow K > K_c$, there are $3$ solutions: $M=0, \pm M(K)$.
+\end{itemize}
+
+In the case $K > K_c$, we need to understand which of the three solution leads to the absolute minimum of $F_V$. So, let's proceed by expanding $\beta F_V(m,0)/N \equiv f(m)$ (\ref{eqn:FV-uniform}) for small $m$. The first four coefficients are:
+\begin{align*}
+    f(0) &= \frac{1}{2} \ln \frac{1}{2} + \frac{1}{2} \ln \frac{1}{2} = -\frac{1}{2} \ln 2 - \frac{1}{2}\ln 2 = -\ln 2\\
+    f'(0) &= -2 K d m + \cancel{\frac{1}{2}\ln \frac{1+m}{2}} + \bcancel{\frac{1}{2}} -\cancel{\frac{1}{2}\ln \frac{1-m}{2}} -\bcancel{\frac{1}{2}} \Big|_{m=0} = 0\\
+    f''(0) &= -2Kd +\frac{1}{4}\frac{2}{1+m} +\frac{1}{4}\frac{2}{1-m}\Big|_{m=0} = 1-2Kd    \\
+    f^{(3)}(0) &= -\frac{1}{2(1+m)^2} + \frac{1}{2(1-m)^2} \Big|_{m=0} = 0  \\
+    f^{(4)}(0) &= -\frac{1}{2}\frac{-2}{(1+m)^3} + \frac{1}{2}(-2)\frac{-1}{(1-m)^3} \Big|_{m=0} = 2    
+\end{align*}
+Clearly all odd terms vanish because $F_V(m,0)$ is \textbf{even}. Then: 
+\begin{align*}
+    \frac{\beta F_V(m, h=0)}{N} &= f(0) + mf'(0) + \frac{m^2}{2}f''(0) + \frac{m^3}{3!}f^{(3)}(0) + \frac{m^4}{4!}f^{(4)}(0) + \dots =\\
+    &= -\ln 2 +\hlc{Yellow}{\frac{1-2Kd}{2}} m^2  + \frac{m^4}{12} + O(m^6) 
+\end{align*}
+Let's focus on the highlighted quadratic term. We distinguish three cases:
+
+\begin{enumerate}
+    \item When $\textcolor{Blue}{2Kd < 1}$ ($K < K_c$) the coefficient its positive, meaning that, for $x \sim 0$, $F_V$ behaves like a convex parabola (left of fig. \ref{fig:variational_cases}). As $K = \beta J = J/k_B T$, this holds for $T > T_c = 2d J/k_B$, where $T_c$ is called the system's \textbf{critical temperature}. 
+
+    Note how, in this case, the variational free energy has a single global minimum at $m=0$.
+    \item Now, if we let $\textcolor{Blue}{2Kd = 1}$ ($K=K_c = 1/2d$, or $T=T_c = 2dJ/k_B$), then the quadratic coefficient vanishes, and for $m \sim 0$ the variational free energy has the shape of a \textit{quartic} ($m^4$), meaning that it is close to $0$ and \q{very flat} for $m \to 0$. Still, there is only one global minimum at $m=0$.
+    \item However, if $\textcolor{Blue}{2Kd > 1}$, then $F_V$ is like a \textbf{concave} parabola near the origin. So $m=0$ becomes a local maximum, and $m = \pm M(K)$ are two equivalent local minima. 
+\end{enumerate}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{variational_cases.png}
+    \caption{}
+    \label{fig:variational_cases}
+\end{figure}
+
+Thus, depending on the \textbf{temperature}, the system's behaviour changes \textit{fundamentally}.  
+
+\medskip
+
+Once we have found the solution $M$ for the minimum, the \textbf{best estimate} of the exact \textit{free energy} $\beta F$ is given by \ref{eqn:FV-uniform} evaluated at $m=M$ and $h=0$:
+\begin{align*}
+    \beta \frac{F_V(M,H,0)}{N} = -K d M + \frac{1+M}{2} \ln \frac{1+M}{2} + \frac{1-M}{2} \ln \frac{1-M}{2}     
+\end{align*}
+
+\subsection{Physical meaning of $M(K)$}
+When $T < T_c$, we found that the free energy is best approximated by a function with two local minima at $\pm M(K)$ - which we have interpreted as estimates of the system's \textbf{magnetization}. So, this mechanism could explain the experimentally observed phenomenon of \textbf{spontaneous magnetization}.
+
+\medskip
+
+Explicitly, we defined the spontaneous magnetization $m_S$ (\ref{eqn:break1}) as:
+\begin{align}\label{eqn:ms}
+    \lim_{h \downarrow 0} \lim_{N \uparrow \infty} \pdv{h} (\beta F) = \lim_{h \downarrow } \langle \frac{\sum_x \sigma_x}{N}  \rangle = m_s
+\end{align}
+
+%TODO Second part of Lecture 21
 
 
 \end{document}
