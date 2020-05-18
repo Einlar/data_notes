@@ -1,5 +1,3 @@
-%&latex
-%
 \providecommand{\main}{../..}
 \documentclass[../../main.tex]{subfiles}
 
@@ -210,7 +208,8 @@ Clearly, we can also consider the limits \textit{from the other direction}, i.e.
     \lim_{h \downarrow 0^+} m(K,h) = \textcolor{Red}{-} \lim_{h \uparrow 0^-} m(K,h)
 \end{align*} 
 
-For the Ising Model in $d=1$, $m(T) = 0$. In fact, in computing $m$ in (\ref{eqn:m-pbc}) we first considered the thermodynamic limit $L \to \infty$ for the free energy (\ref{eqn:f-limit}) with $h \neq 0$. Then, taking $h \to 0$ (as already observed), leads to $m = 0$. So, unfortunately, the $d=1$ Ising Model does not suffice to capture the effect of spontaneous magnetization, even when spin-spin interactions are considered. 
+\label{par:no-phase-transition}
+For the Ising Model in $d=1$, $m(T) = 0$. In fact, in computing $m$ in (\ref{eqn:m-pbc}) we first considered the thermodynamic limit $L \to \infty$ for the free energy (\ref{eqn:f-limit}) with $h \neq 0$. Then, taking $h \to 0$ (as already observed), leads to $m = 0$. So,\marginpar{No phase-transitions in $d=1$} unfortunately, the $d=1$ Ising Model \textbf{does not} suffice to capture the effect of spontaneous magnetization (and thus of a phase-transition), even when spin-spin interactions are considered. 
 
 \medskip
 
@@ -239,7 +238,7 @@ To observe a phase-transition, we need to find where the free energy $f(K,h)$ is
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\textwidth]{\main/Images/image021.png}
-    \caption{The analogue of the magnetization $m$ in the lattice gas is the \textbf{density} $\rho = v^{-1} = \langle N \rangle /V = (1+m(T))/2$. \label{fig:lattice-critical}} %Mathematically derive the shift and rotation of that curve
+    \caption{The analogue of the magnetization $m$ in the lattice gas is the \textbf{density} $\rho = v^{-1} = \langle N \rangle /V = (1+m(T))/2$. \label{fig:lattice-critical}} %TODO Mathematically derive the shift and rotation of that curve
 \end{figure}
 
 Consider the lattice gas model,\marginpar{\danger This part is still under revision!} with a fraction $\rho$ of occupied cells. Suppose we want to keep $\langle N \rangle$ fixed. This can be done by changing the chemical potential, which is the conjugate variable to $N$, and in the lattice gas model takes the role the external magnetic field had in the ferromagnetic Ising Model (in fact the magnetic field $b$ is a function of $\ln z$, which contains $\mu$).
@@ -284,11 +283,11 @@ $T_\rho$ is defined as the temperature at which the red dashed line intercepts t
 \end{figure}
 
 Spinoidal decomposition: try to enter in the unphysical region by rapidly cooling the gas. 
-
+%TODO complete lattice gas analogy and results, explain spinoidal decomposition
 
 \medskip
 
-%Video part 2
+%Lecture 20 B
 So we have found that the both the non-interacting case and the $d=1$ Ising Model do not present any kind of phase transition. To proceed, we need to considerate a higher dimensional case. One possible way is through numerical simulations, or by considering the exact solution of the $d=2$ case, for which the critical temperature turns out to be:
 \begin{align*}
     T_c = \frac{2 \epsilon_0 / k_B}{\ln (1 + \sqrt{2})} 
@@ -309,7 +308,7 @@ The magnetization is $0$ above $T_c$, and for $T < T_c$ is given by:
 \begin{align*}
     m(T) = \left[1-\frac{1}{\sinh^4(2K)} \right]^{1/8} \theta(T_c-T) \propto \theta(T_c - T) (T_c - T)^{1/8}
 \end{align*}
-The exponent $1/8$ is also called the $\beta$ exponent (not to be confused with $1/k_B T$). We will study this kind of \textit{power laws} for criticality in a later chapter. They are of particular importance because of their \textbf{universality} - i.e. very different systems sharing certain fundamental symmetries have the same behaviour when approaching $T_c$. (As anticipated, criticality is important to model complex systems). 
+The exponent $1/8$ is also called the $\beta$ exponent (not to be confused with $1/k_B T$). We will study this kind of \textit{power laws} for criticality in a later chapter. They are of particular importance because of their \textbf{universality} - i.e. very different systems sharing certain fundamental symmetries have the same behaviour when approaching $T_c$. (As anticipated, criticality is important to model complex systems). %TODO Complete Onsager's exact solution discussion, add references
 
 \medskip
 
@@ -318,7 +317,6 @@ No rigorous \textit{exact} result is known for the case $h \neq 0$.
 \medskip
 
 Another possibility to go on is to study low/high temperatures expansion of the Ising Model. 
-
 
 
 \subsection{Low temperature expansion}

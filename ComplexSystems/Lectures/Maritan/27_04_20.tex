@@ -281,7 +281,7 @@ Given these assumptions, (\ref{eqn:var-free-energy}) becomes:
 \end{align*}
 Then $\sum_x 1$ is just the number of nodes $N$, and $\sum_{\langle x,y \rangle} 1$ is the number of possible pairs, which is $N d$ for a $d$-dimensional cubic lattice (each node contributes with one pair for every possible \textit{direction}). Dividing by $N$:
 \begin{align}\label{eqn:FV-uniform}
-    \beta \frac{F_V(m,h)}{h} = - K d m^2 + \frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2} - hm   
+    \beta \frac{F_V(m,K,h)}{N} = - K d m^2 + \frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2} - hm   
 \end{align}
 
 The equation for $M_X$ (\ref{eqn:variational-sol}) becomes:
@@ -294,6 +294,7 @@ The sum is over all \textit{neighbours} of $x$, which are $2d$ for a $d$-dimensi
     M(h,K) = \tanh(2dKM + h)
 \end{align} 
 
+\subsubsection{A. No external field}
 Let's start with the case of no external field $h=0$. \marginpar{Case 1. $h=0$}
 In this case, the variational free energy (\ref{eqn:FV-uniform}) is an \textbf{even}  function of $m$: 
 \begin{align*}
@@ -319,10 +320,11 @@ The plots in (\ref{fig:uniformh0}) can be obtained by expanding $\tanh x$ in Tay
     \dv[3]{x} \tanh x &= -2(1-\tanh^2 x ) + 4\tanh^2 x (1-\tanh^2 x)
 \end{align*}
 So:
-\begin{align*}
+\begin{align}\nonumber
     \tanh x &= \tanh 0 +x \dv{x}\tanh x\Big|_{x=0} + \frac{x^2}{2} \dv[2]{x} \tanh x\Big|_{x=0} + \frac{x^3}{3!}\dv[3]{x} \tanh x\Big|_{x=0} + \dots = \\
     &= x -\frac{2x^3}{3\cdot 2 \cdot 1} + O(x^5) = x -\frac{x^3}{3} + O(x^5) 
-\end{align*}
+    \label{eqn:tanh-exp}
+\end{align}
 For small $x$, $\tanh x$ is linear, and in particular $\tanh(2d K M)$ is a line passing through the origin with slope $2dK$. It that slope is \textbf{less}  than te one of $y=M$, i.e. $1$, then the only intersection is at $M=0$ (left of fig. \ref{fig:uniformh0}). However, if $2dK > 1$, then there will be two other solutions (right of fig. \ref{fig:uniformh0}). 
 
 In summary:
@@ -357,7 +359,7 @@ Let's focus on the highlighted quadratic term. We distinguish three cases:
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{variational_cases.png}
-    \caption{}
+    \caption{} %TODO Add caption
     \label{fig:variational_cases}
 \end{figure}
 
@@ -370,17 +372,189 @@ Once we have found the solution $M$ for the minimum, the \textbf{best estimate} 
     \beta \frac{F_V(M,H,0)}{N} = -K d M + \frac{1+M}{2} \ln \frac{1+M}{2} + \frac{1-M}{2} \ln \frac{1-M}{2}     
 \end{align*}
 
-\subsection{Physical meaning of $M(K)$}
-When $T < T_c$, we found that the free energy is best approximated by a function with two local minima at $\pm M(K)$ - which we have interpreted as estimates of the system's \textbf{magnetization}. So, this mechanism could explain the experimentally observed phenomenon of \textbf{spontaneous magnetization}.
+\subsubsection{Physical meaning of $M(K)$}
+When $T < T_c$, we found\marginpar{$M(K)$ and the spontaneous magnetization} that the free energy is best approximated by a function with two local minima at $\pm M(K)$ - which we have interpreted as estimates of the system's \textbf{magnetization}. So, this mechanism could explain the experimentally observed phenomenon of \textbf{spontaneous magnetization}.
 
 \medskip
 
-Explicitly, we defined the spontaneous magnetization $m_S$ (\ref{eqn:break1}) as:
+Explicitly, we defined the spontaneous magnetization \textit{per node}  $m_S$ (\ref{eqn:break1}) as:
 \begin{align}\label{eqn:ms}
-    \lim_{h \downarrow 0} \lim_{N \uparrow \infty} \pdv{h} (\beta F) = \lim_{h \downarrow } \langle \frac{\sum_x \sigma_x}{N}  \rangle = m_s
+    -\lim_{h \downarrow 0} \frac{1}{N} \lim_{N \uparrow \infty} \pdv{h} (\beta F) = \lim_{h \downarrow 0} \langle \frac{\sum_x \sigma_x}{N}  \rangle = m_S
 \end{align}
+In particular, the thermodynamic limit must be taken \textbf{before} the $h \to 0$ limit.
 
-%TODO Second part of Lecture 21
+We can now use the variational free energy to compute an estimate of $m_S$. Note that in (\ref{eqn:FV-uniform}), the free energy density \textit{does not} depend on $N$, so the limit of $N \to \infty$ is trivial. Then we just need to differentiate with respect to $h$ and set $m = M$, the minimum found by solving (\ref{eqn:h0case}). Thus, the \textit{variational estimate} of $m_S$ is given by:
+\begin{align}\nonumber
+    m_S\Big|_{\mathrm{var.}} &= -\lim_{h \downarrow 0} \pdv{h} \frac{F_V(M, K, h)}{N} = -\lim_{h \downarrow 0} \Bigg[\underbrace{{\pdv{F_V}{m}}(m, K, h)}_{0\ (\ref{eqn:minimize})} \pdv{M}{h} + \underbrace{{\pdv{F_V}{h}}(m, K, h)}_{-m\ (\ref{eqn:FV-uniform})} \Bigg]_{\quad\mathclap{m = M}} \mathclap{=} \\
+    &= \lim_{h \downarrow 0} M(K,h) = M(k)
+    \label{eqn:variational-spontaneous-magnetization}
+\end{align} 
+where $M(K,h)$ is the solution of (\ref{eqn:uniform-variational-eq}), which, in the limit $h \to 0$, becomes one of the solutions we found in the $h=0$ case, since it is an analytic function. So $m_S = 0$ if $2dK < 1$, and $\neq 0$ otherwise.
+
+\medskip
+
+We can then study how the solution $M(K)$ of (\ref{eqn:h0case}) varies as a function of $K^{-1} = k_B T/J$. This can be done numerically - but to get some understanding we consider the case near criticality $K \approx K_c = 1/2d$. From fig. \ref{fig:uniformh0} and fig. \ref{fig:variational_cases} we expect $M \approx 0$ when $K \approx K_c$.
+
+\medskip
+
+So, using the expansion of $\tanh x$ (\ref{eqn:tanh-exp}) for small $x$, (\ref{eqn:h0case}) becomes:
+\begin{align*}
+    M = 2dKM- \frac{(2dK)^3 M^3}{3} + O(M^5) 
+\end{align*}
+One solution is clearly $M=0$, $\forall K$. 
+
+For the other \textbf{solutions},\marginpar{$M(K)$ near criticality} we suppose that $K > K_c = 1/2d$, e.g. $K = K_c + \delta$ with $\delta \approx 0^+$, and then divide by $M$ to get:
+\begin{align*}
+    M^2 &= \frac{3}{(2dK)^3}(2dK-1) + O(M^4) =\\
+        &= \frac{6d}{(K/K_c)^3} (K-K_c)  + O(M^4) =\\
+        &= \frac{6d}{[(K_c + \delta)/K_c]^3} (\cancel{K_c}+\delta - \cancel{K_c}) + O(M^4) =\\
+        &= 6d \frac{\delta}{(1+ \delta/K_c)^3} + O(M^4) =\\
+        &= 6d \delta + O(\delta^2)
+\end{align*}
+For $\delta \approx 0$, $\delta/(1+ \delta/K_c)^3 \approx \delta$, and so $M^2$ is of order $\delta$, meaning that $M^4$ is of order $\delta^2$. 
+
+Taking the square root:
+\begin{align}\label{eqn:mean-field-MS}
+    M(K) = \sqrt{6d} (K-K_c)^\beta + O(K-K_c)
+\end{align}
+where $\beta = 1/2$ is the \textbf{critical exponent}. Note that the behaviour of the spontaneous magnetization\marginpar{Critical exponent and universality} near criticality is given by a power law in the distance to the critical point $K_c$: this happens more in general, not only for the Ising Model, and does not depend on the details of the model  (\textbf{universality}). (\ref{eqn:mean-field-MS}) also produces a \textbf{singularity} at $K=K_c$, where $M(K)$ starts rising from $0$ in a non-smooth manner (fig. \ref{fig:MK_plot}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{MK_plot.png}
+    \caption{Plot of the spontaneous magnetization $M(K)$ (estimated from the variational free energy) as function of temperature ($K^{-1} \propto T$).
+    From fig. \ref{fig:variational_cases} we know that $M(K) = 0$ for $K < K_c$. The red curve at $K \approx K_c$ is given by (\ref{eqn:mean-field-MS}), while the blue curve at $K \to \infty$ derives from (\ref{eqn:low-temperature-var})
+    Note the \textbf{singularity} at $K=K_c$, the critical point. }
+    \label{fig:MK_plot}
+\end{figure}
+
+The result in (\ref{eqn:mean-field-MS})\marginpar{The validity of the mean field approximation} is an estimate given by the mean field approximation. However, the same kind of relation \textit{holds} in the true model, just with a different exponent $\beta$. For the $d=2$ case, $\beta = 1/8$ can be exactly determined, while for $d > 2$ one resorts to numerical methods, obtaining $\beta \approx 0.31$ at $d=3$, and - surprisingly - $\beta = 1/2$ for $d > 3$. Again, this is not a specific behaviour: the mean field approximation happens to become \textbf{exact} in $d \geq 4$ in many cases, as we will see later on.   
+
+\medskip
+
+If we instead study the behaviour at low temperatures ($K \gg 1$), we expect from fig. \ref{fig:uniformh0} to see $M \approx 1$, meaning that the argument $2dKM(k)$ of the tangent in (\ref{eqn:h0case}) becomes very large. So we expand $\tanh x$ accordingly:
+\begin{align*}
+    \tanh x &= \frac{e^x - e^{-x}}{e^x + e^{-x}} \frac{\textcolor{Red}{e^{-x}}}{\textcolor{Red}{e^{-x}}} = \frac{1-e^{-2x}}{1+e^{-2x}} \underset{(a)}{=}  (1-e^{-2x})(1-e^{-2x} + e^{-4x} + \dots) =\\
+    &= 1 - 2e^{-2x} + 2e^{-4x} + O(e^{-6x})
+\end{align*}
+where in (a) we used the geometric series expansion:
+\begin{align*}
+    \frac{1}{1+x} = 1 - x + x^2 - x^3 + \dots
+\end{align*}
+
+And substituting in (\ref{eqn:h0case}) we get:
+\begin{align}\label{eqn:low-temeperature-var}
+    M(K) = 1-2e^{-4dK M(k)} + O(e^{-8KdM(k)}) \underset{(b)}{=}  1-2e^{-4dK} + O(e^{-12dK})
+\end{align}
+where in (b) we substituted $M(k) \approx 1$ in the right side, noticing that all other terms are of order $e^{-12dK}$ or higher. This result agrees with the low temperature expansion we did in the $d=2$ case in (\ref{eqn:m-low}, pag. \pageref{eqn:m-low}). So the spontaneous magnetization quickly approaches $1$ when $K^{-1} \to 0$ ($T \to 0$).
+
+\subsubsection{B. External field}
+If $h\neq 0$, from (\ref{eqn:FV-uniform}) we have:\marginpar{2. Case $h\neq 0$}
+\begin{align*}
+    \beta \frac{F_V(m, K, h)}{N} = \beta \frac{F_V(m,K,0)}{N} - hm  
+\end{align*}
+So the variational equations (\ref{eqn:minimize}) become:
+\begin{align}\label{eqn:var-eq-h}
+    h &= \pdv{m}\left[\beta \frac{F_V(m,K,0)}{N} \right]_{m=M} = (\tanh^{-1} m - 2dKm)\Big|_{m=M} =\\
+      &\underset{\mathclap{M \approx 0}}{=}  M(1-2dK) + \frac{M^3}{3} + \frac{M^5}{5} + \frac{M^7}{7} + \dots \nonumber
+\end{align}
+Depending on the sign of $1-2dK$, i.e. if $2dK$ is lower of higher than $1$, the slope at the origin will be either positive or negative, leading to the plots in fig. \ref{fig:hplot}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{hplot.png}
+    \caption{Plot of the right hand side of (\ref{eqn:var-eq-h}), i.e. the variational estimate of magnetization,
+as function of $m$.} %TODO Caption
+    \label{fig:hplot}
+\end{figure}
+
+So there are two cases:
+\begin{enumerate}
+    \item If $K < K_c = 1/2d$, then the right side of (\ref{eqn:var-eq-h}) is strictly increasing, and so admits only one intersection with an horizontal line $y = h$, meaning that there is only one solution for $M(h,K)$ (in general $\neq 0$). If we then let $h \to 0$, $M(K,h) \to 0$ smoothly, and so $m_S = 0$, as expected. 
+    \item If $K > K_c$, instead, the plot is the one on the right of fig. \ref{fig:hplot}, and multiple intersections with $y=h$ are possible if $h$ lies in a certain range:
+    \begin{align*}
+        \pdv{m} \frac{\beta F_V(m,K,0)}{N} \Big|_
+        {m_+} < h < \pdv{m} \frac{\beta F_V(m,K,0) }{N}\Big|_{m_-}
+    \end{align*}
+    where $m_\pm$ are the local minima/maxima of the right side of (\ref{eqn:var-eq-h}).
+\end{enumerate}
+
+In the $K>K_c$ case, in order to understand which of the possible multiple solutions $\{M_i\}_{i=1,2,3}$ corresponds to the minimum of $F_V$ we refer to fig. \ref{fig:variational_energy_h}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{variational_energy_h.png}
+    \caption{} %TODO CAPTION
+    \label{fig:variational_energy_h}
+\end{figure}
+
+To simplify notation, let's denote as $f_i$ the free variational energy evaluated at a solution $M_i$:
+\begin{align*}
+    f_i = \frac{\beta F_V(M_i, K, h)}{N} = \frac{\beta F_V(M_i, K, 0)}{N} - hM_i  
+\end{align*}
+Then note that differences of $f_i$ can be rewritten as integrals, which can be roughly evaluated by looking at fig. \ref{fig:variational_energy_h}. Then, for $h > 0$:
+\begin{align*}
+    f_1 - f_2 &= \int_{M_2}^{M_1} \left(\frac{\beta}{N} \pdv{m} F_V(m, K, 0) - h\right) \dd{m} = -\text{\textcolor{Blue}{Area of \textbf{B}}} < 0 \Rightarrow f_1 < f_2\\
+    f_2 - f_3 &= \int_{M_3}^{M_2} \left(\frac{\beta}{N} \pdv{m} F_V(m, K, 0) - h\right) \dd{m} = -\text{\textcolor{PineGreen}{Area of \textbf{A}}} < 0 \Rightarrow f_2 < f_3\\
+    f_1-f_3 &= \int_{M_3}^{M_1} \left(\frac{\beta}{N} \pdv{m} F_V(m, K, 0) - h\right) \dd{m} = \text{\textcolor{PineGreen}{Area of \textbf{A}}}-\text{\textcolor{Blue}{Area of \textbf{B}}} < 0 \Rightarrow f_1 < f_3\\
+\end{align*}
+Summarizing:
+\begin{enumerate}
+    \item For $h > 0$, the area of \textbf{\textcolor{Blue}{B}} is always bigger than that of \textbf{\textcolor{PineGreen}{A}}. So, at the end, $f_1 < f_2 < f_3$.
+    \item For $h = 0$, the two areas \textbf{\textcolor{PineGreen}{A}} and \textbf{\textcolor{Blue}{B}} become equal, and $f_1$ and $f_3$ are two degenerate minima. 
+    \item On the other hand, if $h < 0$, all inequalities are reversed, and $f_3 < f_2 < f_1$. So, when $h$ changes sign, the system \textit{jumps} to a different minimum. 
+\end{enumerate}
+
+Intuitively, a $h > 0$ leads to a \textit{preference} for a positive magnetization, and, conversely, $h < 0$ for a negative magnetization. 
+
+\medskip
+
+A plot of the solution $M(K,h)$ corresponding to the minimum of $F_V$ as a function of $h$ is shown in fig. \ref{fig:Mhplot}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Mhplot.png}
+    \caption{
+    Plot of $M(K,h)$ (variational estimate of magnetization, obtained by minimizing $F_V$) as a function of the external field $h$, which can be obtained by rotating and reflecting fig. \ref{fig:hplot}.    
+    If $K < K_c$ (top) the magnetization varies continuously as a function of $h$. If $K > K_c$, instead, (bottom) there is a discontinuity at $h=0$, given by the system's transition to a different minimum ($M_3$ instead of $M_1$)}
+    \label{fig:Mhplot}
+\end{figure}
+
+All of these results about criticality are summarized in fig. \ref{fig:phase-diagram-uniform}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{phase-diagram-uniform.png}
+    \caption{Phase diagram representing all the singular points of $M(K,h)$ as a dashed line. Any curve surpassing the dashed part (left of $K_c^{-1}$) has a discontinuity (first-order transition). One such path is the one in the bottom plot of fig. \ref{fig:Mhplot}. On the other hand, a curve surpassing $h=0$ \textit{at the right} of $K_c^{-1}$, however, is smooth; and one such example is given by the top curve of fig. \ref{fig:Mhplot}. So, starting at a point $(h, K^{-1})$ with $h>0$, we can construct \textit{two kinds} of paths arriving to the phase with $h < 0$: one passing through a high-temperature state and without phase-transitions, and one with a phase-transition at a low temperature.
+    Something analogous happens for the vapour-liquid transition: it can be observed as an abrupt change (phase transition) at sufficiently low temperatures, or as a completely smooth process if pressure is increased such that phase differences are removed (the \q{gas looks like a liquid}).}
+    \label{fig:phase-diagram-uniform}
+\end{figure}
+
+We conclude by stressing that the \textbf{singularities} at $h=0$ and $K > K_c$ \textit{emerge} from to the variational principle as a consequence of the minimization.  
+
+\begin{appr}\textbf{Remarks on the mean-field approximation}. The Mean Field (MF) model predicts a phase transition in all $d > 0$. However we know that this is not true in $d=1$, where no phase transition is observed (pag. \pageref{par:no-phase-transition}). Still, for $d > 1$ the MF is at least qualitatively correct. Impressively, such a simple model agrees \textit{exactly} with simulation at $d \geq 4$, at least for the behaviour of magnetization near criticality. 
+\end{appr}
+
+\begin{appr}\textbf{Mean Field and symmetry breaking}. For $h=0$, the Ising Model Hamiltonian:
+    \begin{align*}
+        \mathcal{H}(\bm{\sigma}) = -J \sum_{\langle x,y \rangle} \sigma_x \sigma_y
+    \end{align*} 
+    is \textbf{symmetric} with respect to the transformation $\sigma_x \to -\sigma_x$ $\forall x$, i.e. $\mathcal{H}(\bm{\sigma}) = -\mathcal{H}(\bm{\sigma})$. In any \textbf{finite} system ($N < \infty$), this symmetry implies that $\langle \sigma_x \rangle = - \langle \sigma_x \rangle \Rightarrow \langle \sigma_x \rangle = 0$, meaning that no spontaneous magnetization can be observed. However, in the \textbf{infinite volume}, this symmetry is \textbf{spontaneously broken} below some critical temperature and $\langle \sigma_x \rangle \neq 0$. %TODO Add reference to pag. 13 ch. 6 of the notes (?)
+    
+    We have shown how this occurs in the mean field approximation. Specifically, the symmetry that is broken for the Ising model is $\mathbb{Z}_2$.
+    
+    \medskip
+
+    If we instead consider the Hamiltonian:
+    \begin{align*}
+        H(\bm{\sigma}) = -J \sum_{\langle x,y \rangle} \bm{\sigma_x} \cdot \bm{\sigma_y}
+    \end{align*}
+    where $\bm{\sigma_x} \in \mathbb{R}^n$ and $\norm{\bm{\sigma_x}} = 1$, then the group symmetry is $\mathrm{O}(n)$, the orthogonal group, and $H(R \bm{\sigma}) = H(\bm{\sigma})$, where $R$ is a $n\times n$ matrix such that $\norm{R \bm{\sigma}} = \norm{\bm{\sigma}}^2 = 1$, i.e. a orthogonal (\q{rotation}) matrix satisfying $R^TR = RR^T = \mathbb{I}$. 
+
+    There are rigorous results establishing that discrete symmetries like $\mathbb{Z}_2$ cannot be spontaneously broken in $d=1$ (Landau arguments) whereas continuous symmetries, like $\mathrm{O}(n)$, cannot be spontaneously broken in $d \leq 2$ (Mermin-Wagner theorem). In both cases only short-range interactions are assumed.
+\end{appr}
+
+
 
 
 \end{document}

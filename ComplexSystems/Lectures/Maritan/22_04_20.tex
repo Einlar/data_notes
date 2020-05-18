@@ -1,5 +1,3 @@
-%&latex
-%
 \providecommand{\main}{../..}
 \documentclass[../../main.tex]{subfiles}
 
@@ -400,7 +398,7 @@ On the other hand, the $2$-point correlation function $\langle \sigma_x \sigma_y
 
 \medskip
 
-Note that for any finite $V$, the sum in (\ref{eqn:Z-Is}) is a sum over a finite number $2^V$ of states. As each term is an analytic function, $Z$ is also an analytic function, and so it is $\ln Z = - \beta V f(K,h)$, and in particular the free energy $f(K,h)$. However, we expect phase-transitions to correspond to points at which the free energy is non-analytic - which would explain the \textit{sudden} changes in the system's properties that are experimentally observed during such a transition. %Motivate 
+Note that for any finite $V$, the sum in (\ref{eqn:Z-Is}) is a sum over a finite number $2^V$ of states. As each term is an analytic function, $Z$ is also an analytic function, and so it is $\ln Z = - \beta V f(K,h)$, and in particular the free energy $f(K,h)$. However, we expect phase-transitions to correspond to points at which the free energy is non-analytic - which would explain the \textit{sudden} changes in the system's properties that are experimentally observed during such a transition. %TODO Why phase-transitions require singularities?
 
 So, in any finite lattice we won't be able to see any phase-transition. Conversely, to observe a phase-transition, an \textbf{infinite lattice} is required, which is obtained when $V \to \infty$, i.e. in the \textbf{thermodynamic limit}. 
 
@@ -489,7 +487,6 @@ So, in any finite lattice we won't be able to see any phase-transition. Converse
         \pdv{\gamma(m)}{m} = b
     \end{align*}
 
-    %Check from here------ (Last 10 minutes)
     Then, the \textbf{entropy density} is obtained by differentiating $f$ (or equivalently its Legendre transform $\gamma$, as $T$ is not involved in the transformation):
     \begin{align}\label{eqn:s-density}
         s = -\pdv{f}{T} = -\pdv{\gamma}{T} = -k_B \left[\frac{1-m}{2} \ln \frac{1-m}{2} + \frac{1+m}{2} \ln \frac{1+m}{2} \right]
