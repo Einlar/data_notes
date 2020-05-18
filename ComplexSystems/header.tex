@@ -1,0 +1,306 @@
+
+%---General---%
+\usepackage{subfiles} %Modular structure
+\usepackage[ddmmyyyy,hhmmss]{datetime} %Compilation date
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage[nointegrals]{wasysym} %fonts support
+\usepackage[a4paper,inner=20mm,outer=49mm,top=20mm,bottom=25mm,%
+            marginparsep=6mm,marginparwidth=30mm]{geometry}
+
+\newcommand\hmmax{0} %Avoid too many alphabets error
+\newcommand\bmmax{0}
+\renewcommand{\rmdefault}{ppl} % rm
+\linespread{1.05}        % Palatino needs more leading
+\usepackage[scaled]{helvet} % ss
+\usepackage{courier} % tt
+\usepackage{mathpazo} 
+
+%---Encoding---%
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{csquotes}
+
+%---Math---%
+\usepackage{amsmath,amsthm,amstext,amsbsy,amsfonts,amssymb,stackengine}
+\usepackage{mathrsfs}
+\usepackage{cancel}
+\usepackage{bm}
+\usepackage{mathtools}
+\usepackage{mathdots}
+\usepackage{thmtools}
+\usepackage{array}
+\usepackage{yhmath}
+\usepackage{gensymb}
+\usepackage{blkarray}
+
+\newcommand\myop{\ensuremath\mathrel{\raisebox{1pt}{\stackunder{$<$}{\rotatebox{-27}{\resizebox{7pt}{2pt}{$\sim$}}}}}}
+\setstackgap{S}{-1.5pt}
+%---Physics---%
+\usepackage{physics}
+\usepackage{siunitx}
+\sisetup{
+separate-uncertainty = true
+}
+%\usepackage{braket}
+%\usepackage[version=4]{mhchem}
+%\usepackage{hepnames}
+
+%---Tables---%
+\usepackage{booktabs}
+\usepackage{multirow}
+
+\setlength{\aboverulesep}{0pt} %removes annoying spaces in booktabs tables
+\setlength{\belowrulesep}{0pt}
+\setlength{\extrarowheight}{.75ex}
+\setlength\parindent{0pt} 
+
+%---Graphics & Plots---%
+\usepackage{graphicx}
+\usepackage[usenames, dvipsnames, table]{xcolor} %colori
+\usepackage{color}
+\usepackage{wrapfig}
+
+\usepackage[font=footnotesize, labelfont=bf,
+            labelformat=parens,
+            labelsep=endash, justification=raggedright,
+            singlelinecheck=on]{caption} %fancy captions
+\usepackage{subcaption} 
+% \captionsetup[sub]{font=footnotesize,
+%             labelsep=endash, justification=centering}
+
+\usepackage{pgf,tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{patterns}
+\usepackage{soul}
+\usepackage[framemethod=tikz]{mdframed}
+\usepackage{fancybox}
+\usepackage{framed}
+
+%---(Inkscape imports)---%
+\usepackage{import}
+\usepackage{xifthen}
+\usepackage{pdfpages}
+\usepackage{transparent}
+
+\newcommand{\incfig}[1]{%
+    \def\svgwidth{\columnwidth}
+    \import{./figures/}{#1.pdf_tex}
+}
+
+\definecolor{mygray}{gray}{0.6}
+
+
+%---Indeces, links, bibliography---%
+\usepackage{imakeidx} %Indice analitico
+\usepackage[stable]{footmisc}
+
+%\usepackage{xr-hyper}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}  %hyperref va caricato sempre dopo footmisc, altrimenti le footnotes si buggano e riportano tutte alla prima pagina
+\usepackage[inline]{showlabels} %Draft
+
+\usepackage[symbol=$\wedge$,numberlinked=false]{footnotebackref}
+\makeindex[columns=2, title=Analytical index, options= -s indexstyle.ist]
+
+\usepackage[backend=biber,sorting=none]{biblatex}
+\renewbibmacro{in:}{}
+\addbibresource{bibliography.bib}
+
+%---Utilities---%
+\usepackage{comment}
+\usepackage{xspace}
+\usepackage{marginnote}
+\usepackage{ragged2e}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{etoolbox}
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage{lipsum}  
+\usepackage{float}
+
+%---Additional symbols---%
+%\bigcdot
+\makeatletter
+\newcommand*\bigcdot{\mathpalette\bigcdot@{.5}}
+\newcommand*\bigcdot@[2]{\mathbin{\vcenter{\hbox{\scalebox{#2}{$\m@th#1\bullet$}}}}}
+\makeatother
+
+%Circled symbols
+\makeatletter
+\newcommand{\ogeneric}[2][0.7]{%
+  \vphantom{\oplus}\mathpalette\o@generic{{#1}{#2}}%
+}
+\newcommand{\o@generic}[2]{\o@@generic#1#2}
+\newcommand{\o@@generic}[3]{%
+  \begingroup
+  \sbox\z@{$\m@th#1\oplus$}%
+  \dimen@=\dimexpr\ht\z@+\dp\z@\relax
+  \savebox\tw@[\totalheight]{$\m@th#1\bigcirc$}%
+  \makebox[\wd\z@]{%
+    \ooalign{%
+      $#1\vcenter{\hbox{\resizebox{\dimen@}{!}{\usebox\tw@}}}$\cr
+      \hidewidth
+      $#1\vcenter{\hbox{\resizebox{#2\dimen@}{!}{$#1\vphantom{\oplus}{#3}$}}}$%
+      \hidewidth
+      \cr
+    }%
+  }%
+  \endgroup
+}
+\makeatother
+
+\newcommand{\ole}{\mathrel{\ogeneric{<}}} 
+\newcommand{\oleq}{\mathrel{\ogeneric[0.6]{\leq}}}
+\newcommand{\osubseteq}{\mathrel{\ogeneric[0.6]{\subseteq}}}
+\newcommand{\thickfrac}[2]{\genfrac{}{}{1.1pt}{}{\displaystyle #1}{\displaystyle #2}}
+
+%---New environments---%
+%Exercises + Examples
+\newenvironment{myleftbar}{%
+\def\FrameCommand{\hspace{0.6em}\vrule width 2pt\hspace{0.6em}}%
+\MakeFramed{\advance\hsize-\width \FrameRestore}}%
+{\endMakeFramed}
+\declaretheoremstyle[
+spaceabove=6pt,
+spacebelow=6pt
+headfont=\normalfont\bfseries,
+headpunct={} ,
+headformat={\cornersize*{2pt}\ovalbox{\NAME~\NUMBER\ifstrequal{\NOTE}{}{\relax}{\NOTE}:}},
+bodyfont=\normalfont,
+]{exobreak}
+
+\declaretheorem[style=exobreak, name=Exercise,%
+numberwithin = section, %
+postheadhook=\leavevmode\myleftbar, %
+prefoothook = \endmyleftbar]{exo}
+
+%show just the name in theorem list
+\makeatletter
+%\show\ll@problem gives default definition:
+% \protect \numberline {\csname the\thmt@envname \endcsname }\thmt@thmname \ifx
+% \@empty \thmt@shortoptarg \else \protect \thmtformatoptarg {\thmt@shortoptarg 
+% }\fi
+\def\ll@exo{%
+  \protect\numberline{\theexo}\thmt@shortoptarg%
+}
+\makeatother
+
+\usepackage[type={CC}, lang=english, modifier={by-nc-sa}, version={4.0}]{doclicense}
+%Chapter division in theorem list
+%\colorlet{shadecolor}{lightgray!25}
+
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\thmtlo@chaptervspacehack
+  {\addtocontents{loe}{\protect\addvspace{10\p@}}}
+  {\addtocontents{loe}{\protect\thmlopatch@endchapter\protect\thmlopatch@chapter{\thechapter}}}
+  {}{}
+\AtEndDocument{\addtocontents{loe}{\protect\thmlopatch@endchapter}}
+\long\def\thmlopatch@chapter#1#2\thmlopatch@endchapter{%
+  \setbox\z@=\vbox{#2}%
+  \ifdim\ht\z@>\z@
+    \hbox{\bfseries\chaptername\ #1}\nobreak
+    #2
+    \addvspace{10\p@}
+  \fi
+}
+\def\thmlopatch@endchapter{}
+
+\makeatother
+\renewcommand{\thmtformatoptarg}[1]{ -- #1}
+\renewcommand{\listtheoremname}{List of definitions}
+%%%
+
+\declaretheorem[style=exobreak, name=Example,%
+postheadhook=\leavevmode\myleftbar, %
+prefoothook = \endmyleftbar]{example}
+
+\usepackage{etoolbox}
+\usepackage{needspace}
+\AtBeginEnvironment{exo}{\Needspace{10\baselineskip}}% Impedisce l'inserimento di una domanda a fondo pagina e la risposta alla pagina successiva
+\AtBeginEnvironment{example}{\Needspace{10\baselineskip}}
+
+%---Custom commands---%
+\newcommand{\q}[1]{``#1''}              %quotes
+\newcommand{\hlc}[2]{%
+  \colorbox{#1!50}{$\displaystyle#2$}}  %highlight
+\newcommand{\bb}[1]{\mathbb{#1}}        %faster \mathbb
+\newcommand{\breakpage}{\begin{center}
+  $\ast$~$\ast$~$\ast$
+\end{center}}                           %fancy page separator
+\newcommand{\lesson}[2]{\marginpar{(Lesson #1 of #2)\\Compiled: \today}}  %Lesson number, date and compilation
+
+%---Dots---%
+\newcommand{\danger}{{\textcolor{Red}{\fontencoding{U}\fontfamily{futs}\selectfont\char 66\relax}}}
+\newcommand{\reddot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[red,fill=red] (0,0) circle (.5ex);}}
+\newcommand{\bluedot}{\href{\tikz\draw[blue,fill=blue] (0,0) circle (.5ex);}{http://bit.ly/2Tj5OEj}}
+\newcommand{\greendot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[green,fill=green] (0,0) circle (.5ex);}}
+\newcommand{\orangedot}{\href{http://bit.ly/2Tj5OEj}{\tikz\draw[orange,fill=orange] (0,0) circle (.5ex);}}
+
+
+%---Fancy stuff---%
+%\usepackage[Bjornstrup]{fncychap}
+%\usepackage{fancyhdr}
+%\pagestyle{fancy}
+%\fancyhead{} % clear all header fields
+%\renewcommand{\headrulewidth}{0pt} % no line in header area
+%\fancyfoot{} % clear all footer fields
+%\fancyfoot[R]{A.A. 2018/19} % other info in "inner" position of footer line
+%\cfoot{\thepage}
+
+\makeatletter
+\def\thickhrulefill{\leavevmode \leaders \hrule height 1ex \hfill \kern \z@}
+\def\@makechapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedleft \reset@font
+            \scshape \@chapapp{} \thechapter
+        \par\nobreak
+        \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    %\vspace*{1\p@}%
+    \hrulefill
+    \par\nobreak
+    \vskip 100\p@
+  }}
+\def\@makeschapterhead#1{%
+  \vspace*{10\p@}%
+  {\parindent \z@ \raggedleft \reset@font
+            \scshape \vphantom{\@chapapp{} \thechapter}
+        \par\nobreak
+        \interlinepenalty\@M
+    \Huge \bfseries #1\par\nobreak
+    %\vspace*{1\p@}%
+    \hrulefill
+    \par\nobreak
+    \vskip 100\p@
+  }}
+
+%---Theorems---%
+\theoremstyle{plain}
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{lem}{Lemma}[section]
+\newtheorem{prop}{Proposition}[section]
+\newtheorem{axi}{Axiom}
+\newtheorem{pst}{Postulato}
+
+\theoremstyle{definition}
+\newtheorem{dfn}{Definition}
+
+%---Colored blocks---%
+\newenvironment{expl}{\begin{mdframed}[hidealllines=true,backgroundcolor=green!20,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt]}{\end{mdframed}} %Box di colore verde
+\newenvironment{appr}{\begin{mdframed}[hidealllines=true,backgroundcolor=blue!10,innerleftmargin=3pt,innerrightmargin=3pt,leftmargin=-3pt,rightmargin=-3pt]}{\end{mdframed}} %Approfondimenti matematici (box di colore blu)
+
+%Raggedright marginpar
+\makeatletter
+\renewcommand{\@marginparreset}{%
+  \reset@font\footnotesize
+  \raggedright
+  \slshape
+  \@setminipage
+}
+\makeatother
+
+
+\allowdisplaybreaks %allow pagebreaks in align enviroments
