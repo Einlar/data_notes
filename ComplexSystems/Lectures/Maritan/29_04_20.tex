@@ -4,6 +4,95 @@
 \documentclass[../../main.tex]{subfiles}
 
 \begin{document}
+
+\section{Critical Behaviours and Scaling Laws}
 \lesson{22}{29/04/20}
+
+In the last section, we were able to finally describe a \textbf{phase-transition} , by analysing the Ising Model in the mean field approximation in $d > 1$. Mathematically, we observed how the \textbf{spontaneous magnetization} $M(K, h)$,\marginpar{Power laws} when $K$ is chosen in the proximity of the \textit{critical parameter} $K_c$ needed for the phase-transition, is described by a \textbf{power law} (\ref{eqn:mean-field-MS}).
+
+\medskip
+
+This happens to be a very general kind of behaviour, proper of \textbf{not only} \textbf{mean field} models.
+Scaling laws such as (\ref{eqn:mean-field-MS}) were originally formulated from empirical evidence, and then given a theoretical foundation in the 1960s by Widom, Kadanoff and Kenneth Wilson, leading to the field of \textbf{renormalization group theory}. In this framework, all critical phenomena can be treated on equal ground, and general results can be mathematically proven. 
+
+\medskip
+
+The importance of scaling laws, and especially the values of their \textit{critical exponents} (such as $\beta$ for the IM) resides in their \textbf{universality}, i.e. in the fact that they are \textit{largely independent} on the \q{model's details}. In other words, the very same scaling law can describe two systems that - from the outside - seem completely different - but that share some fundamental characteristic (e.g. symmetry). 
+
+\medskip
+
+So, let's continue using the Ising Model in the mean field approximation as a \textit{concrete} example, and let's focus on deriving and understanding scaling laws.
+
+\subsection{Spontaneous magnetization}
+
+We start with (re)deriving the power law for the \textbf{spontaneous magnetization}. Recall the expression for the variational free energy (\ref{eqn:FV-uniform}):
+\begin{align}
+    \beta \frac{F_V(m,K,h)}{N} = - K d m^2 + \frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2} - hm   
+\end{align}
+$F_V$ is closest to the \textit{true} \q{unapproximated} free energy $F$ when it's minimum:
+\begin{align}\label{eqn:minimizing-eq}
+    \pdv{m} F_V(m, K, h) \overset{!}{=} 0 \underset{(\ref{eqn:uniform-variational-eq})}{\Rightarrow}  m(h,K) = \tanh(2d K m + h)
+\end{align} 
+Let's solve (\ref{eqn:minimizing-eq}) for $h$ and expand\footnote{For notational simplicity, we do not denote with $M$ the value of $m$ that solves (\ref{eqn:minimizing-eq}), as was instead done in the previous section.} for $m \sim 0$:
+\begin{align}\nonumber
+    h &= -2dKm + \tanh^{-1}m  \underset{(\ref{eqn:inv_tanh})}{=} -2dKm + \frac{1}{2} \ln \frac{1+m}{1-m} \underset{(\ref{eqn:tanh})}{=} -2dKm + \frac{1}{2}[\ln(1+m) - \ln(1-m)] =\\ \nonumber
+    &= -2dKm +\frac{1}{2}\left[m-\cancel{\frac{m^2}{2}}+\frac{m^3}{3}-\bcancel{\frac{m^4}{4}}+\frac{m^5}{5}+\dots  - \left(-m -\cancel{\frac{m^2}{2}} -\frac{m^3}{3} -\bcancel{\frac{m^4}{4} }-\frac{m^5}{5} + \dots    \right) \right] =\\
+    &= m(1-2dK) + \frac{m^3}{3} + \frac{m^5}{5} + \dots  \label{eqn:h-eq} 
+\end{align}
+When $\textcolor{Blue}{h=0}$\marginpar{1. $h=0$} and $K \geq K_c = 1/2d$, then\footnote{Consider fig. \ref{fig:phase-diagram-uniform}, pag. \pageref{fig:phase-diagram-uniform}. When $h=0$, we are \q{moving} along a horizontal line, encountering the singularity at $K = K_c$.} $1-2dK < 0$. We already know that the solution $m=0$ is a local \textit{maximum} of $F_V$, and the minima are given by the other \textit{two} solutions. Dividing by $m$ and rearranging leads to:
+\begin{align*}
+    (2dK-1) = \frac{m^2}{3} + \frac{m^4}{5} + \dots \Rightarrow  m^2 = 3(2dK - 1) - \frac{m^4}{5} + \dots
+\end{align*}
+If $(2dK - 1)$ is of order $O(m^2)$, then $m^4$ is of order $O[(2dK-1)^2]$, and so:
+\begin{align*}
+    m^2 = 3(2dK-1) + O[(2dK-1)^2]
+\end{align*}
+And substituting $K_c = 1/2d$:
+\begin{align*}
+    m^2 = 3 \frac{K-K_c}{K_c} + O\left(\left[\frac{K-K_c}{K_c} \right]^2\right) 
+\end{align*}
+Then, using $K=J/k_B T$ and $K_c = J/k_B T_c$ leads to the equivalent relation in terms of temperatures:
+\begin{align*}
+    m^2 = 3 \frac{T_c - T}{T_c} + O\left(\left[\frac{T_c - T}{T_c} \right]^2\right)  = 3 |t| + O(t^2) \qquad t \equiv \frac{T-T_c}{T_c} 
+\end{align*} 
+Taking the square root leads to the power law for the magnetization:
+\begin{align}\label{eqn:m-power-law-h0}
+    m = \sqrt{3} |t|^\beta \theta(-t) \qquad \beta = \frac{1}{2} 
+\end{align}
+Here, the Heaviside function $\theta(-t)$ ensures that $m=0$ for $T > T_c$.
+
+\medskip
+
+Let's now consider (\ref{eqn:h-eq}) in the case $\textcolor{Blue}{h \neq 0}$ \marginpar{2. $h\neq 0$}. To \q{see} the phase-transition, we fix\footnote{Referring to fig. \ref{fig:phase-diagram-uniform}, \pageref{fig:phase-diagram-uniform}, we are \q{moving} along a vertical line with $K = K_c$} any $K \geq K_c$, for example (and for simplicity) $K=K_c$. 
+%TODO Do the calculation
+
+Then (\ref{eqn:h-eq}) becomes:
+\begin{align}\label{eqn:m-power-law-h}
+    h = \frac{m^3}{3} + \frac{m^5}{5} + \dots \underset{m\sim 0}{=} \frac{m}{3} |m|^{\delta - 1} \qquad \delta=3
+\end{align}
+After collecting a $m$, all the powers are even, and so we can insert a modulus. The exponent of the leading order is then $\delta=3$.
+
+\subsection{Susceptibility}
+Near criticality, also the susceptibility $\chi$, measuring \q{how much} the system reacts to a change in the external field, obeys a power law.
+
+\medskip
+
+Recall that the susceptibility $\chi$ is defined as:
+\begin{align*}
+    \chi^{-1} \underset{(\ref{eqn:susceptibility})}{=} \pdv{h}{m}   
+\end{align*}
+Using the expression (\ref{eqn:h-eq}) for $h$ and expanding around $m = 0$ we get:
+\begin{align*}
+    \chi^{-1} = \pdv{h}{m} \underset{(\ref{eqn:h-eq})}{=}  -2dK + \frac{1}{1-m^2}  = 1 - 2dK + m^2 + O(m^4)
+\end{align*}
+And using (\ref{eqn:m-power-law-h0}) to compute $m^2$ we arrive to:
+\begin{align*}
+    \chi^{-1} \Big|_{h=0} \underset{(\ref{eqn:m-power-law-h0})}{=} \begin{cases}
+        1 - 2 d K = \frac{K_c-K}{K_c} = \frac{T-T_c}{T} = t+ O(t^2) & T > T_c \> (m=0)\\  
+        1 - 2 dK + m^2 = \frac{K_c-K}{K_c} + 3\frac{K-K_c}{K_c} = 2|t| + O(t^2) & T<T_c 
+    \end{cases}
+\end{align*}
+
+
 
 \end{document}

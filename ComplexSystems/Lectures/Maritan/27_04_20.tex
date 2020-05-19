@@ -1,4 +1,3 @@
-%&latex
 %
 \providecommand{\main}{../..}
 \documentclass[../../main.tex]{subfiles}
@@ -308,7 +307,7 @@ Clearly $M=0$ is always a solution. Depending on $2dK$, there can be two more so
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{uniformh0.png}
+    \includegraphics[width=0.9\textwidth]{\main/Images/uniformh0.png}
     \caption{Solutions of (\ref{eqn:uniform-variational-eq}) are intersections of the two curves.}
     \label{fig:uniformh0}
 \end{figure}
@@ -358,7 +357,7 @@ Let's focus on the highlighted quadratic term. We distinguish three cases:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{variational_cases.png}
+    \includegraphics[width=0.9\textwidth]{\main/Images/variational_cases.png}
     \caption{} %TODO Add caption
     \label{fig:variational_cases}
 \end{figure}
@@ -421,7 +420,7 @@ where $\beta = 1/2$ is the \textbf{critical exponent}. Note that the behaviour o
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{MK_plot.png}
+    \includegraphics[width=0.7\textwidth]{\main/Images/MK_plot.png}
     \caption{Plot of the spontaneous magnetization $M(K)$ (estimated from the variational free energy) as function of temperature ($K^{-1} \propto T$).
     From fig. \ref{fig:variational_cases} we know that $M(K) = 0$ for $K < K_c$. The red curve at $K \approx K_c$ is given by (\ref{eqn:mean-field-MS}), while the blue curve at $K \to \infty$ derives from (\ref{eqn:low-temperature-var})
     Note the \textbf{singularity} at $K=K_c$, the critical point. }
@@ -462,7 +461,7 @@ Depending on the sign of $1-2dK$, i.e. if $2dK$ is lower of higher than $1$, the
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{hplot.png}
+    \includegraphics[width=0.9\textwidth]{\main/Images/hplot.png}
     \caption{Plot of the right hand side of (\ref{eqn:var-eq-h}), i.e. the variational estimate of magnetization,
 as function of $m$.} %TODO Caption
     \label{fig:hplot}
@@ -483,7 +482,7 @@ In the $K>K_c$ case, in order to understand which of the possible multiple solut
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{variational_energy_h.png}
+    \includegraphics[width=0.9\textwidth]{\main/Images/variational_energy_h.png}
     \caption{} %TODO CAPTION
     \label{fig:variational_energy_h}
 \end{figure}
@@ -513,7 +512,7 @@ A plot of the solution $M(K,h)$ corresponding to the minimum of $F_V$ as a funct
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Mhplot.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/Mhplot.png}
     \caption{
     Plot of $M(K,h)$ (variational estimate of magnetization, obtained by minimizing $F_V$) as a function of the external field $h$, which can be obtained by rotating and reflecting fig. \ref{fig:hplot}.    
     If $K < K_c$ (top) the magnetization varies continuously as a function of $h$. If $K > K_c$, instead, (bottom) there is a discontinuity at $h=0$, given by the system's transition to a different minimum ($M_3$ instead of $M_1$)}
@@ -524,7 +523,7 @@ All of these results about criticality are summarized in fig. \ref{fig:phase-dia
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{phase-diagram-uniform.png}
+    \includegraphics[width=0.9\textwidth]{\main/Images/phase-diagram-uniform.png}
     \caption{Phase diagram representing all the singular points of $M(K,h)$ as a dashed line. Any curve surpassing the dashed part (left of $K_c^{-1}$) has a discontinuity (first-order transition). One such path is the one in the bottom plot of fig. \ref{fig:Mhplot}. On the other hand, a curve surpassing $h=0$ \textit{at the right} of $K_c^{-1}$, however, is smooth; and one such example is given by the top curve of fig. \ref{fig:Mhplot}. So, starting at a point $(h, K^{-1})$ with $h>0$, we can construct \textit{two kinds} of paths arriving to the phase with $h < 0$: one passing through a high-temperature state and without phase-transitions, and one with a phase-transition at a low temperature.
     Something analogous happens for the vapour-liquid transition: it can be observed as an abrupt change (phase transition) at sufficiently low temperatures, or as a completely smooth process if pressure is increased such that phase differences are removed (the \q{gas looks like a liquid}).}
     \label{fig:phase-diagram-uniform}
