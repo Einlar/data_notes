@@ -43,7 +43,7 @@ Such function $f(x)$ is \textbf{concave}. In fact:
     f'(x) &= -1 - \ln x\\
     f''(x) &= -\frac{1}{x}  < 0 \qquad x > 0
 \end{align*}
-So, we may apply Jensen's inequality. For any choice of a set of non-negative numbers $\{\lambda_i\}$ summing to $1$, the following relation holds: %TO DO Add reference to 15/04 lecture (after adding ex. 5.17 and verification of Shannon Entropy's 3 defining properties)
+So, we may apply Jensen's inequality. For any choice of a set of non-negative numbers $\{\lambda_i\}$ summing to $1$, the following relation holds: %TODO Add reference to 15/04 lecture (after adding ex. 5.17 and verification of Shannon Entropy's 3 defining properties)
 \begin{align*}
     f\left(\sum_i \lambda_i x_i\right) \geq \sum_i f(x_i) \lambda_i \qquad \sum_i \lambda_i = 1 \> \land \> \lambda_i \geq 0
 \end{align*}
@@ -213,9 +213,9 @@ On the other hand, the entropy of $\rho_0$ can be directly computed. Noting that
     &= \sum_x \left(\frac{1+m_x}{2} \ln \frac{1+m_x}{2} + \frac{1-m_x}{2} \ln \frac{1-m_x}{2} \right)  \equiv \sum_x s_0(m_x)
 \end{align}
 where we defined a \textit{local entropy} $s_0$ as: 
-\begin{align*}
+\begin{align}\label{eqn:local_entropy}
     s_0(m) \equiv \frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2}    
-\end{align*}
+\end{align}
 Substituting these results (\ref{eqn:H0avg}) and (\ref{eqn:rho0-ent}) back in (\ref{eqn:ising-variational}) we arrive to:
 \begin{align} \label{eqn:var-free-energy}
     \beta F_V(\bm{m}, \bm{h}) &= \beta H(\bm{m}) + \sum_x s_0(m_x) =\\
@@ -341,10 +341,10 @@ In the case $K > K_c$, we need to understand which of the three solution leads t
     f^{(4)}(0) &= -\frac{1}{2}\frac{-2}{(1+m)^3} + \frac{1}{2}(-2)\frac{-1}{(1-m)^3} \Big|_{m=0} = 2    
 \end{align*}
 Clearly all odd terms vanish because $F_V(m,0)$ is \textbf{even}. Then: 
-\begin{align*}
+\begin{align}\nonumber
     \frac{\beta F_V(m, h=0)}{N} &= f(0) + mf'(0) + \frac{m^2}{2}f''(0) + \frac{m^3}{3!}f^{(3)}(0) + \frac{m^4}{4!}f^{(4)}(0) + \dots =\\
-    &= -\ln 2 +\hlc{Yellow}{\frac{1-2Kd}{2}} m^2  + \frac{m^4}{12} + O(m^6) 
-\end{align*}
+    &= -\ln 2 +\hlc{Yellow}{\frac{1-2Kd}{2}} m^2  + \frac{m^4}{12} + O(m^6) \label{eqn:free-energy-expansion-h0}
+\end{align}
 Let's focus on the highlighted quadratic term. We distinguish three cases:
 
 \begin{enumerate}
@@ -367,9 +367,9 @@ Thus, depending on the \textbf{temperature}, the system's behaviour changes \tex
 \medskip
 
 Once we have found the solution $M$ for the minimum, the \textbf{best estimate} of the exact \textit{free energy} $\beta F$ is given by \ref{eqn:FV-uniform} evaluated at $m=M$ and $h=0$:
-\begin{align*}
-    \beta \frac{F_V(M,H,0)}{N} = -K d M + \frac{1+M}{2} \ln \frac{1+M}{2} + \frac{1-M}{2} \ln \frac{1-M}{2}     
-\end{align*}
+\begin{align}\label{eqn:FV-energy-h0}
+    \beta \frac{F_V(M,K,0)}{N} = -K d M + \frac{1+M}{2} \ln \frac{1+M}{2} + \frac{1-M}{2} \ln \frac{1-M}{2}     
+\end{align}
 
 \subsubsection{Physical meaning of $M(K)$}
 When $T < T_c$, we found\marginpar{$M(K)$ and the spontaneous magnetization} that the free energy is best approximated by a function with two local minima at $\pm M(K)$ - which we have interpreted as estimates of the system's \textbf{magnetization}. So, this mechanism could explain the experimentally observed phenomenon of \textbf{spontaneous magnetization}.
@@ -463,7 +463,7 @@ Depending on the sign of $1-2dK$, i.e. if $2dK$ is lower of higher than $1$, the
     \centering
     \includegraphics[width=0.9\textwidth]{\main/Images/hplot.png}
     \caption{Plot of the right hand side of (\ref{eqn:var-eq-h}), i.e. the variational estimate of magnetization,
-as function of $m$.} %TODO Caption
+as function of $m$.}
     \label{fig:hplot}
 \end{figure}
 
