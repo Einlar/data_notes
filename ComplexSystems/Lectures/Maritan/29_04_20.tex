@@ -33,7 +33,7 @@ $F_V$ is closest to the \textit{true} \q{unapproximated} free energy $F$ when it
 \begin{align}\label{eqn:minimizing-eq}
     \pdv{m} F_V(m, K, h) \overset{!}{=} 0 \underset{(\ref{eqn:uniform-variational-eq})}{\Rightarrow}  m(h,K) = \tanh(2d K m + h)
 \end{align} 
-Let's solve (\ref{eqn:minimizing-eq}) for $h$ and expand\footnote{For notational simplicity, we do not denote with $M$ the value of $m$ that solves (\ref{eqn:minimizing-eq}), as was instead done in the previous section.} for $m \sim 0$:
+Let's solve (\ref{eqn:minimizing-eq}) for $h$ and expand\footnote{For notational simplicity, we do not denote with $M$ the value of $m$ that solves (\ref{eqn:minimizing-eq}), as was instead done in the previous section.} for $m \approx 0$, which holds near the critical temperature $T \approx T_c$:
 \begin{align}\nonumber
     h &= -2dKm + \tanh^{-1}m  \underset{(\ref{eqn:inv_tanh})}{=} -2dKm + \frac{1}{2} \ln \frac{1+m}{1-m} \underset{(\ref{eqn:tanh})}{=} -2dKm + \frac{1}{2}[\ln(1+m) - \ln(1-m)] =\\ \nonumber
     &= -2dKm +\frac{1}{2}\left[m-\cancel{\frac{m^2}{2}}+\frac{m^3}{3}-\bcancel{\frac{m^4}{4}}+\frac{m^5}{5}+\dots  - \left(-m -\cancel{\frac{m^2}{2}} -\frac{m^3}{3} -\bcancel{\frac{m^4}{4} }-\frac{m^5}{5} + \dots    \right) \right] =\\
@@ -53,8 +53,8 @@ And substituting $K_c = 1/2d$:
 \end{align}
 Then, using $K=J/k_B T$ and $K_c = J/k_B T_c$ leads to the equivalent relation in terms of temperatures:
 \begin{align*}
-    m^2 &= 3 \frac{\sfrac{J}{k_BT} - \sfrac{J}{k_B T_C}}{\sfrac{J}{k_B T_C}} +\dots = 3 \frac{\sfrac{1}{T} - \sfrac{1}{T_c}}{\sfrac{1}{T_c}} +\dots = 3\left(\frac{T_c - T}{T} \right) + \dots =\\ %TODO Fix T_c at denominator
-    &= 3 \frac{T_c - T}{T_c} + O\left(\left[\frac{T_c - T}{T_c} \right]^2\right)  = 3 |t| + O(t^2) \qquad t \equiv \frac{T-T_c}{T_c} 
+    m^2 &= 3 \frac{\sfrac{J}{k_BT} - \sfrac{J}{k_B T_C}}{\sfrac{J}{k_B T_C}} +\dots = 3 \frac{\sfrac{1}{T} - \sfrac{1}{T_c}}{\sfrac{1}{T_c}} +\dots = 3\left(\frac{T_c - T}{T} \right) \underbrace{\frac{\textcolor{Red}{T}}{\textcolor{Red}{T_c}}}_{\approx 1}  + \dots =\\ 
+    &= 3 \underbrace{\frac{T_c - T}{T_c}}_{-t} + O\left(\left[\frac{T_c - T}{T_c} \right]^2\right)  = 3 |t| + O(t^2) \qquad t \equiv \frac{T-T_c}{T_c} 
 \end{align*} 
 Taking the square root leads to the power law for the magnetization:
 \begin{align}\label{eqn:m-power-law-h0}
@@ -126,13 +126,13 @@ For $K < K_c$ ($T > T_c$), $m\equiv 0$ (\ref{eqn:m-power-law-h0}) and so $c=0$. 
     &\underset{K \approx K_c}{=} \frac{3}{2}k_B 
 \end{align*}
 
-In summary:
+In summary: \marginpar{\danger In the slides it is $\sfrac{3}{4}$ instead.}%TODO In the slides it is 3/4. Why? %https://courses.physics.ucsd.edu/2010/Spring/physics210a/LECTURES/CH07.pdf See 7.71
 \begin{align}\label{eqn:specific-heat-power-law}
     c(T) = \begin{cases}
         0 & T > T_c\\
         \frac{3}{2}k_B & T<T_c 
-    \end{cases} \propto |t|^{-\alpha} \qquad \alpha = 0 %TODO In the slides it is 3/4. Why?
-\end{align} %https://courses.physics.ucsd.edu/2010/Spring/physics210a/LECTURES/CH07.pdf See 7.71
+    \end{cases} \propto |t|^{-\alpha} \qquad \alpha = 0 
+\end{align} 
 Here we would expect $C(T)$ to diverge near the critical temperature, with some exponent $\alpha$, but this does not happen in the mean-field approximation (and so we say $\alpha=0$). However, in Onsanger's exact solution for the $d=2$ case, $c(T)$ diverges logarithmically. 
 
 \begin{appr}\textbf{Mean field and specific heat}. The fact that $\alpha=0$ in (\ref{eqn:specic-heat-power-law}) in the mean-field approximation can be justified by examining $c(T)$ on the complex plane - as a purely abstract function (clearly a \textit{complex} temperature does not make any physical sense). See [] %TODO Add reference (22:26 Lecture 22 A) 
@@ -146,11 +146,8 @@ for more details.
     \label{fig:chi-cv}
 \end{figure}
 
-\subsection{The scaling ansatz}
-We can use the power laws we have just found to write an \textbf{equation of state} connecting $h$, $m$ and $t$ (temperature difference to criticality). 
-
-\medskip
-
+\section{Scaling ansatz\textit{s}}
+We can use the power laws we have just found to write an \textbf{equation of state} connecting the external field $h$, the magnetization $m$ and distance to criticality $t$. 
 We start from (\ref{eqn:h-eq}), highlight a $t$ and collect a $m^3$:
 \begin{align*}
     h = m^3 \Bigg[\frac{1}{3} + \overbrace{\frac{K_c - K}{K_c}}^{t}m^{-2} + O(m^2) \Bigg] \qquad K \sim K_c;\> h\sim 0
@@ -159,11 +156,12 @@ As in the mean-field $\beta = 1/2$ (\ref{eqn:m-power-law-h0}), we can rewrite $m
 \begin{align}\label{eqn:h-equation-state}
     h = m|m|^{\delta -1} h_s(t|m|^{-1/\beta}) \qquad  \quad t = \frac{T-T_c}{T_c}  
 \end{align}
-Where $h_s$ (the \q{scaling function}), has the following form in the mean field approximation:
-\begin{align*}
+Where $h_s$ (the \q{scaling function}) has the following form in the mean field approximation:
+\begin{align}
     h_s(x) = \frac{1}{3} + x
-\end{align*}
-It is conjectured that, in general, $h_s$ will be a increasing function of the argument, becoming $0$ at a \textit{negative} value of the argument (fig. \ref{fig:scaling-function}).
+    \label{eqn:h-s-mean-field}
+\end{align}
+Expression (\ref{eqn:h-equation-state}) is certainly a valid relation between $h$, $m$ and $t$ near criticality in the mean field approximation - but we \textit{suppose}\footnote{That is why it is called an \textit{ansatz}.} that it holds in more general cases, perhaps with different choices of exponents $\beta, \delta$ or scaling function $h_s$. In particular, we make the hypothesis that $h_s$ \textit{should be \q{similar}} to (\ref{eqn:h-s-mean-field}), and in particular should be \textbf{non-decreasing} and vanishing at a \textbf{negative} point $x_0$  (fig. \ref{fig:scaling-function}).
 
 \begin{figure}[H]
     \centering
@@ -172,7 +170,7 @@ It is conjectured that, in general, $h_s$ will be a increasing function of the a
     \label{fig:scaling-function}
 \end{figure}
 
-Equation (\ref{eqn:h-equation-state}) summarizes the previous scaling laws, in particular (\ref{eqn:m-power-law-h0}), (\ref{eqn:m-power-law-h}) and (\ref{eqn:susceptibility-power-law}) in all cases ($h=0$ or $h\neq 0$, $T < T_c$ or $T > T_c$). So, in the hypothesis that an equation of state of the form (\ref{eqn:h-equation-state}) holds in a more general case, and not only in the mean field approximation (eventually with different values for the exponent), we have a way to re-derive scaling laws in a more general case.
+Equation (\ref{eqn:h-equation-state}) summarizes the previous scaling laws, in particular (\ref{eqn:m-power-law-h0}), (\ref{eqn:m-power-law-h}) and (\ref{eqn:susceptibility-power-law}) in all cases ($h=0$ or $h\neq 0$, $T < T_c$ or $T > T_c$). So, if we assume that an equation of state of the form (\ref{eqn:h-equation-state}) holds indeed in a more general case, and not only in the mean field approximation, we have a way to re-derive all the scaling laws.
 
 \medskip
 
@@ -182,24 +180,40 @@ Explicitly, assuming $h_S$ monotonically increasing with $h_S(x_0) = 0$ and $x_0
     \begin{align*}
         0 = m|m|^{\delta-1} h_s(t|m|^{-1/\beta})
     \end{align*}
-    The possible solutions are $m=0$ or $t|m|^{-1/\beta} = x_0 < 0$. However, the second one is present only if $t < 0$, and so:
+    The possible solutions are $m=0$ or $t|m|^{-1/\beta} = x_0 < 0$. The second one is acceptable only if $t < 0$, and in that case:
     \begin{align*}
+        -|t| |m|^{-1/\beta} = -|x_0| \Rightarrow |m| = \left|\frac{t}{x_0}  \right|^{\beta}
+    \end{align*}
+    
+    However, the second one is present only if $t < 0$, and so:
+    \begin{align}
         m = \begin{cases}
-            0 & t < 0\\
-            (-t)^\beta |x_0| & t > 0
-        \end{cases}
-    \end{align*} %TODO Verify
+            0 & t > 0\\
+            |t|^\beta/|x_0|^\beta & t < 0
+        \end{cases}%Different from the notes
+        \label{eqn:magnetization-rules}
+    \end{align} 
+    In the mean field, $\beta = 1/2$ and $x_0=-1/3$, and so (\ref{eqn:magnetization-rules}) is equivalent to (\ref{eqn:m-power-law-h0}). 
     \item \textbf{Susceptibility}. Differentiating (\ref{eqn:h-equation-state}) with respect to $m$ and evaluating at $h=0$ leads to:
     \begin{align*}
-        \chi^{-1} = \pdv{h}{m}\Big|_{h=0} = |m|^{\delta-1}\left[\delta h_S(x) - \frac{x}{\beta} h_S'(x) \right]_{h=0}
-    \end{align*} %TODO complete (from pag. 20)
+        \chi^{-1}(h=0) &= \pdv{h}{m}\Big|_{h=0} \underset{(\ref{eqn:h-equation-state})}{=} \delta |m|^{\delta - 1} h_S(\underbrace{ t|m|^{-1/\beta}}_{x}) +\cancel{ m}|m|^{\delta-1}h_S'(t|m|^{-1/\beta})\frac{t|m|^{-1/\beta}}{\cancel{m}} \left(-\frac{1}{\beta} \right) = \\
+        &=|m|^{\delta-1}\left[\delta h_S(x) - \frac{x}{\beta} h_S'(x) \right]_{h=0} \qquad x \equiv t|m|^{-1/\beta}
+    \end{align*}
+    
+    For $t < 0$, the scaling is given by:
+    \begin{align*}
+        \chi^{-1} \propto |m|^{\delta-1} \underset{(\ref{eqn:magnetization-rules})}{\propto} |t|^{\beta (\delta-1)} = |t|^{\gamma_-} \qquad \gamma_- \equiv \beta(\delta-1)
+    \end{align*}
+    In the mean field, $\beta = 1/2$ and $\delta=3$, and so $\gamma_- = 1$, and $\chi \propto |t|^{-1}$, which is the same result we got in (\ref{eqn:susceptibility-power-law}).
+
+    %At high temperature ($T > T_c$, $t > 0$) instead, we expect thermal noise to dominate, making the spins \q{independent}, and so $m = \tanh \sim h$ for $m \approx 0$, meaning that $m \approx h$ and $x \gg 1$. %TODO Finish last part of pag. 20
 \end{enumerate}
 
 In essence, the scaling ansatz (\ref{eqn:h-equation-state}) comes from the peculiar scaling of $m$ in a neighbourhood of criticality (fig. \ref{fig:criticality-vicinity}), and in particular: 
 \begin{enumerate}[label=\alph*)]
-    \item \label{item:1} For $h=0$ fixed and $t = (T-T_c)/T_c \approx 0$ (i.e. varying in the vicinity of the critical point), $m \propto (-t)^\beta$ for $t \lesssim 0$.
-    \item \label{item:2} For $t=0$ fixed and $h$ varying, $|m| \propto |h|^{1/\delta}$.
-\end{enumerate} %TODO Add references
+    \item \label{item:1} For $h=0$ fixed and $t = (T-T_c)/T_c \approx 0$ (i.e. varying in the vicinity of the critical point), $m \propto (-t)^\beta$ for $t \lesssim 0$ (\ref{eqn:m-power-law-h0}).
+    \item \label{item:2} For $t=0$ fixed and $h$ varying, $|m| \propto |h|^{1/\delta}$ (\ref{eqn:m-power-law-h}).
+\end{enumerate} 
 
 \begin{figure}[H]
     \centering
@@ -223,24 +237,71 @@ By shining a light on a fluid and measuring its scattering we can estimate how t
 \begin{align*}
     g(\bm{r}) \equiv \langle \sigma_x \sigma_y \rangle - \langle \sigma_x \rangle \langle \sigma_y \rangle
 \end{align*} 
-For the $d=1$ Ising model with $h=0$ and open boundary conditions we obtain:
+For the $d=1$ Ising model with $h=0$ and open boundary conditions we obtained:
+\begin{align}\label{eqn:zeromean}
+    \langle \sigma_x \rangle &\underset{(\ref{eqn:symmetry-arg}, \text{ pag.} \pageref{eqn:symmetry-arg})}{=}  0
+\end{align}
+For the correlation, we proceed by explicitly computing the average:
 \begin{align*}
-    \langle \sigma_x \rangle &= 0\\
     \langle \sigma_x \sigma_y \rangle &= \sum_{\bm{\sigma}} \sigma_x \sigma_y \frac{1}{Z}  \exp\left(K \sum_z \sigma_z \sigma_{z+1}\right) =\\
     \shortintertext{Factoring the exponential over neighbouring pairs:}
     &= \sum_{\bm{\sigma}} \sigma_x \sigma_y \frac{1}{Z}  \prod_z \hlc{Yellow}{\exp\left(K \sigma_z \sigma_{z+1} \right)} =
     \shortintertext{As $\sigma_z \sigma_{z+1}$ is a binary variable (it can be only $\pm 1$), we can rewrite it using (\ref{eqn:ehsigma}, pag. \pageref{eqn:ehsigma}):}
     &= \sum_{\bm{\sigma}} \frac{\sigma_x \sigma_y}{Z}  \prod_z  (\cosh K + \sigma_z \sigma_{z+1} \sinh K)
     \shortintertext{Then we expand $Z = (2\cosh K)^N$ (\ref{eqn:Z-open-boundaries}, pag. \pageref{eqn:Z-open-boundaries}) and simplify the $\cosh K$:}
-    &= \sum_{\bm{\sigma}} \sigma_x \sigma_y \frac{\prod_z \cosh K (1+ \sigma_z \sigma_{z+1} \tanh K)}{(2\cosh K)^L} = \\
-    &= \sum_{\bm{\sigma}} \sigma_x \sigma_y \frac{\cancel{(\cosh K)^N} \prod_z (1+\sigma_z \sigma_{z+1} \tanh K)}{(2\cancel{\cosh K})^N} =\\
-    &= %TODO Fix 2 factor
-    \sum_{\bm{\sigma}} \sigma_x \sigma_y \prod_z (1 + \sigma_z \sigma_{z+1} \tanh K) =\\
-    &= (\tanh K)^{|x-y|} %TODO Complete. Do it for N = 3 manually, and generalize from there (it should be "trivial" once understood) The only remaining term should be the one with only the sigma between x and y
+    &= \sum_{\bm{\sigma}} \sigma_x \sigma_y \frac{\displaystyle \prod_z \cosh K (1+ \sigma_z \sigma_{z+1} \tanh K)}{(2\cosh K)^L} = \\
+    &= \sum_{\bm{\sigma}} \sigma_x \sigma_y \frac{\displaystyle \cancel{(\cosh K)^N} \prod_z (1+\sigma_z \sigma_{z+1} \tanh K)}{(2\cancel{\cosh K})^N} =\\
+    &= \frac{1}{2^N} 
+    \sum_{\bm{\sigma}} \sigma_x \sigma_y \prod_z (1 + \sigma_z \sigma_{z+1} \tanh K) 
 \end{align*}
-Thus the two-point correlation function can be written as:
+To proceed, let's denote $\tanh K \equiv A$ for simplicity, and expand both the sum and the product, assuming $x < y$:
+\begin{align*}
+    &= \frac{1}{2^N} \sum_{\sigma_1 = \pm 1} \cdots \sum_{\sigma_N = \pm 1} \sigma_x \sigma_y (1+\sigma_1 \sigma_2A) \cdots (1+\sigma_{x-1}\sigma_xA) \cdots (1+\sigma_{y-1}\sigma_yA) \cdots(1+ \sigma_{N-1}\sigma_NA) \span
+    \shortintertext{We can \textit{factor out} all elements except the last, and perform the sum over $\sigma_{N}$:}
+    &=\frac{1}{2^N}\left[\sum_{\sigma_1 = \pm 1} \cdots \sum_{\sigma_{N-1} = \pm 1}
+    \sigma_x \sigma_y(1+\sigma_1 \sigma_2 A)\cdots(1+\sigma_{N-2}\sigma_{N-1}) 
+    \right] \left[\sum_{\sigma_N = \pm 1} (1+\sigma_{N-1} \sigma_N A)\right] \span
+\end{align*}
+Note that:
+\begin{align*}
+    \sum_{\sigma_N = \pm 1} (1+\sigma_{N-1} \sigma_N A ) = 1 +\cancel{ \sigma_{N-1} A }+1 - \cancel{\sigma_{N-1} A} = 2
+\end{align*}
+Leading to:
+\begin{align*}
+    =\frac{1}{2^N} \sum_{\sigma_1 = \pm 1} \cdots \sum_{\sigma_{N-1} = \pm 1}
+    \sigma_x \sigma_y(1+\sigma_1 \sigma_2 A)\cdots(1+\sigma_{N-2}\sigma_{N-1}A) \cdot 2
+\end{align*}
+We can then sum over $\sigma_{N-1}$, which will result in another factor $2$, and reiterate until we arrive at the sum over $\sigma_y$:
+\begin{align*}
+    =\frac{1}{2^N} \sum_{\sigma_1=\pm 1} \cdots \sum_{\sigma_y = \pm 1} \sigma_x (1+ \sigma_1 \sigma_2 A) \cdots  \sigma_y(1+\sigma_{y-1} \sigma_yA) \cdot 2^{N-y}
+\end{align*}
+If we now compute the sum over $\sigma_y$, the result will be different due to the added factor:
+\begin{align*}
+    \sum_{\sigma_y = \pm 1} \sigma_y(1+\sigma_{y-1} \sigma_yA) = 1 + \sigma_{y-1}A \textcolor{Red}{-}(1 - \sigma_{y-1}A) = 2 \sigma_{y-1}A
+\end{align*}
+Beside the usual factor $2$, now we have also a factor $A$ and a $\sigma_{y-1}$:
+\begin{align*}
+    =\frac{1}{2^N} \sum_{\sigma_1 = \pm 1} \cdots \sum_{\sigma_{y-1} = \pm 1} \sigma_x (1+\sigma_1 \sigma_2 A) \cdots \sigma_{y-1} (1+\sigma_{y-2}\sigma_{y-1}A) \cdot 2^{N-y+1} A 
+\end{align*}
+Due to the added $\sigma_{y-1}$, also the \textit{next} sum will produce (beside the $2$) also an $A$ and a $\sigma_{y-2}$, and so on. This continues until we arrive at the sum over $\sigma_x$:
+\begin{align*}
+    = \frac{1}{2^N} \sum_{\sigma_1=\pm 1} \cdots \sum_{\sigma_x = \pm 1} (1+\sigma_1 \sigma_2 A) \cdots \sigma_x^2(1+\sigma_{x-1}\sigma_xA) \cdot 2^{N-x} A^{y-x}
+\end{align*} 
+Note the $\sigma_x^2$: one $\sigma_x$ was there from the start, the other was produced by summing over $\sigma_{x+1}$. However, as $\sigma_x = \pm 1$, $\sigma_x^2 \equiv 1$ in any case, thus making the sum \q{go back to normal}:
+\begin{align*}
+    \sum_{\sigma_x = \pm 1} \underbrace{\sigma_x^2}_{1} (1+\sigma_{x-1}\sigma_xA) = 1 + \cancel{\sigma_{x-1}A} + 1 - \cancel{\sigma_{x-1}A} = 2
+\end{align*}
+From now on, all the remaining sums will just produce a factor $2$ each, and nothing more. So, at the end:
+\begin{align*}
+    \langle \sigma_x \sigma_y \rangle = \frac{1}{\cancel{2^N}} A^{y-x} \cancel{2^N} = (\tanh K)^{y-x}
+\end{align*}
+Here we supposed $x < y$. If $y < x$ instead, nothing really changes in the argument apart from the sign of the exponent. So, in general, we may write:
+\begin{align}\label{eqn:xy-correlation}
+    \langle \sigma_x \sigma_y \rangle = (\tanh K)^{|y-x|}
+\end{align}
+Denoting with $r = |y-x|$ the \textbf{distance} between the \textit{two points} $x$ and $y$, we can finally compute the correlation function $g(r)$, and rewrite it as an exponential:
 \begin{align}\label{eqn:2point-exp-behaviour}
-    g(r) = (\tanh K)^{|r|} = \exp\left(-\frac{|r|}{\xi(K)} \right)
+    g(r) = \underbrace{\langle \sigma_x \sigma_y \rangle}_{(\ref{eqn:xy-correlation})}  - \underbrace{\langle \sigma_x \rangle \langle \sigma_y \rangle}_{0\>(\ref{eqn:zeromean})} = (\tanh K)^{|r|} \equiv \exp\left(-\frac{|r|}{\xi(K)} \right)
 \end{align}
 where $\xi(K)$ is called the \textbf{correlation length}, and measures the \textit{decay} of correlations. In other words, spins are significantly correlated only when they are $|r| < \xi(K)$ positions apart. 
 
@@ -254,18 +315,104 @@ diverges when $K \to \infty$, i.e. when $T \to 0$. At very low temperature, the 
 
 \medskip
 
-The exponential behaviour of the two-point correlation function (\ref{eqn:2point-exp-behaviour}) motivates an \textit{ansatz} for models in $d \geq 2$. More precisely, when $t \neq 0$ (i.e. $T \neq T_c$) the two-point correlation function is suspected to have the form:
-\begin{align*}
+The divergence of the correlation length $\xi(K)$ is fundamental for \textbf{universality}: as all microscopical parts of the system can interact with the \textit{whole} system, the \q{exact specifics} do not matter anymore, but only the most \textit{fundamental} characteristics of the system.
+
+\medskip
+
+The exponential behaviour of the two-point correlation function (\ref{eqn:2point-exp-behaviour}) motivates an \textit{ansatz} for models in $d \geq 2$. More precisely, when $t \neq 0$ (i.e. $T \neq T_c$) the two-point correlation function is hypothesized to have the form:\marginpar{\vspace{3em}Correlation ansatz}
+\begin{align}\label{eqn:corr-ansatz-t}
     g(\bm{r}, t) = r^{-\tau} \exp\left(-\frac{\tau}{\xi(t)} \right) \qquad r=\norm{\bm{r}}
-\end{align*} 
+\end{align} 
 with the correlation length diverging near the critical point:
-\begin{align*}
+\begin{align}\label{eqn:corr-length-t}
     \xi(t) = C_\pm |t|^{-\nu} \qquad t \approx 0, \> h = 0
-\end{align*}
+\end{align}
 for some proper choices of parameters $\tau$, $\nu$ and $C_\pm$. In more general cases, $\xi(t)$ may also depend (weakly) on the \textit{direction} of $\bm{r}$, meaning that the system is not isotropous.
 
 \medskip
 
-At the critical point %TODO 16.33 onwards
+At the critical point $t = (T-T_c)/T_c = 0$, with $h=0$, the correlation \textit{does not diverge} anymore, but it's described instead by a power law: \marginpar{\vspace{1em}Correlation ansatz at $t=0$}
+\begin{align}
+    g(\bm{r}, t) \sim \norm{\bm{r}}^{-(d-2 + \eta)}\label{eqn:corr-ansatz-t0}
+\end{align}
+where the added exponent $\eta$ is called the \textbf{anomalous dimension}\index{Anomalous dimension}. 
+
+\medskip
+
+We can combine (\ref{eqn:corr-ansatz-t}) and (\ref{eqn:corr-ansatz-t0}) by writing an \textit{equation of state} for the correlation length $\xi(K)$, as a function of the only two \q{dimensionless} scaling variable $r/\xi$ and $t |h|^{-1/\beta \delta}$:
+\begin{align}\label{eqn:corr-length-ansatz}
+    \xi(t, h) = |t|^{-\nu} \hat{\xi} (t |h|^{-1/\beta \delta})
+\end{align}
+leading to the \textbf{complete} ansatz for the two-point correlation ansatz:\marginpar{\vspace{1em}The \q{complete} correlation ansatz}
+\begin{align}\label{eqn:correlation-ansatz-full}
+    g(\bm{r}, t, h) = r^{-(d-2+\eta)} \tilde{g} \left(\frac{r}{\xi}, t h^{-1/\beta \delta} \right)
+\end{align} 
+
+Before proceeding, we note that (\ref{eqn:correlation-ansatz-full}) leads to an interesting relation between $\gamma$ (the exponent defining the scaling for the susceptibility) and $\eta, \delta$, i.e. the exponents appearing in the correlation ansatz.
+
+\medskip
+
+Recall the fluctuation dissipation theorem (\ref{eqn:fluctuation_dissipation}, \pageref{eqn:fluctuation_dissipation}):
+\begin{align*}
+    \chi &= \pdv{h} \langle \frac{\sum_x \sigma_x}{N}  \rangle = \frac{1}{N}[ \langle \sum_{xy} \sigma_x \sigma_y \rangle - \langle \sum_x \sigma_x \rangle^2]  =\\
+    &= \frac{1}{N} \sum_{xy} \Big(\underbrace{\langle \sigma_x \sigma_y \rangle - \langle \sigma_x \rangle \langle \sigma_y \rangle}_{g(x-y, t, h)} \Big) = \sum_{\bm{r}} g(\bm{r}, t, h) 
+\end{align*}
+At $h=0$ and $t\approx 0$, $\tilde{g}$ varies slowly, because it is defined as a function of \q{dimensionless} variables. So we can consider the continuum limit, and substitute the sum over $\bm{r}$ with an integral:
+\begin{align*}
+    \chi &= \int \dd[d]{\bm{r}} \tilde{g}\left(\frac{r}{\xi} \right) r^{-(d-2+\eta)} \underset{\bm{r}/\xi = \bm{x}}{=} \xi^{2-\eta} \underbrace{\int \dd[d]{\bm{x}} \tilde{g}(\bm{x}) x^{-(d-2+\eta)}}_{\text{Constant in $h$, $t$}} =\\
+    &= \xi^{2- \eta} \cdot \text{Const.} \underset{(\ref{eqn:corr-length-t})}{\propto} |t|^{-\nu(2-\eta)}  
+\end{align*}
+and comparing with (\ref{eqn:susceptibility-power-law}) leads to the following \textbf{scaling relation}:
+\begin{align}\label{eqn:scaling-relation}
+    \gamma = \nu (2 - \eta)
+\end{align} %TODO Do the computation
+
+\subsection{Hyperscaling}
+Finally, we proceed yet further in finding new ansatz\textit{s}. 
+
+In the previous section, we found that the correlation length $\xi$ can be regarded as new scale length that emerges spontaneously near criticality. 
+
+So, na\"ively we know that the free energy \textbf{density} $f$ scales as $L^{-d}$, where $L$ is the physical length scale of the system and $d$ its dimension. However, near criticality, we may \textit{guess} that the \q{most important} length scale becomes instead $\xi$, leading to the ansatz:
+\begin{align*}
+    f(T, h=0) = \frac{F(T, h=0)}{N} = \xi^{-d} \cdot \text{Const.} + \text{Less Singular Terms} 
+\end{align*} 
+As $\xi \sim |t|^{-\nu}$ (\ref{eqn:corr-length-ansatz}), then, near criticality:
+\begin{align*}
+    f(T, h=0) \sim |t|^{d \nu}
+\end{align*}
+Differentiating two times with respect to $T$ we can derive a similar relation for the heat capacity:
+\begin{align*}
+    C = - T \pdv[2]{T} F(T, h=0) &= \text{Const} \cdot |t|^{d \nu - 2} + \text{l.s.t} 
+\end{align*}
+Comparing with (\ref{eqn:specific-heat-power-law}), we find a relation for the exponent $\alpha$, known as the \textbf{hyper-scaling relation} :
+\begin{align}\label{eqn:hyper-scaling-relation}
+    \alpha = 2 - d \nu
+\end{align}
+The \textit{hyper} comes from the fact that (\ref{eqn:hyper-scaling-relation}) is the only relation thus far that \textit{explicitly} involves the dimension $d$ of the system. Moreover, it is known to hold only below some \textbf{critical dimension} $d_U$ (the \q{upper} dimension), and violated in $d > d_U$. In case of the Ising Model, $d_U = 4$.
+
+
+\subsection{Summary of scaling relations}
+We have introduced a total of $6$ exponents:
+\begin{enumerate}
+    \item $\beta$, regulating the magnetization $m$ as a function of temperature (\ref{eqn:magnetization-rules})
+    \item $\gamma$, for the susceptibility $\chi$ as a function of temperature (\ref{eqn:susceptibility-power-law})
+    \item $\delta$, regulating the magnetization $m$ as a function of the magnetic field $h$ (\ref{eqn:m-power-law-h})
+    \item $\alpha$, for the specific heat $c$ versus temperature (\ref{eqn:specific-heat-power-law})
+    \item $\eta$, dealing with the \textit{decay} of the two-point correlation function near the critical point as a function of the distance $t$ from it (\ref{eqn:correlation-ansatz-full})
+    \item $\nu$, describing the divergence of the correlation length near criticality as a function of $t$ (\ref{eqn:corr-length-ansatz})
+\end{enumerate}
+and $4$ scaling relations between them:
+\begin{subequations}\label{eqn:scaling-relations}
+    \begin{align}
+        \beta (\delta - 1) &= \gamma\\
+        \nu(2- \eta) &= \gamma\\
+        \beta ( \delta + 1) &= 2 - \alpha\\
+        d \nu -2 &= \alpha
+    \end{align}
+\end{subequations}
+meaning that, at the end, only $2$ exponents are independent.
+
+%TODO Add footnote pag. 24 in a appr box
+
 
 \end{document}
