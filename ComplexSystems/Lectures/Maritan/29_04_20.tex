@@ -2,7 +2,6 @@
 %
 \providecommand{\main}{../..}
 \documentclass[../../main.tex]{subfiles}
-\usepackage{amssymb}
 
 \begin{document}
 
@@ -237,7 +236,11 @@ By shining a light on a fluid and measuring its scattering we can estimate how t
 \begin{align*}
     g(\bm{r}) \equiv \langle \sigma_x \sigma_y \rangle - \langle \sigma_x \rangle \langle \sigma_y \rangle
 \end{align*} 
-For the $d=1$ Ising model with $h=0$ and open boundary conditions we obtained:
+
+\subsubsection{Ising Model in $d=1$}
+Before computing $g(\bm{r})$ in a generic dimension using the mean field model, we study a simpler case - namely, the $d=1$ IM with $h=0$ and \textbf{open boundary} conditions. 
+
+We previously obtained:
 \begin{align}\label{eqn:zeromean}
     \langle \sigma_x \rangle &\underset{(\ref{eqn:symmetry-arg}, \text{ pag.} \pageref{eqn:symmetry-arg})}{=}  0
 \end{align}
@@ -317,8 +320,7 @@ diverges when $K \to \infty$, i.e. when $T \to 0$. At very low temperature, the 
 
 The divergence of the correlation length $\xi(K)$ is fundamental for \textbf{universality}: as all microscopical parts of the system can interact with the \textit{whole} system, the \q{exact specifics} do not matter anymore, but only the most \textit{fundamental} characteristics of the system.
 
-\medskip
-
+\subsubsection{General case: the correlation ansatz}
 The exponential behaviour of the two-point correlation function (\ref{eqn:2point-exp-behaviour}) motivates an \textit{ansatz} for models in $d \geq 2$. More precisely, when $t \neq 0$ (i.e. $T \neq T_c$) the two-point correlation function is hypothesized to have the form:\marginpar{\vspace{3em}Correlation ansatz}
 \begin{align}\label{eqn:corr-ansatz-t}
     g(\bm{r}, t) = r^{-\tau} \exp\left(-\frac{\tau}{\xi(t)} \right) \qquad r=\norm{\bm{r}}
