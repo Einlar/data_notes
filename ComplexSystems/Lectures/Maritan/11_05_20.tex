@@ -2,7 +2,6 @@
 %
 \providecommand{\main}{../..}
 \documentclass[../../main.tex]{subfiles}
-\usepackage{amssymb}
 
 \begin{document}
 
@@ -90,9 +89,9 @@ In the case of a \textbf{cubic lattice} with \textbf{periodic boundary condition
     \end{cases} 
 \end{align*}
 And from (\ref{eqn:AG-mtx}) we obtain:
-\begin{align*}
+\begin{align}\label{eqn:G-mtx}
     \textbf{G}^{-1} = \textbf{A}  \Leftrightarrow (\textbf{G}^{-1})_{xy} = A_{xy} = \frac{\delta_{xy}}{1-m^2} - K_{xy} 
-\end{align*}
+\end{align}
 Note that the entries of $\textbf{G}^{-1}$ depend only on \textit{differences of positions} (in $K_{xy}$), meaning that $\textbf{G}^{-1}$ is translationally invariant. Explicitly, the (reciprocal of the) correlation between spins that are \textit{the same distance apart} is the same, and so:
 \begin{align*}
     (\textbf{G}^{-1})_{xy} \equiv G^{-1}(\bm{r}_x, \bm{r}_y) = G^{-1}(\bm{r}_x + \bm{n}a, \bm{r}_y + \bm{n}a) \qquad \bm{n} \in \mathbb{Z}^d
@@ -226,11 +225,11 @@ The integral's cubic domain is also called the \textbf{first Brillouin zone}\foo
 \medskip
 
 Note that for $|\bm{x}-\bm{y}| \gg a$, i.e. spins that are very far apart, the oscillation of the complex exponential $e^{i \bm{p} \cdot (\bm{r}_x - \bm{r}_y)}$ is very rapid, i.e. a tiny difference in $\bm{p}$ amounts to a high change in phase. Then the integrand will \textit{oscillate} rapidly about $0$, making the integral vanish. Thus, the only significant contributions are when $\bm{p} \approx \bm{0}$, i.e. the ones with a \q{stationary phase}\footnote{This is in fact a generalization of the \textit{saddle-point approximation} to complex integrals with an oscillating term}. So, we can expand $\tilde{G}(\bm{p})$ in series:
-\begin{align*}
-    \tilde{G}(\bm{p}) &= \left[\frac{1}{1-m^2} - 2K \sum_{\mu=1}^d \cos(a p_\mu)\right] = \left[\frac{1}{1-m^2} - 2K \sum_{\mu=1}^d \left(1 - \frac{(a p_\mu)^2}{2} + O(p_\mu^4) \right) \right] =\\
-    &= \Big[\underbrace{\frac{1}{1-m^2} - 2 dK}_{A} + K \norm{\bm{p}}^2 a^2 + O(\norm{\bm{p}}^4) \Big]^{-1} \approx \Big[Ka^2\Big(\norm{\bm{p}}^2 + \frac{A}{Ka^2} \Big) \Big]^{-1} =\\
+\begin{align} \label{eqn:eigenvalue-expansion}
+    \tilde{G}(\bm{p}) &= \left[\frac{1}{1-m^2} - 2K \sum_{\mu=1}^d \cos(a p_\mu)\right] = \left[\frac{1}{1-m^2} - 2K \sum_{\mu=1}^d \left(1 - \frac{(a p_\mu)^2}{2} + O(p_\mu^4) \right) \right] =\\ \nonumber
+    &= \Big[\underbrace{\frac{1}{1-m^2} - 2 dK}_{A} + K \norm{\bm{p}}^2 a^2 + O(\norm{\bm{p}}^4) \Big]^{-1} \approx \Big[Ka^2\Big(\norm{\bm{p}}^2 + \frac{A}{Ka^2} \Big) \Big]^{-1} =\\ \nonumber
     &= \frac{1}{Ka^2} \frac{1}{\norm{\bm{p}}^2 + Ka^2/A}   
-\end{align*}
+\end{align}
 Recall that $a$ has dimension of length, ($[a] = \sf{L}$) and that $\bm{p}$ of the reciprocal of length ($[\norm{\bm{p}}] = \sf{L}^{-1}$), while the constant $A$ defined in the above expression is a pure number. Then $[A/Ka^2] = \sf{L}^{-2}$ and so we denote it $\xi^{-2} = A/ka^2$, where now $[\xi] = \si{L}$ is the \textbf{correlation} length:
 \begin{align}\label{eqn:G-corr}
     \tilde{G}(\bm{p}) \approx \frac{1}{Ka^2} \frac{1}{\norm{\bm{p}}^2 + \xi^{-2}} \qquad \xi^{-2} \equiv \frac{A}{Ka^2} = \frac{a^{-2}}{K} \Big[\frac{1}{1-m^2} - 2dK \Big]    
@@ -349,19 +348,19 @@ If the ansatz in (\ref{eqn:tree-ansatz}) is correct, then by rescaling the $x$ a
 This means that there is some kind of \textit{emergent behaviour} in the forest: the distribution of tree sizes is not completely random, but exhibits a \textit{scaling behaviour}, which is similar to the one we studied in the Ising model. In a sense, the forest has \q{self-tuned} to a state \q{near criticality}. Yet, it is not clear \textit{why} this is the case - for example what is the evolutionary advantage in this kind of \q{self tuning}.
 
 %TODO Add exercises
-%TODO Add exercise guide (non recorded lecture)
+%TODO Add exercise guide (non recorded lecture) end of 30/4 lecture
 
 \chapter{Beyond Mean Field\\ and Universality}
-Many years of study of phase transitions have shown that there are few \textit{types} of critical behaviours, meaning that many systems exhibit the same kind of behaviour near criticality.
+Many years of study of phase transitions have shown that there are few \textit{types} of critical behaviours, meaning that \textbf{many systems} exhibit the \textbf{same kind} of \textbf{behaviour} near \textbf{criticality}.
 
 \medskip
 
-A summary of the critical exponents for several \textit{classes} of models is shown in fig. \ref{fig:table-criticality}. 
+As an explicit example, a summary of the critical exponents for several \textit{classes} of models is shown in fig. \ref{fig:table-criticality}. 
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.8\textwidth]{table-criticality.png}
-    \caption{Values of critical exponents for several models. As these exponents do not depend on all the details of each model, there is no need to fully specify each Hamiltonian. For example, the IM in $d=2$ could have more complex couplings between spins (other than the nearest neighbour ones we considered until now).} %From the textbook "Field theory, the Renormalization Group and Critical Phenomena" %TODO Add citation
+    \caption{Values of critical exponents for several models. As these exponents do not depend on all the details of each model, there is no need to fully specify each Hamiltonian. For example, the IM in $d=2$ could have more complex couplings between spins (other than the nearest neighbour ones we considered until now). Taken from \cite{renormalization}}
     \label{fig:table-criticality}
 \end{figure}
 
@@ -369,7 +368,7 @@ Here there is no need to \textbf{fully specify} the \textbf{Hamiltonian} of each
 
 Moreover, if we consider higher and \textbf{higher dimensions} , the exponents \textbf{tend} to the values obtained in the \textbf{mean field} approximation. For example, $\delta$ is $15$ in $d=2$, and $5$ in $d=3$, which is closer to the MF value of $3$.
 
-There is also a dependence on the \textbf{symmetries} of each model. As an example we may consider the Heisenberg model, a generalization of the IM in which each spin is a $3$-vector. Now the system is globally \textit{rotationally symmetric}, meaning that the symmetry group is $\mathrm{O}(3)$. In the Ising Model with \textit{binary} spins, the spin-flip symmetry is instead described by the $\mathbb{Z}_2$ group. So, even if the two models are studied in the same number of dimension (e.g. $d=3$), the scaling exponents will be different, as can be seen in fig. \ref{table-criticality}. 
+There is also a dependence on the \textbf{symmetries} of each model. As an example we may consider the Heisenberg model, a generalization of the IM in which each spin is a $3$-vector. Now the system is globally \textit{rotationally symmetric}, meaning that the symmetry group is $\mathrm{O}(3)$. In the Ising Model with \textit{binary} spins, the spin-flip symmetry is instead described by the $\mathbb{Z}_2$ group. So, even if the two models are studied in the same number of dimension (e.g. $d=3$), the scaling exponents will be different, as can be seen in fig. \ref{fig:table-criticality}. 
 
 \medskip
 
@@ -379,16 +378,19 @@ From this analysis, we find that the critical exponents do not depend on the spe
     \item The \textbf{symmetries} of the Hamiltonian  
 \end{itemize}
 
-%TODO Add introduction: describe why we go to the continuum and back
-\begin{comment}
-    We want to 
--heuristic arguments, not pretend to be rigorous
-In some cases there are however rigorous proofs, but are very heavy and will be skipped
+In the following, we will try to give some mathematical foundation to these arguments, mainly motivated by heuristics and intuition. A true formal proof, while possible (in some cases), would require a level of depth and sophistication well outside the scope of this course.
 
-Discrete to continuous, and lattice to continuum. But then we want to come back
-\end{comment}
+\medskip
 
+In essence, the idea is to start by fixing a specific symmetry - for instance that of the Ising Model - and consider the \textit{most general} kind of Hamiltonian with that symmetry. The goal is to compute the partition function as a \textit{power series}, and demonstrate that, at least near criticality, the relevant coefficients are few, and depend only on the initial symmetry and the model's dimensionality.
 
+\medskip
+
+However, this kind of computation is impossible if we are dealing with \textit{discrete variables}, such as the \textit{binary} spins $\sigma_i = \pm 1$ of the IM, as in general there is no analytical way to compute the sum in the partition function. A way around this is to convert the model to \textit{continuous} variables, i.e. spins $\sigma_i \in \mathbb{R}$, making the partition function vanish for values $\varphi_x$ that are \q{far} from the discrete ones ($\pm 1$). This, along with some reasonable assumptions (such as translational invariance and short-range interactions) allows to expand $Z$ in series near criticality, and study its behaviour. 
+
+\medskip
+
+We can then search for the \textit{simplest} discrete model that is able to recreate the relevant coefficients in the $Z$ expansion, and thus provide a \q{minimal description} for the behaviour of entire \textit{classes} of systems.   
 
 \section{From discrete to continuous variables}
 Consider a Ising Model, with a general Hamiltonian including also more complex spin-spin interactions:
@@ -540,7 +542,7 @@ The yellow term comes from the binary interactions, the blue ones from the quart
 
 \medskip
 
-As $\varphi \in \mathbb{R}$, through a change of variables we can \textit{fix} one of the coefficients - for example $c_3$ to $1/2$. So we consider the transformation $\varphi = \zeta \phi$, with $\zeta \in \mathbb{R}$ constant such that:
+As $\varphi \in \mathbb{R}$, through a change of variables we can \textit{fix} one of the coefficients - for example\footnote{The choice of which coefficient to fix is arbitrary. At the end, we will be interested in the \q{relative order of magnitude} of the coefficients} $c_3$ to $1/2$. So we consider the transformation $\varphi = \zeta \phi$, with $\zeta \in \mathbb{R}$ constant such that:
 \begin{align*}
     c_3 a^{2-d} (\nabla \varphi)^2 = c_3 a^{2-d}\zeta^2(\nabla \phi)^2 \overset{!}{=}  \frac{1}{2} (\nabla \phi)^2 \Rightarrow \zeta^2 = \frac{a^{d-2}}{c_3} 
 \end{align*}  
@@ -556,7 +558,7 @@ It is not important to specify exactly the dependence of these new coefficients 
 \end{align*}
 %TODO How to find them? 22:25
 
-When taking the continuum limit $a \to 0$, $\mu$ always diverges, while the other coefficients either vanish or diverge depending on $d$. For instance:
+When taking the continuum limit $a \to 0$, $\mu$ always diverges, while the other coefficients either vanish or diverge\footnote{In fact, we take the continuum limit in the first place just to quantify the relative importance of these coefficients} depending on $d$. For instance:
 \begin{itemize}
     \item $d > 4$: only $\mu$ is diverging
     \item $3 < d < 4$: $\mu$ and $g_4$ diverge
@@ -576,11 +578,11 @@ From a physical point of view, we are interested only in the $d=3$ (general syst
 \section{Back to the discrete world}
 In summary, the continuum limit $a \to 0$ has shown to us that only a \textbf{finite number of terms} in the \textbf{Hamiltonian} are \textbf{important}. 
 
-Thus, a \textbf{discrete model} with just the \q{right terms} so that its continuum limit matches just the first terms of (\ref{eqn:continuum-limit}) is enough to describe \textit{all the systems} in the same \textit{universality class} near criticality!
+Thus, a \textbf{discrete model} with just the \q{right complexity} so that its continuum limit matches just the first terms of (\ref{eqn:continuum-limit}) is enough to describe \textit{all the systems} in the same \textit{universality class} near criticality!
 
 \medskip
 
-One such example is the Nearest Neighbour Ising Model that we have already studied. In the same universality class we find the \q{Next neighbour} Ising Model, in which a spin may interact with a \textit{neighbour} of its \textit{neighbours} (fig. \ref{fig:n-nIM}). Explicitly, the Hamiltonian is given by:
+One such example is the Nearest Neighbour Ising Model that we have already studied. In the same universality class we find the \q{Next Neighbour} Ising Model, in which a spin may interact with a \textit{neighbour} of its \textit{neighbours} (fig. \ref{fig:n-nIM}). Explicitly, the Hamiltonian is given by:
 \begin{align*}
     -\beta H(\bm{\sigma}) = \textcolor{Blue}{K \sum_{\langle x,y \rangle} \sigma_x \sigma_y} + \textcolor{ForestGreen}{L \sum_{\langle \langle x,y \rangle \rangle} \sigma_x \sigma_y}
 \end{align*}

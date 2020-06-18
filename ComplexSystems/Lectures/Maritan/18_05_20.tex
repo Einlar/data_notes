@@ -1,0 +1,424 @@
+%&latex
+%
+\providecommand{\main}{../..}
+\documentclass[../../main.tex]{subfiles}
+
+\begin{document}
+
+\section{Proof that $\mathbb{P}(m,t) \to \mathbb{P}_{\mathrm{eq.}}(m)$}\label{sec:proof-db}\lesson{30}{18/05/20}
+
+\textbf{Hypotheses}. 
+Assume that:
+\begin{enumerate}
+    \item \textbf{Detailed balance} (\ref{eqn:detailed-balance}) holds:
+    \begin{align}\label{eqn:hyp-db1}
+        {W(m|m') \mathbb{P}_{\mathrm{eq}}(m')} = {W(m'|m) \mathbb{P}_{\mathrm{eq}}(m)} 
+    \end{align}
+    \item For any pairs of states $(m,m')$, there is a \textbf{path} $\{m_0 = m, m_1, m_2, \dots, m_K = m'\}$ with \textbf{non-zero transition rate}:
+    \begin{align}\label{eqn:hyp-2}
+        W(m_K|m_{K-1}) W(m_{K-1}|m_{K-2}) \cdots W(m_1|m_0) > 0
+    \end{align}
+    In other words, there is a way to go from every state $m$ to any other state $m'$ in a finite number of steps. 
+\end{enumerate}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{path_existance.png}
+    \caption{Any pair of states of $(m,m')$ must have a \textit{possible} path that connects them.}
+    \label{fig:path_existance}
+\end{figure}
+\textbf{Thesis}. 
+Then, we want to show that:
+\begin{align*}
+    \lim_{t \to +\infty} \mathbb{P}(m,t) = \mathbb{P}_{\mathrm{eq}}(m)
+\end{align*}
+Moreover, we are interested in finding a way to compute \textit{how fast} $\mathbb{P}(m,t)$ goes to $\mathbb{P}_{\mathrm{eq}}$.
+
+\medskip
+
+\textbf{Sketch of proof}. 
+The idea of the proof is to solve the evolution differential equation in matrix form (\ref{eqn:pdf-evolution-matrixform}):
+\begin{align}\label{eqn:evo-matrixform}
+    \dot{\bm{P}}(t) = \mathrm{T} \bm{P}(t) \qquad \mathrm{T}(m,m') \equiv W(m|m') - \delta_{m,m'} \sum_{m''} W(m''|m')
+\end{align}
+This is a system of first order differential equations. To solve it, we make use of the \textbf{spectral decomposition} of $\mathrm{T}$.
+
+Let $\{\bm{w_n}\}$ be a orthonormal basis\marginpar{Idea of the proof} of $\mathbb{R}^N$, with $\bm{w_n}$ being the eigenvectors of $\mathrm{T}$ with eigenvalues $\lambda_n \in \mathbb{R}$:
+\begin{align}\label{eqn:eigen-eq}
+    \mathrm{T} \bm{w_n} = \lambda_n \bm{w_n} \qquad \langle \bm{w_n}, \bm{w_m} \rangle = \delta_{n,m}
+\end{align}
+
+Then we can write any vector $\bm{P} \in \mathbb{R}^N$ as a linear combination of $\{\bm{w_n}\}$:
+\begin{align}\label{eqn:Pt}
+    \bm{P}(t) = c_1(t) \bm{w_1} + \dots + c_N(t) \bm{w_N} = \sum_{n} c_n(t) \bm{w_n}
+\end{align}
+
+Differentiating:
+\begin{align*}
+    \dot{\bm{P}}(t) = \sum_n \dot{c}_n(t) \bm{w_n} \underset{(\ref{eqn:evo-matrixform})}{=}  \mathrm{T} \sum_{n} c_n(t) \bm{w_n} \underset{(\ref{eqn:eigen-eq})}{=} \sum_n \lambda_n c_n(t) \bm{w_n} 
+\end{align*}
+If we then take the scalar product of both sides with $\bm{w_m}$ and apply the orthonormality property (\ref{eqn:eigen-eq}) we get:
+\begin{align*}
+    \dot{c}_m(t) = \lambda_m c_m(t) \qquad \forall m = 1,\dots,N
+\end{align*}
+which can immediately be solved by separation of variables:
+\begin{align*}
+    c_m(t) = c_m(0) e^{\lambda_m t}
+\end{align*}
+And substituting back in (\ref{eqn:Pt}) we find the solution:
+\begin{align*}
+    \bm{P}(t) = \sum_n c_n(0) e^{\lambda_n t} \bm{w_n}
+\end{align*}
+
+To proceed, we will show that $\mathbb{P}_{\mathrm{eq}}$ is an eigenvector of $\mathrm{T}$ with eigenvalue $\lambda_0 = 0$, and that all other eigenvectors have $\lambda_n < 0$. This means that, for any initial condition:
+\begin{align*}
+    \bm{P}(t) = \sum_n c_n(0) e^{\lambda_n t} \bm{w_n} = c_0(0) \mathbb{P}_{\mathrm{eq}} + \sum_{n > 0} c_n(0) e^{-|\lambda_n|t} \bm{w_n}  \xrightarrow[t \to \infty]{}  c_0(0) \mathbb{P}_{\mathrm{eq}}
+\end{align*}
+Due to the conservation of probability $c(0) = 1$. Moreover, if $\lambda_1$ is the eigenvalue nearest to $0$, it describes the \textit{dominant} timescale for reaching $\mathbb{P}_{\mathrm{eq}}$. 
+
+\medskip
+
+So, to complete the proof we will proceed as follows:
+\begin{enumerate}
+    \item First we show that a orthonormal eigenbasis of $\mathrm{T}$ (\ref{eqn:eigen-eq}) exists, and that the eigenvalues $\lambda_n$ are real. This is done by showing that, by just rescaling $\mathrm{T} \mapsto \hat{T}$ (which does not alter the eigenvalues), it becomes a \textbf{symmetric} matrix.
+    \item Then we show explicitly that $\mathbb{P}_{\mathrm{eq}}$ is the eigenvector with $0$ eigenvalue, and that all the other $\lambda_n$ are negative. 
+    \item We will adapt the previous arguments to the newly defined matrix $\hat{T}$.
+\end{enumerate}
+
+\textbf{Proof}.
+
+\begin{enumerate}
+    \item To \q{symmetrize} $\mathrm{T}$, we first \textit{symmetrize} $W$, starting by dividing both sides of (\ref{eqn:hyp-db1}) by $\sqrt{\mathbb{P}_{\mathrm{eq}}(m) \mathbb{P}_{\mathrm{eq}}(m')}$ (assuming $\mathbb{P}_{\mathrm{eq}}(m) \neq 0$ $\forall m$):
+    \begin{align}\label{eqn:symmetric-db}
+        W(m|m') \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(m')}{\mathbb{P}_{\mathrm{eq}}(m)}} = W(m'|m) \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(m)}{\mathbb{P}_{\mathrm{eq}}(m')} }
+    \end{align}
+    For simplicity of notation, let's define:
+    \begin{align}\label{eqn:What}
+        \hat{W}(m|m') \equiv W(m|m') \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(m')}{\mathbb{P}_{\mathrm{eq}}(m)} }
+    \end{align}
+    Then (\ref{eqn:symmetric-db}) can be written as:
+    \begin{align*}
+        \hat{W}(m|m') = \hat{W}(m'|m)
+    \end{align*}
+    meaning that the matrix $\hat{W}_{m,m'} \equiv \hat{W}(m|m')$ is symmetric.
+    
+    \medskip
+    
+    We apply the same transformation (\ref{eqn:What}) to the matrix $T$ defined in (\ref{eqn:T-matrix}):
+    \begin{align} \label{eqn:That}
+        \hat{T}(m,m') &\equiv T(m,m') \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(m')}{\mathbb{P}_{\mathrm{eq}}(m)}} =\\
+        \nonumber
+        &= \underbrace{W(m|m') \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(m')}{\mathbb{P}_{\mathrm{eq}}(m)}}}_{\hat{W}(m,m')} - \delta_{m,m'} \sum_{m''} \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(m')}{\mathbb{P}_{\mathrm{eq}}(m)}} W(m''|m') = \\ \nonumber
+        &\underset{\mathclap{(a)}}{=} \hat{W}(m,m') - \delta_{m,m'} \sum_{m''} \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(\textcolor{Red}{m})}{\mathbb{P}_{\mathrm{eq}}(m)} } W(m''|m') =\\ \nonumber
+        &= \hlc{Yellow}{\hat{W}(m,m') }- \hlc{SkyBlue}{\delta_{m,m'} \sum_{m''} W(m''|m')}
+    \end{align}
+    where in (a) we note that the second term can be non-zero only if $m = m'$ (due to the $\delta$) and in this case the two $\mathbb{P}_{\mathrm{eq}}$ factors cancel out.
+    
+    The matrix $\hat{T}$ is the sum of a symmetric matrix $\hat{W}$ (yellow term) and a diagonal matrix (blue term), so it is symmetric:
+    \begin{align*}
+        \hat{\mathrm{T}}(m,m') = \hat{\mathrm{T}}(m',m)
+    \end{align*}
+    Since $\hat{\mathrm{T}}$ is symmetric, its eigenvectors $\{\bm{v_n}\}$ form a basis of $\mathbb{R}^N$, and may be chosen to be orthonormal:
+    \begin{align*}
+        \hat{\mathrm{T}} \bm{v_n} = \lambda_n \bm{v_n} \qquad \langle \bm{v_n}, \bm{v_m} \rangle = \delta_{n,m}
+    \end{align*}
+
+    Moreover, the eigenvalues of $\hat{\mathrm{T}}$ are \textbf{real} numbers (since $\hat{\mathrm{T}}$ has real entries), and are the same of the eigenvalues of $\mathrm{T}$, since the trasnformation $\mathrm{T} \mapsto \hat{\mathrm{T}}$ is a \textbf{similitude} transformation, i.e. (\ref{eqn:That}) may be written as:
+    \begin{align*}
+        \hat{\mathrm{T}} = S^{-1} \mathrm{T} S \qquad S_{m,m'} = \delta_{m,m'} \sqrt{\mathbb{P}_{\mathrm{eq}}(m)}
+    \end{align*} 
+    
+    The eigenvectors of $\mathrm{T}$ and $\hat{\mathrm{T}}$, on the other hand, are different. In fact, if $\bm{v_n}$ is an eigenvector of $\hat{\mathrm{T}}$ with eigenvalue $\lambda_n$ then:
+    \begin{align}\nonumber
+        \hat{\mathrm{T}} \bm{v_n} &= \lambda_n \bm{v}_n \\ \nonumber
+        \Rightarrow  S^{-1} \mathrm{T} S \bm{v}_n &= \lambda_n \bm{v}_n\\ \nonumber
+        \Rightarrow  \mathrm{T} \underbrace{S \bm{v}_n}_{\bm{w_n^R}}  &= \lambda_n \underbrace{S \bm{v}_n}_{\bm{w_n^R}} \\
+        \Rightarrow  \mathrm{T} \bm{w_n^R} &= \lambda_n \bm{w_n^R}
+        \label{eqn:right-eigenvector}
+    \end{align}
+    where $\bm{w_n^R} = S \bm{v_n}$ is the right eigenvector of $\mathrm{T}$ corresponding to the eigenvector $\bm{v_n}$ of $\hat{\mathrm{T}}$.
+
+    \medskip
+
+    Transposing the eigenvalue equation we obtain also an expression for the left eigenvectors of $\mathrm{T}$:
+    \begin{align}\nonumber
+        \bm{v_n}^T \hat{\mathrm{T}} &= \lambda_n \bm{v_n}^T\\
+        \Rightarrow  \bm{v_n}^T S^{-1} \mathrm{T} S &=  \lambda_n \bm{v_n}^T\\ \nonumber
+        \Rightarrow \bm{v_n}^T S^{-1} \mathrm{T} &= \lambda_n \bm{v_n}^T S^{-1}\\ \nonumber
+        \Rightarrow [(S^{-1})^T \bm{v_n}]^T \mathrm{T} &= \lambda_n [\underbrace{(S^{-1})^T \bm{v_n}}_{\bm{w_n^L}}]^T \\
+        \Rightarrow [\bm{w_n^L}]^T \mathrm{T} &= \lambda_n [\bm{w_n^L}]^T 
+        \label{eqn:left-eigenvector}
+    \end{align}
+    \item We know that $\mathbb{P}_{\mathrm{eq}}$ is a stationary state, and so $\dot{\mathbb{P}}_{\mathrm{eq}} = 0$. Substituting this in (\ref{eqn:pdf-evolution-matrixform}) we get:
+    \begin{align}\label{eqn:Peq-stationarity}
+        \mathrm{T} \mathbb{P}_{\mathrm{eq}} = 0
+    \end{align}
+    And so $\bm{w_0^R} = \mathbb{P}_{\mathrm{eq}}$ is a right eigenvector of $\mathrm{T}$. This means that:
+    \begin{align*}
+        \bm{v_0} \underset{(\ref{eqn:right-eigenvector})}{=}  S^{-1} \mathbb{P}_{\mathrm{eq}} = (1/\sqrt{\mathbb{P}_{\mathrm{eq}}^{(k)}} \colon k = 1,\dots,N)^T
+    \end{align*}
+     is a right eigenvector of $\hat{\mathrm{T}}$, with eigenvalue $0$.
+
+    \medskip
+
+    We now prove that all the other $\lambda_n$ are negative. Starting from the eigenvalue equation for $\hat{\mathrm{T}}$ and taking the scalar product of both sides by $\bm{v_n}$ we get:
+    \begin{align*}
+        \langle \bm{v_n}, \hat{\mathrm{T}} \bm{v_n} \rangle = \lambda \underbrace{\langle \bm{v_n}, \bm{v_n} \rangle}_{1} 
+    \end{align*}
+    So $\lambda_n < 0$ ($n > 0$) if and only if $\langle \bm{v}, \hat{\mathrm{T}}\bm{v} \rangle < 0$ $\forall \bm{v} \in \mathbb{R}^N \setminus \{\bm{0}\}$. Let's write this scalar product in full:
+    \begin{align}\nonumber
+        \langle \bm{v}, \hat{\mathrm{T}} \bm{v} \rangle &= \sum_{m,n} v_m \hat{\mathrm{T}}_{mn} v_n \underset{(\ref{eqn:That})}{=} \sum_{mn} v_m v_n \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(n)}{\mathbb{P}_{\mathrm{eq}}(m)}} \left[W(m|n) - \delta_{mn} \sum_k W(k|m) \right] =\\ \nonumber
+        &= \sum_{mn} v_m v_n \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(n)}{\mathbb{P}_{\mathrm{eq}}(m)}} W(m|n) - \sum_{kn} v_n^2 W(k|n)
+        \intertext{In the last term we used the $\delta_{mn}$ to remove the sum over $m$ by setting $m = n$. Then, if we rename $k \leftrightarrow m$ we can merge the two sums:}
+        &= \sum_{mn} \left[v_m v_n \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(n)}{\mathbb{P}_{\mathrm{eq}}(m)}} W(m|n)- v_n^2 W(m|n)\right] \label{eqn:sum-merge}
+    \end{align}
+    Since the sum is over both $m$ and $n$, note that:
+    \begin{align*}
+        \sum_{mn} v_{\textcolor{Red}{n}}^2 W(\textcolor{Blue}{m}|\textcolor{Red}{n}) = \sum_{mn} v_{\textcolor{Blue}{m}}^2 W(\textcolor{Red}{n}|\textcolor{Blue}{m})
+    \end{align*}
+    This allows to \textit{symmetrize} the last term in (\ref{eqn:sum-merge}):
+    \begin{align}\label{eqn:symm-term}
+        \sum_{mn} v_n^2 W(m|n) = \frac{1}{2} \left[\sum_{mn} v_n^2 W(m|n) + \sum_{mn} v_m^2 W(n|m)\right]  
+    \end{align}
+    In this way we can use (\ref{eqn:hyp-db1}) to express $W(n|m)$ in terms of $W(m|n)$ and $\mathbb{P}_{\mathrm{eq}}$:
+    \begin{align}\label{eqn:db-cons}
+        W(n|m) = W(m|n) \frac{\mathbb{P}_{\mathrm{eq}}(n)}{\mathbb{P}_{\mathrm{eq}}(m)} 
+    \end{align}
+
+    Substituting (\ref{eqn:symm-term}) and (\ref{eqn:db-cons}) in (\ref{eqn:sum-merge}) we can finally recognize a square:
+    \begin{align}\nonumber
+        \langle \bm{v}, \hat{\mathrm{T}} \bm{v} \rangle &= \frac{1}{2} \sum_{mn} W(m|n) \mathbb{P}_{\mathrm{eq}}(n) \left[2 \frac{v_m}{\sqrt{\mathbb{P}_{\mathrm{eq}}(m)}} \frac{v_n}{\sqrt{\mathbb{P}_{\mathrm{eq}}}(n)} - \left(\frac{v_n}{\sqrt{\mathbb{P}_{\mathrm{eq}}(n)}} \right)^2 - \left(\frac{v_m}{\sqrt{\mathbb{P}_{\mathrm{eq}}(m)}} \right)^2  \right] =\\
+        &= -\frac{1}{2} \sum_{mn} W(m|n) \mathbb{P}_{\mathrm{eq}}(n) \left(\frac{v_n}{\sqrt{\mathbb{P}_{\mathrm{eq}}(n)}} - \frac{v_m}{\sqrt{\mathbb{P}_{\mathrm{eq} }(m)}}  \right)^2 \leq 0 \label{eqn:square}
+    \end{align}
+
+    In particular the equality is reached if:
+    \begin{align}\label{eqn:equality-pair}
+        \frac{v_n}{\sqrt{\mathbb{P}_{\mathrm{eq}}(n)}} = \frac{v_m}{\sqrt{\mathbb{P}_{\mathrm{eq}}(m)}}  \qquad \forall n,m \colon W(m|n) > 0
+    \end{align}
+    However, by hypothesis there is \textit{always} a path connecting any pair of states $(m,n)$, meaning that $W(m|n) > 0$ always. So (\ref{eqn:equality-pair}) must hold for every pair $(m,n)$, which is only possible if it's constant:
+    \begin{align*}
+        \frac{v_n}{\sqrt{\mathbb{P}_{\mathrm{eq}}(n)}} = \text{Constant independent of $n$} \equiv c
+    \end{align*}
+    So $\bm{v_0} \in \mathbb{R}^N$ with entries given by:
+    \begin{align*}
+        v_n = c \sqrt{\mathbb{P}_{\mathrm{eq}}(n)}
+    \end{align*}
+    is the \textbf{only} eigenvector of $\hat{\mathrm{T}}$ with eigenvalue $0$. If we choose $c=1$, the corresponding eigenvector of $T$ is exactly $\mathbb{P}_{\mathrm{eq}}$:
+    \begin{align*}
+        \sum_n \hat{\mathrm{T}}(m,n)\sqrt{\mathbb{P}_{\mathrm{eq}}(n)} &= \sum_n T(m,n) \sqrt{\frac{\mathbb{P}_{\mathrm{eq}}(n)}{\mathbb{P}_{\mathrm{eq}}(m)} } \sqrt{\mathbb{P}_{\mathrm{eq}}(n)} =\\
+        &= \frac{1}{\sqrt{\mathbb{P}_{\mathrm{eq}}(m)}} \sum_n T(m,n) \mathbb{P}_{\mathrm{eq}}(n) \underset{(\ref{eqn:Peq-stationarity})}{=}  0
+    \end{align*}
+    Then, all the other eigenvalues $\lambda_n$ ($n > 1$) are negative.
+    \item Finally, let's wrap up the demonstration. Since $\hat{\mathrm{T}}$ is symmetric, we can choose an orthonormal basis $\{\bm{v_n}\}$ made by eigenvectors of $\hat{\mathrm{T}}$. Let's denote with $\{\bm{w}_n^L\}$ and $\{\bm{w_n^R}\}$ the corresponding left and right eigenvectors of $\mathrm{T}$. Each of the two sets still form a (non-orthonormal) basis of $\mathbb{R}^N$.
+    
+    We have:
+    \begin{align}\label{eqn:on-2}
+        \delta_{n,m} = \langle \bm{v_n}, \bm{v_m} \rangle = \langle \bm{w_n^L} S, S^{-1} \bm{w_n^R} \rangle = \langle \bm{w_n^L}, \bm{w_n^R} \rangle
+    \end{align}
+
+    We can write $\bm{P}(t)$ as a linear combination of $\{\bm{w_n^R}\}$:
+    \begin{align}\label{eqn:Pt2}
+        \bm{P}(t) = \sum_{k} c_k(t) \bm{w_k^R} \qquad c_k(t) = \langle \bm{w_k^L}, \bm{P}(t) \rangle
+    \end{align}
+    Differentiating:
+    \begin{align*}
+        \partial_t \bm{P}(t) &= \sum_{k} \dot{c}_k(t) \bm{w_k^R} = \mathrm{T} \bm{P}(t) = \sum_k c_k(t) \mathrm{T} \bm{w_k^R}= \sum_k c_k(t) \lambda_k \bm{w_k^R}
+    \end{align*}
+    And taking the scalar product of both sides with $\bm{w_j^L}$ and applying (\ref{eqn:on-2}) leads to:
+    \begin{align*}
+        \dot{c}_j(t) = \lambda_j c_j(t) \Rightarrow c_j(t) = c_j(0) e^{\lambda_j t}
+    \end{align*}
+    Substituting back in (\ref{eqn:Pt2}):
+    \begin{align*}
+        \bm{P}(t) = \sum_{k} c_k(0) e^{\lambda_k t} \bm{w_k^R}  \xrightarrow[t \to +\infty]{} c_0(0) \underbrace{\bm{w_0^R}}_{\mathbb{P}_{\mathrm{eq}}} 
+    \end{align*}
+    In particular:
+    \begin{align*}
+        c_0(0) = \langle \bm{w_0^L}, \bm{P}(t=0) \rangle
+    \end{align*}
+    And $\bm{w_0^L} = (1,\dots,1)^T$ because:
+    \begin{align*}
+        (1,\dots,1)^T \mathrm{T} &= \sum_{m} \mathrm{T}_{mn} \underset{(\ref{eqn:T-matrix})}{=}  \sum_m W(m|n) - \sum_m \delta_{mn} \sum_{k} W(k|n) =\\
+        &= \sum_{m} W(m|n) - \sum_k W(k|n) \>\> \underset{\mathclap{k \leftrightarrow m}}{=} \>\> \sum_m \cancel{W(m|n)} - \sum_m \cancel{W(m|n)} = 0
+    \end{align*}
+    Thus, as $\bm{P}$ is a vector of probabilities that must sum to $1$:
+    \begin{align*}
+        c_0(0) = \langle \bm{1}, \bm{P}(t=0) \rangle = \sum_n P_n(0) \overset{!}{=} 1
+    \end{align*}
+
+    This proves indeed that:
+    \begin{align*}
+        \bm{P}(t)  \xrightarrow[t \to +\infty]{}  \mathbb{P}_{\mathrm{eq}}
+    \end{align*}
+\end{enumerate}
+
+\textbf{Alternative proof}. The same result can be deduced on the basis of the time behaviour of the relative entropy (\ref{eqn:relative-entropy}). Recall that the relative entropy can be regarded as measuring a sort of \q{distance} between different probabilities distributions. In particular, if we compar $\bm{P}(t)$ with the equilibrium distribution $\mathbb{P}_{\mathrm{eq}}$, the relative entropy is given by:
+\begin{align*}
+    S_R(t) \equiv - \sum_m \mathbb{P}(m,t) \ln \frac{\mathbb{P}(m,t)}{\mathbb{P}_{\mathrm{eq}}(m)} 
+\end{align*} 
+Recall that $S_R(t) \leq 0$, with the equality reached only if $\mathbb{P}(m,t) = \mathbb{P}_{\mathrm{eq}}(m)$ $\forall m$.
+
+\medskip
+
+Differentiating both sides:
+\begin{align*}
+    \partial_t S_R(t) &= -\sum_m \left[\dot{\mathbb{P}}(m,t) \ln \frac{\mathbb{P}(m,t)}{\mathbb{P}_{\mathrm{eq}}(m)} + \mathbb{P}(m,t) \frac{\dot{\mathbb{P}}(m,t)}{\mathbb{P}(m,t)} \right] =\\
+    &\underset{(\ref{eqn:MasterEquation})}{=}  -\sum_{mn} \left[W(m|n) \mathbb{P}(n,t) - W(n|m)\mathbb{P}(m,t)\right] \ln \frac{\mathbb{P}(m,t)}{\mathbb{P}_{\mathrm{eq}}(m)} - \underbrace{\sum_m \cancel{\dot{\mathbb{P}}(m,t)}}_{\mathclap{0 \> (\text{Prob. conserv.})}} 
+\end{align*}
+In the first term, as we are summing over both $m$ and $n$, we can use again the trick of summing the same expression with $m \leftrightarrow n$ and then dividing by $2$:
+\begin{align*}
+    \partial_t S_R(t) &= -\frac{1}{2} \sum_{mn} \left[W(m|n)\mathbb{P}(n,t) - W(n|m) \mathbb{P}(m,t)\right] \left[\ln \frac{\mathbb{P}(m,t)}{\mathbb{P}_{\mathrm{eq}}(m)} - \ln \frac{\mathbb{P}(n,t)}{\mathbb{P}_{\mathrm{eq}}(n)}  \right]
+\end{align*}
+We can rewrite the logarithms as follows:
+\begin{align*}
+    \ln \frac{\mathbb{P}(m,t)}{\mathbb{P}_{\mathrm{eq}}(m)} - \ln \frac{\mathbb{P}(m,t)}{\mathbb{P}_{\mathrm{eq}}(m)} = \ln \left[\frac{\mathbb{P}(m,t)}{\mathbb{P}(n,t)} \frac{\mathbb{P}_{\mathrm{eq}}(n)}{\mathbb{P}_{\mathrm{eq}}(m)} \right]
+\end{align*}
+and then use the detailed balance condition:
+\begin{align*}
+    \frac{\mathbb{P}_{\mathrm{eq}}(n)}{\mathbb{P}_{\mathrm{eq}}(m)}  = \frac{W(n|m)}{W(m|n)} 
+\end{align*}
+so that:
+\begin{align*}
+    \partial_t S_R(t) &= \frac{1}{2} \sum_{mn} \left[\underbrace{W(m|n)\mathbb{P}(n,t)}_{x} -\underbrace{ W(n|m) \mathbb{P}(m,t)}_{y}\right] \ln \frac{W(m|n)\mathbb{P}(n,t)}{W(n|m)\mathbb{P}(m,t)} =\\
+    &= \frac{1}{2} (x-y) \ln \frac{x}{y} = y \left(\frac{x}{y} -1 \right) \ln \underbrace{\frac{x}{y}}_{z} = y(z-1) \ln z
+\end{align*}
+Note that $y > 0$ and $z > 0$ (as they are a product/ratio of positive quantities). So $(z-1)\ln z \geq 0$, with the equality reached only if $z=1$. Thus:
+\begin{align*}
+    \partial_t S_R(t) \geq 0
+\end{align*}
+In particular:
+\begin{align*}
+    \partial_t S_R(t) = 0 \Leftrightarrow \frac{W(m|n)\mathbb{P}(n,t)}{W(n|m)\mathbb{P}(m,t)} = 1 \Leftrightarrow \mathbb{P}(m,t) = \mathbb{P}_{\mathrm{eq}}(m) \frac{\mathbb{P}(n,t)}{\mathbb{P}_{\mathrm{eq} }(n)}  \quad \forall m,n
+\end{align*}
+since we have assumed that all pairs of states are joined by a path of non-zero transition rates $W(i|j)$.
+
+\medskip
+
+Summing over $m$:
+\begin{align*}
+    \sum_m \mathbb{P}(m,t) = 1 = \frac{\mathbb{P}(n,t)}{\mathbb{P}_{\mathrm{eq}}(n)} \underbrace{\sum_m \mathbb{P}_{\mathrm{eq}}(m) }_{1} \Rightarrow \frac{\mathbb{P}(n,t)}{\mathbb{P}_{\mathrm{eq}}(n)} = 1  
+\end{align*}
+Thus:
+\begin{align*}
+    \partial_t S_R(t) = 0 \Leftrightarrow \mathbb{P}(m,t) = \mathbb{P}_{\mathrm{eq}}(m)
+\end{align*}
+
+Summarizing, we know that $S_R(t)$ is bounded ($S_R(t) \leq 0$), and for every initial condition different from the equilibrium ($\mathbb{P}(m,0) \neq \mathbb{P}_{\mathrm{eq}}(m)$) it increases with time ($\partial_t S_R(t) > 0$). Since $S_R(t)$ is monotonous and bounded, it admits a limit for $t \to +\infty$, that we denote with $S_R^*$:
+\begin{align*}
+    \lim_{t \to +\infty} S_R(t) \equiv S_R^*
+\end{align*}
+This limit \textit{must} be $S_R^* = 0$, meaning that $\mathbb{P}(m,t)  \xrightarrow[t \to \infty]{}  \mathbb{P}_{\mathrm{eq}}(m)$. In fact, if we assume by absurd that $\mathbb{P}(m,t)  \xrightarrow[t \to \infty]{}   \mathbb{P}^*(m) \neq \mathbb{P}_{\mathrm{eq}}(m)$, then $S_R^* < 0$ and the time derivative would be positive in the limit:
+\begin{align*}
+    \partial_t S_R(t)  \xrightarrow[t \to \infty]{}  \frac{1}{2} \sum_{mn} [W(m|n) \mathbb{P}^*(n) - W(n|m)\mathbb{P}^*(m)] \ln \frac{W(m|n)\mathbb{P}^*(n)}{W(n|m)\mathbb{P}^*(m)} > 0
+\end{align*}
+which is absurd, since $S_R(t)$ is bounded, and so it cannot increase indefinitely. So, this proves that:
+\begin{align*}
+    \lim_{t \to +\infty} \mathbb{P}(m,t) = \mathbb{P}_{\mathrm{eq}}(m) \quad \forall m
+\end{align*}
+However, differently from the previous proof, we do not have any information on the \textit{rate} of convergence (which we know to be exponential).
+
+\chapter{Population Dynamics}%TODO Rewrite this part
+
+Idea of the general picture. 
+We can now use all the tools we developed in the previous chapters for some real applications. 
+Show some examples of how powerful these techniques are and what is the attitude to have before a complex problem.
+
+As we were seeing for the case of a real gas, it is very difficult to solve it, because we have to solve integrals with both kinetic energy and the interaction potential, which is non trivial. We were simplifying it in terms of an Ising Model in a lattice, and even there we needed a variational principle to obtain some solutions in higher dimensions. 
+The variational principle could be used directly for the gas, but we introduced the Ising Model because of its generality
+
+Just trying to simplify complex systems in terms of paradigmatic models reveals similarity between different subjects, that a priori are independent.
+
+%Important for what
+Why is Environmental Statistical Mechanics relevant?
+
+It can be used to understand and possibly avoid environmental disasters. 
+
+%Add plots of trees
+
+
+Population dynamics studies how the number of individuals of a certain species change with time. 
+One of the first models of population dynamics was devised by Fibonacci in the 13th century, and described the growth of an idealized population of rabbits. Assuming that each pair of rabbits mates after one month, generating a new pair, and continues breeding forever.
+
+Suppose we start with one pair. At the end of the month, the two rabbits mate, but there is still one pair in total.
+During next month, they produce a new pair, bringing the total to $2$. At the end of the third month, the initial pair produces a new pair, but the second one not, and so the total will be $3$. They both produce new pairs in the following month, meaning that the next number will be $5$, and we obtain the Fibonacci's sequence.
+
+\begin{align*}
+    F_n = F_{n-1} + F_{n-2}
+\end{align*}
+with $F_0 = 0$ and $F_1 = 1$. 
+
+Because of this, Fibonacci is considered the father of population dynamics. Its sequence became so famous that there is also a journal about it. %https://www.fq.math.ca/
+
+
+Euler himself worked on this problem, introducing the concept of \textit{exponential growth} in a treaty about the infinite. %Euler and the geometric growth of populations, Nicolas Baca\"er
+
+Then Malthus in 1798 wrote an essay on population dynamics %Principle of Populatin. 
+It supposed a geometric increase of population, but a linear increse in resources, warning for the problems of overpopulation and scarsity (Malthusian Law of Population).
+His studies motivated the Census Act in 1800 in England, starting a detailed record of populations. 
+
+A more complex model was provided by Verhulst in 1838, where the population $p(t)$ evolves according to the differential equation:
+\begin{align*}
+    \dv{p}{t} = mp - \phi(p)
+\end{align*}
+$m$ is a constant describing \textit{fertility}, while $\phi(p)$ is a (non-linear) unknown function acting as a \textit{limiter}. So population grows exponentially only at the start, and then \textit{stationarizes} at a certain point, due to mortality and lack of resources - both of which scale on $p$ (more population means a higher probability for epidemics and famine). This is the first example of a \textit{logistic growth}.
+
+In the 1920s, the dynamics of two populations - a predator and a prey - was described by two coupled differential equations by Lotka and Volterra:
+\begin{align*}
+    \begin{cases}
+        \dv{N_1}{t} = (\epsilon_1 - \gamma_1(h_1 N_1 + h_2 N_2))N_1\\
+        \dv{N_2}{t} = (\epsilon_2 - \gamma_2(h_1 N_1 + h_2 N_2))N_2
+    \end{cases}
+\end{align*}
+Both populations tend to increase exponentially with a rate $\epsilon_{1,2}$, but they are limited by a Verhulst non-linear term ($N_{1,2}^2$) and also by the size of the other population. %Check constants
+The result is that $N_1(t)$ and $N_2(t)$ both \textit{oscillate} with the same period, but with a slight offset in their phase. If the prey increases, than predators will have more food and increase, reducing the number of prey, meaning that now predators will find more difficult to find nourishment. 
+
+This kind of behaviour was in effect observed in reality in the population of fish.
+
+The prey-predator evolution can be described deterministically by (), but also stochastically as a birth-death process. In particular, this leads to the interesting phenomenon of \textit{stochastic amplification}, where the dynamics present oscillations purely due to randomness, while the deterministic model would not predict any change.
+
+In the present times, ecological data is more abundant and available than ever. For example there are 5-year census of entire tree populations in the Amazon, registering many features of interest.
+
+One of the first to try to understand biodiversity and biogeography in a mathematical way is Stephen Hubbel, who wrote The Unified Neutral Theory of Biodiversity and Biogeography in 2001. He proposed that the complexity of biodiversity could be unsterstood with very simple models, and tried to simplify complex models of the past so that they can be more maneageable.
+
+The core of biogeography deals with how \textit{population} is distributed among different \textit{species}, i.e. how many species have $n$ individuals (alpha diversity). This can be directly relevant to us when dealing with the biodiversity of bacteria in the gut, as several illnesses can be linked to changes in the bacterial flora.
+
+Another question is studying the number of species as a function of area.
+
+% RSA = Relative Species Abundance
+
+% The number of trees in a forest grows linearly with the considered area, meaning that the density of trees, independently of their size, is constant (law of constant density). 
+
+% \begin{figure}[H]
+%     \centering
+%     \includegraphics[width=0.7\textwidth]{constant-density.png}
+%     \caption{Population size of trees in the BCI forest as a function of the sample area.}
+%     \label{fig:constant-density}
+% \end{figure}
+
+Also the two-point correlation function, i.e. the probability of finding a certain species $i$ at distance $r$ from a species $j$ (beta diversity).
+
+Other questions of interest are the emergence of power laws (scaling laws). 
+
+%Map of censuses of forests
+%e.g. Island in Panama of forest, and graph of number of species per patch. 
+Q: Are there species that are specialized to a given resource? Can this explain the difference in distribution of species?
+
+For example one can study the distribution of a certain resource (e.g. Nitrogen and Manganese) vs another (phosphorus and magnesium)
+
+Histogram: look at the percentage of patches that correspond to a certain ratio of resurces. This can then be divided into species. If some species are specialized, we expect an histogram that is peaked in the left/right tail.
+
+Histogram: distribution of hybanthus (blue), while the black is the percentage of quadrants with that given ratio of nitrogen over phosphorus. The fact that the two histograms coincide means that the species is distributed randomly, i.e. it has no preference. 
+Histogram: the same result can be obtained if we consider other resources (magnesium/manganese) etc.
+Also changing the species does not change the result.
+
+%Fin
+
+
+
+
+
+
+
+
+
+
+\end{document}
