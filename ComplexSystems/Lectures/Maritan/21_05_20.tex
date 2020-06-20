@@ -127,9 +127,9 @@ Thus:
 \end{align}
 
 We can finally compute the extinction time distribution. Let $\mathcal{P}(t|n_0) \dd{t}$ be the probability that a species with $n_0$ individuals becomes extinct at time in $(t, t+ \dd{t})$. This is merely the probability of surviving until $t$, but not after $t+ \dd{t}$:
-\begin{align*}
+\begin{align}\label{eqn:lifetime-derivative}
     \mathcal{P}(t|n_0)\dd{t} = \mathcal{P}_>(t|n_0) - \mathcal{P}_>(t+\dd{t}|n_0) = - \dd{t} \pdv{t} \mathcal{P}_>(t|n_0)
-\end{align*}
+\end{align}
 Dividing by $\dd{t}$ we get:
 \begin{align}\label{eqn:extinction-diff-eq}
     \mathcal{P}(t|n_0) = -\pdv{t} \mathcal{P}_>(t|n_0)
@@ -202,11 +202,8 @@ In the first two cases we can estimate the lifetimes $\tau'$ of these two specie
 \end{figure}
 
 
-
-
-
 %Presentation continues
-\section{Stochastic Evolution} %TODO Find a better title
+\subsection{Continuum limit}\label{sec:birth-death-continuum}
 Recall the Master Equation (\ref{eqn:birth-death-ME2}) and let $x = n$ and $\mathbb{P}_n = p_x$:
 \begin{align*}
     \pdv{p_x(t)}{t}=b(x-1) p_{x-1}(t)+d(x+1) p_{x+1}(t)-[b(x)+d(x)] p_{x}(t)
@@ -278,7 +275,7 @@ By fitting the stationary state distribution we can determine $2$ parameters out
     \label{fig:speciesturnover}
 \end{figure}
 
-\section{Spatial models}
+\section{Spatial models}\label{sec:spatial-models}
 Until now we completely neglected \textit{spatial effects} in the data, i.e. the physical distribution of species in the environment. 
 
 One of the main models that includes these kinds of features is the \textbf{voter model}, originally created to understand elections and \textit{influences} between different voters.

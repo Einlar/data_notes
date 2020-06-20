@@ -16,9 +16,9 @@
 
 
 \lesson{31}{20/05/20}
-%History of population dynamics part 2 %TODO Rewrite this part
-Neutral Theory by Stephen Hubbel: simplifies a lot the approach to biodiversity in tropical forests (at least for some very important aspects) and has to do with the analysis of several censa taken around the world, and in particular at Panama.
-We were saying that it seems that species do distribute randomly, with no particular bias towards certain kind of nutrients: plants can grow almost in any place in the forest.
+Moreover, different species seem to interact \textit{weakly} with each other. Let's see how we can understand this from empirical data.
+
+\medskip
 
 Suppose we have $S$ species with population $n_1, \dots, n_S$. We consider the joint probability for a certain configuration $\bm{n}$, i.e. $\mathbb{P}(n_1, \dots, n_S)$. If the species are non-interacting, then the probability factorizes:
 \begin{align*}
@@ -49,27 +49,26 @@ which corresponds to the case of non-interacting species.
 
 \medskip
 
-It is interesting to study the interactions between different species. This would also enable us to \textit{design} a new forest, by choosing which species to plant to get a stable ecosystem. 
-
-%another question: why biodiversity depends heavily on latitude? It is nearly constant near the equator, but drops fast at higher latitudes. 
-
-How to infer the species interactions?
-%Plot of the occupation of the 20 most abundand species in the Barro Colorado Island (BCI) tropical forest 
-
-Divide the region of 1000x500m in $Q$ quadrants of size 20mx20m. Select the top 20 most abundant species to have sufficient numbers to allow for reasonable statistics (so that they are almost in every quadrant). We compute 
-
-Measure the populations $n_1, \dots, n_{20}$ of the $20$ species in each quadrant.
-
-\begin{align*}
+To quantify interaction, we need to measure correlations between the populations of different species ($\beta$-diversity). For example, let's consider the Barro Colorado Island (BCI) forest. The dataset describes a region of size $\num{1000}\timex\SI{500}{\m}$, recording the position and species of each tree. We can divide this area in $Q$ \textit{small} quadrants (let's say of size $\num{20}\times\SI{20}{\m}$). In each quadrant $a$, we measure the population $n_i^{(a)}$ of species $i$, and compute:
+\begin{align}\label{eqn:maxent-bci}
     \langle n_i \rangle &= \frac{1}{Q} \sum_{j=1,\dots,Q} n_i^{(Q)}\\
-    \langle n_i n_j \rangle &= \frac{1}{Q} \sum_{i=1,\dots,Q} n_i^{(Q)} n_j^{(Q)} 
-\end{align*}
-Using these two constraints for MaxEnt, the final probability distribution will be given by:
+    \langle n_i n_j \rangle &= \frac{1}{Q} \sum_{i=1,\dots,Q} n_i^{(Q)} n_j^{(Q)} \nonumber
+\end{align}
+To get useful results, it is convenient to consider only the most common species (e.g. the first $20$ \q{most frequent} ones), such that $n_i^{(Q)}$ are almost all far from $0$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{tree-location.png}
+    \caption{Location of trees of the $20$ most abundant species in the BCI dataset.}
+    \label{fig:tree-location}
+\end{figure}
+
+Using (\ref{eqn:maxent-bci}) as constraints in a MaxEnt model, treating the $n_i$ as continuous variables for simplicity, the final distribution will be given by:
 \begin{align*}
     \ln P(\bm{n}) &= K - \frac{1}{2} \sum_{i,j} (n_i - \langle n_i \rangle) M_{ij} (n_i - \langle n_i \rangle)\\
     M_{ij}^{-1} &= \langle n_i n_j \rangle - \langle n_i \rangle \langle n_j \rangle
 \end{align*}
-where $K$ is the normalization constant, and $\mathrm{M}$ acts as a correlation matrix. %Here we treat n as a continuous variable
+where $K$ is the normalization constant, and $\mathrm{M}$ acts as a correlation matrix. 
 
 \medskip
 
@@ -78,18 +77,45 @@ If the species are non-interacting, then $\mathrm{M}$ is diagonal:
     \langle n_i n_j \rangle = \langle (n_i)^2 \rangle \delta_{ij}
 \end{align*}
 
-%Plot of interaction matrix %slide 35
+So, we can see how much interactions are important by examining the size of the non-diagonal elements of $\mathrm{M}$. The empirical results for the BCI forest are shown in fig. \ref{fig:bci-matrix}.
 
-To get an idea whether the interactions are small or not, we can change at random the labels of each species in each quadrant, and then repeat the same analysis as before. At the end, we will have an estimate of the entity of stochastic fluctuations in the correlation matrix. 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{bci-matrix.png}
+    \caption{Correlation matrix for the top $20$ species in the BCI forest.}
+    \label{fig:bci-matrix}
+\end{figure}
 
-%Plot of scrambled matrix
+The non-diagonal terms seem \textit{small} - but it is not exactly clear if it is right to say so, since we do not have any element to compare them to.
 
-The resulting interactions are much higher. So in nature, we see that species that coexist \textit{do not interact much}. 
+A trick is then to \textit{destroy} all correlations and examine the size of random fluctuations. To do this we can just \textit{relabel} each species inside each quadrant. In other words, inside each quadrant we permutate all \textit{species names} at random, and we repeat this (with different independent relabelling) for every quadrant. The result is a matrix with \textit{no real meaning}, which elements are the product of random chance (fig. \ref{fig:random-chance}).
 
-Why are they not interacting in a cooperative way? Recall that in SM the MaxEnt is obtained when the interaction is \q{turned off}. The interaction potential is a constraint - it bounds the possible values of entropy, in a sense it creates \textit{order}. In nature, the system seems to like \q{being the most random possible}, and this is only possible if the interactions are very small.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.8\textwidth]{random-chance.png}
+    \caption{Correlation matrix after random relabelling of all species in each quadrant.}
+    \label{fig:random-chance}
+\end{figure}
+
+From this experiment we see that, if species were really distributed \textit{at random}, we would expect some relatively \textit{strong} interactions to arise from pure chance. This means that the matrix elements of fig. \ref{fig:bci-matrix} are indeed small, indicating that in nature, species that coexist \textit{do not interact much}. A possible explanation is that, for an ecosystem to be stable, the interactions between its parts must be either \textit{neutral} or \textit{cooperative} - otherwise several species would get extinct, destroying the equilibrium. However, the latter case is much more difficult to realize than the form, as it requires a more precise \q{order}, i.e. a lower information entropy. In nature, evolution optimizes species for survival through a series of random mutations. A system of weakly interacting individuals is more likely to arise from chance alone than a perfectly cooperative system, and still guarantees a low probability of extinction. 
+
+\section{Models}
+Following a semi-historical approach, we will now describe several models of population dynamics.
+\begin{enumerate}
+    \item \textbf{Birth-death processes} are one of the simplest way to \textbf{stochastically} model the growth and decline of populations. In section \ref{sec:birth-death}, we will see how including a Malthusian growth and a death rate proportional to population leads, at stationarity, to the \textbf{Fisher Log-Series}, one of the first function proposed to \textit{fit} empirical data. However, more modern datasets accounting also for rarer species lead to a population distribution that seems to follow a \textbf{log-normal function} - which can not be naturally produced by tweaking the parameters of a birth-death process. Fortunately, assuming birth/death rates that depend on the population itself (\textbf{density dependence}) can give similarly good results, while maintaining the overall model simple.
+    
+    \medskip
+
+    In section \ref{sec:birth-death-continuum} we will then take the continuum limit of the birth-death process, obtaining a \textbf{deterministic} differential equation for the system's evolution. This can be used to predict the stationary distribution, and also to compute the Species Turnover Distribution (STD) - a sort of $\alpha$-diversity as a function of time. The latter is particularly useful to find the characteristic timescale of an ecosystem, i.e. the time needed for a population to recover from some sufficiently small external perturbation, such as human action. Alarmingly, that interval appears to be in the order of millennia in the case of Amazon rainforests.
+    \item While birth-death processes are really useful to compute both $\alpha$-diversity and the STD, they miss entirely on the \textit{spatial} nature of ecosystems. The \textbf{voter model} is perhaps the most paradigmatic spatial model that is able to capture relevant features in the data. It is introduced in section \ref{sec:spatial-models}, where we state (just as an example) several key analytical results, and compare them with empirical evidence, with the aim of understanding the $\beta$-diversity of Amazon rainforests.
+    
+    \medskip
+
+    Then, in section \ref{sec:voter-model} we show some full derivations in a simplified case, with the aim of understanding if, at equilibrium, several species will coexist (biodiversity), or only one will dominate (monodominance). As we will show, while the voter model can fit really well real data, it cannot explain how high biodiversity can be stable in nature - which is still one of the important unsolved problem in environmental statistical mechanics.
+\end{enumerate}
 
 
-\section{Birth-Death processes}
+\section{Birth-Death processes}\sec{sec:birth-death}
 We want now to construct a model based on the empirical observations we made regarding the distribution of species in forests. We make the following assumptions:
 \begin{enumerate}
     \item Species in the same \textbf{trophic level} (number of steps from the start of the food chain) behave similarly.

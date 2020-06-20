@@ -316,52 +316,62 @@ which is absurd, since $S_R(t)$ is bounded, and so it cannot increase indefinite
 \end{align*}
 However, differently from the previous proof, we do not have any information on the \textit{rate} of convergence (which we know to be exponential).
 
-\chapter{Population Dynamics}%TODO Rewrite this part
+\chapter{Population Dynamics}
+Population dynamics is the branch of life sciences that studies the \textbf{size} and \textbf{composition} of populations as \textbf{dynamical systems}. In particular, it aims to model the growth and disappearence of species in ecosystems, allowing to understand the impact of changes in the environment on \textbf{biodiversity} - a topic of utmost importance in the current times, more than ever.
 
-Idea of the general picture. 
-We can now use all the tools we developed in the previous chapters for some real applications. 
-Show some examples of how powerful these techniques are and what is the attitude to have before a complex problem.
+\medskip
 
-As we were seeing for the case of a real gas, it is very difficult to solve it, because we have to solve integrals with both kinetic energy and the interaction potential, which is non trivial. We were simplifying it in terms of an Ising Model in a lattice, and even there we needed a variational principle to obtain some solutions in higher dimensions. 
-The variational principle could be used directly for the gas, but we introduced the Ising Model because of its generality
+In this chapter, \textit{population dynamics} will serve us as a \q{test range} to appreciate the \textbf{power} and \textbf{generality} of statistical mechanics. 
 
-Just trying to simplify complex systems in terms of paradigmatic models reveals similarity between different subjects, that a priori are independent.
+\medskip
 
-%Important for what
-Why is Environmental Statistical Mechanics relevant?
+After a brief introduction, we will focus on several historical models, and see how the techniques we developed in the previous chapters (e.g. variational principle, mean field approximation, scaling laws) can be effectively used to solve problems. As we will show, often just trying to simplify complex systems in terms of paradigmatic models of statistical mechanics, such as the Ising Model, can reveal deep similarities between very different subjects - developing insight on important physical phenomena.
 
-It can be used to understand and possibly avoid environmental disasters. 
+\section{Historical notes}
+At its most basic, population dynamics models how the number of individuals of a given species changes with time.
 
-%Add plots of trees
+One of the first attempt to describe\marginpar{Fibonacci sequence} a population was made by Fibonacci back in the 13th century, resulting in the popular \textbf{Fibonacci sequence}.
 
-
-Population dynamics studies how the number of individuals of a certain species change with time. 
-One of the first models of population dynamics was devised by Fibonacci in the 13th century, and described the growth of an idealized population of rabbits. Assuming that each pair of rabbits mates after one month, generating a new pair, and continues breeding forever.
-
-Suppose we start with one pair. At the end of the month, the two rabbits mate, but there is still one pair in total.
-During next month, they produce a new pair, bringing the total to $2$. At the end of the third month, the initial pair produces a new pair, but the second one not, and so the total will be $3$. They both produce new pairs in the following month, meaning that the next number will be $5$, and we obtain the Fibonacci's sequence.
-
+The main focus was to describe the unchecked growth of a \textit{idealized} colony of \textit{rabbits}, with the following assumptions:
+\begin{itemize}
+    \item Each pair of adult rabbits mates after one month, generating a new pair.
+    \item Newly born rabbits grow to adulthood in just one month.
+    \item The environment resources are abundant, and so rabbits may breed forever
+\end{itemize}
+If we start with a single pair of rabbits ($N_0=1$), the total population $N$ will grow as follows:
+\begin{enumerate}
+    \item In the first month, the only pair of rabbits just grows to adulthood, without generating a new pair, so $N_1=1$.
+    \item In the second month, the pair of adult rabbits will produce a new pair, leading to $N_2=2$.
+    \item In the third month, the original pair of rabbits will produce a new pair, but the second pair needs still some time to grow. So we have $N_3 = 3$.
+    \item In the fourth month, two pairs of rabbits reproduce, and so $N_4 = 5$
+\end{enumerate}
+It can be shown that:
 \begin{align*}
-    F_n = F_{n-1} + F_{n-2}
+    N_n = N_{n-1} + N_{n-2}
 \end{align*}
-with $F_0 = 0$ and $F_1 = 1$. 
+with $N_0 = 0$ and $N_1 = 1$. This is the recurrence relation of the so-called \textbf{Fibonacci sequence}, which is now so famous to have gained an exclusive mathematical journal\footnote{\url{https://www.fq.math.ca/}}.
 
-Because of this, Fibonacci is considered the father of population dynamics. Its sequence became so famous that there is also a journal about it. %https://www.fq.math.ca/
+\medskip
 
+The Fibonacci sequence\marginpar{Euler} is one of the first description of \textit{exponential growth}. A more detailed account on the same concept was given several years later by \textbf{Euler} in a treaty about the infinite \cite{euler_population}.
 
-Euler himself worked on this problem, introducing the concept of \textit{exponential growth} in a treaty about the infinite. %Euler and the geometric growth of populations, Nicolas Baca\"er
+\medskip
 
-Then Malthus in 1798 wrote an essay on population dynamics %Principle of Populatin. 
-It supposed a geometric increase of population, but a linear increse in resources, warning for the problems of overpopulation and scarsity (Malthusian Law of Population).
-His studies motivated the Census Act in 1800 in England, starting a detailed record of populations. 
+One of the most influential works\marginpar{Malthus} on population dynamics was the \q{Essay on the Principle of Population} written by \textbf{Malthus} in 1798. Its main observation was that human population increased \textit{geometrically}, while resources only \textit{linearly} (Malthusian Law of Population). Without any active control on birth rates, this would have lead to overpopulation and famine. 
 
-A more complex model was provided by Verhulst in 1838, where the population $p(t)$ evolves according to the differential equation:
+Malthus book motivated the \textit{Census Act} in the 1800 Britain, starting a detailed account of all population every $10$ years. 
+
+\medskip
+
+All of these models, however,\marginpar{Verhulst} focused heavily on describing the exponential \textit{growth} of population. It was Verhulst, in 1838, to consider quantitatively the environmental \textbf{limiting effects}. He modelled the population $p(t)$ with a differential equation as follows:
 \begin{align*}
     \dv{p}{t} = mp - \phi(p)
 \end{align*}
-$m$ is a constant describing \textit{fertility}, while $\phi(p)$ is a (non-linear) unknown function acting as a \textit{limiter}. So population grows exponentially only at the start, and then \textit{stationarizes} at a certain point, due to mortality and lack of resources - both of which scale on $p$ (more population means a higher probability for epidemics and famine). This is the first example of a \textit{logistic growth}.
+Here $m$ is is a constant describing \textit{fertility}, i.e. the rate of growth of population, while $\phi(p)$ is a (non-linear) unknown function acting as a \textit{limiter}. In this way, population grows exponentially only at the start, and then \textit{stabilizes} at a certain point, due to mortality and lack of resources - both of which scale on $p$ (more population means, for instance, a higher probability for epidemics and famine). This is the first example of a \textit{logistic growth}.
 
-In the 1920s, the dynamics of two populations - a predator and a prey - was described by two coupled differential equations by Lotka and Volterra:
+\medskip
+
+The \textbf{interaction} between different\marginpar{Lotka-Volterra} species was initially examined in a landmark work of the 1920s, where the dynamics of two populations - predator and prey - was described by two coupled differential equations by Lotka and Volterra:
 \begin{align*}
     \begin{cases}
         \dv{N_1}{t} = (\epsilon_1 - \gamma_1(h_1 N_1 + h_2 N_2))N_1\\
@@ -369,56 +379,96 @@ In the 1920s, the dynamics of two populations - a predator and a prey - was desc
     \end{cases}
 \end{align*}
 Both populations tend to increase exponentially with a rate $\epsilon_{1,2}$, but they are limited by a Verhulst non-linear term ($N_{1,2}^2$) and also by the size of the other population. %Check constants
-The result is that $N_1(t)$ and $N_2(t)$ both \textit{oscillate} with the same period, but with a slight offset in their phase. If the prey increases, than predators will have more food and increase, reducing the number of prey, meaning that now predators will find more difficult to find nourishment. 
+The result is that $N_1(t)$ and $N_2(t)$ both \textit{oscillate} with the same period, but with a slight offset in their phase. If the prey increases, than predators will have more food and increase, reducing the number of prey, meaning that now predators will find more difficult to find nourishment, and so on. A behaviour of this kind was effectively observed in nature, by studying the population of fish.
 
-This kind of behaviour was in effect observed in reality in the population of fish.
+\medskip
 
-The prey-predator evolution can be described deterministically by (), but also stochastically as a birth-death process. In particular, this leads to the interesting phenomenon of \textit{stochastic amplification}, where the dynamics present oscillations purely due to randomness, while the deterministic model would not predict any change.
+While Lotka-Volterra approach involved \textbf{deterministic} differential equations, the same behaviour can be modelled using \textbf{stochastic processes}, and in particular the so-called \textbf{birth-death processes}. The main results are the same, but the stochastic case exhibits some interesting consequences due to its inherent \textit{randomness}, such ast the phenomenon of \textit{stochastic amplification}, where significant oscillations in the population are produced by fluctuations and amplified by interaction. We will dedicate one of the following sections to introducing some simple birth-death processes.
 
-In the present times, ecological data is more abundant and available than ever. For example there are 5-year census of entire tree populations in the Amazon, registering many features of interest.
+\medskip
 
-One of the first to try to understand biodiversity and biogeography in a mathematical way is Stephen Hubbel, who wrote The Unified Neutral Theory of Biodiversity and Biogeography in 2001. He proposed that the complexity of biodiversity could be unsterstood with very simple models, and tried to simplify complex models of the past so that they can be more maneageable.
+In \textbf{modern times}, population dynamics is fueled by an increasingly available \textbf{ecological data}. For example there are 5-year census of entire tree populations in the Amazon, registering many features of interest.
 
-The core of biogeography deals with how \textit{population} is distributed among different \textit{species}, i.e. how many species have $n$ individuals (alpha diversity). This can be directly relevant to us when dealing with the biodiversity of bacteria in the gut, as several illnesses can be linked to changes in the bacterial flora.
+\medskip
 
-Another question is studying the number of species as a function of area.
+One of the first to try to understand biodiversity and biogeography in a mathematical way is \textbf{Stephen Hubbel}, who wrote \q{The Unified Neutral Theory of Biodiversity and Biogeography} in 2001. He proposed that the complexity of biodiversity could be unsterstood with very \textbf{simple models}, and tried to simplify complex models of the past so that they can be more maneageable.
 
-% RSA = Relative Species Abundance
+\section{Features of interest}
+In the rest of the chapter, we will present several \textit{models} of population dynamics, finding interesting application to statistical mechanics techniques. Before doing that, however, let's examine \textit{what exactly} are we trying to describe.   
 
-% The number of trees in a forest grows linearly with the considered area, meaning that the density of trees, independently of their size, is constant (law of constant density). 
+\medskip
 
-% \begin{figure}[H]
-%     \centering
-%     \includegraphics[width=0.7\textwidth]{constant-density.png}
-%     \caption{Population size of trees in the BCI forest as a function of the sample area.}
-%     \label{fig:constant-density}
-% \end{figure}
+The main focus of population dynamics has always been the \textit{counting} of individuals belonging to a population (e.g. a certain \textit{species}). 
 
-Also the two-point correlation function, i.e. the probability of finding a certain species $i$ at distance $r$ from a species $j$ (beta diversity).
+The distribution of species\marginpar{$\alpha$-diversity} sizes in an ecosystem, i.e. the probability that a given species picked at random has exactly $n$ individuals, is called the $\bm{\alpha}$-\textbf{diversity} of that ecosystem. It is inherently a measure of \textit{biodiversity}, giving us some information abouth the \textit{health} of a certain population - for example trees in an Amazon rainforest.
 
-Other questions of interest are the emergence of power laws (scaling laws). 
+We know that the existence of many different species is important to maintain a sort of \q{stable equilibrium} in nature, i.e. ecosystems with less \textit{variety} are more prone to extinction, and more sensitive to external perturbations. This is particularly relevant when studying the distribution of bacteria species in the human gut, since here changes can lead to disease.  
 
-%Map of censuses of forests
-%e.g. Island in Panama of forest, and graph of number of species per patch. 
-Q: Are there species that are specialized to a given resource? Can this explain the difference in distribution of species?
+\medskip
 
-For example one can study the distribution of a certain resource (e.g. Nitrogen and Manganese) vs another (phosphorus and magnesium)
+$\alpha$-diversity can be studied as a function of \textit{time}, i.e. in the evolution of ecosystems; or \textit{space}, i.e. how it scales with area. In the latter case, it is unsurprising to find that the number of individuals usually \textit{scales linearly} with the considered area, as if any species had a fixed spatial \textbf{density} (fig. \ref{fig:constant-density}).
 
-Histogram: look at the percentage of patches that correspond to a certain ratio of resurces. This can then be divided into species. If some species are specialized, we expect an histogram that is peaked in the left/right tail.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{constant-density.png}
+    \caption{Population size of trees in the Barro Colorado Island (BCI) forest as a function of the sample area.}
+    \label{fig:constant-density}
+\end{figure}
 
-Histogram: distribution of hybanthus (blue), while the black is the percentage of quadrants with that given ratio of nitrogen over phosphorus. The fact that the two histograms coincide means that the species is distributed randomly, i.e. it has no preference. 
-Histogram: the same result can be obtained if we consider other resources (magnesium/manganese) etc.
-Also changing the species does not change the result.
+In terms of frequency, $\alpha$-diversity gives us information about the \textbf{Relative Species Abundance} (RSA), i.e. how many individuals of a given species are present in a certain sample of population.
 
-%Fin
+\medskip
 
+To measure the \textbf{interaction} between different\marginpar{$\beta$-diversity} species, we can consider the \textbf{two-point correlation function}, i.e. the probability of finding a certain species $i$ at a fixed distance $r$ from a species $j$. This is the so-called $\bm{\beta}$-diversity. It is also an example of inherently \textbf{spatial feature}. 
+%another question: why biodiversity depends heavily on latitude? It is nearly constant near the equator, but drops fast at higher latitudes. 
+\medskip
 
-
-
-
+$\alpha$, $\beta$-diversity and other spatial features can be determined by available empirical data. The challenge is then to find a \textit{understandable} model that, given some \q{simple assumptions}, is able to \textit{fit} that data and \textit{predict} how it evolves in time. In particular, we already know that real systems exhibit \textit{scaling laws} similar to those of physical systems at criticality - so we will pay additional attention to finding them.
 
 
+\section{Neutral theory}
+At first, the problem of studying many different species, each one with unique \textit{quirks} and \textit{interactions}, can seem intractable with relatively simple models. It is reasonable that the complex biodiversity of an Amazon rainforest would require hundreds of parameters to be tackled - which would quickly destroy any hope of some real understanding.
 
+\medskip
 
+Fortunately, this is not the case. Complex ecosystems are surprisingly \textit{simple} at their core: to the eye of population dynamics, all species \q{look the same}, and almost \textit{do not} interact with each other. This is the main argument of the \textbf{neutral theory} by Stephen Hubbell: all species which share the same \textit{level} in the food chain can be considered \textit{equivalent}, in the sense that differences between them are \q{neutral}, i.e. irrelevant to the success of their individuals. 
 
+\medskip
+
+From a physical point of view, this is great news: it means that we can create models with \textit{few} parameters, borrowing ideas from the paradigmatic models of statistical mechanics, and achieve our target. Still, the extraordinary nature of such a claim requires a strong foundation.
+
+\medskip
+
+In this introduction, we will consider just an example at the root of the neutral theory. Let's consider an Amazon rainforest, inhabited by many different species of trees. If the assumptions of neutral theory are adequate, we expect all trees to be placed \q{at random}, i.e. without any correlation to other physical quantities. 
+
+Let's consider, for example, the distribution of \textbf{nutrients} in an area (fig. \ref{fig:relative-nutrients}). This is done by dividing the area in small \textit{quadrants}, and measuring in each of them the relative concentration of certain soil elements.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{relative-nutrients.png}
+    \caption{Relative distribution of plant nutrients in the BCI forest}
+    \label{fig:relative-nutrients}
+\end{figure}
+
+We then consider all the quadrants with a given concentration of nutrients, and measure in them the \textit{relative abundance} of tree species, i.e. the fraction of all individuals in these quadrants that belong to a given species. For example, suppose that a species $A$ is \textit{specialized} in consuming phosphorus, and a species $C$ instead prefers \textit{nitrogen}. Then we would expect to find a lot of trees of species $A$ in quadrants where the ratio nitrogen/phosphorus is low, and a lot of trees of species $C$ where it is high, giving rise to a plot similar to fig. \ref{fig:N-P-plot}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{N-P-plot.png}
+    \caption{Relative abundance of nutrient-specialized species}
+    \label{fig:N-P-plot}
+\end{figure}
+
+However, when plotting \textit{real data}, we do not see this kind of pattern. Instead, species seem to be \textit{agnostic} to the relative concentration of nutrients - they simply occupy all available space (fig. \ref{fig:hybanthus}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{hybanthus.png}
+    \caption{The distribution of hybanthus as a function of soil nutrients concentration. There is no clear \textit{bias} towards a certain element.}
+    \label{fig:hybanthus}
+\end{figure}
+
+The same result holds for different combinations of nutrients and different species, contributing evidence for the neutral assumption.
+
+\medskip
 \end{document}
