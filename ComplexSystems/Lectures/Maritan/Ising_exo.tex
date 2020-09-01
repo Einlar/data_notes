@@ -1,0 +1,629 @@
+%
+\providecommand{\main}{../..}
+\documentclass[12pt,a4paper]{report}
+
+\input{\main/header.tex}
+
+\newgeometry{total={170mm,257mm}, left=20mm, top=20mm}
+\begin{document}
+
+\chapter{Complex Systems Exercises}
+
+
+\begin{exo}[Ising Model]
+    Consider a $1$-dimensional Ising Model with nearest-neighbour ferromagnetic interaction in an external uniform field with energy function given by:
+    \begin{align*}
+        \mathcal{H}(\bm{\sigma}) = -J \sum_{x=1}^N \sigma_x \sigma_{x+1} - B \sum_{x=1}^N \sigma_x \qquad J > 0
+    \end{align*}    
+    where periodic boundary conditions are used, i.e. $\sigma_{N+1} \equiv \sigma_1$. Define $K \equiv \beta J$ and $h \equiv \beta B$.
+    
+    \medskip
+    
+    \textbf{Part A}. Using the transfer matrix $\mathrm{T}(\sigma, \sigma') = \exp(K \sigma \sigma' + h (\sigma + \sigma')/2)$ and its spectral decomposition, determine:
+    \begin{enumerate}
+        \item The \textbf{partition function} $Z(K,h)$
+        \item The \textbf{free energy} per node in the thermodynamic limit and its plot for $h=0$ versus $1/K$
+        \item The \textbf{entropy} per node in the thermodynamic limit and its plot for $h=0$ versus $1/K$
+        \item The \textbf{mean energy} per node in the thermodynamic limit and its plot for $h=0$ versus $1/K$
+        \item The \textbf{specific heat} per node in the thermodynamic limit and its plot for $h=0$ versus $1/K$
+        \item The \textbf{average magnetization} at $x$, $\langle \sigma_x \rangle$, in the thermodynamic limit and its plot for $h=0, 0.1, 0.2, 0.5, 1$ versus $1/K$ and for $K=1$ versus $h$ in the range $(-5,5)$
+        \item The \textbf{two-point correlation function} $\langle \sigma_x \sigma_{x+y} \rangle$ in the thermodynamic limit and its plot for $h=0$ and $K=1$ versus $y$.
+    \end{enumerate}
+
+    \textbf{Part B}. Consider the same model with \textbf{open} boundary conditions (node $1$ is linked only to node $2$, and node $N$ only to node $N-1$):
+    \begin{align*}
+        \mathcal{H}(\bm{\sigma}) = -J \sum_{x=1}^{N-1} \sigma_x \sigma_{x+1} - B \sum_{x=1}^N \sigma_x
+    \end{align*}   
+    Show that the partition function for this case can be formally written as:
+    \begin{align*}
+        Z(K,h) = \bm{v}^T \mathrm{T}^N \bm{v} \equiv \sum_{\substack{\sigma_1 = \pm 1\\ \sigma_N = \pm 1}} v(\sigma_1) \mathrm{T}^N(\sigma_1, \sigma_N) v(\sigma_N)  
+    \end{align*}
+    where $v(\sigma) = e^{h \sigma /2}$. Show that the free energy per node in the thermodynamic limit is the same as above.
+    
+    \medskip
+
+    \textbf{Part C}. Same as in part $B$ with fixed boundary conditions $\sigma_1 = 1 = \sigma_N$, and $v(\sigma) = e^{h/2}$ for both $\sigma=\pm 1$.
+    
+    \medskip
+
+    \textbf{Part D}. How would you try to solve the Ising model in $1$-dimension with nearest neighbour and next-to-nearest neighbour interaction and periodic boundary condition ($\sigma_{N+1} = \sigma_1$ and $\sigma_{N+2} = \sigma_2$):
+    \begin{align*}
+        \mathcal{H}(\bm{\sigma}) = -\sum_{x=1}^N (J_1 \sigma_x \sigma_{x+1} + J_2 \sigma_x \sigma_{x+2}) - B \sum_{x=1}^N \sigma_x
+    \end{align*} 
+
+\end{exo}
+
+\section{Solution}
+    \subsection{Part A}
+
+    Consider a $d=1$ system with $N$ spins. The periodic boundary conditions are $\sigma_{N+1} = \sigma_1$.
+    \begin{enumerate}
+        \item The \textbf{partition function} is given by:
+        \begin{align*}
+            Z(K,h) &= \sum_{\{\bm{\sigma}\}} e^{-\beta \mathcal{H}(\bm{\sigma})} = \sum_{\{\bm{\sigma}\}} \exp\left(K \sum_{x=1}^N \sigma_x \sigma_{x+1} + h \sum_{x=1}^N \sigma_x\right) =\\
+            &= \sum_{\{\bm{\sigma}\}} \prod_{x=1}^N \underbrace{\exp\left(K \sigma_x \sigma_{x+1} + h \frac{\sigma_x + \sigma_{x+1}}{2} \right)}_{\mathrm{T}_{\sigma_x,\sigma_{x+1}}}  =\\
+            &= \sum_{\sigma_1 = \pm 1} \cdots \sum_{\sigma_{N} = \pm 1} \mathrm{T}_{\sigma_1 \sigma_2} \mathrm{T}_{\sigma_2 \sigma_3} \cdots \mathrm{T}_{\sigma_{N-1} \sigma_N} \mathrm{T}_{\sigma_N \sigma_1} =\\
+            &= \sum_{\sigma_1 = \pm 1} (\underbrace{\mathrm{T} \cdots \mathrm{T}}_{\text{$N$ times}})_{\sigma_1 \sigma_1} = \sum_{\sigma_1 = \pm 1} (\mathrm{T}^N)_{\sigma_1 \sigma_1} = \operatorname{Tr} \mathrm{T}^N 
+        \end{align*} 
+        where $\mathrm{T}$ is a $2\times 2$ matrix given by:
+        \begin{align}\label{eqn:T-matrix1}
+            \mathrm{T} = \begin{blockarray}{l*{2}{c}}
+                \begin{block}{*{2}{>{\scriptstyle}c<{}}l}
+                    \sigma'=+1 & \sigma'=-1 & \\
+                \end{block}
+                \begin{block}{[*{2}{c}]>{\scriptstyle}r<{}}
+                    e^{K+h} & e^{-K} & \sigma=+1 \\
+                    e^{-K}   & e^{K-h} & \sigma = -1\\
+                \end{block}
+            \end{blockarray}
+        \end{align}
+        As the trace is basis-independent, we can compute it in the basis that diagonalizes $\mathrm{T}$. Let $\lambda_1$ and $\lambda_2$ be the eigenvalues of $\mathrm{T}$, with $\lambda_1 < \lambda_2$. By solving:
+        \begin{align*}
+            \operatorname{det}(\mathrm{T} - \lambda \bb{I}) \overset{!}{=} 0
+        \end{align*}
+        we find:
+        \begin{align}\label{eqn:lambdas}
+            \lambda_{1,2} = e^{K} \cosh h \mp \sqrt{e^{2K} \sinh^2 h + e^{-2K}}
+        \end{align}
+        When diagonalized, $\mathrm{T} = \operatorname{diag}(\lambda_1, \lambda_2)$, and so:
+        \begin{align}\label{eqn:partition-pbc}
+            Z(K,h) = \operatorname{Tr} \mathrm{T}^N = (\lambda_1^N + \lambda_2^N) 
+        \end{align} 
+
+        \item The \textbf{free energy} per node $f(K,h)$ is defined by the relation:
+        \begin{align*}
+            Z = e^{-\beta N f(K,h)} \underset{\mathclap{(\ref{eqn:partition-pbc})}}{=} (\lambda_1^N + \lambda_2^N)
+        \end{align*} 
+        Taking the $\ln$ of both sides and dividing by $N$ leads to:
+        \begin{align*}
+            \frac{\ln Z}{N} = -\beta f(K,h) &= \frac{1}{N} \ln (\lambda_1^N + \lambda_2^N) 
+            \intertext{In the thermodynamic limit $N \to +\infty$ only the greatest eigenvalue ($\lambda_1$) will dominate:}
+            &= \frac{1}{N} \ln \Big( \lambda_2^N \Big[1 + \Big(\frac{\lambda_1}{\lambda_2} \Big)^N\Big]\Big) =\\
+            \xrightarrow[N \to +\infty]{} &\phantom{=} \frac{1}{\cancel{N}} \cancel{N} \ln \lambda_2 = \ln \lambda_2 
+        \end{align*}
+        Thus:
+        \begin{align}\label{eqn:free-energy-pbc}
+            f(K,h) = -\frac{1}{\beta} \ln \lambda_2 = -\frac{1}{\beta} \ln [e^K \cosh h + \sqrt{e^{2K} \sinh^2 h + e^{-2K}}]  
+        \end{align}
+
+        When $h=0$:
+        \begin{align}\nonumber
+            f(K,h=0) &= -\frac{1}{\beta} \ln [e^K \cdot 1 + \sqrt{e^{2K} \cdot 0 + e^{-2K}}] =\\ \label{eqn:free-energy-pbc-zerofield}
+            &= -\frac{\textcolor{Blue}{J}}{\beta \textcolor{Blue}{J}} \ln \textcolor{Red}{2}\frac{[e^K + e^{-K}]}{\textcolor{Red}{2}}  = -\frac{J}{K} \ln (2\cosh K)
+        \end{align}
+        where $K = \beta J = J/(k_B T)$, and so $1/K \propto T$.
+        
+        \medskip
+
+        As a function of $T$ (or $1/K$), we have that:
+        \begin{align*}
+            f(K,0)  &\xrightarrow[T \to 0^+]{} -J
+        \end{align*}
+        And for large $T$:
+        \begin{align*}
+            f(K,0) \underset{T \gg 1}{\sim} -J T \log 2
+        \end{align*}
+        So, if $J=k_B = 1$, $f(K,0)$ stationarizes at $-1$ for $T \to 0^+$, and goes to $-\infty$ linearly (with a $\log 2$ factor) as $T \to +\infty$.
+        
+        A plot of $f(1/K)$ is shown in fig. \ref{fig:free-energy}.
+
+        \item The \textbf{entropy} per node is obtained by differentiating the free energy per node:
+        \begin{align}\label{eqn:entropy-expression}
+            s \equiv - \pdv{f}{T} = -\pdv{f}{\beta} \pdv{\beta}{T} = \frac{1}{k_B T^2} \pdv{f}{\beta}     
+        \end{align} 
+        Using (\ref{eqn:free-energy-pbc}) we get:
+        \begin{align*}
+            \pdv{f}{\beta} &= +\frac{1}{\beta^2} \ln [e^K \cosh h + \sqrt{e^{2K} \sinh^2 h + e^{-2K}}] \cdot\\
+            &\quad\> \Bigg( e^{K} J \cosh h + e^{K} B \sinh h + \frac{1}{2 \sqrt{e^{2K} \sinh^2 h + e^{-2K}}} \cdot\\
+            &\quad \> \cdot \Big[ 2 e^{2K} J \sinh^2 h + 2 e^{2K} B \cosh h \sinh h  - 2 J e^{-2K} \Big]\Bigg)
+        \end{align*}
+        Taking $h=0$:
+        \begin{align*}
+            \pdv{f}{\beta}\Big|_{h=0} &= \frac{1}{\beta^2} \ln \textcolor{Blue}{2}\frac{[e^K + e^{-K} ]}{\textcolor{Blue}{2}}  - \frac{J \textcolor{Red}{\beta}}{\beta \cdot \textcolor{Red}{\beta}} \frac{e^K - e^{-K}}{e^K + e^{-K}} =\\
+            &= \frac{1}{\beta^2} \ln [2 \cosh(K)] - \frac{K}{\beta^2}\tanh(K)  
+        \end{align*}
+
+        The result is the same we would have obtained by directly differentiating (\ref{eqn:free-energy-pbc-zerofield}), since:
+        \begin{align*}
+            {\pdv{f}{\beta}}(K,h) = \pdv{f}{K} \pdv{K}{\beta} + \pdv{f}{h} \underbrace{\pdv{h}{\beta}}_{B} 
+        \end{align*}
+        and $h=0 \Rightarrow B=0$, meaning that the rightmost term vanishes (assuming that $\pdv{f}{h}$ is well behaved).
+
+        \medskip
+
+        Substituing back in (\ref{eqn:entropy-expression}) we get:
+        \begin{align}\label{eqn:entropy-pbc}
+            s = k_B \Big[\ln(2\cosh K) - K \tanh K \Big] 
+        \end{align}
+        A plot of $s(1/K)$ is shown in fig. \ref{fig:entropy}.
+
+        \item The \textbf{mean energy} is given by:
+        \begin{align*}
+            \langle \epsilon \rangle &= - \pdv{\beta} \frac{\ln Z}{N} = - \pdv{\beta} (\beta f(K,h)) =\\
+            &= \frac{1}{e^K \cosh h + \sqrt{e^{2K} \sinh^2 h + e^{-2K}}} \Bigg( e^K J \cosh h + e^K B \sinh h +\\
+            &\quad\> + \frac{1}{2 \sqrt{e^{2K} \sinh^2 h + e^{-2K}}} \cdot \Big[2 e^{2K} J \sinh^2 h + 2 e^{2K} B \sinh h \cosh h - 2 J e^{-2K} \Big]  \Bigg) 
+        \end{align*} 
+
+        When $h=0$:
+        \begin{align}\label{eqn:mean-energy-pbc}
+            \epsilon(K,h=0) &= -J \frac{e^K - e^{-K}}{e^K + e^{-K}} = - J \tanh K
+        \end{align}
+        which is plotted in fig. \ref{fig:mean-energy}.
+        
+        Note that, alternatively, we could have used the free energy definition to determine $\epsilon$:
+        \begin{align*}
+            f = \epsilon - T s
+        \end{align*}
+        
+
+        \item The \textbf{specific heat} \textit{per node} is defined as:
+        \begin{align*}
+            c &\equiv \pdv{\epsilon}{T} = -\pdv{\epsilon}{\beta} \pdv{\beta}{T} = -k_B \beta^2 \pdv{\epsilon}{\beta}
+        \end{align*}
+        Since the expression is quite complicated, we use the argument we made when computing the entropy to take $h=0$ \textit{before} computing the derivative:
+        \begin{align*}
+            c(h=0) &= -k_B \beta^2 \pdv{\beta} (-J \tanh K) = \frac{k_B K^2}{\cosh^2 K}   
+        \end{align*} 
+        A plot of $c(1/K)$ is shown in fig. \ref{fig:specific-heat}.
+        
+%Check with mathematica:
+%\[Epsilon][\[Beta]_]:=1/(Exp[J \[Beta]]Cosh[B \[Beta]] + Sqrt[Exp[2J \[Beta]] Sinh[\[Beta] B]^2+Exp[-2 J \[Beta]]]) * ( ( Exp[J \[Beta]](J Cosh[\[Beta] B]+ B Sinh[\[Beta] B])) + 
+%(Exp[2 J \[Beta]] * Sinh[\[Beta] B] * (J Sinh[\[Beta] B]+ B Cosh[\[Beta] B]) - J Exp[-2 \[Beta] J]) / (Sqrt[Exp[2 \[Beta] J] Sinh[\[Beta] B]^2 + Exp[-2 \[Beta] J]])
+%)
+%FullSimplify[-kb \[Beta]^2 D[ \[Epsilon][\[Beta]],\[Beta]] /. B-> 0, Reals]
+
+        \item The \textbf{magnetization} can be directly computed by differentiating the free energy:
+        \begin{align} \nonumber
+            \langle \sigma_x \rangle &= - \beta \pdv{h} f(K,h) = \pdv{h} (-\beta f(K,h)) = \\ \nonumber
+            &\underset{\mathclap{(\ref{eqn:free-energy-pbc})}}{=} \pdv{h} \ln (e^K \cosh h + \sqrt{e^{2K} \sinh^2 h + e^{-2K}}) =\\ \nonumber
+            &= \frac{1}{e^K \cosh h + \sqrt{e^{2K} \sinh^2 h + e^{-2K}}} \Big(e^K \sinh h + \frac{2 e^{2K} \sinh h \cosh h}{2 \sqrt{e^{2K} \sinh^2 h + e^{-2K}}}  \Big) =\\ \nonumber
+            &= e^K \sinh h \Big[1 + \frac{e^K \cosh h}{\sqrt{e^{2K} \sinh^2 h + e^{-2K}}} \Big] \frac{1}{e^K \cosh h + \sqrt{e^{2K} \sinh^2 h + e^{-2K}}} =\\ \nonumber
+            &= e^K \sinh h \frac{\sqrt{e^{2K} \sinh^2 h + e^{-2K}} + e^K \cosh h}{\sqrt{e^{2K} \sinh^2 h + e^{-2K}}} \frac{1}{e^K \cosh h + \sqrt{e^{2K} \sinh^2 h + e^{-2K}}} =\\ 
+            &= \frac{e^K \sinh h}{\sqrt{e^{2K} \sinh^2 h + e^{-2K}}} \label{eqn:magnetization-pbc-full}
+        \end{align} 
+
+        For $h=0$:
+        \begin{align*}
+            \langle \sigma_x \rangle \equiv 0
+        \end{align*}
+
+        Plots of $\langle \sigma_x \rangle$ as function of $h$ and $K$ are shown in fig. \ref{fig:magnetization-k} and \ref{fig:magnetization-h}.
+
+        \medskip
+
+        Alternatively, we can use the transfer matrix $\mathrm{T}$. We start by writing explicitly the average:
+        \begin{align*}
+            \langle \sigma_x \rangle &= \frac{1}{Z} \sum_{\{\bm{\sigma}\}} \sigma_x e^{-\beta \mathcal{H}(\bm{\sigma})} = \frac{1}{Z} \sum_{\sigma_1 = \pm 1} \dots \sum_{\sigma_N = \pm 1} \mathrm{T}_{\sigma_1 \sigma_2} \cdots \mathrm{T}_{\sigma_{x-1} \sigma_x} \sigma_x \mathrm{T}_{\sigma_x \sigma_{x+1}} \cdots \mathrm{T}_{\sigma_N \sigma_1}  
+        \end{align*}
+        If we define:
+        \begin{align}\label{eqn:T-prime}
+            \mathrm{T}'_{\sigma_i \sigma_j} \equiv \sigma_{i} \mathrm{T}_{\sigma_i \sigma_j} 
+        \end{align}
+        We can still write the sum over all spin configurations as the trace of a matrix product:
+        \begin{align*}
+            \langle \sigma_x \rangle = \frac{1}{Z} \operatorname{Tr}(\mathrm{T}^{x-1} \mathrm{T}' \mathrm{T}^{N-x}) 
+        \end{align*}
+        Then, using the cyclic property of the trace:
+        \begin{align*}
+            \operatorname{Tr}(\mathrm{A} \mathrm{B} \mathrm{C}) = \operatorname{Tr}(\mathrm{C} \mathrm{A} \mathrm{B}) = \operatorname{Tr}(\mathrm{B}\mathrm{C}\mathrm{A})   
+        \end{align*}
+        we get:
+        \begin{align*}
+            {\langle \sigma_x \rangle} = \frac{1}{Z} \operatorname{Tr} (\mathrm{T}' \mathrm{T}^{N-x} \mathrm{T}^{x-1}) = \frac{1}{Z} \operatorname{Tr}(\mathrm{T}' \mathrm{T}^{N-1}) \qquad \forall x
+        \end{align*}
+        As expected, $\langle \sigma_x \rangle$ does not depend on $x$, since the system is translational invariant.
+
+        \medskip
+
+        Explicitly, $\mathrm{T}'$ is given by:
+        \begin{align*}
+            \mathrm{T}' = \begin{blockarray}{l*{2}{c}}
+                \begin{block}{*{2}{>{\scriptstyle}c<{}}l}
+                    \sigma'=+1 & \sigma'=-1 & \\
+                \end{block}
+                \begin{block}{[*{2}{c}]>{\scriptstyle}r<{}}
+                    e^{K+h} & e^{-K} & \sigma=+1 \\
+                    -e^{-K}   & -e^{K-h} & \sigma = -1\\
+                \end{block}
+            \end{blockarray}
+        \end{align*}
+        Note that it can be written as:
+        \begin{align*}
+            \mathrm{T}' = \begin{pmatrix}
+                1 & 0\\
+                0 & -1
+            \end{pmatrix} \mathrm{T} = \sigma_z \mathrm{T}
+        \end{align*}
+        where $\sigma_z$ is the third Pauli matrix (not to be confused with the $z$-th spin). Thus:
+        \begin{align*}
+            \langle \sigma_x \rangle = \frac{1}{Z} \operatorname{Tr}(\sigma_z \mathrm{T}^N)  
+        \end{align*}
+
+        As before, since the trace is basis independent, this computation is easier in the basis that diagonalizes $\mathrm{T}$. Let $\ket{v_{1,2}}$ be the two eigenvectors of $\mathrm{T}$, with eigenvalues $\lambda_{1,2}$. In the basis $\{\ket{v_{1,2}}\}$, $\mathrm{T}^N = \operatorname{diag}(\lambda_1^N, \lambda_2^N)$, while $\sigma_z$ becomes:
+        \begin{align}\label{eqn:sigma-z-transformed}
+            \mathrm{V}^{-1}\sigma_z \mathrm{V} = \begin{pmatrix}
+                \bra{v_1} \sigma_z \ket{v_1} & \bra{v_1} \sigma_z \ket{v_2}\\
+                \bra{v_2} \sigma_z \ket{v_1} & \bra{v_2} \sigma_z \ket{v_2}
+            \end{pmatrix} 
+        \end{align}
+        So, the argument of the trace in the $\{\ket{v_\pm}\}$ basis is:
+        \begin{align*}
+            \mathrm{V}^{-1} \sigma_z \mathrm{V} \operatorname{diag}(\lambda_1^N, \lambda_2^N) = \begin{pmatrix}
+                \lambda_1^N \bra{v_1} \sigma_z \ket{v_1} & \lambda_2^N \bra{v_1} \sigma_z \ket{v_2} \\
+                \lambda_1^N \bra{v_1} \sigma_z \ket{v_1} & \lambda_2^N \bra{v_2} \sigma_z \ket{v_2}
+            \end{pmatrix} 
+        \end{align*}
+        Thus:
+        \begin{align}\label{eqn:magnetization-count1}
+            \langle \sigma_z \rangle = \frac{1}{Z} \Big[ \lambda_1^N \bra{v_1} \sigma_z \ket{v_1} + \lambda_2^N \bra{v_2}\sigma_z \ket{v_2} \Big]
+        \end{align}
+        $Z(K,h)$ is given by (\ref{eqn:partition-pbc}), which in the thermodynamic limit becomes:
+        \begin{align*}
+            Z(K,h) = (\lambda_1^N + \lambda_2^N) = \lambda_2^N \Big(1 + \Big(\frac{\lambda_1}{\lambda_2}\Big)^N \Big)  \xrightarrow[N \to +\infty]{} \lambda_2^N \qquad \lambda_1 < \lambda_2
+        \end{align*}
+        Substituting back in (\ref{eqn:magnetization-count1}) we get:
+        \begin{align}\label{eqn:magnetization-count2}
+            \langle \sigma_z \rangle = \frac{1}{\lambda_2^N}\Big[ \lambda_1^N \bra{v_1} \sigma_z \ket{v_1} + \lambda_2^N \bra{v_2}\sigma_z \ket{v_2} \Big]  \xrightarrow[N \to +\infty]{}  \bra{v_2} \sigma_z \ket{v_2}
+        \end{align}
+
+        All that's left is to find the eigenvectors $\{\ket{v_{1,2}}\}$ and compute the required matrix element. 
+
+        \medskip
+
+        Since $\mathrm{T}$ is a $2\times 2$ matrix, we can write it as a \textit{linear combination} of the Pauli Matrices $\sigma_{x,y,z}$, which, together with the identity $\bb{1}$, form a basis of $\mathcal{M}_{2 \times 2}(\mathbb{C})$. In other words, any $2\times 2$ matrix $\mathrm{M}$ can be written as:
+        \begin{align*}
+            \mathrm{M} = a_0 \bb{1} + a_1 \sigma_x + a_2 \sigma_y + a_3 \sigma_z
+        \end{align*}
+        with:
+        \begin{align*}
+            \sigma_x \equiv \left(\begin{array}{cc}
+            0 & 1 \\ 
+            1 & 0
+            \end{array}\right); \quad \sigma_y \equiv \left(\begin{array}{cc}
+            0 & -i \\ 
+            i & 0
+            \end{array}\right); \quad \sigma_z \equiv \left(\begin{array}{cc}
+            1 & 0 \\ 
+            0 & -1
+            \end{array}\right)
+        \end{align*}
+        We can define a \textit{vector of matrices} $\bm{\sigma}\equiv (\sigma_x, \sigma_y, \sigma_z)^T$, and write:
+        \begin{align*}
+            M = a_0 \bb{1} + \bm{a} \cdot \bm{\sigma} = a_0 \bb{1} + \underbrace{\norm{\bm{a}}}_{a} (\bm{\hat{n}} \cdot \bm{\sigma}) 
+        \end{align*}
+        where $\bm{\hat{n}} = (n_x, n_y, n_z)^T$ is a unitary vector ($\norm{\bm{\hat{n}}} = 1$), and:
+        \begin{align*}
+            \bm{\hat{n}}\cdot \bm{\sigma} = \left(\begin{array}{cc}
+            n_z & n_x - i n_y \\ 
+            n_x + in_y & -n_z
+            \end{array}\right)
+        \end{align*}
+
+        This makes it simpler to find eigenvalues and eigenvectors of $\mathrm{M}$. In fact, if $\bm{v}$ is an eigenvector of $\bm{\hat{n}}\cdot \bm{\sigma}$ with eigenvalue $\lambda$:
+        \begin{align*}
+            (\bm{n} \cdot \bm{\sigma}) \bm{v} = \lambda \bm{v}
+        \end{align*}
+        then $\bm{v}$ is an eigenvector also of $\mathrm{M}$, but with eigenvalue $a_0 + a \lambda$:
+        \begin{align*}
+            M \bm{v} = [a_0 \bb{1} + a (\bm{\hat{n}} \cdot \bm{\sigma})] \bm{v} = a_0 \bm{v} + a \lambda \bm{v} = (a_0 + a \lambda) \bm{v}
+        \end{align*}
+        The eigenvalues of $\bm{\hat{n}}\cdot \bm{\sigma}$ are $\pm 1$:
+        \begin{align*}
+            \operatorname{det}(\bm{\hat{n}} \cdot \bm{\sigma} - \lambda \bb{1}) = \lambda^2 - \norm{\bm{\hat{n}}}^2 \Rightarrow \lambda^2 = 1 \Rightarrow \lambda = \pm 1 
+        \end{align*}
+        If we parametrize the unit vector $\bm{\hat{n}}$ in spherical coordinates:
+        \begin{align}\label{eqn:n-parameterization}
+            n_x &= \sin \theta \cos \varphi\\
+            n_y &= \sin \theta \sin \varphi\\ \nonumber
+            n_z &= \cos \theta \nonumber
+        \end{align}
+        Then a pair of \textit{orthonormal} eigenvactors of $\bm{\hat{n}}\cdot \bm{\sigma}$ is given by:
+        \begin{align*}
+            \ket{v_1} = \left(\begin{array}{c}
+            -\sin \frac{\theta}{2}  \\ 
+            \cos \frac{\theta}{2} 
+            \end{array}\right) \qquad \ket{v_2} = \left(\begin{array}{c}
+            \cos \frac{\theta}{2}  \\ 
+            \sin \frac{\theta}{2} 
+            \end{array}\right)
+        \end{align*}
+        $\ket{v_1}$ corresponds to $\lambda=-1$ and $\ket{v_2}$ to $\lambda_2 = +1$.
+
+        \medskip
+
+        So, let's write $\mathrm{T}$ in the Pauli basis, using the Hilbert-Schmidt inner product ($\langle \mathrm{A}, \mathrm{B} \rangle = \operatorname{Tr}(\mathrm{A} \mathrm{B}^*)$) to find the coefficients $a_{0,1,2,3}$:
+        \begin{align*}
+            \mathrm{T} = \underbrace{\frac{\operatorname{Tr}(\mathrm{T} \bb{1})}{2}}_{a_0} \bb{1} + \underbrace{\frac{\operatorname{Tr}(\mathrm{T} \sigma_x) }{2}}_{a_1} \sigma_x + \underbrace{\frac{\operatorname{Tr}(\mathrm{T} \sigma_y)}{2}}_{a_2} \sigma_y + \underbrace{\frac{\operatorname{Tr}(\mathrm{T}\sigma_z) }{2}}_{a_3} \sigma_z    
+        \end{align*}
+        In our case:
+        \begin{align}\label{eqn:a-values}
+            a_0 &= e^K \frac{e^h + e^{-h}}{2} = e^K \cosh h\\ \nonumber
+            a_1 &= \frac{2 e^{-K}}{2} = e^{-K}\\ \nonumber
+            a_2 &= 0\\ \nonumber
+            a_3 &= e^K \frac{e^h - e^{-h}}{2} = e^K \sinh h
+        \end{align}
+        Thus:
+        \begin{align*}
+            a &= \norm{\bm{a}}^2 = \sqrt{a_1^2 + a_2^2 + a_3^2} = \sqrt{e^{-2K} + e^{2K} \sinh^2 h}\\
+            \bm{\hat{n}} &= \frac{\bm{a}}{a} 
+        \end{align*}
+        Since the eigenvectors of $\mathrm{T}$ are the same of $\bm{\hat{n}} \cdot \bm{\sigma}$ we can evaluate (\ref{eqn:magnetization-count2}):
+        \begin{align*}
+            \bra{v_2} \sigma_z \ket{v_2} = \cos^2 \frac{\theta}{2} - \sin^2 \frac{\theta}{2} = \cos \theta = n_z = \frac{a_3}{a} = \frac{e^K \sinh h}{\sqrt{e^{-2K} + e^{2K} \sinh^2 h}}    
+        \end{align*}
+        which coincides with the result we got in (\ref{eqn:magnetization-pbc-full}). 
+
+        \item \textbf{Two-point correlation} 
+        
+        The same spectral method used to compute the magnetization can be used also for the two-point correlation $\langle \sigma_x \sigma_{x+y} \rangle$. As before, we start by explicitly writing the average:
+        \begin{align*}
+            \langle \sigma_x \sigma_{x+y} \rangle &= \frac{1}{Z} \sum_{\{\bm{\sigma}\}}  \sigma_x \sigma_{x+y} e^{-\beta \mathcal{H}(\bm{\sigma})} =  \\
+            &= \frac{1}{Z} \sum_{\sigma_1 = \pm 1} \cdots \sum_{\sigma_N = \pm 1} \mathrm{T}_{\sigma_1 \sigma_2} \cdots \mathrm{T}_{\sigma_{x-1} \sigma_x}\sigma_x \mathrm{T}_{\sigma_x \sigma_{x+1}} \cdots \\
+            &\qquad\qquad\qquad\qquad\quad \> \cdots \mathrm{T}_{\sigma_{x+y-1} \sigma_{x+y}} \sigma_{x+y} \mathrm{T}_{\sigma_{x+y} \sigma_{x+y+1}} \cdots \mathrm{T}_{\sigma_{N} \sigma_1} \span =\\
+            &= \frac{1}{Z} \operatorname{Tr} (\mathrm{T}^{x-1} \sigma_x \mathrm{T}^y \sigma_{x+y} \mathrm{T}^{N-x-y+1}) =\\
+            &\underset{\mathclap{(a)}}{=}  \frac{1}{Z} \operatorname{Tr}(\sigma_z \mathrm{T}^y \sigma_z \mathrm{T}^{N-y}) 
+        \end{align*}
+        where in (a) we used the cyclic property of the trace, and the fact that $\sigma_n \mathrm{T}_{\sigma_n \sigma_{n+1}}$ is equivalent to $\mathrm{T}' = \sigma_z \mathrm{T}$, where $\sigma_z$ is the third Pauli matrix.
+
+        \medskip
+
+        In the continuum limit $Z = \lambda_2^N$. If we compute the trace in the basis $\ket{v_{1,2}}$ that diagonalizes $\mathrm{T}$, we get:
+        \begin{align*}
+            \langle \sigma_x \sigma_{x+y} \rangle = \frac{1}{\lambda_2^N} \Big[ \bra{v_1} \sigma_z \mathrm{T}^y \sigma_z \ket{v_1} \lambda_1^{N-y} + \bra{v_2} \sigma_z \mathrm{T}^y \sigma_z \ket{v_2} \lambda_2^{N-y} \Big]
+        \end{align*}
+        and since $\lambda_1 < \lambda_2$, when $N \to +\infty$ the first term vanishes, leaving:
+        \begin{align*}
+            \langle \sigma_x \sigma_{x+y} \rangle = \frac{\bra{v_2} \sigma_z \mathrm{T}^y \sigma_z \ket{v_2}}{\lambda_2^y} 
+        \end{align*}
+        Be careful not to mix different bases! The matrix product can be done in the canonical basis - but it's difficult since here $\mathrm{T}$ has the form (\ref{eqn:T-matrix1}), thus making $\mathrm{T}^y$ quite hard to compute. A better choice is to compute everything in the $\ket{v_{1,2}}$ basis, where $\mathrm{T} = \operatorname{diag}(\lambda_1, \lambda_2)$, $\ket{v_{1}} = (1,0)^T$, $\ket{v_2} = (0,1)^T$ and $\sigma_z$ is given by (\ref{eqn:sigma-z-transformed}), i.e.:
+        \begin{align*}
+            \sigma_z = \left(\begin{array}{cc}
+            -\cos \theta & -\sin \theta \\ 
+            - \sin \theta & \cos \theta
+            \end{array}\right)
+        \end{align*}
+        An even better choice is to use completeness:
+        \begin{align*}
+            \bra{v_2} \sigma_z \mathrm{T}^y \sigma_z \ket{v_2} = \sum_{i,j=1}^2 \bra{v_2}\sigma_z \ket{v_i} \bra{v_i} \mathrm{T}^y \ket{v_j}\bra{v_j} \sigma_z \ket{v_2}
+        \end{align*}
+        Since $\ket{v_{1,2}}$ diagonalize $\mathrm{T}$, we have:
+        \begin{align*}
+            \bra{v_1} \mathrm{T}^y \ket{v_1} = \lambda_1^y \quad \bra{v_2} \mathrm{T}^y \ket{v_2} = \lambda_2^y \quad \bra{v_1} \mathrm{T}^y \ket{v_2} = \bra{v_2} \mathrm{T}^y \ket{v_1} = 0
+        \end{align*}
+        Thus:
+        \begin{align*}
+            \bra{v_2} \sigma_z \mathrm{T}^y \sigma_z \ket{v_2} &= \bra{v_2} \sigma_z \ket{v_1} \lambda_1^y \bra{v_1} \sigma_z \ket{v_2} + \bra{v_2} \sigma_z \ket{v_2} \lambda_2^y \bra{v_2} \sigma_z \ket{v_2}
+        \end{align*}
+        Note that we already computed $\bra{v_2} \sigma_z \ket{v_2} = \cos \theta$, and so we just need $\bra{v_2} \sigma_z \ket{v_1}$, which is equal to $\bra{v_1} \sigma_z \ket{v_2}$ since $\sigma_z$ is symmetric in the canonical basis, and symmetry is preserved in an orthonormal change of basis. We then find $\bra{v_1} \sigma_z \ket{v_2} = -\sin \theta$ and so:
+        \begin{align*}
+            \langle \sigma_x \sigma_{x+y} \rangle = \frac{\lambda_1^y \sin^2 \theta + \lambda_2^y \cos^2 \theta}{\lambda_2^y} = \cos^2 \theta + \left(\frac{\lambda_1}{\lambda_2} \right)^y \sin^2 \theta
+        \end{align*}
+        $\lambda_{1,2}$ have been computed in (\ref{eqn:lambdas}), and from the parameterization of $\bm{\hat{n}}$ (\ref{eqn:n-parameterization}) we have $\cos^2 \theta = n_3^2 = (a_3/a)^2$ and $\sin^2 \theta = n_x^2 + n_y^2 = (a_1/a)^2$, with the values found in (\ref{eqn:a-values}).
+
+        Since $\lambda_1 < \lambda_2$, when $y \to +\infty$ the second term vanishes, and:
+        \begin{align*}
+            \langle \sigma_x \sigma_{x+y} \rangle  \xrightarrow[y \to \infty]{}  \cos^2 \theta = \cos \theta \cdot \cos \theta = \langle \sigma_x \rangle \langle \sigma_{x+y} \rangle
+        \end{align*}
+        This means that two \textit{spins} that are \textit{infinitely} far apart are effectively \textit{independent}.   
+
+        \medskip
+
+        When $h=0$, the two-point correlation reduces to:
+        \begin{align*}
+            \langle \sigma_x \sigma_{x+y} \rangle = \left(\frac{e^K + e^{-K}}{e^K + e^{-K}} \right)^y = (\tanh K)^y
+        \end{align*}
+        which coincides with the result already found in section 4.3.1 of the main notes, where we used \textit{open} boundary conditions instead of periodic ones (in the thermodynamic limit they are effectively the same, as we will see in part B). 
+
+        \medskip
+
+        A plot of $\langle \sigma_x \sigma_{x+y} \rangle$ as a function of $y$ is shown in fig. \ref{fig:correlation}.
+
+        
+    \end{enumerate}
+    
+
+
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \input{free_energy.pgf}  
+        \caption{\textbf{Free energy} $f$ per node ($h=0$).\label{fig:free-energy}}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \input{entropy.pgf}
+        \caption{\textbf{Entropy} $s$ per node ($h=0$).\label{fig:entropy}}
+    \end{subfigure}\\
+
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \input{energy.pgf}
+        \caption{\textbf{Mean energy} $\epsilon$ per node ($h=0$).\label{fig:mean-energy}}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \input{specific-heat.pgf}
+        \caption{\textbf{Specific heat} $c$ per node ($h=0$).\label{fig:specific-heat}}
+    \end{subfigure}\\
+
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \input{magnetization-k.pgf}
+        \caption{\textbf{Average magnetization} $\langle \sigma_x \rangle$ for $h=0$, $0.1$, $0.2$, $0.5$, $1$. \label{fig:magnetization-k}}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \centering
+        \input{magnetization-h.pgf}
+        \caption{\textbf{Average magnetization} $\langle \sigma_x \rangle$ for $K=1$.\label{fig:magnetization-h}}
+    \end{subfigure}\\
+
+    \begin{subfigure}{\textwidth}
+        \centering
+        \input{correlation.pgf}
+        \caption{\textbf{Two-point correlation function} $\langle \sigma_x \sigma_{x+y} \rangle$ for $h=0$ and $K=1$.\label{fig:correlation}}
+    \end{subfigure}
+    
+    \caption{Plots of various quantities of interest. Note that $K_B T / J = 1/K$.\label{fig:plots}}
+\end{figure}
+
+\subsection{Part B}
+Let's consider the same model with \textbf{open boundary conditions}. The Hamiltonian is given by:
+\begin{align*}
+    \mathcal{H}(\bm{\sigma}) = -J \sum_{x=1}^{N\textcolor{Red}{-1}} \sigma_x \sigma_{x+1} - B \sum_{x=1}^N \sigma_x
+\end{align*}
+We begin by computing the partition function $Z$:
+\begin{align*}
+    Z &= \sum_{\{\bm{\sigma}\}} e^{- \beta \mathcal{H}(\bm{\sigma})} = \sum_{\{\bm{\sigma}\}} \exp\left(K \sum_{x=1}^{N-1} \sigma_x \sigma_{x+1} + h \sum_{x=1}^N \sigma_x\right)
+\end{align*} 
+We rewrite the sum $\sum_x \sigma_x$ in as follows:
+\begin{align}\label{eqn:sum-rewrite}
+    \sum_{x=1}^N \sigma_x &= \frac{1}{\textcolor{Red}{2}} \textcolor{Red}{2} \sum_{x=1}^N \sigma_x = \frac{1}{2} \Big[\phantom{\sigma_1 + }\> \hlc{Yellow}{\sigma_1 + \sigma_2 + \dots + \sigma_{N-1}} + \sigma_N \\  \nonumber
+    &\hspace{7.9em}\sigma_1 + \hlc{Yellow}{\sigma_2  + \sigma_3 + \dots + \sigma_N}\Big] = \\ \nonumber
+    &= \frac{1}{2} \left(\hlc{Yellow}{\sum_{x=1}^{N-1} (\sigma_x + \sigma_{x+1}) }+ \sigma_1 + \sigma_N\right) 
+\end{align}
+Substituting back:
+\begin{align*}
+    Z = \sum_{\{\bm{\sigma}\}} \prod_{x=1}^{N-1} \underbrace{\exp\left(K \sigma_x \sigma_{x+1} + h \frac{\sigma_x +\sigma_{x+1}}{2} \right)}_{T_{\sigma_x \sigma_{x+1}}} \exp\left(h \frac{\sigma_1}{2} \right) \exp\left(h \frac{\sigma_N}{2} \right)
+\end{align*}
+We define the $2\times 2$ transfer matrix $\mathrm{T}$ as:
+\begin{align*}
+    \mathrm{T}_{\sigma \sigma'} = \exp\left(K \sigma \sigma' + h \frac{\sigma_x + \sigma_{x+1}}{2} \right)
+\end{align*}
+and the vector $\bm{v} = (v(+1), v(-1))$ as:
+\begin{align*}
+    v(\sigma) = \exp\left(h\frac{\sigma}{2} \right)
+\end{align*}
+Leading to:
+\begin{align*}
+    Z &= \sum_{\{\sigma\}} \prod_{x=1}^{N-1} T_{\sigma_x \sigma_{x+1}} v(\sigma_1) v(\sigma_N) =\\
+    &= \sum_{\sigma_1=\pm 1} \sum_{\sigma_2 = \pm 1} \cdots \sum_{\sigma_{N-1} = \pm 1} \sum_{\sigma_N=\pm 1} v(\sigma_1) T_{\sigma_1 \sigma_2} \cdots T_{\sigma_{N-1} \sigma_{N}} v(\sigma_N) =\\
+    &=\sum_{\sigma_1 = \pm 1} \sum_{\sigma_N = \pm 1} v(\sigma_1) (\mathrm{T}^{N-1})_{\sigma_1 \sigma_N} v(\sigma_N) = \bm{v}^T \mathrm{T}^{N-1} \bm{v} = \bra{v} \mathrm{T}^{n-1} \ket{v}
+\end{align*}
+The scalar product can be computed in the basis $\ket{v_{1,2}}$ where $\mathrm{T} = \operatorname{diag}(\lambda_1, \lambda_2)$. The change of basis can be done quickly by using completeness:
+\begin{align*}
+    \bra{v} \mathrm{T}^{n-1} \ket{v} = \sum_{i,j=1}^2 \braket{v}{v_i} \lambda_1^{N-1} \braket{v_j}{v} = \braket{v}{v_1}^2 \lambda_1^{N-1} + \braket{v}{v_2}^2 \lambda_2^{N-1}
+\end{align*}
+There is no necessity of computing $\braket{v}{v_1}$ or $\braket{v}{v_2}$, as they won't be significant in the thermodynamic limit.
+
+\medskip
+
+In fact, let's consider the free energy per node $f$:
+\begin{align}\label{eqn:free-energy-limit}
+    \frac{\ln Z}{N} \equiv -\beta f &= \frac{1}{N} \ln \Big[ \braket{v}{v_1}^2 \lambda_1^{N-1} + \braket{v}{v_2}^2 \lambda_2^{N-1}\Big] =\\ \nonumber
+    &= \frac{1}{N} \ln \Big[ \lambda_2^{N-1}\Big( \braket{v}{v_1}^2 \Big(\frac{\lambda_1}{\lambda_2}\Big)^{N-1} + \braket{v}{v_2}^2 \Big) \Big] 
+\end{align}
+Since $\lambda_1 < \lambda_2$, when $N \gg 1$, the first term vanishes, leaving:
+\begin{align*}
+    -\beta f &= \frac{N-1}{N} \ln \lambda_2 + \frac{2}{N} \ln \braket{v}{v_2}  \xrightarrow[N \to +\infty]{} \ln \lambda_2
+\end{align*}
+which is exactly the same result we found in (\ref{eqn:free-energy-pbc}). This also means that all the thermodynamic quantities we computed in part A have the same expression for the IM with o.b.c.
+
+\medskip
+
+Intuitively, since in the thermodynamic limit the system is \textit{infinite}, periodic and open boundary conditions are \textit{effectively} the same.  
+
+\subsection{Part C}
+We now consider the case with $+$ boundary conditions: $\sigma_1 = \sigma_N = +1$. The partition function becomes:
+\begin{align*}
+    Z = \sum_{\{\bm{\sigma}\}} e^{-\beta \mathcal{H}(\bm{\sigma})} = \sum_{\sigma_{2} = \pm 1} \cdots \sum_{\sigma_{N-1} = \pm 1} \exp\left(K \sum_{x=1}^{N-1} \sigma_x \sigma_{x+1} + h \sum_{x=1}^N \sigma_x\right) \quad \sigma_1=\sigma_N \equiv +1
+\end{align*}
+We can repeat the argument we used in (\ref{eqn:sum-rewrite}), leading to:
+\begin{align*}
+    Z &= \sum_{\sigma_2 = \pm 1} \cdots \sum_{\sigma_{N-1} = \pm 1} \exp\left(\frac{h}{2}\sigma_1 \right) \mathrm{T}_{\sigma_1 \sigma_2} \cdots \mathrm{T}_{\sigma_{N-1} \sigma_N} \exp\left(\frac{h}{2} \sigma_N \right) =\\
+    &= e^{h/2} (\mathrm{T}^{N-1})_{1,1} e^{h/2} =\\
+    &= e^{h/2} \left(\begin{array}{cc}
+    1 & 0
+    \end{array}\right) \mathrm{T}^{N-1} \left(\begin{array}{c}
+    1 \\ 
+    0
+    \end{array}\right) e^{h/2} = \left(\begin{array}{cc}
+    e^{h/2} & 0
+    \end{array}\right) \mathrm{T}^{N-1} \left(\begin{array}{c}
+    e^{h/2} \\ 
+    0
+    \end{array}\right) =\\
+    &= \tilde{\bm{v}}^T \mathrm{T}^{N-1} \tilde{\bm{v}} = \bra{\tilde{v}} \mathrm{T}^{N-1} \ket{\tilde{v}}
+\end{align*}
+where $\tilde{\bm{v}} = (e^{h/2},0)^T$. To compute the scalar product we use again \textit{completeness}:
+\begin{align*}
+    \bra{\tilde{v}} \mathrm{T}^{N-1} \ket{\tilde{v}} = \braket{\tilde{v}}{v_1}^2 \lambda_1^{N-1} + \braket{\tilde{v}}{v_2}^2 \lambda_2^{N-1}
+\end{align*} 
+In the thermodynamic limit, the term $\lambda_2$ dominates, and everything else (including the prefactors) can be neglected. In fact, by repeating the same computation we did in (\ref{eqn:free-energy-limit}), we obtain for the free energy:
+\begin{align*}
+    - \beta f  \xrightarrow[N \to +\infty]{}    \ln \lambda_2
+\end{align*}
+
+\subsection{Part D}
+Consider the Ising Model with both nearest-neighbours and next-nearest-neighbours interactions in $d=1$:
+\begin{align*}
+    \mathcal{H}(\bm{\sigma}) = - \sum_{x=1}^N (J_1 \sigma_x \sigma_{x+1} + J_2 \sigma_x \sigma_{x+2}) - B \sum_{x=1}^N \sigma_x
+\end{align*}
+To compute the partition function $Z$, we can still use the same logic from before, i.e. construct a transfer matrix $\mathrm{T}$. However, we first need to rewrite the Hamiltonian as the product of terms $\mathrm{T}_{\sigma, \sigma'}$, depending on only \textit{two (consecutive) indices}. As of now, this is not possible - since we have $3$ different indices: $x$, $x+1$ and $x+2$. There is no way to remove one of them if we want to account for both kind of interactions. So, the \textit{trick} is to \textit{add} a fourth index, and group them by $2$, forming some kind of \textit{multi-index} (or binary index).
+
+\medskip
+
+We can do this by reasoning with \textbf{parity}. In fact, note that the nearest-neighbour interactions always involve spins with \textit{different parity}, while the next-to-nearest-neighbour interactions only connect spins with the \textit{same parity}. So, let's \textit{group} the spins in two different \textit{chains} depending on their parity. The first chain will contain all the \textit{odd} spins $\sigma_i^{(1)} \equiv \sigma_{2i+1}$, and the second one all the \textit{even} spins $\sigma_{i}^{(2)} \equiv \sigma_{2i}$. With this notation, the nearest neighbours interactions involve always spins of different chains (i.e. different parities), and the next-to-nearest-neighbours interaction always spins from the same chain.
+
+We can then rewrite the Hamiltonian as follows (suppose, for simplicity, that $N$ is even):
+\begin{align}\label{eqn:h-parity}
+    \mathcal{H}(\bm{\sigma}) = -J_1 [\sum_{x=1}^{N/2} \sigma_x^{(1)} \sigma_x^{(2)}+ \sigma_x^{(2)} \sigma_{x+1}^{(1)}] - J_2 \sum_{x=1}^{N/2} [ \sigma_x^{(1)} \sigma_{x+1}^{(1)} + \sigma_x^{(2)} \sigma_{x+1}^{(2)}] - B \sum_{x=1}^{N/2} [\sigma_x^{(1)}+ \sigma_{x}^{(2)}]
+\end{align}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics{nnn.pdf}
+    \caption{Graphical representation of the IM model with both nearest-neighbour and next-to-nearest-neighbour interactions. Spins are represented as black dots, and ordered in two lines (chains) depending on their \textit{parity}. The red continuous lines connect nearest-neighbours ($J_1$ terms), while the black dashed lines join next-to-nearest-neighbours ($J_2$ terms). The interactions described by the first term ($x=1$) of (\ref{eqn:h-parity}) are highlighted in bold.\label{fig:next-nearest-model}}
+\end{figure}
+
+
+The two \textit{multi}-indices of the transfer matrix will be $(\sigma_x^{(1)}, \sigma_x^{(2)})$ and $(\sigma_{x+1}^{(1)}, \sigma_{x+1}^{(2)})$, and so we need all terms to contain both of them:
+
+\begin{align*}
+    \mathcal{H}(\bm{\sigma}) &= 
+    -\Big[
+    \frac{J_1}{\textcolor{Red}{2}} \sum_{x=1}^{N/2} [\sigma_x^{(1)} \sigma_x^{(2)} + 2\sigma_x^{(2)} \sigma_{x+1}^{(1)} + \textcolor{Red}{\sigma_{x+1}^{(1)} \sigma_{x+1}^{(2)}}] +   
+    J_{2} \sum_{x=1}^{N/2} [\sigma_x^{(1)} \sigma_{x+1}^{(1)} + \sigma_x^{(2)} \sigma_{x+1}^{(2)}] +\\
+    &\quad\>\>\,+ \frac{B}{\textcolor{Red}{2}} \sum_{x=1}^{N/2}[\sigma_x^{(1)} + \sigma_x^{(2)} + \textcolor{Red}{\sigma_{x+1}^{(1)} + \sigma_{x+1}^{(2)}} ] \Big]
+\end{align*}
+
+The partition function is given by:
+\begin{align*}
+    Z &= \sum_{\{\bm{\sigma}\}} e^{-\beta \mathcal{H}(\bm{\sigma})} = \sum_{\mathclap{\substack{\sigma^{(1)}_1=\pm 1\\\sigma^{(2)}_1 = \pm 1}}}\quad \cdots \quad\sum_{\mathclap{\substack{\sigma^{(1)}_{N/2}=\pm 1\\\sigma^{(2)}_{N/2} = \pm 1}}}\quad \prod_{i=1}^{N/2} \exp \Bigg(\frac{K_1}{2}\Big[\sigma_x^{(1)} \sigma_x^{(2)} + 2\sigma_x^{(2)} \sigma_{x+1}^{(1)} + \sigma_{x+1}^{(1)} \sigma_{x+1}^{(2)}\Big] \\
+    &\quad\> K_2 \Big[\sigma_x^{(1)} \sigma_{x+1}^{(1)} + \sigma_x^{(2)} \sigma_{x+1}^{(2)}\Big] + \frac{B}{2} \Big[\sigma_x^{(1)} + \sigma_x^{(2)} + \sigma_{x+1}^{(1)} + \sigma_{x+1}^{(2)} \Big] 
+    \Bigg)
+\end{align*}
+
+The exponential term is one entry of a $4\times 4$ transfer matrix $\mathrm{T}$:
+\begin{align*}
+    \mathrm{T}_{(\sigma_x^{(1)}, \sigma_x^{(2)}), (\sigma_{x+1}^{(1)}, \sigma_{x+1}^{(2)})}
+\end{align*}
+By mapping $\sigma_x = \pm 1 \to \{0,1\}$, each \q{multi-index} is a binary number, defining a position in the matrix. For example, when $\sigma_x^{(1)} = \sigma_{x}^{(2)} = \sigma_{x+1}^{(1)} = \sigma_{x+1}^{(2)} = +1$, the matrix entry will be $\mathrm{T}_{(1,1),(1,1)} \equiv \mathrm{T}_{4,4}$. In this way, the sum of the product of exponentials can be interpreted as a \textit{matrix product}, leading to:
+\begin{align*}
+    Z = \operatorname{Tr}(\mathrm{T}^{N/2}) 
+\end{align*}%Not so sure
+
+%Source: https://inis.iaea.org/collection/NCLCollectionStore/_Public/27/020/27020481.pdf
+
+\end{document}

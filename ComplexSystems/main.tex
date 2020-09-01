@@ -1,5 +1,3 @@
-%&latex
-%
 \providecommand{\main}{.}
 \documentclass[12pt,a4paper]{report} %Modalità draft settata qui
 
@@ -29,18 +27,31 @@
 %---Frontpage End---%
 
 \tableofcontents 
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\pagenumbering{gobble}
+
 \clearpage
 \section*{Introduction}
+In the following, you will find the notes of \q{Statistical Mechanics of Complex Systems}. As of A.A. 2019-20, the course is divided in two parts:
+\begin{itemize}
+        \item \textbf{Part A}, dealing with mathematical methods, the basics of statistical mechanics and stochastic processes (Brownian motion).
+        \item \textbf{Part B}, focusing on \textit{entropy}, the Ising Model, variational methods and dynamics of complex systems.
+\end{itemize}
+Notes of part B are \textit{complete}, in the sense that all lectures and topics are covered. However, pay attention as they may well be mistakes, typos and other not-so-good stuff.
+
+On the other hand, part A, which was reserved to students of mathematical engineering, contains only the transcriptions of the first few lectures. All the missing required topics can be found, in much more detail, in the first chapters of the following notes from Physics of Data courses:
+\begin{itemize}
+        \item \q{Statistical Mechanics} by Alice Pagano: \href{https://github.com/AlicePagano/Lectures-Statistical-Mechanics}{link}.
+        \item \q{Models of Theoretical Physics} (Brownian motion) by Francesco Manzali: \href{https://www.overleaf.com/read/hwzmdmrmmhzn}{link}.
+\end{itemize}
+
+Many intermediate steps and additional information have been added to make the notes more clear, at the cost of a bit of redundancy.
+
 If you find any mistake/typo/missing thing, please write at \textit{francesco.manzali@studenti.unipd.it} (or even just for feedback).
 
 \begin{flushright}
-\textit{Francesco Manzali}, 20/02/2019
+\textit{Francesco Manzali}, 02/07/2019
 \end{flushright}
-
-
-\begin{appr}
-\textbf{About the missing lectures}. Lectures 18/03, 19/03, 23/03, 25/03 and 26/03 are still missing, because of lack of time. I will try to keep up with the new lectures (especially the ones about different topics), and then return back to these lessons. If you want to help with transcription, please write to \textit{francesco.manzali@studenti.unipd.it}
-\end{appr}
 
 \begin{flushright}
 \textit{The contract is complete. Your wish has surpassed entropy. Now release your new power!}\\
@@ -61,6 +72,11 @@ Thanks to Alice Pagano for providing corrections and realizing several figures i
 \subfile{Lectures/Maritan/11_03_20.tex}
 \subfile{Lectures/Maritan/12_03_20.tex}
 \subfile{Lectures/Maritan/16_03_20.tex}
+
+\danger 
+\begin{expl}
+        \textbf{Missing lectures}. The following $9$ lectures are missing, ranging from 18/03 to 06/04.  Their topics can be found at the following \href{https://docs.google.com/spreadsheets/d/1H_VqhfWnARh3Nlv6bU2MoWXACttQx0YhCds1guY-hKE/edit?usp=sharing}{link}.
+\end{expl}
 
 %TO Review:
 %\subfile{Lectures/Maritan/18_03_20.tex}

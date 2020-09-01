@@ -331,7 +331,7 @@ For each $r$, $\mathbb{P}^>(r_i|r)$ is plotted in fig. \ref{fig:tree-size}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{tree_size.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/tree_size.png}
     \caption{Plot of the \textit{accumulated} probabilities for $r_i$ for various tree sizes $r$.}
     \label{fig:tree_size}
 \end{figure}
@@ -340,14 +340,100 @@ If the ansatz in (\ref{eqn:tree-ansatz}) is correct, then by rescaling the $x$ a
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{tree-collapse.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/tree-collapse.png}
     \caption{All curves from fig. \ref{fig:tree_size} collapse (approximately) into one when rescaling the $x$ axis according to ansatz (\ref{eqn:tree-ansatz})}
     \label{fig:tree-collapse}
 \end{figure}
 
 This means that there is some kind of \textit{emergent behaviour} in the forest: the distribution of tree sizes is not completely random, but exhibits a \textit{scaling behaviour}, which is similar to the one we studied in the Ising model. In a sense, the forest has \q{self-tuned} to a state \q{near criticality}. Yet, it is not clear \textit{why} this is the case - for example what is the evolutionary advantage in this kind of \q{self tuning}.
 
-%TODO Add exercises
+\begin{exo}[Plots]
+    Plot the \textbf{specific heat} and the \textbf{susceptibility} as a function of $K$ at $h=0$ in the mean field approximation of the Ising Model with reduced Hamiltonian:
+    \begin{align*}
+        -\beta H = K \sum_{\langle x,y \rangle} \sigma_x \sigma_y + h \sum_x \sigma_x
+    \end{align*}
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}[Phase diagram]\label{exo:phase-diagram}
+    Consider a variational free energy density of the form:
+    \begin{align*}
+        f_V(m,a,b,c) = a m^2 + b m^4 + cm^6 - hm
+    \end{align*}
+    where $m$ is the magnetization, $a$, $b$ and $c$ are coefficients, which are suitable functions of the temperature, and $h$ is proportional to the external magnetic field. $m$, $a$ and $b$ are allowed to be real numbers, whereas $c > 0$ to guarantee that $f_V$ is bounded from below. 
+    \begin{enumerate}
+        \item Determine \textit{analytically} the whole phase diagram in the $a$ - $b$ plane for a fixed value of $c$ and $h=0^+$, showing where the first and second order transitions occur.
+        \item Sketch the form of the free energy density in the various phases and along the transition lines.
+        \item Solve numerically the equation for the spontaneous magnetization.
+    \end{enumerate}
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}[Mean field IM]
+    Consider an Ising Model in a $d$-dimensional hyper-cubic lattice with both nearest-neighbour ($\langle \cdot \rangle$) and $4$-spin ($[\cdot]$) interactions on the elementary squares of the lattice, with energy function given by:
+    \begin{align*}
+        - \beta H(\bm{\sigma}) = K \sum_{\mathclap{\langle x,y \rangle}} \sigma_x \sigma_y + L \sum_{\mathclap{[xyvz]}} \sigma_x \sigma_y \sigma_v \sigma_z
+    \end{align*}
+    where periodic boundary conditions are used, and $\sigma_x = \pm 1$ for every lattice node $x$.
+
+    \medskip
+
+    Use the mean field approximation to determine, in the thermodynamic limit:
+    \begin{enumerate}
+        \item The analytical expression, as a function of the magnetization $m$, of the variational free energy per node, $f_V(m,K,L)$, the entropy per node, $s(m,K,L)$, the mean energy per node $\epsilon(m,K,L)$ and the specific heat per node, $c(m,K,L)$.
+        \item The phase diagram in the plane $K$ - $L$, with $K \geq 0$ and $L \geq 0$, specifying where the magnetization changes with continuity (second order phase transition), and where it changes with a discontinuity (first order phase transition).
+    \end{enumerate}
+
+    Notice that, while the whole second order transition line, including its end (the tri-critical point), can be determined analytically, the first order transition line has to be determined numerically.
+\end{exo}
+
+\begin{exo}[Scaling ansatz]
+    Show that the scaling ansatz in equation (\ref{eqn:h-equation-state}, pag. \pageref{eqn:h-equation-state}) is equivalent to assume that $M(K,h)$ has the following homogeneous form in the vicinity of the critical point $(K_c, h_c) = (1/2d, 0)$:
+    \begin{align*}
+        |M(K,h)| = |t|^\beta g_{\pm} (h|t|^{-\beta \delta}) \qquad \beta = \frac{1}{2}, \> \delta=3 
+    \end{align*}
+    where $g_\pm$ is an odd function, i.e. $g_{\pm}(-x) = - g_{\pm}(x)$, and $g_+$ ($g_-$) is used when $t>0$ ($t<0$).
+\end{exo}
+
+\begin{exo}[Collapse plot]
+    Minimize the variational free energy:
+    \begin{align*}
+        \beta \frac{F_V(m,K,h)}{N} = - Kd m^2 + \frac{1+m}{2} \ln \frac{1+m}{2} + \frac{1-m}{2} \ln \frac{1-m}{2} - hm    
+    \end{align*}
+    with respect to $m$ and determine where the minimum occurs ($M(K,h)$).
+
+    Plot $M(K,h)$ as a function of $h$ for various values of $K > 1/(2d)$ and $K < 1/(2d)$, with several of them in the neighbourhood of $1/(2d)$. For the various curves so obtained, define $t \equiv (K_c - K)/K_c$, where $K_c \equiv 1/(2d)$, and verify the scaling ansatz (\ref{eqn:h-equation-state}) by plotting:
+    \begin{align*}
+        \frac{h}{M^3(K,h)} \text{ vs } \frac{|t|}{M^2(K,h)} \qquad (\delta = 3, \> \beta = \frac{1}{2} )
+    \end{align*}
+    What you should obtain is that the collapse shown in fig. \ref{fig:collapse_plot} is good only when both $|t|$ and $|h|$ are sufficiently small.
+
+    Show that an alternative collapse can be obtained by plotting $|M(K,h)| |t|^{1/2}$ vs $|h| |t|^{-3/2}$. Notice that, according to exercise \ref{exo:phase-diagram}, one should obtain a collapsed curve for all $t \gtrsim 0$ (i.e. $K \lesssim K_c$) and a different one for all $t \lesssim 0$ (i.e. $K \gtrsim K_c$).
+
+    The collapse quality deteriorates when $|h|$ and/or $|t|$ increase.
+
+    \medskip
+
+    \textbf{Solution}. 
+\end{exo}
+
+\begin{exo}[Scaling relations]
+    Use the following scaling ansatz for the free energy density:
+    \begin{align*}
+        f(t,h) = |t|^{d \nu} \varphi(t|h|^{-1/\beta \delta})
+    \end{align*}
+    to deduce the scaling relations in (\ref{eqn:scaling-relations}, pag. \pageref{eqn:scaling-relations}):
+    \begin{align*}
+        \beta(\delta-1) = \gamma \qquad \beta(\delta+1) = 2 - \alpha \qquad d \nu -2 = \alpha
+    \end{align*}
+\end{exo}
+
 %TODO Add exercise guide (non recorded lecture) end of 30/4 lecture
 
 \chapter{Beyond Mean Field\\ and Universality}
@@ -359,7 +445,7 @@ As an explicit example, a summary of the critical exponents for several \textit{
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{table-criticality.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/table-criticality.png}
     \caption{Values of critical exponents for several models. As these exponents do not depend on all the details of each model, there is no need to fully specify each Hamiltonian. For example, the IM in $d=2$ could have more complex couplings between spins (other than the nearest neighbour ones we considered until now). Taken from \cite{renormalization}}
     \label{fig:table-criticality}
 \end{figure}
@@ -429,7 +515,7 @@ with the sum over all (simple) roots $x_i$ of $g(x)$.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{delta-peaks.png}
+    \includegraphics[width=0.9\textwidth]{\main/Images/delta-peaks.png}
     \caption{The $\delta(\varphi_x^2-1)$ can be seen as the limit of a smooth function with two peaks in $\pm 1$, which become more and more sharp as $\lambda \to +\infty$, while maintaining the area under the curve fixed to $1$.}
     \label{fig:delta-peaks}
 \end{figure}
@@ -590,7 +676,7 @@ where the second sum is over all $x$ and $y$ that \textit{share} a neighbour $z$
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{n-nIM.png}
+    \includegraphics[width=0.5\textwidth]{\main/Images/n-nIM.png}
     \caption{Diagram of the interactions in a Next Neighbour Ising Model. Spins in the lattice are represented as red dots, the usual \textit{nearest neighbour} interactions are in \textcolor{Blue}{blue}, and the \textit{next neighbour} interactions are in \textcolor{ForestGreen}{green}.}
     \label{fig:n-nIM}
 \end{figure}
@@ -599,7 +685,7 @@ Results from renormalization group theory show that the phase diagram of this ki
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{critical-n-nIM.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/critical-n-nIM.png}
     \caption{Phase diagram of the Next Neighbour Ising Model.}
     \label{fig:critical-n-nIM}
 \end{figure}
@@ -615,7 +701,7 @@ Let's add \textit{another term} to the Hamiltonian, describing \textit{quartic} 
  
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\textwidth]{interactions.png}
+    \includegraphics[width=0.5\textwidth]{\main/Images/interactions.png}
     \caption{Types of interactions in (\ref{eqn:H-complicated})}
     \label{fig:interactions}
 \end{figure}
@@ -625,7 +711,7 @@ In this case, the phase diagram is shown in fig. \ref{fig:complicated-phases}. N
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{complicated-phases.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/complicated-phases.png}
     \caption{Phase diagram for the model (\ref{eqn:H-complicated})}
     \label{fig:complicated-phases}
 \end{figure}

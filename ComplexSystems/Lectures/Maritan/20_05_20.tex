@@ -49,7 +49,7 @@ which corresponds to the case of non-interacting species.
 
 \medskip
 
-To quantify interaction, we need to measure correlations between the populations of different species ($\beta$-diversity). For example, let's consider the Barro Colorado Island (BCI) forest. The dataset describes a region of size $\num{1000}\timex\SI{500}{\m}$, recording the position and species of each tree. We can divide this area in $Q$ \textit{small} quadrants (let's say of size $\num{20}\times\SI{20}{\m}$). In each quadrant $a$, we measure the population $n_i^{(a)}$ of species $i$, and compute:
+To quantify interaction, we need to measure correlations between the populations of different species ($\beta$-diversity). For example, let's consider the Barro Colorado Island (BCI) forest. The dataset describes a region of size $\num{1000}\times\SI{500}{\m}$, recording the position and species of each tree. We can divide this area in $Q$ \textit{small} quadrants (let's say of size $\num{20}\times\SI{20}{\m}$). In each quadrant $a$, we measure the population $n_i^{(a)}$ of species $i$, and compute:
 \begin{align}\label{eqn:maxent-bci}
     \langle n_i \rangle &= \frac{1}{Q} \sum_{j=1,\dots,Q} n_i^{(Q)}\\
     \langle n_i n_j \rangle &= \frac{1}{Q} \sum_{i=1,\dots,Q} n_i^{(Q)} n_j^{(Q)} \nonumber
@@ -58,7 +58,7 @@ To get useful results, it is convenient to consider only the most common species
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{tree-location.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/tree-location.png}
     \caption{Location of trees of the $20$ most abundant species in the BCI dataset.}
     \label{fig:tree-location}
 \end{figure}
@@ -81,7 +81,7 @@ So, we can see how much interactions are important by examining the size of the 
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{bci-matrix.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/bci-matrix.png}
     \caption{Correlation matrix for the top $20$ species in the BCI forest.}
     \label{fig:bci-matrix}
 \end{figure}
@@ -92,7 +92,7 @@ A trick is then to \textit{destroy} all correlations and examine the size of ran
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=.8\textwidth]{random-chance.png}
+    \includegraphics[width=.8\textwidth]{\main/Images/random-chance.png}
     \caption{Correlation matrix after random relabelling of all species in each quadrant.}
     \label{fig:random-chance}
 \end{figure}
@@ -112,10 +112,10 @@ Following a semi-historical approach, we will now describe several models of pop
     \medskip
 
     Then, in section \ref{sec:voter-model} we show some full derivations in a simplified case, with the aim of understanding if, at equilibrium, several species will coexist (biodiversity), or only one will dominate (monodominance). As we will show, while the voter model can fit really well real data, it cannot explain how high biodiversity can be stable in nature - which is still one of the important unsolved problem in environmental statistical mechanics.
-\end{enumerate}
+\end{enumerate} %TODO Add reference to contact model
 
 
-\section{Birth-Death processes}\sec{sec:birth-death}
+\section{Birth-Death processes}\label{sec:birth-death}
 We want now to construct a model based on the empirical observations we made regarding the distribution of species in forests. We make the following assumptions:
 \begin{enumerate}
     \item Species in the same \textbf{trophic level} (number of steps from the start of the food chain) behave similarly.
@@ -133,7 +133,7 @@ At each timestep $\Delta t$ (which can be of order $\sim \SI{1}{y}$ for trees) a
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{birth-death-evo.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/birth-death-evo.png}
     \caption{} %TODO Add caption
     \label{fig:birth-death-evo}
 \end{figure}
@@ -296,14 +296,14 @@ While the data collected by Fisher agrees with his Log-Series model (fig. \ref{f
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{fisher-log.png}
+    \includegraphics[width=0.6\textwidth]{\main/Images/fisher-log.png}
     \caption{Histogram of butterfly population sizes observed by Fisher, and compared with the Fisher Log-Series (\ref{eqn:fisher-log}).}
     \label{fig:fisher-log}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{preston-plot.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/preston-plot.png}
     \caption{Histogram (with Preston's logarithmic binning) of butterfly population sizes, comparing Fisher observations (darkest bars) with data collected over a much longer timespan. The black line corresponds to a log-normal fit.}
     \label{fig:preston-plot}
 \end{figure}
@@ -324,7 +324,7 @@ To observe the full log-normal distribution, accurate measurements over a long p
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.6\textwidth]{tail.png}
+    \includegraphics[width=0.6\textwidth]{\main/Images/tail.png}
     \caption{A small sample will contain only the most abundant species, corresponding to the \textit{rightmost} tail of the log-normal distribution. Everything else is hidden behind a \q{veil-line}, which can be \q{pushed further} only by increasing the sample size and the duration of the measurements.}
     \label{fig:tail}
 \end{figure}
@@ -386,7 +386,7 @@ Note that when $c \to 0^+$ we get back the Fisher Log-Series:
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.9\textwidth]{preston-plots.png}
+    \includegraphics[width=0.9\textwidth]{\main/Images/preston-plots.png}
     \caption{Preston plots of (\ref{eqn:p-stat3}). For $c=0$ we obtain the Fisher Log-Series, while for $c > 0$ we get a log-normal distribution.}
     \label{fig:preston-plots}
 \end{figure}
@@ -424,7 +424,7 @@ The model (\ref{eqn:p-stat3}) seems to fit well real data (fig. \ref{fig:preston
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{preston-fits2.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/preston-fits2.png}
     \caption{Preston plot of the Relative Species Abundance (RSA) of the BCI forest. The black line is a log-normal fit, while the green one is a fit with the density-dependent model (\ref{eqn:p-stat3}). Both curves fit the data really well, but (\ref{eqn:p-stat3}) comes from a well-defined model, not an \textit{ad-hoc} function.}
     \label{fig:preston-fits2}
 \end{figure}
@@ -433,14 +433,14 @@ The model (\ref{eqn:p-stat3}) seems to fit well real data (fig. \ref{fig:preston
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{density-dependence.png}
+    \includegraphics[width=0.8\textwidth]{\main/Images/density-dependence.png}
     \caption{Plot of $r_n = \frac{\mathbb{P}^{\mathrm{stat}}(n+1)}{\mathbb{P}^{\mathrm{stat}}(n)} \frac{n+1}{n} = x \frac{1+c/n}{1 + c/(n+1)}$. For $x = b/d \sim 1$, if $c = 0$ (Fisher Log-Series), then $r_n \equiv 1$ (black continuous line). Otherwise, if $c > 0$, $r_n$ depends on $n$, and is slightly $>1$ for small $n$ (blue and black points). Physically, this measures the \textit{survival advantage} of rare species (since they interact less with possible threats).}
     \label{fig:density-dependence}
 \end{figure}
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{density-real.png}
+    \includegraphics[width=0.7\textwidth]{\main/Images/density-real.png}
     \caption{Birth/death ratios for all species in the BCI forest. Note how $b_n/d_n$ does not tend to a constnat for $n \to \infty$, nor has any precise trend for $n$ small.}
     \label{fig:density-real}
 \end{figure}
@@ -448,7 +448,7 @@ The model (\ref{eqn:p-stat3}) seems to fit well real data (fig. \ref{fig:preston
 
 % \begin{figure}[H]
 %     \centering
-%     \includegraphics[width=0.8\textwidth]{preston-fits.png}
+%     \includegraphics[width=0.8\textwidth]{\main/Images/preston-fits.png}
 %     \caption{Example of fitting real data with the density-dependent model (\ref{eqn:p-stat3}).}
 %     \label{fig:preston-fits}
 % \end{figure}

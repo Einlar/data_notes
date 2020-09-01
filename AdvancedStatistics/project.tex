@@ -1,0 +1,34 @@
+%&latex
+\documentclass{article}
+\usepackage{hyperref}
+
+\begin{document}
+
+%+Title
+\title{Advanced Statistics Project}
+\author{Physics of Data}
+\date{\today}
+\maketitle
+%-Title
+
+
+\begin{center}
+    Learning the topology of a Bayesian network from a database of cases using the K2 algorithm. 
+\end{center}
+
+A Bayesian belief-network structure is a directed acyclic graph in which nodes represent domain variables and arcs between nodes represent probabilistic dependencies \cite{1}. 
+
+Given a database of records, it is interesting to construct a probabilistic network which can provide insights into probabilistic dependencies existing among the variables in the database. Such network can be further used to classify future behavior of the modelled system \cite{1}. Although researchers have made substantial advances in developing the theory and application of belief networks, the actual construction of these networks often remains a difficult, time-consuming task. An efficient method for determining the relative probabilities of different belief-network structures, given a database of cases and a set of explicit assumptions is described in \cite{1} and \cite{2}. The K2 algorithm \cite{2} can be used to learn the topology of a Bayes network \cite{1}, i.e. of finding the most probable belief-network structure, given a database. After having studied the problem in the suggested literature (\cite{1}-\cite{2}), implement the algorithm in R and check its performances with the test dataset given in \cite{2}.  After having implemented and tested the K2 algorithm, investigate if it is possible to code it inside the \texttt{bnstruct} R package \cite{3}-\cite{4}.
+
+%+Bibliography
+\begin{thebibliography}{99}
+\bibitem{1} G. F. Cooper and E. Herskovits, \textit{A Bayesian Method for the Induction of Probabilistic Networks from Data}, Machine Learning \textbf{9}, (1992) 309
+\bibitem{2} C. Ruiz, \textit{Illustration of the K2 algorithm for learning Bayes Net Structures}, \url{http://web.cs.wpi.edu/~cs539/s11/Projects/k2\_algorithm.pdf}
+\bibitem{3} A. Franzin et al, \textit{bnstruct: an R package for Bayesian Network structure learning in the presence of missing data}, Bioinformatics \textbf{33(8)} (2017) 1250 
+\bibitem{4} F. Sambo and A. Franzin, \textit{bnstruct: an R package for Bayesian Network Structure Learning with missing data}, December 12, 2016
+\end{thebibliography}
+%-Bibliography
+
+\end{document}
+
+

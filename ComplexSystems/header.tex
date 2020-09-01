@@ -1,5 +1,8 @@
 
 %---General---%
+\usepackage[pdftex]{graphicx}
+\usepackage[usenames, dvipsnames, table]{xcolor} %colori
+
 \usepackage{subfiles} %Modular structure
 \usepackage[ddmmyyyy,hhmmss]{datetime} %Compilation date
 \usepackage[english]{babel}
@@ -58,8 +61,6 @@ separate-uncertainty = true
 \setlength\parindent{0pt} 
 
 %---Graphics & Plots---%
-\usepackage{graphicx}
-\usepackage[usenames, dvipsnames, table]{xcolor} %colori
 \usepackage{color}
 \usepackage{wrapfig}
 
@@ -100,7 +101,7 @@ separate-uncertainty = true
 
 %\usepackage{xr-hyper}
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}  %hyperref va caricato sempre dopo footmisc, altrimenti le footnotes si buggano e riportano tutte alla prima pagina
-\usepackage[inline]{showlabels} %Draft
+%\usepackage[inline]{showlabels} %Draft
 
 \usepackage[symbol=$\wedge$,numberlinked=false]{footnotebackref}
 \makeindex[columns=2, title=Analytical index, options= -s indexstyle.ist]

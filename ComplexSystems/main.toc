@@ -1,76 +1,110 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \babel@toc {english}{}
-\contentsline {chapter}{\numberline {1}Statistical Mechanics}{5}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Introduction}{5}{section.1.1}%
-\contentsline {subsection}{\numberline {1.1.1}Ingredients for a complex physical system}{6}{subsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.1.2}The non-equilibrium case}{8}{subsection.1.1.2}%
-\contentsline {subsection}{\numberline {1.1.3}Statistical Mechanics}{9}{subsection.1.1.3}%
-\contentsline {section}{\numberline {1.2}Review of Mathematical Methods}{9}{section.1.2}%
-\contentsline {subsection}{\numberline {1.2.1}Continuous Random Variables}{9}{subsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.2.2}Discrete Random Variables}{13}{subsection.1.2.2}%
-\contentsline {subsection}{\numberline {1.2.3}Characteristic Functions}{16}{subsection.1.2.3}%
-\contentsline {subsection}{\numberline {1.2.4}Generating functions}{19}{subsection.1.2.4}%
-\contentsline {subsection}{\numberline {1.2.5}Change of variables}{20}{subsection.1.2.5}%
-\contentsline {subsection}{\numberline {1.2.6}Generating probability distributions}{21}{subsection.1.2.6}%
-\contentsline {subsection}{\numberline {1.2.7}Gaussian Integrals}{22}{subsection.1.2.7}%
-\contentsline {subsection}{\numberline {1.2.8}Saddle Point approximation}{25}{subsection.1.2.8}%
-\contentsline {subsection}{\numberline {1.2.9}Gaussian averages}{27}{subsection.1.2.9}%
-\contentsline {subsection}{\numberline {1.2.10}Central Limit Theorem}{28}{subsection.1.2.10}%
-\contentsline {section}{\numberline {1.3}Statistical Ensembles}{30}{section.1.3}%
-\contentsline {subsection}{\numberline {1.3.1}Ideal gas}{33}{subsection.1.3.1}%
-\contentsline {subsubsection}{Probability distribution of the number of particles in half the volume}{35}{section*.6}%
-\contentsline {subsubsection}{Velocity distribution}{38}{section*.7}%
-\contentsline {chapter}{\numberline {2}Entropy and the Emergence of Time}{45}{chapter.2}%
-\contentsline {section}{\numberline {2.1}The Liouville theorem}{46}{section.2.1}%
-\contentsline {subsection}{\numberline {2.1.1}Measure theoretic version}{51}{subsection.2.1.1}%
-\contentsline {subsection}{\numberline {2.1.2}Consequences of Liouville's theorem}{58}{subsection.2.1.2}%
-\contentsline {section}{\numberline {2.2}Poincaré Recurrence Theorem}{60}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Heuristic estimate of recurrence time}{60}{subsection.2.2.1}%
-\contentsline {section}{\numberline {2.3}Asymptotic Evolution}{62}{section.2.3}%
-\contentsline {section}{\numberline {2.4}Three kinds of entropy}{64}{section.2.4}%
-\contentsline {section}{\numberline {2.5}Information Entropy and Ignorance}{69}{section.2.5}%
-\contentsline {section}{\numberline {2.6}MaxEnt Principle}{69}{section.2.6}%
-\contentsline {subsection}{\numberline {2.6.1}Single constraint: probability normalization}{70}{subsection.2.6.1}%
-\contentsline {subsection}{\numberline {2.6.2}Multiple constraints}{72}{subsection.2.6.2}%
-\contentsline {subsection}{\numberline {2.6.3}Types of constraints}{77}{subsection.2.6.3}%
-\contentsline {section}{\numberline {2.7}Variational Statistical Mechanics}{80}{section.2.7}%
-\contentsline {subsection}{\numberline {2.7.1}Derivation of the MC ensemble}{80}{subsection.2.7.1}%
-\contentsline {subsection}{\numberline {2.7.2}Derivation of the C ensemble}{83}{subsection.2.7.2}%
-\contentsline {subsection}{\numberline {2.7.3}Derivation of the G-C ensemble}{85}{subsection.2.7.3}%
-\contentsline {subsubsection}{Large $V$ limit}{88}{section*.12}%
-\contentsline {subsubsection}{The large $V$ limit}{88}{section*.13}%
-\contentsline {subsection}{\numberline {2.7.4}Remark on the Legendre Transform}{89}{subsection.2.7.4}%
-\contentsline {subsection}{\numberline {2.7.5}Fluctuation of the number of particles}{90}{subsection.2.7.5}%
-\contentsline {subsection}{\numberline {2.7.6}Absence of macroscopic motion in equilibrium}{91}{subsection.2.7.6}%
-\contentsline {section}{\numberline {2.8}Non Equilibrium Entropy}{93}{section.2.8}%
-\contentsline {subsection}{\numberline {2.8.1}Maxwell demon}{95}{subsection.2.8.1}%
-\contentsline {chapter}{\numberline {3}Ising Model}{97}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Lattice gas}{98}{section.3.1}%
-\contentsline {section}{\numberline {3.2}Ising Partition Function}{107}{section.3.2}%
-\contentsline {section}{\numberline {3.3}Spontaneous magnetization}{118}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Low temperature expansion}{122}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Correlation functions}{126}{subsection.3.3.2}%
-\contentsline {chapter}{\numberline {4}Variational methods}{131}{chapter.4}%
-\contentsline {subsection}{\numberline {4.0.1}Relative Entropy}{132}{subsection.4.0.1}%
-\contentsline {subsection}{\numberline {4.0.2}Approximation as an optimization problem}{132}{subsection.4.0.2}%
-\contentsline {section}{\numberline {4.1}Mean Field Ising Model}{134}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Physical meaning of the variational parameters $M_x$}{137}{subsection.4.1.1}%
-\contentsline {subsection}{\numberline {4.1.2}Uniform case}{137}{subsection.4.1.2}%
-\contentsline {subsubsection}{A. No external field}{138}{section*.37}%
-\contentsline {subsubsection}{Physical meaning of $M(K)$}{140}{section*.40}%
-\contentsline {subsubsection}{B. External field}{142}{section*.42}%
-\contentsline {section}{\numberline {4.2}Critical Behaviours and Scaling Laws}{147}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Spontaneous magnetization}{147}{subsection.4.2.1}%
-\contentsline {subsection}{\numberline {4.2.2}Susceptibility (at $h=0$)}{149}{subsection.4.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Specific heat (at $h=0$)}{149}{subsection.4.2.3}%
-\contentsline {section}{\numberline {4.3}Scaling ansatz\textit {s}}{151}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Two-point correlation function}{154}{subsection.4.3.1}%
-\contentsline {subsubsection}{Ising Model in $d=1$}{154}{section*.51}%
-\contentsline {subsubsection}{General case: the correlation ansatz}{156}{section*.52}%
-\contentsline {subsection}{\numberline {4.3.2}Hyperscaling}{157}{subsection.4.3.2}%
-\contentsline {subsection}{\numberline {4.3.3}Summary of scaling relations}{158}{subsection.4.3.3}%
-\contentsline {subsection}{\numberline {4.3.4}Correlation function in the Mean Field}{159}{subsection.4.3.4}%
-\contentsline {subsection}{\numberline {4.3.5}Example in a real system}{166}{subsection.4.3.5}%
-\contentsline {chapter}{\numberline {5}Beyond Mean Field\\ and Universality}{168}{chapter.5}%
-\contentsline {section}{\numberline {5.1}From discrete to continuous variables}{169}{section.5.1}%
-\contentsline {section}{\numberline {5.2}Back to the discrete world}{174}{section.5.2}%
+\contentsline {chapter}{\numberline {1}Statistical Mechanics}{6}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Introduction}{6}{section.1.1}%
+\contentsline {subsection}{\numberline {1.1.1}Ingredients for a complex physical system}{7}{subsection.1.1.1}%
+\contentsline {subsection}{\numberline {1.1.2}The non-equilibrium case}{9}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Statistical Mechanics}{10}{subsection.1.1.3}%
+\contentsline {section}{\numberline {1.2}Review of Mathematical Methods}{10}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Continuous Random Variables}{10}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Discrete Random Variables}{14}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}Characteristic Functions}{17}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Generating functions}{20}{subsection.1.2.4}%
+\contentsline {subsection}{\numberline {1.2.5}Change of variables}{21}{subsection.1.2.5}%
+\contentsline {subsection}{\numberline {1.2.6}Generating probability distributions}{22}{subsection.1.2.6}%
+\contentsline {subsection}{\numberline {1.2.7}Gaussian Integrals}{23}{subsection.1.2.7}%
+\contentsline {subsection}{\numberline {1.2.8}Saddle Point approximation}{26}{subsection.1.2.8}%
+\contentsline {subsection}{\numberline {1.2.9}Gaussian averages}{28}{subsection.1.2.9}%
+\contentsline {subsection}{\numberline {1.2.10}Central Limit Theorem}{29}{subsection.1.2.10}%
+\contentsline {section}{\numberline {1.3}Statistical Ensembles}{31}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Ideal gas}{34}{subsection.1.3.1}%
+\contentsline {subsubsection}{Probability distribution of the number of particles in half the volume}{36}{section*.6}%
+\contentsline {subsubsection}{Velocity distribution}{39}{section*.7}%
+\contentsline {chapter}{\numberline {2}Entropy and the Emergence of Time}{46}{chapter.2}%
+\contentsline {section}{\numberline {2.1}The Liouville theorem}{47}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Measure theoretic version}{52}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Consequences of Liouville's theorem}{59}{subsection.2.1.2}%
+\contentsline {section}{\numberline {2.2}Poincaré Recurrence Theorem}{61}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Heuristic estimate of recurrence time}{61}{subsection.2.2.1}%
+\contentsline {section}{\numberline {2.3}Asymptotic Evolution}{63}{section.2.3}%
+\contentsline {section}{\numberline {2.4}Three kinds of entropy}{65}{section.2.4}%
+\contentsline {section}{\numberline {2.5}Information Entropy and Ignorance}{70}{section.2.5}%
+\contentsline {section}{\numberline {2.6}MaxEnt Principle}{70}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Single constraint: probability normalization}{71}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Multiple constraints}{73}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Types of constraints}{78}{subsection.2.6.3}%
+\contentsline {section}{\numberline {2.7}Variational Statistical Mechanics}{81}{section.2.7}%
+\contentsline {subsection}{\numberline {2.7.1}Derivation of the MC ensemble}{81}{subsection.2.7.1}%
+\contentsline {subsection}{\numberline {2.7.2}Derivation of the C ensemble}{84}{subsection.2.7.2}%
+\contentsline {subsection}{\numberline {2.7.3}Derivation of the G-C ensemble}{86}{subsection.2.7.3}%
+\contentsline {subsubsection}{Large $V$ limit}{89}{section*.12}%
+\contentsline {subsubsection}{The large $V$ limit}{89}{section*.13}%
+\contentsline {subsection}{\numberline {2.7.4}Remark on the Legendre Transform}{90}{subsection.2.7.4}%
+\contentsline {subsection}{\numberline {2.7.5}Fluctuation of the number of particles}{91}{subsection.2.7.5}%
+\contentsline {subsection}{\numberline {2.7.6}Absence of macroscopic motion in equilibrium}{92}{subsection.2.7.6}%
+\contentsline {section}{\numberline {2.8}Non Equilibrium Entropy}{94}{section.2.8}%
+\contentsline {subsection}{\numberline {2.8.1}Maxwell demon}{96}{subsection.2.8.1}%
+\contentsline {chapter}{\numberline {3}Ising Model}{98}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Lattice gas}{99}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Ising Partition Function}{108}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Spontaneous magnetization}{119}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Low temperature expansion}{123}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Correlation functions}{127}{subsection.3.3.2}%
+\contentsline {chapter}{\numberline {4}Variational methods}{132}{chapter.4}%
+\contentsline {subsection}{\numberline {4.0.1}Relative Entropy}{133}{subsection.4.0.1}%
+\contentsline {subsection}{\numberline {4.0.2}Approximation as an optimization problem}{133}{subsection.4.0.2}%
+\contentsline {section}{\numberline {4.1}Mean Field Ising Model}{135}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Physical meaning of the variational parameters $M_x$}{138}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Uniform case}{138}{subsection.4.1.2}%
+\contentsline {subsubsection}{A. No external field}{139}{section*.37}%
+\contentsline {subsubsection}{Physical meaning of $M(K)$}{141}{section*.40}%
+\contentsline {subsubsection}{B. External field}{143}{section*.42}%
+\contentsline {section}{\numberline {4.2}Critical Behaviours and Scaling Laws}{148}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Spontaneous magnetization}{148}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Susceptibility (at $h=0$)}{150}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Specific heat (at $h=0$)}{150}{subsection.4.2.3}%
+\contentsline {section}{\numberline {4.3}Scaling ansatz\textit {s}}{152}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Two-point correlation function}{155}{subsection.4.3.1}%
+\contentsline {subsubsection}{Ising Model in $d=1$}{155}{section*.51}%
+\contentsline {subsubsection}{General case: the correlation ansatz}{157}{section*.52}%
+\contentsline {subsection}{\numberline {4.3.2}Hyperscaling}{158}{subsection.4.3.2}%
+\contentsline {subsection}{\numberline {4.3.3}Summary of scaling relations}{159}{subsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.3.4}Correlation function in the Mean Field}{160}{subsection.4.3.4}%
+\contentsline {subsection}{\numberline {4.3.5}Example in a real system}{167}{subsection.4.3.5}%
+\contentsline {chapter}{\numberline {5}Beyond Mean Field\\ and Universality}{169}{chapter.5}%
+\contentsline {section}{\numberline {5.1}From discrete to continuous variables}{170}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Back to the discrete world}{175}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}The Lattice Gaussian Model}{179}{subsection.5.2.1}%
+\contentsline {section}{\numberline {5.3}Conclusions}{180}{section.5.3}%
+\contentsline {chapter}{\numberline {6}Dynamics}{181}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Markov Processes}{181}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Chapman-Kolmogorov equation}{182}{subsection.6.1.1}%
+\contentsline {section}{\numberline {6.2}Master Equation}{182}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Limiting distribution and equilibrium}{189}{subsection.6.2.1}%
+\contentsline {section}{\numberline {6.3}Dynamics of the Ising Model}{189}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Mean Field Dynamics}{193}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Uniform solution}{193}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.2}Non-uniform case}{195}{subsection.6.4.2}%
+\contentsline {section}{\numberline {6.5}Proof that $\PazoBB {P}(m,t) \to \PazoBB {P}_{\mathrm {eq.}}(m)$}{199}{section.6.5}%
+\contentsline {chapter}{\numberline {7}Population Dynamics}{207}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Historical notes}{207}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Features of interest}{209}{section.7.2}%
+\contentsline {section}{\numberline {7.3}Neutral theory}{210}{section.7.3}%
+\contentsline {section}{\numberline {7.4}Models}{216}{section.7.4}%
+\contentsline {section}{\numberline {7.5}Birth-Death processes}{217}{section.7.5}%
+\contentsline {subsection}{\numberline {7.5.1}Fisher Log Series}{220}{subsection.7.5.1}%
+\contentsline {subsection}{\numberline {7.5.2}Data Binning and Preston Plots}{221}{subsection.7.5.2}%
+\contentsline {subsection}{\numberline {7.5.3}Log-Normal distribution}{222}{subsection.7.5.3}%
+\contentsline {subsection}{\numberline {7.5.4}Extinction time distribution}{227}{subsection.7.5.4}%
+\contentsline {subsection}{\numberline {7.5.5}Continuum limit}{232}{subsection.7.5.5}%
+\contentsline {section}{\numberline {7.6}Spatial models}{234}{section.7.6}%
+\contentsline {subsection}{\numberline {7.6.1}Extinction time for a random walk}{238}{subsection.7.6.1}%
+\contentsline {section}{\numberline {7.7}The Voter Model}{241}{section.7.7}%
+\contentsline {subsection}{\numberline {7.7.1}Correlation functions}{243}{subsection.7.7.1}%
+\contentsline {subsubsection}{1-point correlation}{243}{section*.93}%
+\contentsline {subsubsection}{$2$-point correlation}{247}{section*.94}%
+\contentsline {subsection}{\numberline {7.7.2}Final Remarks}{256}{subsection.7.7.2}%
+\contentsline {section}{\numberline {7.8}Contact Process}{256}{section.7.8}%
+\contentsline {subsection}{\numberline {7.8.1}Infinite range model}{257}{subsection.7.8.1}%
+\contentsline {subsection}{\numberline {7.8.2}Variation: infection from outside}{260}{subsection.7.8.2}%
+\contentsline {subsection}{\numberline {7.8.3}Spatial effects}{261}{subsection.7.8.3}%

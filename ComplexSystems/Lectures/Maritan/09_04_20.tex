@@ -6,7 +6,7 @@
 \section{Asymptotic Evolution}
 Liouville's theorem showed us that a uniform ensemble, such as the \textit{microcanonical ensemble} for a isolate system, is \textbf{stationary}, thus suitable to describe equilibrium.
 
-However, we would like to prove that it \textit{is} in fact, the only suitable description. Intuitively, this requires that the Liouville's evolution \q{throughly stirs} phase-space, so that the trajectory followed by \textit{almost}\footnote{Up to a set of null measure} any point in phase-space passes arbitrarily close to any other point in phase-space. In such case, it can be shown that all states can be treated \q{equally}, and so we can compute the expected values of observables by using the microcanonical ensemble, as we previously postulated. A system satisfying this condition is said to be \textbf{ergodic}. Unfortunately, it is usually very difficult to prove.
+However, we would like to prove that it \textit{is} in fact, the only suitable description. Intuitively, this requires that the Liouville's evolution \q{thoroughly stirs} phase-space, so that the trajectory followed by \textit{almost}\footnote{Up to a set of null measure} any point in phase-space passes arbitrarily close to any other point in phase-space. In such case, it can be shown that all states can be treated \q{equally}, and so we can compute the expected values of observables by using the microcanonical ensemble, as we previously postulated. A system satisfying this condition is said to be \textbf{ergodic}. Unfortunately, it is usually very difficult to prove.
 
 \medskip
 
@@ -161,7 +161,7 @@ Finally, we will examine the relation linking \textit{entropy} and \textit{infor
 
     For example, if $p_i=1$, i.e. the event occurs with certainty, we will not gain any new information by its occurrence: we already knew that it would occur! In other words, if now the sky is free of clouds and it is a beautiful sunny day, the fact that it will be still sunny in $15$ minutes is almost sure, and it will not be surprising when it indeed happens. On the other hand, we would not expect that in $15$ minutes it will start to rain. Such a unlikely scenario, if it occurs, will give \textit{a lot} of new information to us: for example that we were ignoring little dark clouds on the horizon, or did not properly account of the air currents.  
 
-    Equivalently, we can quantify the \textit{gain in information} by measuring the minimum length of a message needed to precisely communicate to someone that a certain event has occurred. To \textit{optimize} the sending of data, we can in fact create a code such that the shorter combinations of characters refer to likely events, while the longer ones to \textit{unlikely} events. In this way, on average, we will have to send \textit{shorter} messages. Then, in this scenario, a likely event holds \textit{less information} becaus e it can be coded with \textit{shorter messages} (assuming that the code we are using for transmission is the \textit{most efficient} possible).
+    Equivalently, we can quantify the \textit{gain in information} by measuring the minimum length of a message needed to precisely communicate to someone that a certain event has occurred. To \textit{optimize} the sending of data, we can in fact create a code such that the shorter combinations of characters refer to likely events, while the longer ones to \textit{unlikely} events. In this way, on average, we will have to send \textit{shorter} messages. Then, in this scenario, a likely event holds \textit{less information} because it can be coded with \textit{shorter messages} (assuming that the code we are using for transmission is the \textit{most efficient} possible).
 
     \medskip
 
@@ -200,7 +200,7 @@ Finally, we will examine the relation linking \textit{entropy} and \textit{infor
         \begin{align*}
             I'(1) = - k_B
         \end{align*}
-        Thus (\ref{eqn:S-info}) becomes: %Re-watch registration for this part
+        Thus (\ref{eqn:S-info}) becomes: 
         \begin{align}\label{eqn:S-info-discrete}
             S_I (p_1, \dots, p_k) = \langle I(p_i) \rangle = - k_B \sum_{i=1}^k p_i \ln p_i
         \end{align}
@@ -251,8 +251,9 @@ We now show that (\ref{eqn:S-info-cont}) agrees with the Statistical Mechanics e
         S_c(T,V,N) = - \pdv{A}{T}(T,V,N)
     \end{align*}
 \end{itemize}
-What is the max $S_I(p_1, \dots, p_k)$, given $\sum_i p_i = 1$?
 
-%Add references
+%What is the max $S_I(p_1, \dots, p_k)$, given $\sum_i p_i = 1$?
+
+%TODO Add references
 
 \end{document}
